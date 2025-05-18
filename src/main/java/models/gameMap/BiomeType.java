@@ -30,7 +30,7 @@ public enum BiomeType {
                         new Spawnable("Tulip Bulb", 10),
                         new Spawnable("Rice Shoot", 10),
                         new Spawnable("Common Mushroom", 10),
-                        new Spawnable("Ancient Seeds", 10),
+                        new Spawnable("Ancient Seed", 10),
                         new Spawnable("Spring Mixed Seed", 10)
                 ),
                 Season.SUMMER, Arrays.asList(
@@ -54,7 +54,7 @@ public enum BiomeType {
                         new Spawnable("Tomato Seeds", 10),
                         new Spawnable("Wheat Seeds", 10),
                         new Spawnable("Common Mushroom", 10),
-                        new Spawnable("Ancient Seeds", 10),
+                        new Spawnable("Ancient Seed", 10),
                         new Spawnable("Summer Mixed Seed", 10)
 
                 ),
@@ -77,7 +77,7 @@ public enum BiomeType {
                         new Spawnable("Yam Seeds", 10),
                         new Spawnable("Rare Seed", 10),
                         new Spawnable("Common Mushroom", 10),
-                        new Spawnable("Ancient Seeds", 10),
+                        new Spawnable("Ancient Seed", 10),
                         new Spawnable("Fall Mixed Seed", 10)
 
                 ),
@@ -89,14 +89,14 @@ public enum BiomeType {
                         new Spawnable("Winter Root", 10),
                         new Spawnable("Powdermelon Seeds", 10),
                         new Spawnable("Common Mushroom", 10),
-                        new Spawnable("Ancient Seeds", 10),
+                        new Spawnable("Ancient Seed", 10),
                         new Spawnable("Winter Mixed Seed", 10)
 
                 )
             ),
             Arrays.asList(
                     new Spawnable("Common Mushroom", 10),
-                    new Spawnable("Ancient Seeds", 10),
+                    new Spawnable("Ancient Seed", 10),
                     new Spawnable("Acorns", 10),
                     new Spawnable("Maple Seeds", 10),
                     new Spawnable("Pine Cones", 10),

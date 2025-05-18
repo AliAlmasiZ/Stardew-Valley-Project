@@ -377,7 +377,7 @@
       ]
     },
     {
-      "name": "Ancient Seeds",
+      "name": "Ancient Seed",
       "components": [
         {
           "type": "SeedComponent",

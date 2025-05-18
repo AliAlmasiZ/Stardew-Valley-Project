@@ -7,7 +7,8 @@
     {
       "type": "Placeable",
       "isWalkable": false
-    },{
+    },
+    {
       "type" : "Renderable",
       "char" : "A",
       "color" : [255, 255, 255]
