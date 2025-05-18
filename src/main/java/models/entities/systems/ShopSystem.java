@@ -117,6 +117,35 @@ public class ShopSystem {
 
     }
 
+    public static Result upgradeBackPack(Shop shop, String toolName) {
+        if(!StringUtils.isNamesEqual(shop.getName(), StringUtils.pierre))
+            return new Result(false, "you can upgrade your backpack in " + StringUtils.pierre);
+        Inventory inventory = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class);
+        if(StringUtils.isNamesEqual(toolName, "Large Pack")) {
+            if(inventory.getSize() != 12)
+                return new Result(false,"You upgraded your Backpack before");
+            Result res = handlePay(shop.getUpgradableShopProduct("Large Pack"), 1);
+            if(!res.isSuccessful())
+                return res;
+            shop.getUpgradableShopProduct("Large Pack").addSold(1);
+            inventory.setCapacity(24);
+            return new Result(true, "your backpack upgraded");
+        }
+        else {
+            if(inventory.getSize() == 12) {
+                return new Result(false, "You should buy Large Pack first");
+            }
+            Result res = handlePay(shop.getUpgradableShopProduct("Deluxe Pack"), 1);
+            if(!res.isSuccessful())
+                return res;
+            shop.getUpgradableShopProduct("Deluxe Pack").addSold(1);
+            inventory.setUnlimited(true);
+            return new Result(true, "your inventory is unlimited now!");
+
+        }
+
+    }
+
 
 
 

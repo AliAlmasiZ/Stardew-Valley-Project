@@ -818,18 +818,7 @@
       },
 
 
-      {
-        "type": "Product",
-        "name": "Large Pack",
-        "price": 2000,
-        "dailyLimit": 1
-      },
-      {
-        "type": "Product",
-        "name": "Deluxe Pack",
-        "price": 10000,
-        "dailyLimit": 1
-      },
+
 
 
 
@@ -1076,6 +1065,20 @@
 
 
 
+    ],
+    "upgrades" :[
+      {
+        "type": "Upgrade",
+        "name": "Large Pack",
+        "price": 2000,
+        "dailyLimit": 1
+      },
+      {
+        "type": "Upgrade",
+        "name": "Deluxe Pack",
+        "price": 10000,
+        "dailyLimit": 1
+      }
     ]
 
   }
