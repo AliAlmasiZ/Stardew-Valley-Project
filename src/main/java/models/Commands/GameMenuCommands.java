@@ -1,20 +1,20 @@
 package models.Commands;
 
 public enum GameMenuCommands implements Commands {
-    WALK                      ("^\\s*walk\\s+-l\\s+<?\\s*(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*>?\\s*$"),
-    NEXT_TURN                 ("^\\s*next\\s+turn\\s*$"),
-    ENERGY_SET                ("\\s*energy\\s+set\\s+-v\\s+(?<amount>\\d+)\\s*"),
-    ENERGY_SHOW               ("\\s*energy\\s+show\\s*"),
-    SHOW_INVENTORY            ("\\s*show\\s+inventory\\s*"),
-    ENERGY_UNLIMITED          ("\\s*energy\\s+unlimited\\s*"),
-    CHANGE_INPUT_TYPE         ("^\\s*change\\s+input\\s+type\\s*$"),
-    START_TRADE               ("^\\s*start\\s+trade\\s*$"),
-    EAT_FOOD                  ("^eat\\s+(?<foodName>.+)$"),
-    CHEAT_THOR                ("^\\s*cheat\\s+Thor\\s+-l\\s+<(?<x>\\d+),(?<y>\\d+)>\\s*$"),
-    SHOW_FRIDGE_CONTENT       ("^\\s*show\\s+fridge\\s+content\\s*$"),
-    BUILD_GREENHOUSE          ("^\\s*build\\s+greenhouse\\s*$"),
-    SHOW_SHIPPING_BIN_CONTENT ("^\\s*show\\s+shipping\\s+bin\\s+content\\s*$"),
-    TRASH_ITEM                ("^\\s*trash\\s+item\\s+-n\\s+(?<name>.+?)\\s+-a\\s+(?<amount>\\S+)\\s*$"),
+    WALK              ("^\\s*walk\\s+-l\\s+<?\\s*(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*>?\\s*$"),
+    NEXT_TURN         ("^\\s*next\\s+turn\\s*$"),
+    ENERGY_SET        ("\\s*energy\\s+set\\s+-v\\s+(?<amount>\\d+)\\s*"),
+    ENERGY_SHOW       ("\\s*energy\\s+show\\s*"),
+    SHOW_INVENTORY    ("\\s*show\\s+inventory\\s*"),
+    ENERGY_UNLIMITED  ("\\s*energy\\s+unlimited\\s*"),
+    CHANGE_INPUT_TYPE ("^cit$"),
+    START_TRADE       ("^\\s*start\\s+trade\\s*$"),
+    EAT_FOOD          ("^eat\\s+(?<foodName>.+)$"),
+    CHEAT_THOR        ("^\\s*cheat\\s+Thor\\s+-l\\s+<(?<x>\\d+),(?<y>\\d+)>\\s*$"),
+    SHOW_FRIDGE_CONTENT("^\\s*show\\s+fridge\\s+content\\s*$"),
+    BUILD_GREENHOUSE  ("^\\s*build\\s+greenhouse\\s*$"),
+    SHOW_SHIPPING_BIN_CONTENT("^\\s*show\\s+shipping\\s+bin\\s+content\\s*$"),
+    TRASH_ITEM("^\\s*trash\\s+item\\s+-n\\s+(?<name>.+?)\\s+-a\\s+(?<amount>\\S+)\\s*$"),
     SAVE_GAME                 ("^\\s*save\\s+game\\s*$"),
 
     /* ----------------------------------------- Plant commands ------------------------------------------- */
@@ -70,7 +70,7 @@ public enum GameMenuCommands implements Commands {
     /* ------------------------------------------- Item Commands ------------------------------------------- */
     PLACE_ITEM("^place\\s+item\\s+-n\\s+(?<itemName>.+?)\\s+-d\\s+(?<direction>.+)$"),
     PICK_NEARBY_ITEMS("^\\s*pick\\s+nearby\\s+items\\s*$"),
-    CHEAT_GIVE_ITEM   ("^\\s*cheat\\s+give\\s+item\\s+\"\\s*(?<name>.+?)\\s*\"\\s+(?<quantity>-?\\d+)\\s*$"),
+    CHEAT_GIVE_ITEM   ("^item\\s*(?<name>.+?)\\s+(?<quantity>-?\\d+)\\s*$"),
     REFRIGERATOR("^cooking\\s+refrigerator\\s+(?<what>put|pick)\\s+(?<item>.+)\\s+(?<amount>\\d+)$"),
 
     /* -------------------------------------------------- -------------------------------------------------- */
@@ -83,7 +83,7 @@ public enum GameMenuCommands implements Commands {
     /* -------------------------------------------------- -------------------------------------------------- */
 
     /* ------------------------------------------ Render Commands ------------------------------------------ */
-    TOGGLE_MAP        ("^\\s*toggle\\s+map\\s*$"),
+    TOGGLE_MAP        ("^tm$"),
     CHANGE_MAP_RENDER ("^\\s*change\\s+map\\s+render\\s*$"),
     /* -------------------------------------------------- -------------------------------------------------- */
 
@@ -128,7 +128,7 @@ public enum GameMenuCommands implements Commands {
     CHEAT_SET_FRIENDSHIP("cheat\\s+-u\\s+(?<name>.+)\\s*level\\s*(?<level>\\d+)\\s*xp\\s*(?<xp>\\d+)\\s*"),
     CHEAT_BUILD_BUILDING("^\\s*cheat\\s+build\\s+building\\s+(?<name>\\S+)\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)(?:\\s+(?<force>-force))?\\s*$"),
     CHEAT_SPAWN_ON_GROUND("^\\s*cheat\\s+spawn\\s+on\\s+ground\\s+-n\\s+(?<name>\\S+)\\s+-a\\s+(?<amount>\\S+)\\s*$"),
-    CHEAT_WATER_ALL("cheat water all"),
+    CHEAT_WATER_ALL("water all"),
     /* -------------------------------------------------- -------------------------------------------------- */
 
     ;

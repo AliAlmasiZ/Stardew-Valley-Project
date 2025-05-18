@@ -5,6 +5,9 @@ import models.enums.Menu;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import views.LoginMenu;
 
 import java.io.ByteArrayInputStream;
@@ -78,6 +81,21 @@ public class LoginTest {
         setIn("    login    -u   AliAlmasi    -p    TestPass#403      ");
         checkExpected("logged in successfully");
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "forget password -i   AliAlmasi, invalid command",
+            "forget password -u  liAlmasi, ",
+            "forget password -u   AliAlmasi,",
+            "forget password -u   AliAlmasi",
+            "forget password -u   AliAlmasi",
+            "forget password -u   AliAlmasi"
+    })
+    void forgetPassword(String input, String expected) {
+        setIn(input);
+        checkExpected(expected) ;
+    }
+
 
 
 

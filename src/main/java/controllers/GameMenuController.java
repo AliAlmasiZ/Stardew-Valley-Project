@@ -1655,6 +1655,7 @@ public class GameMenuController implements Controller {    @Override
         if (!App.entityRegistry.doesEntityExist(quest.getReward())) {
             return new Result(false, "Item not have set yet");
         }
+        quest.setCompleted(true);
         Entity reward = App.entityRegistry.makeEntity(quest.getReward());
         reward.getComponent(Pickable.class).setStackSize(rewardNumber);
 

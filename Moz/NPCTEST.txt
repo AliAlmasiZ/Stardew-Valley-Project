@@ -1,0 +1,48 @@
+register -u AliAlm -p AliPass123@ AliPass123@ -n AliAlm -e Aliiii@gmail.com -g male
+pick question -q 1 -a meow -c meow
+register -u Ilia -p AliPass123@ AliPass123@ -n Ilia -e ilia@gmail.com -g male
+pick question -q 1 -a meow -c meow
+register -u Parsa -p AliPass123@ AliPass123@ -n Parsa -e parsa@gmail.com -g male
+pick question -q 1 -a meow -c meow
+register -u Female -p AliPass123@ AliPass123@ -n Female -e female@gmail.com -g female
+pick question -q 1 -a meow -c meow
+login -u Ilia -p AliPass123@
+show current menu
+show menus
+menu enter Game Menu
+game new -u Parsa AliAlm Female
+Mistvale Farm
+Willowridge Farm
+Emberroot Farm
+Suncrest Farm
+
+energy unlimited
+walk -l <7, 14>
+y
+walk -l <155, 124>
+y
+
+meet NPC rof
+meet NPC Robin
+meet NPC Lia
+cheat advance date 1d
+
+friendship NPC list
+item Egg 10
+item Salad 10
+item Iron 10
+
+gift NPC Abigael -i Iron
+cheat advance date 1d
+friendship NPC list
+
+gift NPC Robin -i Tilapia
+gift NPC Lia -i Egg
+friendship NPC list
+gift NPC Lia -i Salad
+friendship NPC list
+
+
+
+quests list
+quests finish -i 10

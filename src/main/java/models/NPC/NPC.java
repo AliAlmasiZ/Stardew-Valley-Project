@@ -1,5 +1,6 @@
 package models.NPC;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import models.entities.Entity;
 import models.entities.components.Renderable;
 import models.enums.Season;
@@ -26,7 +27,7 @@ public class NPC extends Entity implements Serializable {
     public NPC(String name) {
         super(name);
         this.name = name;
-        addComponent(new Renderable('N', new Color(255, 255 ,255)));
+        addComponent(new Renderable(this.name.toUpperCase().charAt(0), new Color(255, 255 ,255)));
     }
 
     public ArrayList<String> getFavorites() {
@@ -65,7 +66,7 @@ public class NPC extends Entity implements Serializable {
 
 
     public String getRandomGift() {
-        int random = (int) (Math.random() * (favorites.size() * 2 + 1));
+        int random = (int) (Math.random() * (favorites.size() + 1));
         if (random < favorites.size()) {
             return favorites.get(random);
         }

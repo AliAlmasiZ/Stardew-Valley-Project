@@ -35,6 +35,15 @@
       ]
     },
     {
+      "name": "Salad",
+      "components": [
+        {
+          "type": "Edible",
+          "energy": -1
+        }
+      ]
+    },
+    {
       "name": "Milk",
       "components": [
         {

@@ -5,10 +5,7 @@ import models.App;
 import models.Position;
 import models.NPC.NPC;
 import models.entities.EntityList;
-import models.entities.components.AnimalHouse;
-import models.entities.components.Growable;
-import models.entities.components.PositionComponent;
-import models.entities.components.Renderable;
+import models.entities.components.*;
 import models.enums.Weather;
 import models.gameMap.GameMap;
 import models.gameMap.Tile;
@@ -396,7 +393,9 @@ public class Player extends Entity implements Serializable {
                 NPC npc = npcFriendship.getKey();
                 String randomGift = npc.getRandomGift();
                 if (randomGift != null) {
+                    if (!App.entityRegistry.doesEntityExist(randomGift)) continue;
                     Entity gift = App.entityRegistry.makeEntity(randomGift);
+                    gift.getComponent(Pickable.class).setStackSize(1);
                     this.getComponent(Inventory.class).addItem(gift);
                     System.out.println("gifted");
                 }

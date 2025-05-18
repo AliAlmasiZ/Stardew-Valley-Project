@@ -126,7 +126,6 @@ public class Game implements Serializable {
 
         //init quests
         try {
-            // TODO: Complete quests.jason
             ObjectMapper mapper = new ObjectMapper();
             List<Quest> quests = mapper.readValue(
                     new File("src/data/NPC/quests.json"),
@@ -141,6 +140,23 @@ public class Game implements Serializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        // Initialize favorites
+        for (NPC npc : gameNPCs) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+
+                ArrayList<String> list = mapper.readValue(
+                        new File("src/data/NPC/Favorites/" + npc.getEntityName() + ".json"),
+                        mapper.getTypeFactory().constructCollectionType(ArrayList.class, String.class)
+                );
+
+                npc.setFavorites(list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
 
         // Initialize dialogs
@@ -159,6 +175,8 @@ public class Game implements Serializable {
         } catch (IOException e) {
             e.printStackTrace(); // Prints the reason for failure
         }
+
+        //initialize
 
         // Put NPC on the Map
         ArrayList<MapData.MapLayerData<String>.ObjectData> npcDatas = WorldMapType.DEFAULT.getData().getNpcs();
@@ -278,7 +296,6 @@ public class Game implements Serializable {
                 Entity entity = tile.getContent();
                 if (entity != null && (entity.hasTag(EntityTag.CROP) || entity.hasTag(EntityTag.FORAGING_CROP))) {
                     entity.delete();
-                    System.out.println("DELETE THIS AT CROW ATTACK");
                 }
                 if (entity != null && entity.hasTag(EntityTag.TREE)) {
                     Growable growable = entity.getComponent(Growable.class);
