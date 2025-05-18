@@ -4,6 +4,7 @@
       "type" : "Pickable",
       "maxStack" : 64
     }
+
   ],
   "entities": [
     {
@@ -14,9 +15,6 @@
     },
     {
       "name": "Goat Cheese"
-    },
-    {
-      "name" : 
     }
   ]
 }

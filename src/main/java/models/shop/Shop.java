@@ -103,6 +103,13 @@ public class Shop extends EntityComponent implements Serializable {
         return null;
     }
 
+    public UpgradableShopProduct getUpgradableShopProduct(String name) {
+        ShopProduct product = getProductByName(name);
+            if(product instanceof UpgradableShopProduct)
+                return (UpgradableShopProduct) product;
+            return null;
+    }
+
 
     /*
     public String allProducts() {
