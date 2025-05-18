@@ -1233,7 +1233,7 @@
       "components": [
         {
           "type": "Growable",
-          "seed": "Ancient Seeds",
+          "seed": "Ancient Seed",
           "seasons": [
             "SPRING",
             "SUMMER",

@@ -113,7 +113,7 @@ public enum GameMenuCommands implements Commands {
     /* ------------------------------------------- Shop Commands ------------------------------------------- */
     SHOW_ALL_PRODUCTS("^show\\s+all\\s+products$"),
     SHOW_ALL_AVAILABLE("^show\\s+all\\s+available\\s+products$"),
-    PURCHASE("^purchase\\s+(?<productName>[^-]+?\\s*)(-n\\s+(?<count>\\d+))?$"),
+    PURCHASE("^purchase\\s+(?<productName>[^-]+?)\\s*(-n\\s+(?<count>\\d+))?$"),
     BUILD_BUILDING("^build\\s+-a\\s+(?<buildingName>.+?)\\s+-l\\s+<?\\s*(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*>?$"),
     SELL_PRODUCT("^sell\\s+(?<productName>[^-]+?)\\s*(-n\\s+(?<count>\\d+))?$"),
 
