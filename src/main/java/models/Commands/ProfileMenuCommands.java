@@ -3,7 +3,7 @@ package models.Commands;
 public enum     ProfileMenuCommands implements Commands{
     USER_INFO         ("^user\\s+info$"),
     MENU_ENTER        ("^menu\\s+enter\\s+(?<menuName>.+)"),
-    CHANGE_EMAIL      ("^change\\s+email\\s+-e(?<email>.+)$"),
+    CHANGE_EMAIL      ("^change\\s+email\\s+-e\\s+(?<email>.+)$"),
     CHANGE_PASSWORD   ("^change\\s+password\\s+-p\\s+(?<newPassword>.+?)\\s+-o\\s+(?<oldPassword>.+)$"),
     CHANGE_USERNAME   ("^change\\s+username\\s+-u\\s+(?<username>.+)$"),
     CHANGE_NICKNAME   ("^change\\s+nickname\\s+-u\\s+(?<nickname>.+)$"),
