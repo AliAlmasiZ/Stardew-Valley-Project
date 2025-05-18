@@ -66,7 +66,7 @@ public class ForgotPasswordFlow {
                 return new Result(true, "re-enter your new password:");
             case 4:
                 if(input.equals("y")){
-                    App.getLoggedInAccount().setPassword(newPassword);
+                    account.setPassword(newPassword);
                     return new Result(false, "password was set!");
                 }else{
                     state--;
