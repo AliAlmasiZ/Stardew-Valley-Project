@@ -7,7 +7,7 @@ import models.gameMap.MapRegistry;
 import models.shop.ShopRegistry;
 import views.AppView;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 
 public class App implements Serializable {
@@ -15,10 +15,10 @@ public class App implements Serializable {
     private Account loggedInAccount = null;
     private Account registeredAccount = null;
     private boolean stayLoggedIn   = false;
-    private Menu currentMenu = Menu.LOGIN_MENU;
-    private final AppView view = new AppView();
-    public Game activeGame = null;
-    public static boolean shouldTerminate = false;
+    public static Game activeGame = null;
+    private static final AppView view = new AppView();
+    public transient static boolean shouldTerminate = false;
+    private static Menu currentMenu = Menu.LOGIN_MENU;
     public static EntityRegistry entityRegistry = new EntityRegistry();
     public static EntityRegistry buildingRegistry = new EntityRegistry();
     public static RecipeRegistry recipeRegistry = new RecipeRegistry();
@@ -73,7 +73,35 @@ public class App implements Serializable {
     }
 
     public static void start(){
-        getInstance().view.run();
+        File configFile = new File("src/data/appState/config.ser");
+
+        try {
+            if(configFile.exists()){
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(configFile));
+                instance = (App) in.readObject();
+                in.close();
+            }else {
+                saveState();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            saveState();
+        }
+
+        if(!instance.stayLoggedIn) instance.loggedInAccount = null;
+
+        if(instance.loggedInAccount != null) setCurrentMenu(Menu.MAIN_MENU);
+
+        view.run();
+    }
+
+    public static void saveState(){
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/data/appState/config.ser"));
+            out.writeObject(getInstance());
+            out.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static AppView getView(){

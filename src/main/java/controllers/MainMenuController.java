@@ -115,6 +115,7 @@ public class MainMenuController implements Controller{    @Override
                 player.setAccount(App.getUserByUsername(player.getUsername()));
             }
             App.setActiveGame(game);
+            in.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

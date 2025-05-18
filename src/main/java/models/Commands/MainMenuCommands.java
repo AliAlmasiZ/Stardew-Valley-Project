@@ -7,6 +7,7 @@ public enum MainMenuCommands implements Commands {
     SHOW_MENUS        ("^show\\s+menus$"),
     USER_LOGOUT       ("^user\\s+logout$"),
     SHOW_CURRENT_MENU ("^show\\s+current\\s+menu$"),
+    EXIT              ("^\\s*exit\\s*$"),
     ;
 
 

@@ -5,8 +5,9 @@ import records.Result;
 
 public interface Controller {
     public Result changeMenu(String menuName);
-    default void exit() {
+    default void    exit() {
         App.shouldTerminate = true;
+        App.saveState();
     }
 
     default Result showCurrentMenu() {

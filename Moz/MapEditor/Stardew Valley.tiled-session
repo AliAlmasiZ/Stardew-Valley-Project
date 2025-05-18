@@ -360,8 +360,8 @@
             "scale": 32,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 6.75,
-                "y": 4.359375
+                "x": 5,
+                "y": 3.515625
             }
         },
         "buildings/stardropSaloonExterior.tmx#objects": {

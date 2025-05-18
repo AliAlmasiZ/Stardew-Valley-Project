@@ -42,6 +42,8 @@ public class MainMenu implements AppMenu {    private final MainMenuController c
             controller.startGame(details);
         } else if ((matcher = MainMenuCommands.LOAD_GAME.getMatcher(input)) != null) {
             System.out.println(controller.loadGame());
+        } else if ((matcher = MainMenuCommands.EXIT.getMatcher(input)) != null) {
+            controller.exit();
         } else {
             System.out.println("invalid command");
         }
