@@ -77,6 +77,9 @@ public class EntityRegistry extends Registry<Entity> {
                     e.addTag(t);
                 }
             }
+            if(registry.get(e.getEntityName()) != null){
+                System.err.println("entity " + e.getEntityName() + " is getting added twice to the registry");
+            }
             this.registry.putIfAbsent(e.getEntityName().toLowerCase(), e);
         }
     }

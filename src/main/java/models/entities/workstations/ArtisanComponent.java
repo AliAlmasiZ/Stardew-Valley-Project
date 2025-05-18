@@ -91,8 +91,9 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
 
     public Entity getProduct() {
         if(isProcessFinished()) {
+            Entity out =  activeProcess.getOutput();
             activeProcess = null;
-            return activeProcess.getOutput();
+            return out;
         }
         throw new RuntimeException("process should finished first");
     }

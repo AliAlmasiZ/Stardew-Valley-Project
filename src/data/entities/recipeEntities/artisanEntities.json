@@ -3,17 +3,39 @@
     {
       "type" : "Pickable",
       "maxStack" : 64
+    },
+    {
+      "type" : "Sellable",
+      "price" : 0
     }
   ],
   "entities": [
-    {
-      "name": "Honey"
-    },
-    {
-      "name": "Cheese"
-    },
-    {
-      "name": "Goat Cheese"
-    }
+    { "name": "Honey" },
+    { "name": "Cheese" },
+    { "name": "Goat Cheese" },
+    { "name": "Beer" },
+    { "name": "Vinegar" },
+    { "name": "Coffee" },
+    { "name": "Juice" },
+    { "name": "Mead" },
+    { "name": "Pale Ale" },
+    { "name": "Wine" },
+    { "name": "Pickles" },
+    { "name": "Jelly" },
+    { "name": "Truffle Oil" },
+    { "name": "Oil" },
+    { "name": "Smoked Fish" },
+    { "name": "Coal" },
+    { "name": "Copper Bar" },
+    { "name": "Iron Bar" },
+    { "name": "Gold Bar" },
+    { "name": "Iridium Bar" },
+    { "name": "Mayonnaise" },
+    { "name": "Duck Mayonnaise" },
+    { "name": "Dinosaur Mayonnaise" },
+    { "name": "Cloth" },
+    { "name": "Dried Mushrooms" },
+    { "name": "Dried Fruit" },
+    { "name": "Raisins" }
   ]
 }

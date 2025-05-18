@@ -118,4 +118,18 @@ purchase Omelet (Recipe)
 cheat give item "Milk" 1
 cheat give item "egg" 1
 
-save game
+tm
+walk -l 5 , 5
+y
+cheat give item "Cheese Press" 1
+place item -n Cheese press -d 4
+
+artisan use "Cheese Press" Cheese
+
+cheat advance time 3h
+
+artisan get Cheese Press
+
+purchase Triple Shot Espresso (Recipe)
+
+cooking show recipes
