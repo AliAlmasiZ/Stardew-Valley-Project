@@ -6,6 +6,8 @@ import java.util.Locale;
 public class StringUtils implements Serializable {
 
     public static String fridge = "Fridge";
+    public static String pierre = "Pierre's General Store";
+
 
     public static boolean isNamesEqual(String str1, String str2) {
         String normalizedString1 = str1.replaceAll("[\\s'()]+", "").toLowerCase();

@@ -408,6 +408,10 @@ public class Inventory extends EntityComponent implements Serializable {
         return out.toString();
     }
 
+    public int getSize() {
+        return slots.size();
+    }
+
     @Override
     public EntityComponent clone() {
         return new Inventory(this);

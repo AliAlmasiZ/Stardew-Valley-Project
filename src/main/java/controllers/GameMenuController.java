@@ -364,6 +364,8 @@ public class GameMenuController implements Controller {    @Override
         Shop shop = building.getComponent(Shop.class);
         if(shop == null)
             return new Result(false, "This building isn't shop");
+        if(StringUtils.isNamesEqual(toolName, "Large Pack") || StringUtils.isNamesEqual(toolName, "Deluxe Pack"))
+            return ShopSystem.upgradeBackPack(shop, toolName);
         if(!StringUtils.isNamesEqual(shop.getName(), "blacksmith"))
             return new Result(false, "You only can Upgrade in blacksmith");
 
@@ -371,6 +373,8 @@ public class GameMenuController implements Controller {    @Override
 
 
     }
+
+
 
     public Result toolsUse(Direction dir) {
         Vec2 playerPosition = App.getActiveGame().getCurrentPlayer().getPosition();
