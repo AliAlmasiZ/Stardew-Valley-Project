@@ -1,5 +1,5 @@
 SOURCE_DIR="./"
-OUTPUT_DIR="../../../src/data/maps"
+OUTPUT_DIR="../../../data/maps"
 
 mkdir -p "$OUTPUT_DIR"
 

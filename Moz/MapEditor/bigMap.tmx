@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="300" height="300" tilewidth="1" tileheight="1" infinite="0" nextlayerid="8" nextobjectid="32">
  <editorsettings>
-  <export target="../../src/data/maps/bigMap.json" format="json"/>
+  <export target="../../data/maps/bigMap.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="Tile sets/ground.json"/>
  <tileset firstgid="17" source="Tile sets/buildings.json"/>

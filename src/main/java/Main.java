@@ -18,14 +18,14 @@ public class Main {
 
     private static void loadDatas() {
         App.getView().log("Loading Game...");
-        App.shopRegistry.load("./src/data/shops");
+        App.shopRegistry.load("./data/shops");
         /* should load recipes first (because artisan has recipes) */
-        App.recipeRegistry.loadRecipes("./src/data/recipes");
-        App.entityRegistry.load("./src/data/entities");
-        App.mapRegistry.load("src/data/maps");
+        App.recipeRegistry.loadRecipes("./data/recipes");
+        App.entityRegistry.load("./data/entities");
+        App.mapRegistry.load("data/maps");
         /* to check is Json entities ok or not */
         App.recipeRegistry.checkIngredients();
-        App.buildingRegistry.load("src/data/buildings");
+        App.buildingRegistry.load("data/buildings");
 
         App.entityRegistry.addChild(App.buildingRegistry);
 

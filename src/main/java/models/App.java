@@ -73,7 +73,7 @@ public class App implements Serializable {
     }
 
     public static void start(){
-        File configFile = new File("src/data/appState/config.ser");
+        File configFile = new File("data/appState/config.ser");
 
         try {
             if(configFile.exists()){
@@ -96,7 +96,7 @@ public class App implements Serializable {
 
     public static void saveState(){
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/data/appState/config.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data/appState/config.ser"));
             out.writeObject(getInstance());
             out.close();
         } catch (IOException e) {

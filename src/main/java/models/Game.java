@@ -110,7 +110,7 @@ public class Game implements Serializable {
         // create NPC
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<NPC> NPCs = objectMapper.readValue(new File("src/data/NPC/npcNames.json"),
+            List<NPC> NPCs = objectMapper.readValue(new File("data/NPC/npcNames.json"),
                     new TypeReference<List<NPC>>() {});
 
             for (Entity npc : NPCs) {
@@ -128,7 +128,7 @@ public class Game implements Serializable {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Quest> quests = mapper.readValue(
-                    new File("src/data/NPC/quests.json"),
+                    new File("data/NPC/quests.json"),
                     new TypeReference<List<Quest>>() {}
             );
 
@@ -147,7 +147,7 @@ public class Game implements Serializable {
                 ObjectMapper mapper = new ObjectMapper();
 
                 ArrayList<String> list = mapper.readValue(
-                        new File("src/data/NPC/Favorites/" + npc.getEntityName() + ".json"),
+                        new File("data/NPC/Favorites/" + npc.getEntityName() + ".json"),
                         mapper.getTypeFactory().constructCollectionType(ArrayList.class, String.class)
                 );
 
@@ -163,7 +163,7 @@ public class Game implements Serializable {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Dialogue> dialogues = mapper.readValue(
-                    new File("src/data/NPC/dialogues.json"),
+                    new File("data/NPC/dialogues.json"),
                     new TypeReference<List<Dialogue>>() {}
             );
 

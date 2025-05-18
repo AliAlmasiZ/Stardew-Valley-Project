@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="24" height="20" tilewidth="1" tileheight="1" infinite="0" nextlayerid="3" nextobjectid="3">
  <editorsettings>
-  <export target="../../../src/data/maps/stardropSaloonInterior.json" format="json"/>
+  <export target="../../../data/maps/stardropSaloonInterior.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="../Tile sets/ground.json"/>
  <tileset firstgid="17" source="../Tile sets/objects.json"/>

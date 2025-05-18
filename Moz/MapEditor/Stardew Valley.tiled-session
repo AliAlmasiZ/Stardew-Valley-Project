@@ -61,7 +61,7 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "/home/parsa/Projects/University/AP/Stardew Valley/src/data/maps/defaultMap.json": {
+        "/home/parsa/Projects/University/AP/Stardew Valley/data/maps/defaultMap.json": {
             "scale": 9.5855,
             "selectedLayer": 3,
             "viewCenter": {
@@ -524,7 +524,7 @@
             }
         }
     },
-    "last.exportedFilePath": "/home/parsa/Projects/University/AP/Stardew Valley/src/data/maps",
+    "last.exportedFilePath": "/home/parsa/Projects/University/AP/Stardew Valley/data/maps",
     "last.imagePath": "/home/parsa/Projects/University/AP/Stardew Valley/Moz/MapEditor/buildings/images",
     "map.height": 7,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
