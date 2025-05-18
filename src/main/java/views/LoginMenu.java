@@ -76,13 +76,8 @@ public class LoginMenu implements AppMenu {    private final LoginMenuController
         } else if ((matcher = LoginMenuCommands.FORGOT_PASSWORD.getMatcher(input)) != null) {
             ForgotPasswordFlow forgotPasswordFlow = new ForgotPasswordFlow();
             Result result = forgotPasswordFlow.handle(matcher.group("username"));
-            Queue<String> messages = new LinkedList<>();
-            messages.add(result.message());
             while (result.isSuccessful()) {
-                if(!result.message().isEmpty()) System.out.println(messages.poll());
-                if(!scanner.hasNextLine()){
-                    continue;
-                }
+                System.out.println(result.message());
                 result = forgotPasswordFlow.handle(scanner.nextLine());
             }
             System.out.println(result);

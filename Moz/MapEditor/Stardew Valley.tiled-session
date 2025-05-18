@@ -162,11 +162,11 @@
             "scaleInEditor": 4
         },
         "bigMap.tmx": {
-            "scale": 3,
-            "selectedLayer": 0,
+            "scale": 8.1487,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 150,
-                "y": 150.16666666666663
+                "x": 143.21302784493233,
+                "y": 145.97420447433333
             }
         },
         "blackSmithExterior.tmx": {
