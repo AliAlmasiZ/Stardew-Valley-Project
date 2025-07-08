@@ -30,7 +30,7 @@
 </details>
 
 <details>
-  <summary>Main Menu</summary>
+  <summary>com.ap.stardew.Main Menu</summary>
 
 - [ ] New game
 - [ ] Show menus
