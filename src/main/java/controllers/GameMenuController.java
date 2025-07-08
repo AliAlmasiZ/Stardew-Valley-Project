@@ -2,33 +2,25 @@ package controllers;
 
 import models.*;
 import models.Date;
-import models.animal.Animal;
-import models.animal.AnimalType;
 import models.NPC.NPC;
 import models.NPC.NpcFriendship;
 import models.NPC.Quest;
+import models.animal.Animal;
+import models.animal.AnimalType;
 import models.crafting.Recipe;
 import models.crafting.RecipeType;
 import models.entities.CollisionEvent;
 import models.entities.Entity;
 import models.entities.components.*;
-import models.entities.systems.GrowthSystem;
-import models.entities.systems.ShopSystem;
-import models.entities.systems.EntityPlacementSystem;
-import models.entities.workstations.ArtisanComponent;
-import models.enums.Direction;
-import models.enums.EntityTag;
-import models.enums.TileType;
-import models.enums.*;
 import models.entities.components.inventory.Inventory;
 import models.entities.components.inventory.InventorySlot;
-import models.enums.Weather;
+import models.entities.systems.EntityPlacementSystem;
+import models.entities.systems.GrowthSystem;
+import models.entities.systems.ShopSystem;
+import models.entities.workstations.ArtisanComponent;
+import models.enums.*;
 import models.gameMap.GameMap;
 import models.gameMap.Tile;
-import models.player.Energy;
-import models.player.Gift;
-import models.player.Message;
-import models.player.Player;
 import models.player.*;
 import models.player.friendship.PlayerFriendship;
 import models.shop.AnimalShopProduct;
@@ -1677,15 +1669,6 @@ public class GameMenuController implements Controller {    @Override
         return new Result(true, message.toString());
     }
 
-    public Result switchInputType() {
-        App.getView().switchInputType();
-        if (App.getView().isRawMode()) {
-            return new Result(true, "You are in raw mode");
-        } else {
-            return new Result(true, "You are in normal mode");
-        }
-    }
-
     public Result handleRawInput(char c) {
         Player player = App.getActiveGame().getCurrentPlayer();
         WalkProposal p;
@@ -1706,12 +1689,6 @@ public class GameMenuController implements Controller {    @Override
             case 'D':
                 p = this.proposeWalk(player.getPosition().getCol() + 1, player.getPosition().getRow());
                 return executeWalk(p);
-
-
-            case 'x':
-            case 'X':
-                switchInputType();
-                break;
             case '1':
             case '2':
             case '3':

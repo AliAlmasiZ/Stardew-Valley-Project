@@ -2,19 +2,9 @@ package models.shop;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import models.App;
 import models.entities.Entity;
-import models.entities.EntityRegistry;
-import models.entities.components.EntityComponent;
-import models.entities.components.Pickable;
-import models.entities.components.inventory.Inventory;
-import models.entities.components.inventory.InventorySlot;
-import models.enums.Season;
-import records.Result;
 
-import javax.swing.*;
 import java.io.Serializable;
-import java.util.HashMap;
 
 /*
 public interface ShopProduct {

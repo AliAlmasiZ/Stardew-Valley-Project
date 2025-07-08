@@ -3,8 +3,6 @@ package models.player;
 import models.App;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Energy implements Serializable{
 

@@ -1,16 +1,15 @@
 package models.NPC;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import models.entities.Entity;
 import models.entities.components.Renderable;
 import models.enums.Season;
 import models.enums.Weather;
 import models.player.Player;
+import views.inGame.Color;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import views.inGame.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NPC extends Entity implements Serializable {

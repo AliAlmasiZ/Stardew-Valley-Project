@@ -5,10 +5,7 @@ import models.Position;
 import models.entities.CollisionEvent;
 import models.entities.Entity;
 import models.entities.components.Placeable;
-import models.entities.components.PositionComponent;
 import models.entities.components.Renderable;
-import models.gameMap.GameMap;
-import models.player.Player;
 import records.Result;
 import views.inGame.Color;
 

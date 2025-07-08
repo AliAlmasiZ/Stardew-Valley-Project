@@ -3,7 +3,6 @@ package models.shop;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.animal.Animal;
 import models.animal.AnimalType;
-import models.entities.Entity;
 
 import java.io.Serializable;
 

@@ -1,7 +1,6 @@
 package models.utils;
 
 import java.io.Serializable;
-import java.util.Locale;
 
 public class StringUtils implements Serializable {
 

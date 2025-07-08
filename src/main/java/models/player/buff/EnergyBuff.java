@@ -2,8 +2,6 @@ package models.player.buff;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import models.App;
-import models.Date;
 import models.enums.SkillType;
 
 import java.io.Serializable;

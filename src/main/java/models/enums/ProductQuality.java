@@ -1,7 +1,5 @@
 package models.enums;
 
-import models.player.Player;
-
 public enum ProductQuality {
     NORMAL(1f),
     SILVER(1.25f),

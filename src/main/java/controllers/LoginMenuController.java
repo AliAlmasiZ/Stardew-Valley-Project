@@ -2,10 +2,10 @@ package controllers;
 
 import models.Account;
 import models.App;
-import records.Result;
-import models.enums.Menu;
 import models.enums.Gender;
+import models.enums.Menu;
 import models.enums.SecurityQuestions;
+import records.Result;
 
 import java.security.SecureRandom;
 import java.util.*;

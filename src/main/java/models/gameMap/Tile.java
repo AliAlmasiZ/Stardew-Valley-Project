@@ -1,11 +1,8 @@
 package models.gameMap;
 
-import models.App;
-import models.Game;
 import models.Position;
 import models.entities.Entity;
 import models.entities.EntityObserver;
-import models.entities.components.SeedComponent;
 import models.enums.TileType;
 import models.player.Player;
 import views.inGame.Color;

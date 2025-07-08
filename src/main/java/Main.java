@@ -1,15 +1,17 @@
 import models.App;
-import views.AppView;
-import views.inGame.CharacterTexture;
-import views.inGame.Color;
-import views.inGame.Renderer;
-import views.inGame.StyledCharacter;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        System.out.print("Enter a command: ");
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.hasNextLine()) {
+            String s = scanner.nextLine();
+            System.out.println("You typed: " + s);
+        } else {
+            System.out.println("No input received.");
+        }
         /* load Jsons */
         loadDatas();
         /* Start game */

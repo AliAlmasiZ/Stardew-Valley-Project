@@ -8,7 +8,6 @@ import models.entities.Entity;
 import models.entities.components.Edible;
 import models.entities.components.Sellable;
 import models.entities.components.inventory.Inventory;
-import models.player.Energy;
 import models.utils.StringUtils;
 
 import java.io.Serializable;

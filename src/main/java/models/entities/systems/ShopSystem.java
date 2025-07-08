@@ -5,7 +5,6 @@ import models.Game;
 import models.Position;
 import models.entities.Entity;
 import models.entities.components.Pickable;
-import models.entities.components.Placeable;
 import models.entities.components.Sellable;
 import models.entities.components.Upgradable;
 import models.entities.components.inventory.Inventory;

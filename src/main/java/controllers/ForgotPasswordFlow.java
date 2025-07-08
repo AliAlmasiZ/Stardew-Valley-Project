@@ -3,12 +3,10 @@ package controllers;
 import models.Account;
 import models.App;
 import models.enums.SecurityQuestions;
+import records.Result;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
-
-import records.Result;
 
 
 public class ForgotPasswordFlow {

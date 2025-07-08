@@ -10,9 +10,9 @@ repositories {
 
 dependencies {
     // Production dependencies
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.0'
-    implementation 'org.jline:jline:3.23.0'
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.2")
 
     // Testing dependencies
     // JUnit 5 (Jupiter)
@@ -36,4 +36,7 @@ application {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+run {
+    standardInput = System.in
 }

@@ -1,6 +1,5 @@
 package models.gameMap;
 
-import models.entities.systems.EntityPlacementSystem;
 import models.enums.Season;
 
 import java.util.*;

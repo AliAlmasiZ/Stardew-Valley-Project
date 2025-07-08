@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.App;
-import models.entities.components.*;
+import models.entities.components.EntityComponent;
 import models.enums.EntityTag;
 import models.utils.StringUtils;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;

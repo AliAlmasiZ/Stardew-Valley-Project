@@ -1,32 +1,27 @@
 package views;
 
 import controllers.GameMenuController;
-import models.*;
+import models.App;
 import models.Commands.GameMenuCommands;
-import models.entities.Entity;
-import models.entities.components.PositionComponent;
+import models.Game;
+import models.Position;
 import models.entities.components.inventory.Inventory;
-import models.entities.components.Renderable;
 import models.enums.Direction;
 import models.enums.SkillType;
 import models.gameMap.GameMap;
-import models.gameMap.MapRegion;
 import models.gameMap.Tile;
-import models.gameMap.WorldMap;
 import models.player.Player;
 import models.player.Skill;
 import records.Result;
 import records.WalkProposal;
-import views.inGame.Color;
-import views.inGame.Renderer;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GameMenu implements AppMenu {    private final GameMenuController controller = new GameMenuController();
+public class GameMenu implements AppMenu {
+    private final GameMenuController controller = new GameMenuController();
     private Result previousResult = null;
 
     private enum MapRenderType {
@@ -42,16 +37,6 @@ public class GameMenu implements AppMenu {    private final GameMenuController c
 
         previousResult = null;
         if (App.getView().isRawMode()) {
-            int c = 0;
-            try {
-                if (App.getView().getTerminal().reader().peek(1000) > 0) {
-                    c = App.getView().getTerminal().reader().read();
-                    System.out.println(c);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            App.getView().log(controller.handleRawInput((char) c));
         } else {
             if (!scanner.hasNextLine()) return;
             String input = scanner.nextLine().trim();
@@ -98,7 +83,7 @@ public class GameMenu implements AppMenu {    private final GameMenuController c
 
             } else if ((matcher = GameMenuCommands.REFRIGERATOR.getMatcher(input)) != null) {
                 App.getView().log(controller.putInFridge(matcher.group(2), Integer.parseInt(matcher.group(3)),
-                                                            matcher.group(1).equals("put")));
+                        matcher.group(1).equals("put")));
 
             } else if (GameMenuCommands.ENERGY_SHOW.getMatcher(input) != null) {
                 App.getView().log(controller.energyShow());
@@ -109,10 +94,7 @@ public class GameMenu implements AppMenu {    private final GameMenuController c
             } else if (GameMenuCommands.ENERGY_UNLIMITED.getMatcher(input) != null) {
                 App.getView().log(controller.energyUnlimited());
 
-            } else if (input.toLowerCase().equals("cit") || GameMenuCommands.CHANGE_INPUT_TYPE.getMatcher(input) != null) {
-                App.getView().log(controller.switchInputType());
-
-            } else if ((matcher = GameMenuCommands.CRAFTINFO.getMatcher(input)) != null) {
+            }else if ((matcher = GameMenuCommands.CRAFTINFO.getMatcher(input)) != null) {
                 App.getView().log(controller.craftInfo(matcher.group(1).trim()));
 
             } else if (input.toLowerCase().equals("tm") || (matcher = GameMenuCommands.TOGGLE_MAP.getMatcher(input)) != null) {
@@ -369,8 +351,6 @@ public class GameMenu implements AppMenu {    private final GameMenuController c
         Game activeGame = App.getActiveGame();
         if (activeGame.isMapVisible()) {
             printMap(activeGame.getActiveMap());
-            App.getView().getRenderer().render();
-            App.getView().getRenderer().moveCurser(0, 0);
 
             Player player = activeGame.getCurrentPlayer();
             System.out.println(player.getComponent(Inventory.class));
@@ -393,105 +373,103 @@ public class GameMenu implements AppMenu {    private final GameMenuController c
 
     public void printMap(GameMap map) {
         Tile[][] tiles = map.getTiles();
-        App.getView().getRenderer().clear();
         Position position = App.getActiveGame().getCurrentPlayer().getPosition();
-        Renderer renderer = App.getView().getRenderer();
-        switch (mapRenderType) {
-            case DEFAULT -> {
-                for (Tile[] value : tiles) {
-                    for (Tile tile : value) {
-                        if (tile.getType() == null) continue;
-                        renderer.mvAddchColored(tile.getCol(), tile.getRow(), tile.getCharacter(), tile.getColor(), position);
-                    }
-                }
-                for (Entity e : map.getEntities()) {
-                    PositionComponent positionComponent = e.getComponent(PositionComponent.class);
+//        switch (mapRenderType) {
+//            case DEFAULT -> {
+//                for (Tile[] value : tiles) {
+//                    for (Tile tile : value) {
+//                        if (tile.getType() == null) continue;
+//                        renderer.mvAddchColored(tile.getCol(), tile.getRow(), tile.getCharacter(), tile.getColor(), position);
+//                    }
+//                }
+//                for (Entity e : map.getEntities()) {
+//                    PositionComponent positionComponent = e.getComponent(PositionComponent.class);
+//
+//                    if (e.getComponent(Renderable.class) != null) {
+//                        renderer.mvAddchColored(positionComponent.getCol(), positionComponent.getRow(),
+//                                e.getComponent(Renderable.class).getCharacter(),
+//                                e.getComponent(Renderable.class).getColor(),
+//                                position);
+//                    }
+//                }
+//            }
+//            case REGIONS -> {
+//                if (!(map instanceof WorldMap)) {
+//                    break;
+//                }
+//
+//                WorldMap map1 = (WorldMap) map;
+//                for (Tile[] value : tiles) {
+//                    for (Tile tile : value) {
+//                        if (tile.getRegion() != null) {
+//                            renderer.mvAddchColored(tile.getCol(), tile.getRow(), '0', tile.getRegion().getColor(), position);
+//                        }
+//                    }
+//                }
+//                for (MapRegion r : map1.getRegions()) {
+//                    renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow(), r.getName(), Color.WHITE, position);
+//                    if (r.getOwner() != null) {
+//                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, r.getOwner().getAccount().getNickname(), Color.WHITE, position);
+//                    } else {
+//                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, "no owner", Color.WHITE, position);
+//                    }
+//                }
+//            }
+//    }
+}
 
-                    if (e.getComponent(Renderable.class) != null) {
-                        renderer.mvAddchColored(positionComponent.getCol(), positionComponent.getRow(),
-                                e.getComponent(Renderable.class).getCharacter(),
-                                e.getComponent(Renderable.class).getColor(),
-                                position);
-                    }
-                }
-            }
-            case REGIONS -> {
-                if (!(map instanceof WorldMap)) {
-                    break;
-                }
-
-                WorldMap map1 = (WorldMap) map;
-                for (Tile[] value : tiles) {
-                    for (Tile tile : value) {
-                        if (tile.getRegion() != null) {
-                            renderer.mvAddchColored(tile.getCol(), tile.getRow(), '0', tile.getRegion().getColor(), position);
-                        }
-                    }
-                }
-                for (MapRegion r : map1.getRegions()) {
-                    renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow(), r.getName(), Color.WHITE, position);
-                    if (r.getOwner() != null) {
-                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, r.getOwner().getAccount().getNickname(), Color.WHITE, position);
-                    } else {
-                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, "no owner", Color.WHITE, position);
-                    }
-                }
-            }
-        }
-    }
-
-    private void handlePurchase(String productName, String count, Scanner scanner) {
-        Pattern pattern = Pattern.compile(".+?(-?\\d+)[,\\s]+(-?\\d+).+");
-        Result result = controller.purchase(productName, count);
-        if (result.isSuccessful() && result.message() == null) {
-            System.out.println("enter x and y to build " + productName);
-            String input = scanner.nextLine().trim();
-            Matcher matcher = pattern.matcher(input);
-            if (!matcher.matches()) {
-                System.out.println("Invalid input! build canceled");
-                return;
-            }
-            int x = Integer.parseInt(matcher.group(1));
-            int y = Integer.parseInt(matcher.group(2));
-            System.out.println(controller.buildBuilding(x, y, productName));
-        }
-        System.out.println(result);
-    }
-
-    private void handleWalk(int x, int y, Scanner scanner) {
-        WalkProposal proposal = controller.proposeWalk(x, y);
-        if (!proposal.isAllowed()) {
-            System.out.println(proposal.message());
+private void handlePurchase(String productName, String count, Scanner scanner) {
+    Pattern pattern = Pattern.compile(".+?(-?\\d+)[,\\s]+(-?\\d+).+");
+    Result result = controller.purchase(productName, count);
+    if (result.isSuccessful() && result.message() == null) {
+        System.out.println("enter x and y to build " + productName);
+        String input = scanner.nextLine().trim();
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            System.out.println("Invalid input! build canceled");
             return;
         }
-        System.out.printf(
-                "It will cost %.02f energy, Proceed? (y/n)%n",
-                proposal.energyCost()
-        );
-        String ans = scanner.nextLine().trim().toLowerCase();
-        if (ans.startsWith("y")) {
-            controller.executeWalk(proposal);
-        } else {
-            System.out.println("Walk cancelled");
-        }
+        int x = Integer.parseInt(matcher.group(1));
+        int y = Integer.parseInt(matcher.group(2));
+        System.out.println(controller.buildBuilding(x, y, productName));
     }
+    System.out.println(result);
+}
 
-    public void toolsCommandParser(String input) {
-        Player player = App.getActiveGame().getCurrentPlayer();
-        Matcher matcher;
-        if ((matcher = GameMenuCommands.TOOLS_EQUIP.getMatcher(input)) != null) {
-            System.out.println(controller.toolsEquip(matcher.group("toolName")));
-        } else if ((matcher = GameMenuCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null) {
-            System.out.println(controller.toolsShowCurrent());
-        } else if ((matcher = GameMenuCommands.TOOLS_AVAILABLE.getMatcher(input)) != null) {
-            System.out.println(controller.toolsShowAvailable());
-        } else if ((matcher = GameMenuCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
-            System.out.println(controller.toolsUpgrade(matcher.group("toolName")));
-        } else if ((matcher = GameMenuCommands.TOOLS_USE.getMatcher(input)) != null) {
-            System.out.println(controller.toolsUse(Direction.getDirection(Integer.parseInt(matcher.group("direction")))));
-
-        } else {
-            System.out.println("Invalid Command!");
-        }
+private void handleWalk(int x, int y, Scanner scanner) {
+    WalkProposal proposal = controller.proposeWalk(x, y);
+    if (!proposal.isAllowed()) {
+        System.out.println(proposal.message());
+        return;
     }
+    System.out.printf(
+            "It will cost %.02f energy, Proceed? (y/n)%n",
+            proposal.energyCost()
+    );
+    String ans = scanner.nextLine().trim().toLowerCase();
+    if (ans.startsWith("y")) {
+        controller.executeWalk(proposal);
+    } else {
+        System.out.println("Walk cancelled");
+    }
+}
+
+public void toolsCommandParser(String input) {
+    Player player = App.getActiveGame().getCurrentPlayer();
+    Matcher matcher;
+    if ((matcher = GameMenuCommands.TOOLS_EQUIP.getMatcher(input)) != null) {
+        System.out.println(controller.toolsEquip(matcher.group("toolName")));
+    } else if ((matcher = GameMenuCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null) {
+        System.out.println(controller.toolsShowCurrent());
+    } else if ((matcher = GameMenuCommands.TOOLS_AVAILABLE.getMatcher(input)) != null) {
+        System.out.println(controller.toolsShowAvailable());
+    } else if ((matcher = GameMenuCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
+        System.out.println(controller.toolsUpgrade(matcher.group("toolName")));
+    } else if ((matcher = GameMenuCommands.TOOLS_USE.getMatcher(input)) != null) {
+        System.out.println(controller.toolsUse(Direction.getDirection(Integer.parseInt(matcher.group("direction")))));
+
+    } else {
+        System.out.println("Invalid Command!");
+    }
+}
 }

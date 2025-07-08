@@ -1,9 +1,6 @@
 package models.entities.systems;
 
-import models.App;
-import models.Game;
 import models.entities.Entity;
-import models.entities.EntityList;
 import models.entities.components.Growable;
 import models.entities.components.InteriorComponent;
 import models.gameMap.GameMap;

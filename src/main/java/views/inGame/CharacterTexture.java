@@ -1,7 +1,5 @@
 package views.inGame;
 
-import models.App;
-
 import java.io.Serializable;
 import java.util.Arrays;
 

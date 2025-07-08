@@ -1,7 +1,7 @@
 package models;
 
-import models.enums.WeekDay;
 import models.enums.Season;
+import models.enums.WeekDay;
 
 import java.io.Serializable;
 

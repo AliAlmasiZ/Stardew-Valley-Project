@@ -2,16 +2,16 @@ package models.entities;
 
 import models.App;
 import models.Vec2;
-import models.entities.components.*;
-import models.entities.systems.EntityPlacementSystem;
-import models.enums.ProductQuality;
-import models.gameMap.Tile;
 import models.animal.Animal;
+import models.entities.components.*;
 import models.entities.components.harvestable.Harvestable;
 import models.entities.components.inventory.Inventory;
+import models.entities.systems.EntityPlacementSystem;
 import models.enums.EntityTag;
+import models.enums.ProductQuality;
 import models.enums.SkillType;
 import models.enums.TileType;
+import models.gameMap.Tile;
 import models.player.Player;
 import records.Result;
 

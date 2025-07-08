@@ -1,14 +1,11 @@
 package models.entities.systems;
 
 import models.App;
-import models.Game;
 import models.Position;
 import models.entities.Entity;
 import models.entities.components.Forageable;
-import models.entities.components.Growable;
 import models.entities.components.Pickable;
 import models.entities.components.PositionComponent;
-import models.enums.Direction;
 import models.enums.EntityTag;
 import models.enums.TileType;
 import models.gameMap.BiomeType;

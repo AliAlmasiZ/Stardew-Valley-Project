@@ -10,7 +10,10 @@ import models.entities.components.Pickable;
 import models.entities.components.Placeable;
 import models.entities.components.PositionComponent;
 import models.enums.TileType;
-import models.gameMap.*;
+import models.gameMap.Environment;
+import models.gameMap.GameMap;
+import models.gameMap.MapData;
+import models.gameMap.Tile;
 import records.Result;
 
 import java.util.ArrayList;

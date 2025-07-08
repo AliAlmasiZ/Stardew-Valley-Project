@@ -1,6 +1,5 @@
 package models.entities.components;
 
-import models.Game;
 import models.Position;
 import models.Vec2;
 import models.gameMap.GameMap;

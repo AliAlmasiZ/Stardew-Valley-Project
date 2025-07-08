@@ -3,14 +3,8 @@ package models.crafting;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import models.App;
-import models.entities.Entity;
-import models.entities.components.EntityComponent;
-import models.enums.EntityTag;
 import models.utils.StringUtils;
-import records.Result;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class RecipeRegistry {

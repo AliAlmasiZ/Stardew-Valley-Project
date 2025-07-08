@@ -5,12 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import models.App;
 import models.Date;
-import models.entities.components.*;
-import models.entities.components.harvestable.Harvestable;
-import models.entities.components.inventory.Inventory;
-import models.entities.workstations.ArtisanComponent;
 import models.enums.SkillType;
-import models.shop.Shop;
 
 import java.io.Serializable;
 

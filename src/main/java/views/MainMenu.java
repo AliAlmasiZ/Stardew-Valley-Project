@@ -2,7 +2,6 @@ package views;
 
 import controllers.MainMenuController;
 import models.Commands.MainMenuCommands;
-import models.gameMap.MapRegion;
 import records.GameStartingDetails;
 
 import java.util.Scanner;

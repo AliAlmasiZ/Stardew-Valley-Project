@@ -3,14 +3,11 @@ package models.shop;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.App;
-import models.animal.Animal;
 import models.entities.components.EntityComponent;
 import models.enums.Material;
-import models.enums.Season;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Shop extends EntityComponent implements Serializable {

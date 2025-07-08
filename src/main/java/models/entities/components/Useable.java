@@ -2,8 +2,8 @@ package models.entities.components;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.App;
-import models.gameMap.Tile;
 import models.entities.UseFunction;
+import models.gameMap.Tile;
 import models.player.Player;
 import records.Result;
 

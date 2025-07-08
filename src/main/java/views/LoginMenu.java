@@ -2,11 +2,9 @@ package views;
 
 import controllers.ForgotPasswordFlow;
 import controllers.LoginMenuController;
-import records.Result;
 import models.Commands.LoginMenuCommands;
+import records.Result;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 

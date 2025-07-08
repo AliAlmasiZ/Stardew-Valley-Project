@@ -1,5 +1,8 @@
 package models.entities.components;
-import com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import models.entities.Entity;
 import models.entities.components.harvestable.Harvestable;
 import models.entities.components.inventory.Inventory;

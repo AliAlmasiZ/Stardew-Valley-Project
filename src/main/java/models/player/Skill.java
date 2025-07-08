@@ -1,7 +1,5 @@
 package models.player;
 
-import models.enums.SkillType;
-
 import java.io.Serializable;
 
 public class Skill implements Serializable {

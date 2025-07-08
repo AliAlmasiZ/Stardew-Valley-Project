@@ -7,25 +7,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import models.App;
-import models.Position;
-import models.Vec2;
-import models.building.Door;
 import models.entities.CollisionEvent;
-import models.entities.Entity;
-import models.entities.systems.EntityPlacementSystem;
 import models.enums.TileType;
-import models.gameMap.GameMap;
-import models.gameMap.MapData;
-import models.gameMap.Tile;
-import records.Result;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @JsonDeserialize(using = PlaceableDeserializer.class)
 public class Placeable extends EntityComponent implements Serializable {

@@ -1,8 +1,6 @@
 package models.entities.components;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import models.App;
-import models.Position;
 import views.inGame.Color;
 
 import java.io.Serializable;

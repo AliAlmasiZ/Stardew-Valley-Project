@@ -1,7 +1,6 @@
 package models;
 
 import models.enums.Gender;
-
 import models.enums.SecurityQuestions;
 import records.Result;
 
@@ -9,7 +8,9 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

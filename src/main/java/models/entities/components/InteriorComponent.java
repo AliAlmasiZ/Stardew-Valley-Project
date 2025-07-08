@@ -6,14 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import models.App;
-import models.building.Door;
-import models.entities.systems.EntityPlacementSystem;
-import models.enums.TileType;
 import models.gameMap.GameMap;
-import models.gameMap.MapData;
-import models.gameMap.MapRegistry;
-import models.gameMap.Tile;
 
 import java.io.IOException;
 import java.io.Serializable;

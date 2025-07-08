@@ -3,12 +3,10 @@ package models.entities.components;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.App;
 import models.Game;
-import models.Position;
 import models.entities.Entity;
 import models.enums.EntityTag;
 import models.enums.Season;
 import models.enums.Weather;
-import models.gameMap.Tile;
 import models.utils.StringUtils;
 import records.Result;
 

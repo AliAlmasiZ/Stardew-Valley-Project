@@ -2,12 +2,7 @@ package models.entities;
 
 import models.entities.components.EntityComponent;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

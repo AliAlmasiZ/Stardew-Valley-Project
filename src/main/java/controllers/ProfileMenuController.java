@@ -2,8 +2,8 @@ package controllers;
 
 import models.Account;
 import models.App;
-import records.Result;
 import models.enums.Menu;
+import records.Result;
 
 public class ProfileMenuController implements Controller{    @Override
     public Result changeMenu(String menuName) {

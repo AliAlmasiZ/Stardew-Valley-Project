@@ -3,8 +3,6 @@ package models.entities.components.inventory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.App;
 import models.entities.Entity;
-import models.entities.EntityList;
-import models.entities.EntityObserver;
 import models.entities.components.EntityComponent;
 import models.entities.components.Pickable;
 import models.enums.EntityTag;
