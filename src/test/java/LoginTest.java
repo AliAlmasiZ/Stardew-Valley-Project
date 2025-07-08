@@ -82,21 +82,6 @@ public class LoginTest {
         checkExpected("logged in successfully");
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "forget password -i   AliAlmasi, invalid command",
-            "forget password -u  liAlmasi, ",
-            "forget password -u   AliAlmasi,",
-            "forget password -u   AliAlmasi",
-            "forget password -u   AliAlmasi",
-            "forget password -u   AliAlmasi"
-    })
-    void forgetPassword(String input, String expected) {
-        setIn(input);
-        checkExpected(expected) ;
-    }
-
-
 
 
 

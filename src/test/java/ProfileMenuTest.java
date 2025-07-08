@@ -133,5 +133,12 @@ public class ProfileMenuTest {
         checkExpected("LoginMenu");
     }
 
+    @Test
+    void testScannerBlocking() {
+        setIn("hello\n");
+        Scanner s = new Scanner(System.in);
+        String line = s.nextLine(); // works if input ends with \n
+        System.out.println("Read: " + line);
+    }
 
 }
