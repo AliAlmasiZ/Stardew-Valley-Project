@@ -1,14 +1,27 @@
 package views;
 
+import com.badlogic.gdx.Game;
 import models.App;
 
 import java.util.Scanner;
 
-public class AppView {
+public class AppView extends Game {
+    private static AppView instance;
+
     private final Scanner scanner;
     //false is the typical terminal mode
-    private boolean rawMode = false;
     private String previusMessage = "";
+
+
+    public static AppView getInstance(){
+        if(instance == null) instance = new AppView();
+        return instance;
+    }
+
+    @Override
+    public void create() {
+        //todo
+    }
 
     public AppView() {
         scanner = new Scanner(System.in);
@@ -18,10 +31,6 @@ public class AppView {
         while (!App.shouldTerminate) {
             App.getCurrentMenu().checker(scanner);
         }
-    }
-
-    public boolean isRawMode() {
-        return rawMode;
     }
 
     public String inputWithPrompt(String prompt) {
@@ -49,4 +58,5 @@ public class AppView {
     public String getPreviusMessage() {
         return previusMessage;
     }
+
 }

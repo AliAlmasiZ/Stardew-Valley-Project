@@ -90,8 +90,6 @@ public class App implements Serializable {
         if(!instance.stayLoggedIn) instance.loggedInAccount = null;
 
         if(instance.loggedInAccount != null) setCurrentMenu(Menu.MAIN_MENU);
-
-        view.run();
     }
 
     public static void saveState(){

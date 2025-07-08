@@ -1,21 +1,25 @@
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import models.App;
+import views.AppView;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        System.out.print("Enter a command: ");
-        Scanner scanner = new Scanner(System.in);
-        if (scanner.hasNextLine()) {
-            String s = scanner.nextLine();
-            System.out.println("You typed: " + s);
-        } else {
-            System.out.println("No input received.");
-        }
         /* load Jsons */
         loadDatas();
         /* Start game */
-        App.start();
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("MyGame");
+        config.setDecorated(true);
+        config.setWindowedMode(1000, 800);
+        config.setResizable(true);
+        config.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL32, 3, 2);
+        config.setBackBufferConfig(8, 8, 8, 8, 16, 8, 4);
+
+        Lwjgl3Application app = new Lwjgl3Application(AppView.getInstance(), config);
     }
 
     private static void loadDatas() {
