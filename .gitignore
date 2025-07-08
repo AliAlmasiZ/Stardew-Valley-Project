@@ -117,7 +117,7 @@ Desktop.ini
 
 # Git
 #.gitignore
-!.gitignore 
+!.gitignore
 
 
 # tests
@@ -141,3 +141,34 @@ test/
 
 # Ignore Gradle build output directory
 build
+
+# Android Module
+android/local.properties
+android/gen/
+android/libs/armeabi*/
+android/libs/x86*/
+
+# Desktop / LWJGL
+lwjgl3/.settings/
+lwjgl3/bin/
+
+# HTML / GWT
+html/war/
+html/gwt-unitCache/
+html/.gwt/
+html/war/WEB-INF/classes/
+html/war/WEB-INF/deploy/
+
+# iOS / RoboVM
+ios/.settings/
+arm*/
+Debug/
+Release/
+*.a
+*.dylib
+
+# Misc / Temp
+tmp/
+bin/
+gen/
+target/

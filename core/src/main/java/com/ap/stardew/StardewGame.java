@@ -11,7 +11,7 @@ public class StardewGame extends Game {
     private static StardewGame instance;
 
     public static StardewGame getInstance() {
-        return instance;    
+        return instance;
     }
 
     @Override
