@@ -2,6 +2,7 @@ package com.ap.stardew.views.old;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -27,6 +28,12 @@ public class MainScreen implements Screen {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+        //test---------------
+        Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
+        stage.getBatch().begin();
+        stage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.getBatch().end();
+        //---------------------
     }
 
     @Override
