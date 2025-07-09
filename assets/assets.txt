@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
