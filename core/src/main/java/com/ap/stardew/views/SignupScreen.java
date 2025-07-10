@@ -4,6 +4,7 @@ import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.Controller;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.LoginMenuController;
+import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.records.Result;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -79,7 +80,7 @@ public class SignupScreen extends AbstractScreen {
         rootTable.add(new Label("Password:", skin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(password).width(fieldWidth);
-        rootTable.add(randomPasswordButton);
+        rootTable.add(randomPasswordButton).pad(15);
         rootTable.row();
         rootTable.add(new Label("Confirm Password:", skin)).padBottom(padFromLabel);
         rootTable.row();
@@ -160,14 +161,21 @@ public class SignupScreen extends AbstractScreen {
         Dialog dialog = new Dialog("Security Question", skin);
 
 
-        Label questionLabel = new Label("What is your favorite Club?", skin);
+        SelectBox<Integer> integerSelectBox = new SelectBox<>(skin);
+        integerSelectBox.setItems(new Integer[]{1, 2, 3, 4, 5});
+        Label questionLabel = new Label(SecurityQuestions.getQuestionList(), skin);
         TextField answerField = new TextField("", skin);
         answerField.setMessageText("Your answer");
+        TextField confirmAnswerField = new TextField("", skin);
+        confirmAnswerField.setMessageText("Your confirm answer");
 
         Label errorLabel = new Label("", skin);
-        errorLabel.setColor(1, 0, 0, 1);
+        errorLabel.setColor(Color.RED);
         dialog.getContentTable().add(questionLabel).padTop(10).padLeft(10).padRight(10).row();
+        dialog.getContentTable().add(new Label("which one will you answer?", skin)).padTop(10).padLeft(10).padRight(10).row();
+        dialog.getContentTable().add(integerSelectBox).padTop(10).padLeft(10).padRight(10).row();
         dialog.getContentTable().add(answerField).width(300).padBottom(10).row();
+        dialog.getContentTable().add(confirmAnswerField).width(300).padBottom(10).row();
         dialog.getContentTable().add(errorLabel).padBottom(10).row();
 
         TextButton confirmButton = new TextButton("Confirm", skin);
@@ -175,14 +183,22 @@ public class SignupScreen extends AbstractScreen {
 
         confirmButton.addListener(new ClickListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
+            public void clicked(InputEvent event, float x, float y) {
                 if (answerField.getText().trim().length() < 2) {
                     errorLabel.setText("Answer is too short.");
-                } else {
-                    dialog.hide();
+                    return;
                 }
+
+                Result result = controller.pickQuestion(integerSelectBox.getSelected(),
+                                     answerField.getText(), confirmAnswerField.getText());
+                if (!result.isSuccessful()) {
+                    errorLabel.setText(result.message());
+                    return;
+                }
+
+                StardewGame.getInstance().setScreen(new MainScreen()); //TODO: go to proper screen
             }
+
         });
 
         skipButton.addListener(new ClickListener() {
