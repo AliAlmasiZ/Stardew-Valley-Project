@@ -1,22 +1,65 @@
-package com.ap.stardew.views.old;
+package com.ap.stardew.views;
 
+import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainScreen implements Screen {
 
     private Stage stage;
     private Table rootTable;
+    private Skin skin;
+    private TextButton registerButton;
+    private TextButton loginButton;
+    private TextButton guestButton;
 
     public MainScreen() {
         stage = new Stage(new ScreenViewport());
         rootTable = new Table();
         rootTable.setFillParent(true);
+        skin = GameAssetManager.getSkin();
+
+        registerButton = new TextButton("Register", skin);
+        loginButton = new TextButton("Login", skin);
+        guestButton = new TextButton("Play as Guest", skin);
+
+        rootTable.add(registerButton);
+        rootTable.row();
+        rootTable.add(loginButton);
+        rootTable.row();
+        rootTable.add(guestButton);
+        rootTable.row();
         stage.addActor(rootTable);
+
+        // Adding listeners
+        registerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("clicked");
+            }
+        });
+
+        loginButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+            }
+        });
+
+        guestButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
     }
 
     @Override
@@ -27,13 +70,13 @@ public class MainScreen implements Screen {
     @Override
     public void render(float delta) {
         stage.act(delta);
-        stage.draw();
         //test---------------
         Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
         stage.getBatch().begin();
         stage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.getBatch().end();
         //---------------------
+        stage.draw();
     }
 
     @Override

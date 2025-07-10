@@ -3680,3 +3680,10 @@ data/recipes/artisanRecipes.json
 data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
+skin/font-export.fnt
+skin/font-subtitle-export.fnt
+skin/font-title-export.fnt
+skin/nougat-extrablack-webfont (2).ttf
+skin/pixthulhu-ui.atlas
+skin/pixthulhu-ui.json
+skin/pixthulhu-ui.png
