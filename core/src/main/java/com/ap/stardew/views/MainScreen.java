@@ -1,5 +1,6 @@
 package com.ap.stardew.views;
 
+import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -43,7 +44,7 @@ public class MainScreen implements Screen {
         registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("clicked");
+                StardewGame.getInstance().setScreen(new SignupScreen());
             }
         });
 
@@ -60,6 +61,10 @@ public class MainScreen implements Screen {
 
             }
         });
+    }
+
+    public void registerDialog() {
+
     }
 
     @Override
