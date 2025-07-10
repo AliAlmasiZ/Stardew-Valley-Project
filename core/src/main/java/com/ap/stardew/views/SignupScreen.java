@@ -1,20 +1,29 @@
 package com.ap.stardew.views;
 
+import com.ap.stardew.StardewGame;
+import com.ap.stardew.controllers.Controller;
 import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.controllers.LoginMenuController;
+import com.ap.stardew.records.Result;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.io.File;
 
 public class SignupScreen extends AbstractScreen {
+    LoginMenuController controller;
     private TextField username;
     private TextField password;
     private TextField confirmPassword;
@@ -23,14 +32,72 @@ public class SignupScreen extends AbstractScreen {
     SelectBox<String> gender;
 
 
+    private TextButton registerButton;
+    private TextButton backButton;
+    private Label message;
+
+
     public SignupScreen() {
         super();
+        controller = new LoginMenuController();
+        float fieldWidth = Gdx.graphics.getWidth() * 0.2f;
 
-
-        // Create SelectBox
+        username = new TextField("", skin);
+        username.setMessageText("Username");
+        username.setWidth(fieldWidth);
+        password = new TextField("", skin);
+        password.setMessageText("Password");
+        password.setWidth(fieldWidth);
+        confirmPassword = new TextField("", skin);
+        confirmPassword.setMessageText("Confirm Password");
+        confirmPassword.setWidth(fieldWidth);
+        name = new TextField("", skin);
+        name.setMessageText("Name");
+        email = new TextField("", skin);
+        email.setMessageText("Email");
+        email.setWidth(fieldWidth);
         gender = new SelectBox<>(skin);
         String[] genders = {"Boy", "Girl"};
         SignupScreen.this.gender.setItems(genders);
+
+        registerButton = new TextButton("Register", skin);
+        backButton = new TextButton("Back", skin);
+
+        message = new Label("", skin);
+        message.setVisible(false);
+
+        float padFromLabel = 0.1f;
+
+        rootTable.add(message).pad(30);
+        rootTable.row();
+        rootTable.add(new Label("Username:", skin)).padBottom(padFromLabel);
+        rootTable.row();
+        rootTable.add(username).width(fieldWidth);
+        rootTable.row();
+        rootTable.add(new Label("Password:", skin)).padBottom(padFromLabel);
+        rootTable.row();
+        rootTable.add(password).width(fieldWidth);
+        rootTable.row();
+        rootTable.add(new Label("Confirm Password:", skin)).padBottom(padFromLabel);
+        rootTable.row();
+        rootTable.add(confirmPassword).width(fieldWidth);
+        rootTable.row();
+        rootTable.add(new Label("Name", skin)).padBottom(padFromLabel);
+        rootTable.row();
+        rootTable.add(name).width(fieldWidth);
+        rootTable.row();
+        rootTable.add(new Label("Email:", skin)).padBottom(padFromLabel);
+        rootTable.row();
+        rootTable.add(email).width(fieldWidth);
+        rootTable.row();
+        rootTable.add(new Label("Gender:", skin));
+        rootTable.add(gender);
+        rootTable.row();
+        rootTable.add(registerButton).pad(20);
+        rootTable.row();
+        rootTable.add(backButton).pad(20);
+
+
 
         // Add change listener
         SignupScreen.this.gender.addListener(new ChangeListener() {
@@ -40,10 +107,91 @@ public class SignupScreen extends AbstractScreen {
             }
         });
 
-        rootTable.add(SignupScreen.this.gender);
+        registerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result isNewUsername = controller.suggestUsername(username.getText());
+                if (!isNewUsername.isSuccessful()) {
+                    username.setText(isNewUsername.message());
+                    message.setColor(Color.RED);
+                    message.setVisible(true);
+                    message.setText("You should choose a new username! We filled new one for you!");
+                    return;
+                }
+
+                Result result = controller.register(username.getText(), password.getText(), confirmPassword.getText(),
+                        name.getText(), email.getText(), gender.getSelected());
+
+                if (!result.isSuccessful()) {
+                    message.setColor(Color.RED);
+                    message.setVisible(true);
+                    message.setText(result.message());
+                }
+
+                message.setVisible(false);
+                showSecurityQuestionDialog();
+            }
+        });
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                StardewGame.getInstance().setScreen(new MainScreen());
+            }
+        });
+
         stage.addActor(rootTable);
 
+    }
 
+    public void showSecurityQuestionDialog() {
+        Dialog dialog = new Dialog("Security Question", skin);
+
+
+        Label questionLabel = new Label("What is your favorite Club?", skin);
+        TextField answerField = new TextField("", skin);
+        answerField.setMessageText("Your answer");
+
+        Label errorLabel = new Label("", skin);
+        errorLabel.setColor(1, 0, 0, 1);
+        dialog.getContentTable().add(questionLabel).padTop(10).padLeft(10).padRight(10).row();
+        dialog.getContentTable().add(answerField).width(300).padBottom(10).row();
+        dialog.getContentTable().add(errorLabel).padBottom(10).row();
+
+        TextButton confirmButton = new TextButton("Confirm", skin);
+        TextButton skipButton = new TextButton("Skip", skin);
+
+        confirmButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (answerField.getText().trim().length() < 2) {
+                    errorLabel.setText("Answer is too short.");
+                } else {
+                    dialog.hide();
+                }
+            }
+        });
+
+        skipButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        dialog.getContentTable().center();
+        dialog.getButtonTable().add(confirmButton).padBottom(5).row();
+        dialog.getButtonTable().add(skipButton).padBottom(5).row();
+
+        dialog.setMovable(false);
+        dialog.setResizable(false);
+        dialog.show(stage);
+        dialog.center();
+        dialog.getTitleTable().padTop(20).padBottom(20);
+        dialog.getButtonTable().center();
+        dialog.getTitleLabel().setFontScale(1.2f);
+        dialog.getTitleLabel().setAlignment(Align.center);
     }
 
     @Override
