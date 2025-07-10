@@ -32,6 +32,7 @@ public class SignupScreen extends AbstractScreen {
     SelectBox<String> gender;
 
 
+    private TextButton randomPasswordButton;
     private TextButton registerButton;
     private TextButton backButton;
     private Label message;
@@ -57,9 +58,10 @@ public class SignupScreen extends AbstractScreen {
         email.setMessageText("Email");
         email.setWidth(fieldWidth);
         gender = new SelectBox<>(skin);
-        String[] genders = {"Boy", "Girl"};
+        String[] genders = {"male", "female"};
         SignupScreen.this.gender.setItems(genders);
 
+        randomPasswordButton = new TextButton("Random Password", skin);
         registerButton = new TextButton("Register", skin);
         backButton = new TextButton("Back", skin);
 
@@ -77,6 +79,7 @@ public class SignupScreen extends AbstractScreen {
         rootTable.add(new Label("Password:", skin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(password).width(fieldWidth);
+        rootTable.add(randomPasswordButton);
         rootTable.row();
         rootTable.add(new Label("Confirm Password:", skin)).padBottom(padFromLabel);
         rootTable.row();
@@ -91,6 +94,7 @@ public class SignupScreen extends AbstractScreen {
         rootTable.add(email).width(fieldWidth);
         rootTable.row();
         rootTable.add(new Label("Gender:", skin));
+        rootTable.row();
         rootTable.add(gender);
         rootTable.row();
         rootTable.add(registerButton).pad(20);
@@ -126,10 +130,18 @@ public class SignupScreen extends AbstractScreen {
                     message.setColor(Color.RED);
                     message.setVisible(true);
                     message.setText(result.message());
+                    return;
                 }
 
                 message.setVisible(false);
                 showSecurityQuestionDialog();
+            }
+        });
+
+        randomPasswordButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                password.setText(LoginMenuController.generatePassword());
             }
         });
 

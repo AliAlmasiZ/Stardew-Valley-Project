@@ -167,7 +167,7 @@ public class LoginMenuController implements Controller{    @Override
         String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lower = "abcdefghijklmnopqrstuvwxyz";
         String digits = "0123456789";
-        String special = "?>,<\"';:/\\|][}{+=)(*&^%$#!";
+        String special = "?*&%$#!";
 
         SecureRandom random = new SecureRandom();
         List<Character> passwordChars = new ArrayList<>();
