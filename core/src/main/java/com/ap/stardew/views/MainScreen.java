@@ -26,7 +26,7 @@ public class MainScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         rootTable = new Table();
         rootTable.setFillParent(true);
-        skin = GameAssetManager.getSkin();
+        skin = GameAssetManager.getInstance().getSkin();
 
         registerButton = new TextButton("Register", skin);
         loginButton = new TextButton("Login", skin);
@@ -45,26 +45,27 @@ public class MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 StardewGame.getInstance().setScreen(new SignupScreen());
+                dispose();
             }
         });
 
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
+                //TODO
             }
         });
 
         guestButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                //TODO
             }
         });
     }
 
     public void registerDialog() {
-
+        //TODO
     }
 
     @Override

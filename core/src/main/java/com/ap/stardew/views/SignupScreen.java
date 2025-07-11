@@ -153,7 +153,6 @@ public class SignupScreen extends AbstractScreen {
             }
         });
 
-        stage.addActor(rootTable);
 
     }
 

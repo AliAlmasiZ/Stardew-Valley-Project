@@ -17,7 +17,8 @@ public class AbstractScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         rootTable = new Table();
         rootTable.setFillParent(true);
-        skin = GameAssetManager.getSkin();
+        stage.addActor(rootTable);
+        skin = GameAssetManager.getInstance().getSkin();
     }
 
     @Override
@@ -26,8 +27,9 @@ public class AbstractScreen implements Screen {
     }
 
     @Override
-    public void render(float v) {
-
+    public void render(float delta) {
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -53,6 +55,6 @@ public class AbstractScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }
