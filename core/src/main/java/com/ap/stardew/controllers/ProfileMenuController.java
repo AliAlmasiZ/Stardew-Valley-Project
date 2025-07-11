@@ -18,8 +18,8 @@ public class ProfileMenuController implements Controller{    @Override
 
     public Result changeUsername(String username) {
         Account user = App.getLoggedInAccount();
-        if(user.getUsername().equals(username))
-            return new Result(false, "your username must be different with old one");
+//        if(user.getUsername().equals(username))
+//            return new Result(false, "your username must be different with old one");
         if(App.getUserByUsername(username) != null)
             return new Result(false, "this username is already taken");
         if(!Account.isUsernameValid(username).isSuccessful())
@@ -30,8 +30,8 @@ public class ProfileMenuController implements Controller{    @Override
 
     public Result changeNickname(String nickname) {
         Account account = App.getLoggedInAccount();
-        if(account.getNickname().equals(nickname))
-            return new Result(false, "your nickname must be different with old one");
+//        if(account.getNickname().equals(nickname))
+//            return new Result(false, "your nickname must be different with old one");
         account.setNickname(nickname);
         return new Result(true, "your nickname changed to \"" + nickname + "\" successfully");
     }
@@ -40,8 +40,8 @@ public class ProfileMenuController implements Controller{    @Override
         Account account = App.getLoggedInAccount();
         if(!Account.isEmailValid(email).isSuccessful())
             return Account.isEmailValid(email);
-        if(account.getEmail().equals(email))
-            return new Result(false, "your email must be different with old one");
+//        if(account.getEmail().equals(email))
+//            return new Result(false, "your email must be different with old one");
         account.setEmail(email);
         return new Result(true, "your email changed to " + email + " successfully");
     }

@@ -36,6 +36,7 @@ public class MainScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 StardewGame.getInstance().setScreen(new SignupScreen());
+                dispose();
             }
         });
 
@@ -49,13 +50,13 @@ public class MainScreen extends AbstractScreen {
         guestButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                //TODO
             }
         });
     }
 
     public void registerDialog() {
-
+        //TODO
     }
 
     @Override

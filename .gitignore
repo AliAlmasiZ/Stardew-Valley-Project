@@ -17,6 +17,10 @@ Thumbs.db
 # Log files
 *.log
 
+#Binary files
+*.bin
+*.ser
+
 # Temporary files
 *.tmp
 *.bak
@@ -172,3 +176,6 @@ tmp/
 bin/
 gen/
 target/
+
+
+

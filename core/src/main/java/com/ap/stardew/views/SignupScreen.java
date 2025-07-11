@@ -32,10 +32,12 @@ public class SignupScreen extends AbstractScreen {
     private TextField email;
     SelectBox<String> gender;
 
+
     private TextButton randomPasswordButton;
     private TextButton registerButton;
     private TextButton backButton;
     private Label message;
+
 
     public SignupScreen() {
         super();
