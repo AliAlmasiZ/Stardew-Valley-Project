@@ -50,6 +50,12 @@ public class ValidatedTextField extends WidgetGroup {
         });
     }
 
+    public ValidatedTextField(String text, Skin skin, Validator<String> validator) {
+        this(skin, validator);
+        textField.setText(text);
+        setMessage("");
+    }
+
     public boolean validateText(){
         Result validation = validator.isValid(textField.getText());
         return validation.isSuccessful();
@@ -140,4 +146,13 @@ public class ValidatedTextField extends WidgetGroup {
     public TextField getTextField() {
         return textField;
     }
+
+    public void setMessageText(String textMessage) {
+        textField.setMessageText(textMessage);
+    }
+
+    public void setPasswordMode(boolean bool) {
+        textField.setPasswordMode(bool);
+    }
+
 }

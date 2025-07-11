@@ -49,7 +49,8 @@ public class MainMenuScreen extends AbstractScreen {
         logoutBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO
+                StardewGame.getInstance().setScreen(new MainScreen());
+                dispose();
             }
         });
     }

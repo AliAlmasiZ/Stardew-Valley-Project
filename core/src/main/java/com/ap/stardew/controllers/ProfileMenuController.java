@@ -1,5 +1,6 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.controllers.validators.Validator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.enums.Menu;
@@ -70,5 +71,19 @@ public class ProfileMenuController implements Controller{    @Override
         return new Result(true, sb.toString());
     }
 
+
+    public Validator<String> getEmailValidator() {
+
+        return new Validator<String>() {
+            @Override
+            public Result isValid(String object) {
+                Account account = App.getLoggedInAccount();
+                if (!Account.isEmailValid(object).isSuccessful())
+                    return Account.isEmailValid(object);
+
+                return new Result(true, "");
+            }
+        };
+    }
 
 }

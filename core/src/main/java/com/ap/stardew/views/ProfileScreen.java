@@ -2,34 +2,37 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.ProfileMenuController;
+import com.ap.stardew.controllers.validators.NonEmptyValidator;
+import com.ap.stardew.controllers.validators.PasswordValidator;
+import com.ap.stardew.controllers.validators.UsernameValidator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.enums.Gender;
+import com.ap.stardew.records.Result;
+import com.ap.stardew.views.widgets.ValidatedTextField;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 public class ProfileScreen extends AbstractScreen {
     Account activeAccount;
     Label title, message;
-    Label usernameLabel, passLabel, nicknameLabel, emailLabel, genderLabel, gender;
-    TextField usernameField, passField, nicknameField, emailField;
-    TextButton submitBtn, backBtn;
+    Label usernameLabel, nicknameLabel, emailLabel, genderLabel, gender;
+    ValidatedTextField usernameField, nicknameField, emailField;
+    TextButton submitBtn, backBtn, changePassBtn;
+    Dialog changePassDialog;
     ProfileMenuController controller;
+
 
     public ProfileScreen() {
         super();
         controller = new ProfileMenuController();
          activeAccount = App.getLoggedInAccount();
-         if(activeAccount == null) {
-             activeAccount = new Account(Gender.MALE, "ali@gmail.com", "alialm", "12345", "alialm");
-         }
 
          setupUI();
+         setupDialog();
     }
 
     private void setupUI() {
@@ -41,39 +44,47 @@ public class ProfileScreen extends AbstractScreen {
 
         //maybe change if skin changed
         usernameLabel = new Label("Username:",  skin, "subtitle");
-        passLabel = new Label("Password:", skin, "subtitle");
         nicknameLabel = new Label("Nickname:", skin, "subtitle");
         emailLabel = new Label("Email:", skin, "subtitle");
         genderLabel = new Label("Gender:", skin, "subtitle");
         gender = new Label(activeAccount.getGender().toString(), skin);
 
-        usernameField = new TextField(activeAccount.getUsername(), skin);
-        passField = new TextField("", skin);
-        emailField = new TextField(activeAccount.getEmail(), skin);
-        nicknameField = new TextField(activeAccount.getNickname(), skin);
+        usernameField = new ValidatedTextField(activeAccount.getUsername(), skin, new UsernameValidator());
+        emailField = new ValidatedTextField(activeAccount.getEmail(), skin, controller.getEmailValidator());
+        nicknameField = new ValidatedTextField(activeAccount.getNickname(), skin, new NonEmptyValidator());
+
+//        usernameField = new TextField(activeAccount.getUsername(), skin);
+//        passField = new TextField("", skin);
+//        emailField = new TextField(activeAccount.getEmail(), skin);
+//        nicknameField = new TextField(activeAccount.getNickname(), skin);
 
         usernameField.setMessageText("Username");
-        passField.setMessageText("Password");
         emailField.setMessageText("Email");
         nicknameField.setMessageText("Nickname");
 
+        changePassBtn = new TextButton("Change Password", skin);
+        changePassBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                changePassDialog.show(stage);
+            }
+        });
 
         Table detailTable = new Table();
-        detailTable.defaults().pad(20).width(400).height(100);
+        detailTable.defaults().pad(20).width(300).height(100);
         detailTable.add(usernameLabel);
         detailTable.add(usernameField);
         detailTable.row();
         detailTable.add(nicknameLabel);
         detailTable.add(nicknameField);
         detailTable.row();
-        detailTable.add(emailLabel);
-        detailTable.add(emailField);
-        detailTable.row();
-        detailTable.add(passLabel);
-        detailTable.add(passField);
+        detailTable.add(emailLabel).width(200);
+        detailTable.add(emailField).width(550); //TODO: message show incomplete
         detailTable.row();
         detailTable.add(genderLabel);
         detailTable.add(gender);
+        detailTable.row();
+        detailTable.add(changePassBtn).center().width(500).height(90).colspan(2);
 
 
         submitBtn = new TextButton("Submit", skin);
@@ -82,7 +93,21 @@ public class ProfileScreen extends AbstractScreen {
         submitBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                if(!usernameField.validateText()) {
+                    usernameField.ping();
+                    return;
+                }
+                if(!emailField.validateText()) {
+                    emailField.ping();
+                    return;
+                }
+                if(!nicknameField.validateText()) {
+                    nicknameField.ping();
+                    return;
+                }
+                controller.changeUsername(usernameField.getText());
+                controller.changeNickname(nicknameField.getText());
+                controller.changeEmail(emailField.getText());
             }
         });
         backBtn.addListener(new ClickListener() {
@@ -97,14 +122,56 @@ public class ProfileScreen extends AbstractScreen {
 
 
         rootTable.add(detailTable).colspan(2).row();
-        rootTable.add(submitBtn).pad(20).width(300).height(100);
-        rootTable.add(backBtn).pad(20).width(300).height(100);
+        rootTable.add(submitBtn).pad(20).width(300).height(90);
+        rootTable.add(backBtn).pad(20).width(300).height(90);
 
     }
 
-    public void setMessage(String text) {
-        message.setText(text);
-        message.setVisible(true);
+    private void setupDialog() {
+        changePassDialog = new Dialog("", skin);
+        Table table = changePassDialog.getContentTable();
+        ValidatedTextField oldPass = new ValidatedTextField(skin, new NonEmptyValidator());
+        ValidatedTextField newPass = new ValidatedTextField(skin, new PasswordValidator());
+        oldPass.setMessageText("Old Password");
+        oldPass.setPasswordMode(true);
+        newPass.setMessageText("New Password");
+        newPass.setPasswordMode(true);
+
+        TextButton changeBtn = new TextButton("change password", skin);
+        TextButton backBtn = new TextButton("Back", skin);
+
+        changeBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(!ProfileScreen.this.activeAccount.isPasswordCorrect(oldPass.getText()))  {
+                    oldPass.setMessage("Password is incorrect");
+                    oldPass.ping();
+                    return;
+                }
+                if(!newPass.validateText()) {
+                    newPass.ping();
+                    return;
+                }
+
+                Result res = controller.changePassword(newPass.getText(), oldPass.getText());
+                if(!res.isSuccessful())
+                    Gdx.app.log("Profile", res.message());
+
+            }
+        });
+
+        backBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                hide();
+            }
+        });
+
+        table.add(oldPass).colspan(2).pad(20).width(400).row();
+        table.add(newPass).colspan(2).pad(20).width(400).row();
+        table.add(submitBtn).pad(20).width(200).height(90);
+        table.add(backBtn).pad(20).width(200).height(90).row();
     }
+
 
 }
