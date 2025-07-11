@@ -13,21 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class MainScreen implements Screen {
-
-    private Stage stage;
-    private Table rootTable;
-    private Skin skin;
+public class MainScreen extends AbstractScreen {
     private TextButton registerButton;
     private TextButton loginButton;
     private TextButton guestButton;
 
     public MainScreen() {
-        stage = new Stage(new ScreenViewport());
-        rootTable = new Table();
-        rootTable.setFillParent(true);
-        skin = GameAssetManager.getSkin();
-
+        super();
         registerButton = new TextButton("Register", skin);
         loginButton = new TextButton("Login", skin);
         guestButton = new TextButton("Play as Guest", skin);
@@ -38,7 +30,6 @@ public class MainScreen implements Screen {
         rootTable.row();
         rootTable.add(guestButton);
         rootTable.row();
-        stage.addActor(rootTable);
 
         // Adding listeners
         registerButton.addListener(new ClickListener() {
@@ -51,7 +42,7 @@ public class MainScreen implements Screen {
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
+                StardewGame.getInstance().setScreen(new LoginScreen());
             }
         });
 

@@ -17,7 +17,10 @@ public class AbstractScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         rootTable = new Table();
         rootTable.setFillParent(true);
+        rootTable.center();
         skin = GameAssetManager.getSkin();
+
+        stage.addActor(rootTable);
     }
 
     @Override

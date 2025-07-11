@@ -72,7 +72,7 @@ public class App implements Serializable {
         getInstance().loggedInAccount = loggedInAccount;
     }
 
-    public static void start(){
+    public static void loadState(){
         File configFile = new File("data/appState/config.ser");
 
         try {
@@ -88,8 +88,6 @@ public class App implements Serializable {
         }
 
         if(!instance.stayLoggedIn) instance.loggedInAccount = null;
-
-        if(instance.loggedInAccount != null) setCurrentMenu(Menu.MAIN_MENU);
     }
 
     public static void saveState(){

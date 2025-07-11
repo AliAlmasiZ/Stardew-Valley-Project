@@ -32,12 +32,10 @@ public class SignupScreen extends AbstractScreen {
     private TextField email;
     SelectBox<String> gender;
 
-
     private TextButton randomPasswordButton;
     private TextButton registerButton;
     private TextButton backButton;
     private Label message;
-
 
     public SignupScreen() {
         super();
@@ -153,13 +151,12 @@ public class SignupScreen extends AbstractScreen {
             }
         });
 
-        stage.addActor(rootTable);
+
 
     }
 
     public void showSecurityQuestionDialog() {
         Dialog dialog = new Dialog("Security Question", skin);
-
 
         SelectBox<Integer> integerSelectBox = new SelectBox<>(skin);
         integerSelectBox.setItems(new Integer[]{1, 2, 3, 4, 5});

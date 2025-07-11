@@ -17,6 +17,7 @@ public class StardewGame extends Game {
     @Override
     public void create() {
         loadDatas();
+        App.loadState();
         instance = this;
         setScreen(new MainScreen());
     }
@@ -44,5 +45,10 @@ public class StardewGame extends Game {
 //        App.entityRegistry.listEntities();
 
         App.getView().log("Done.");
+    }
+
+    @Override
+    public void dispose() {
+        App.saveState();
     }
 }
