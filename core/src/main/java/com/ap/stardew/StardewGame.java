@@ -1,6 +1,7 @@
 package com.ap.stardew;
 
 import com.ap.stardew.models.App;
+import com.ap.stardew.views.MainMenuScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,7 +19,8 @@ public class StardewGame extends Game {
     public void create() {
         loadDatas();
         instance = this;
-        setScreen(new MainScreen());
+//        setScreen(new MainScreen());
+        setScreen(new MainMenuScreen());
     }
 
     @Override
