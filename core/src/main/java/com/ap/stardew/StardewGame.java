@@ -5,13 +5,22 @@ import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class StardewGame extends Game {
     private static StardewGame instance;
+    private Batch batch;
+
+
 
     public static StardewGame getInstance() {
         return instance;
+    }
+
+    public Batch getBatch() {
+        return batch;
     }
 
     @Override
@@ -19,6 +28,7 @@ public class StardewGame extends Game {
         loadDatas();
         App.loadState();
         instance = this;
+        batch = new SpriteBatch();
         setScreen(new MainScreen());
     }
 
@@ -50,5 +60,6 @@ public class StardewGame extends Game {
     @Override
     public void dispose() {
         App.saveState();
+        batch.dispose();
     }
 }

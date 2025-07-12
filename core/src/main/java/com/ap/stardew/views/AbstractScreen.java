@@ -1,5 +1,6 @@
 package com.ap.stardew.views;
 
+import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,7 +15,7 @@ public class AbstractScreen implements Screen {
     protected Skin skin;
 
     public AbstractScreen() {
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport(), StardewGame.getInstance().getBatch());
         rootTable = new Table();
         rootTable.setFillParent(true);
         rootTable.center();
