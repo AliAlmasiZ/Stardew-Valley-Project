@@ -54,7 +54,7 @@ public class StardewGame extends Game {
 
         App.entityRegistry.addChild(App.buildingRegistry);
 
-        App.entityRegistry.listEntities();
+//        App.entityRegistry.listEntities();
 
         App.getView().log("Done.");
     }
