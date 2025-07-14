@@ -2,12 +2,17 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlayerController implements InputProcessor {
+    private static final float ZOOM_SPEED = 0.1f;
+    private static final float MIN_ZOOM = 0.5f;
+    private static final float MAX_ZOOM = 1.5f;
     private Player player;
     private boolean left;
     private boolean right;
@@ -87,6 +92,14 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+            OrthographicCamera cam = screen.camera;
+            cam.zoom += amountY * ZOOM_SPEED;
+            cam.zoom = Math.max(MIN_ZOOM, cam.zoom);
+            cam.zoom = Math.min(MAX_ZOOM, cam.zoom);
+            return true;
+        }
+
         return false;
     }
 
