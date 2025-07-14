@@ -21,6 +21,8 @@ import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.old.inGame.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,6 +54,10 @@ public class Player extends Entity implements Serializable {
     private Entity greenHouse;
     private Entity trashcan;
     private Buff activeBuff;
+    //for graphic
+    private Sprite sprite;
+    private float speed = 200f;
+    private State state = State.IDLE;
 
 
     private transient ArrayList<Tile> ownedTiles = null;
@@ -520,5 +526,28 @@ public class Player extends Entity implements Serializable {
 
     public boolean isGhashed(){
         return this.energy.isGhashed();
+    }
+
+    public void move(Vector2 direction, float delta) {
+        getComponent(PositionComponent.class).move(direction, delta * speed);
+        //TODO : animation?
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    public enum State {
+        IDLE,
+        WALKING;
+
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

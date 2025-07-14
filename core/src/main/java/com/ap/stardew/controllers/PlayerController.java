@@ -5,6 +5,7 @@ import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Vector2;
 
 public class PlayerController implements InputProcessor {
     private Player player;
@@ -89,6 +90,25 @@ public class PlayerController implements InputProcessor {
     }
 
     public void update(float delta) {
-        //TODO
+        if(left) {
+            player.move(Vector2.X.scl(-1), delta);
+        }
+        if(right) {
+            player.move(Vector2.X, delta);
+        }
+        if(up) {
+            player.move(Vector2.Y, delta);
+        }
+        if(down) {
+            player.move(Vector2.Y.scl(-1), delta);
+        }
+
+        if(!up && !down && !right && !left) {
+            player.setState(Player.State.IDLE);
+        } else {
+            player.setState(Player.State.WALKING);
+        }
+
     }
+
 }

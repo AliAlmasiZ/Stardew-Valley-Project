@@ -3,6 +3,7 @@ package com.ap.stardew.models.entities.components;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.gameMap.GameMap;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 
@@ -88,8 +89,13 @@ public class PositionComponent extends EntityComponent implements Serializable {
         return position.getMap();
     }
 
-                           @Override
+    @Override
     public EntityComponent clone() {
         return new PositionComponent(this);
+    }
+
+    public void move(Vector2 direction, float length) {
+        Vector2 dir = new Vector2(direction).nor().scl(length);
+        this.position.add(dir.x, dir.y);
     }
 }

@@ -2025,4 +2025,9 @@ public class GameMenuController implements Controller {    @Override
             throw new RuntimeException(e);
         }
     }
+
+
+    public void update(float delta) {
+
+    }
 }
