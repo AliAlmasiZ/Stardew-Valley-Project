@@ -17,6 +17,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -59,6 +60,7 @@ public class GameScreen implements Screen {
     public GameScreen() {
         controller = new GameMenuController();
         player = App.getActiveGame().getCurrentPlayer();
+        player.setSprite(new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png")));
         currentPlayerSprite = player.getSprite();
         playerController = new PlayerController(this, player);
         playerPosition = player.getPosition();
