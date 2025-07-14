@@ -75,7 +75,7 @@ public class LoginScreen extends AbstractScreen{
                 }
 
                 App.setLoggedInAccount(account);
-                StardewGame.getInstance().setScreen(new MainScreen());
+                StardewGame.getInstance().setScreen(new MainMenuScreen());
             }
         });
         forgotPassworBtn.addListener(new ClickListener(){

@@ -60,46 +60,46 @@ public class Game implements Serializable {
         }
         setCurrentPlayer(players.get(0));
 
-        mainMap = new WorldMap(WorldMapType.DEFAULT.getData());
-        setActiveMap(mainMap);
-
-        this.todayWeather = Weather.SUNNY;
-        this.tomorrowWeather = Weather.SUNNY;
-
-        // init player's friendships
-        for (int i = 0; i < players.size(); i++) {
-            for (int j = i + 1; j < players.size(); j++) {
-                this.playerFriendships.add(new PlayerFriendship(players.get(i), players.get(j)));
-            }
-        }
+//        mainMap = new WorldMap(WorldMapType.DEFAULT.getData());
+//        setActiveMap(mainMap);
+//
+//        this.todayWeather = Weather.SUNNY;
+//        this.tomorrowWeather = Weather.SUNNY;
+//
+//        // init player's friendships
+//        for (int i = 0; i < players.size(); i++) {
+//            for (int j = i + 1; j < players.size(); j++) {
+//                this.playerFriendships.add(new PlayerFriendship(players.get(i), players.get(j)));
+//            }
+//        }
 
         //player farms
-        Map<MapRegion, FarmDetails> farmsDetails = mainMap.getFarmsDetail();
+//        Map<MapRegion, FarmDetails> farmsDetails = mainMap.getFarmsDetail();
+//
+//        for(Player player : players){
+//            MapRegion region = details.selections().get(player.getAccount());
+//            player.addRegion(region);
+//            player.setCurrentMap(mainMap);
+//
+//            MapData.MapLayerData<String>.ObjectData houseDetails = farmsDetails.get(region).cottage;
+//            MapData.MapLayerData<String>.ObjectData greenHouseDetails = farmsDetails.get(region).abandonedGreenhouse;
+//
+//            player.setHouse(App.entityRegistry.makeEntity(houseDetails.value));
+//            EntityPlacementSystem.placeEntity(player.getHouse(), new Vec2(houseDetails.x, houseDetails.y), mainMap);
+//            player.setGreenHouse(App.entityRegistry.makeEntity(greenHouseDetails.value));
+//            EntityPlacementSystem.placeEntity(player.getGreenHouse(), new Vec2(greenHouseDetails.x, greenHouseDetails.y), mainMap);
+//            for(Entity e : player.getHouse().getComponent(InteriorComponent.class).getMap().getEntities()){
+//                if(StringUtils.isNamesEqual(e.getEntityName(), StringUtils.fridge)){
+//                    player.setRefrigerator(e);
+//                }
+//            }
+//
+//            EntityPlacementSystem.placeOnMap(player, new Position(2, 2), player.getHouse().getComponent(InteriorComponent.class).getMap());
+//        }
 
-        for(Player player : players){
-            MapRegion region = details.selections().get(player.getAccount());
-            player.addRegion(region);
-            player.setCurrentMap(mainMap);
-
-            MapData.MapLayerData<String>.ObjectData houseDetails = farmsDetails.get(region).cottage;
-            MapData.MapLayerData<String>.ObjectData greenHouseDetails = farmsDetails.get(region).abandonedGreenhouse;
-
-            player.setHouse(App.entityRegistry.makeEntity(houseDetails.value));
-            EntityPlacementSystem.placeEntity(player.getHouse(), new Vec2(houseDetails.x, houseDetails.y), mainMap);
-            player.setGreenHouse(App.entityRegistry.makeEntity(greenHouseDetails.value));
-            EntityPlacementSystem.placeEntity(player.getGreenHouse(), new Vec2(greenHouseDetails.x, greenHouseDetails.y), mainMap);
-            for(Entity e : player.getHouse().getComponent(InteriorComponent.class).getMap().getEntities()){
-                if(StringUtils.isNamesEqual(e.getEntityName(), StringUtils.fridge)){
-                    player.setRefrigerator(e);
-                }
-            }
-
-            EntityPlacementSystem.placeOnMap(player, new Position(2, 2), player.getHouse().getComponent(InteriorComponent.class).getMap());
-        }
-
-        mainMap.initRandomElements();
-        initNPCs();
-        currentPlayer.getOwnedTiles();
+        //mainMap.initRandomElements();
+        //initNPCs();
+        //currentPlayer.getOwnedTiles();
     }
 
     public void initNPCs() {

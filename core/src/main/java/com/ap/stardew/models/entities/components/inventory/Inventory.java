@@ -397,9 +397,9 @@ public class Inventory extends EntityComponent implements Serializable {
             } else {
                 out.append(String.format("-"));
             }
-            if (App.getActiveGame().getCurrentPlayer().getActiveSlot() == s) {
-                out.append(String.format(" <active>"));
-            }
+//            if (App.getActiveGame().getCurrentPlayer().getActiveSlot() == s) {
+//                out.append(String.format(" <active>"));
+//            }
             out.append(String.format("\n"));
             i++;
         }

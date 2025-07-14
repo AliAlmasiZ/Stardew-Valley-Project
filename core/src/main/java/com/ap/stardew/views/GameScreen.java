@@ -70,7 +70,7 @@ public class GameScreen implements Screen {
         stage = new Stage(gameView, batch);
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
-        map = new TmxMapLoader().load("Content(unpacked)/Maps/Farm.tmx");
+        map = new TmxMapLoader().load("./Content(unpacked)/Maps/Farm.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
         mapWidth = map.getProperties().get("width", Integer.class) * 32;
