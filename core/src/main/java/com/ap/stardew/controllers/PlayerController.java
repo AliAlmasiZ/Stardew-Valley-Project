@@ -2,18 +2,24 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlayerController implements InputProcessor {
+    private static final float ZOOM_SPEED = 0.1f;
+    private static final float MIN_ZOOM = 0.5f;
+    private static final float MAX_ZOOM = 1.5f;
     private Player player;
     private boolean left;
     private boolean right;
     private boolean up;
     private boolean down;
     private GameScreen screen;
+    private Vector2 direction = new Vector2();
 
 
     public PlayerController(GameScreen screen, Player player) {
@@ -86,29 +92,47 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+            OrthographicCamera cam = screen.camera;
+            cam.zoom += amountY * ZOOM_SPEED;
+            cam.zoom = Math.max(MIN_ZOOM, cam.zoom);
+            cam.zoom = Math.min(MAX_ZOOM, cam.zoom);
+            return true;
+        }
+
         return false;
     }
 
     public void update(float delta) {
+        processInput(delta);
+        player.update(delta);
+    }
+
+    private void processInput(float delta) {
+        direction.setZero();
+
         if(left) {
-            player.move(Vector2.X.scl(-1), delta);
+            direction.x -= 1;
         }
         if(right) {
-            player.move(Vector2.X, delta);
+            direction.x += 1;
         }
         if(up) {
-            player.move(Vector2.Y, delta);
+            direction.y += 1;
         }
         if(down) {
-            player.move(Vector2.Y.scl(-1), delta);
+            direction.y -= 1;
         }
+
 
         if(!up && !down && !right && !left) {
             player.setState(Player.State.IDLE);
         } else {
+            player.move(direction, delta);
             player.setState(Player.State.WALKING);
         }
 
     }
+
 
 }

@@ -3,20 +3,14 @@ package com.ap.stardew.views;
 import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
-import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
-import com.ap.stardew.models.Game;
 import com.ap.stardew.models.Position;
-import com.ap.stardew.models.enums.Gender;
-import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.records.GameStartingDetails;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -25,15 +19,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Queue;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class GameScreen implements Screen {
+
+
+    public static final float WORLD_WIDTH = 800;
+    public static final float WORLD_HEIGHT = 450;
+
     private GameMenuController controller;
     private PlayerController playerController;
     private Player player;
@@ -50,8 +45,9 @@ public class GameScreen implements Screen {
     //Map //TODO: this is just for test player movement and should be replace by PARSA
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private int mapWidth;
-    private int mapHeight;
+    private int mapWidth, mapHeight;
+    private int tileWidth, tileHeight;
+
     private MapObject object;
 
 
@@ -59,27 +55,32 @@ public class GameScreen implements Screen {
     public GameScreen() {
         controller = new GameMenuController();
         player = App.getActiveGame().getCurrentPlayer();
+        player.setSprite(new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png")));
         currentPlayerSprite = player.getSprite();
         playerController = new PlayerController(this, player);
         playerPosition = player.getPosition();
 
         batch = StardewGame.getInstance().getBatch();
         camera = new OrthographicCamera();
-        gameView = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        gameView = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+        shapeRenderer = new ShapeRenderer();
         camera.setToOrtho(false, gameView.getWorldWidth(), gameView.getWorldHeight());
         stage = new Stage(gameView, batch);
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
-        map = new TmxMapLoader().load("Content(unpacked)/Maps/Farm.tmx");
+        map = new TmxMapLoader().load("./Content(unpacked)/Maps/Farm.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
-        mapWidth = map.getProperties().get("width", Integer.class) * 32;
-        mapHeight = map.getProperties().get("height", Integer.class) * 32;
+        tileHeight = map.getProperties().get("tileheight", Integer.class);
+        tileWidth = map.getProperties().get("tilewidth", Integer.class);
+        mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
+        mapHeight = map.getProperties().get("height", Integer.class)* tileHeight;
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(playerController);
         inputMultiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(inputMultiplexer);
+
         //TODO
     }
 
@@ -90,27 +91,30 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
-        //TODO: make Vec2 to Vector2
-        if (currentPlayerSprite.getX() + (camera.viewportWidth / 2 * camera.zoom) < mapWidth &&
-            currentPlayerSprite.getX() - (camera.viewportWidth / 2 * camera.zoom) > 0)
-            camera.position.x = (currentPlayerSprite.getX() + currentPlayerSprite.getWidth()) / 2f;
-
-        if (currentPlayerSprite.getY() + camera.viewportHeight / 2 < mapHeight &&
-            currentPlayerSprite.getY() - camera.viewportHeight / 2 > 0)
-            camera.position.y = (currentPlayerSprite.getY() + currentPlayerSprite.getHeight()) / 2f;
-
-
-        camera.update();
         controller.update(delta);
         playerController.update(delta);
 
+        //TODO: make Vec2 to Vector2
+        //center Camera:
+        camera.position.x = currentPlayerSprite.getX() + currentPlayerSprite.getWidth() / 2f;
+        camera.position.y = currentPlayerSprite.getY() + currentPlayerSprite.getHeight() / 2f;
+        float cameraHalfWidth = camera.viewportWidth * camera.zoom / 2;
+        float cameraHalfHeight = camera.viewportHeight * camera.zoom / 2;
+        camera.position.x = Math.max(cameraHalfWidth, camera.position.x);
+        camera.position.x = Math.min(mapWidth - cameraHalfWidth, camera.position.x);
+        camera.position.y = Math.max(cameraHalfHeight, camera.position.y);
+        camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
+
+
+        camera.update();
+
+        renderer.setView(camera);
         renderer.render();
         batch.setProjectionMatrix(camera.combined);
         renderer.setView(camera);
 
         batch.begin();
-
+        currentPlayerSprite.draw(batch);
 
 
 

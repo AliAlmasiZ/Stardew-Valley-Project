@@ -22,6 +22,7 @@ import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.old.inGame.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
@@ -56,6 +57,7 @@ public class Player extends Entity implements Serializable {
     private Buff activeBuff;
     //for graphic
     private Sprite sprite;
+    private Rectangle bounds;
     private float speed = 200f;
     private State state = State.IDLE;
 
@@ -530,7 +532,6 @@ public class Player extends Entity implements Serializable {
 
     public void move(Vector2 direction, float delta) {
         getComponent(PositionComponent.class).move(direction, delta * speed);
-        //TODO : animation?
     }
 
     public Sprite getSprite() {
@@ -549,5 +550,9 @@ public class Player extends Entity implements Serializable {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public void update(float delta) {
+        sprite.setPosition((float) getPosition().getX(), (float) getPosition().getY());
     }
 }

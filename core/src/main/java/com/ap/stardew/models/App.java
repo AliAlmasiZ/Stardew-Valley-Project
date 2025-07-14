@@ -2,6 +2,7 @@ package com.ap.stardew.models;
 
 import com.ap.stardew.models.crafting.RecipeRegistry;
 import com.ap.stardew.models.entities.EntityRegistry;
+import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.gameMap.MapRegistry;
 import com.ap.stardew.models.shop.ShopRegistry;
@@ -88,6 +89,8 @@ public class App implements Serializable {
         }
 
         if(!instance.stayLoggedIn) instance.loggedInAccount = null;
+
+        addDummyAccounts();
     }
 
     public static void saveState(){
@@ -129,6 +132,12 @@ public class App implements Serializable {
 
     public static void setActiveGame(Game activeGame) {
         getInstance().activeGame = activeGame;
+    }
+
+    public static void addDummyAccounts(){
+        addAccount(new Account(Gender.MALE, "asd", "parsa", "a", "parsa"));
+        addAccount(new Account(Gender.MALE, "asd", "ali", "a", "ali"));
+        addAccount(new Account(Gender.MALE, "asd", "ilia", "a", "ilia"));
     }
 
 }

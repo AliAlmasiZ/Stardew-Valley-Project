@@ -2,6 +2,11 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.models.Account;
+import com.ap.stardew.models.App;
+import com.ap.stardew.models.Game;
+import com.ap.stardew.models.enums.Menu;
+import com.ap.stardew.records.GameStartingDetails;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
 
 public class MainScreen extends AbstractScreen {
     private TextButton registerButton;
@@ -50,7 +57,14 @@ public class MainScreen extends AbstractScreen {
         guestButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO
+                Game game = new Game();
+                App.setActiveGame(game);
+
+                Account[] accounts = {App.getUserByUsername("parsa"), App.getUserByUsername("ali"), App.getUserByUsername("ilia")};
+
+                game.initGame(new GameStartingDetails(true, "asd", accounts, null, null, null));
+                App.setCurrentMenu(Menu.GAME_MENU);
+                StardewGame.getInstance().setScreen(new GameScreen());
             }
         });
     }
