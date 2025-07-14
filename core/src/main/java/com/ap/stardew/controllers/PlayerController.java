@@ -14,6 +14,7 @@ public class PlayerController implements InputProcessor {
     private boolean up;
     private boolean down;
     private GameScreen screen;
+    private Vector2 direction = new Vector2();
 
 
     public PlayerController(GameScreen screen, Player player) {
@@ -90,25 +91,35 @@ public class PlayerController implements InputProcessor {
     }
 
     public void update(float delta) {
+        processInput(delta);
+        player.update(delta);
+    }
+
+    private void processInput(float delta) {
+        direction.setZero();
+
         if(left) {
-            player.move(Vector2.X.scl(-1), delta);
+            direction.x -= 1;
         }
         if(right) {
-            player.move(Vector2.X, delta);
+            direction.x += 1;
         }
         if(up) {
-            player.move(Vector2.Y, delta);
+            direction.y += 1;
         }
         if(down) {
-            player.move(Vector2.Y.scl(-1), delta);
+            direction.y -= 1;
         }
+
 
         if(!up && !down && !right && !left) {
             player.setState(Player.State.IDLE);
         } else {
+            player.move(direction, delta);
             player.setState(Player.State.WALKING);
         }
 
     }
+
 
 }
