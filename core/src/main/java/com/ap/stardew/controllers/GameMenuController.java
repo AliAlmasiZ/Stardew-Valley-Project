@@ -2033,6 +2033,5 @@ public class GameMenuController implements Controller {    @Override
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             advanceTime(1);
         }
-
     }
 }

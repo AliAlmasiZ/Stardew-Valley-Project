@@ -1,21 +1,34 @@
 package com.ap.stardew.models.gameMap;
 
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.Vec2;
+import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.components.EntityComponent;
+import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.TileType;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameMap implements Serializable {
+    private static final TmxMapLoader mapLoader = new TmxMapLoader();
     protected Tile[][] tiles;
+    protected TiledMap mapData;
     protected int width, height;
     protected Environment environment;
     protected final EntityList entities = new EntityList();
     protected Entity building = null;
-    protected final String mapDataName;
+    protected String mapDataName;
+
 
     public Entity getBuilding() {
         return building;
@@ -66,6 +79,60 @@ public class GameMap implements Serializable {
         }
     }
 
+    public GameMap(String path){
+        mapData = mapLoader.load(path);
+
+        TiledMapTileLayer backLayer = (TiledMapTileLayer) mapData.getLayers().get("Back");
+        TiledMapTileLayer buildingsLayer = (TiledMapTileLayer) mapData.getLayers().get("Buildings");
+
+        height = backLayer.getHeight();
+        width = backLayer.getWidth();
+
+        tiles = new Tile[height][width];
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+
+                TiledMapTileLayer.Cell cell = backLayer.getCell(j, i);
+                if(cell == null){
+                    tiles[i][j] = new Tile(new Position(j, i), TileType.WATER, this);
+                    continue;
+                }
+                TiledMapTile tileData = cell.getTile();
+
+                boolean diggable = tileData.getProperties().get("Diggable") != null;
+                boolean isWater = tileData.getProperties().get("Water")  != null;
+
+                Tile tile = new Tile(new Position(j, i), TileType.GRASS, this);
+
+                if(diggable){
+                    tile.setType(TileType.DIRT);
+                }else if(isWater){
+                    tile.setType(TileType.WATER);
+                }
+
+                if(buildingsLayer!=null){
+                    if(buildingsLayer.getCell(j, i) != null) tile.setWalkable(false);
+                }
+
+                tiles[i][j] = tile;
+            }
+        }
+
+        MapLayer objectsLayer = mapData.getLayers().get("Objects");
+        if(objectsLayer != null){
+            for (MapObject object : objectsLayer.getObjects()) {
+                if(object.getName().equals("Door")){
+                    GameMap destinationMap = new GameMap("./Content(unpacked)/Maps/" + object.getProperties().get("destinationMap", String.class)+ ".tmx");
+                    Door door = new Door();
+                    door.setDestination(new Position(32, 32, destinationMap));
+                    EntityPlacementSystem.placeOnTile(door, tiles[(int)((object.getProperties().get("y", Float.class) - 16) / 16)]
+                            [(int)(object.getProperties().get("x", Float.class) / 16)]);
+                }
+            }
+        }
+    }
+
     private void generateRandomElements(int min, int max) { //inclusive
         //TODO
     }
@@ -74,7 +141,7 @@ public class GameMap implements Serializable {
         return tiles.clone();
     }
 
-    public Tile getTileByPosition(Position position) {
+    public Tile getTileByPosition(Vec2 position) {
         return getTileByPosition(position.getRow(), position.getCol());
     }
 
@@ -95,5 +162,9 @@ public class GameMap implements Serializable {
 
     public <T extends EntityComponent> ArrayList<T> getComponentsOfType(Class<T> clazz){
         return entities.getComponentsOfType(clazz);
+    }
+
+    public TiledMap getMapData() {
+        return mapData;
     }
 }

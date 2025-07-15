@@ -15,7 +15,7 @@ public class Position extends Vec2 implements Serializable {
         this(x, y, null);
     }
     public Position(int x, int y){
-        this(x, y, null);
+        this(x * tileSize, y * tileSize, null);
     }
     public Position(Vec2 vec){
         this(vec.x, vec.y, null);

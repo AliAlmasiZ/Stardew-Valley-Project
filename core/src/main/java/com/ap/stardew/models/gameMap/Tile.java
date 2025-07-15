@@ -13,6 +13,7 @@ public class Tile implements Serializable, EntityObserver {    private TileType 
     final private Position position;
     private Entity content;
     private final GameMap map;
+    private boolean isWalkable = true;
 
     public Tile(Position position, TileType type/*, MapRegion region*/, GameMap map) {
         this.position = position;
@@ -85,5 +86,13 @@ public class Tile implements Serializable, EntityObserver {    private TileType 
     @Override
     public void onDelete(Entity entity) {
         this.content = null;
+    }
+
+    public boolean isWalkable() {
+        return isWalkable;
+    }
+
+    public void setWalkable(boolean walkable) {
+        isWalkable = walkable;
     }
 }

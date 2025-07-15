@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Vec2 implements Serializable {
     protected double x;
     protected double y;
+    protected static float tileSize = 16;
 
     @JsonCreator
     public Vec2(
@@ -28,10 +29,10 @@ public class Vec2 implements Serializable {
         return y;
     }
     public int getCol(){
-        return (int) Math.round(this.x);
+        return (int) Math.floor(this.x / tileSize);
     }
     public int getRow(){
-        return (int) Math.round(this.y);
+        return (int) Math.floor(this.y / tileSize);
     }
     public double getDistance(Vec2 other){
         return Math.hypot(x - other.x, y - other.y);

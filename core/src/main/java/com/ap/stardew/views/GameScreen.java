@@ -18,8 +18,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -42,7 +44,6 @@ public class GameScreen implements Screen {
     private GameMenuController controller;
     private PlayerController playerController;
     private Player player;
-    private Position playerPosition;
     private Sprite currentPlayerSprite;
     private Skin skin;
 
@@ -62,13 +63,10 @@ public class GameScreen implements Screen {
 
     private MapObject object;
 
-
     // Clock
     private Label timeLabel;
     private Label dateLabel;
     private Label moneyLabel;
-
-
 
     public GameScreen() {
         controller = new GameMenuController();
@@ -76,7 +74,6 @@ public class GameScreen implements Screen {
         player.setSprite(new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png")));
         currentPlayerSprite = player.getSprite();
         playerController = new PlayerController(this, player);
-        playerPosition = player.getPosition();
 
         skin = GameAssetManager.getInstance().getSkin();
 
@@ -85,7 +82,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
         batch = StardewGame.getInstance().getBatch();
         camera = new OrthographicCamera();
         gameView = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -95,7 +91,11 @@ public class GameScreen implements Screen {
         uiStage = new Stage(new ScreenViewport());
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
-        map = new TmxMapLoader().load("./Content(unpacked)/Maps/Farm.tmx");
+        map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
+        System.out.println(map.getProperties());
+        for (MapLayer layer : map.getLayers()) {
+            System.out.println(layer.getName());
+        }
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
         tileHeight = map.getProperties().get("tileheight", Integer.class);
@@ -110,8 +110,6 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         createClockUI();
-
-
     }
 
     @Override
@@ -133,10 +131,10 @@ public class GameScreen implements Screen {
 
         camera.update();
 
+        renderer.setMap(App.getActiveGame().getActiveMap().getMapData());
         renderer.setView(camera);
         renderer.render();
         batch.setProjectionMatrix(camera.combined);
-        renderer.setView(camera);
 
         batch.begin();
         currentPlayerSprite.draw(batch);

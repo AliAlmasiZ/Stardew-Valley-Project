@@ -2134,6 +2134,7 @@ Content(unpacked)/Maps/FarmHouse_FarUpperRoom_Add.tmx
 Content(unpacked)/Maps/FarmHouse_FarUpperRoom_Remove.tmx
 Content(unpacked)/Maps/FarmHouse_SouthernRoom_Add.tmx
 Content(unpacked)/Maps/FarmHouse_SouthernRoom_Remove.tmx
+Content(unpacked)/Maps/FarmHouses.tsx
 Content(unpacked)/Maps/Farm_Combat.tmx
 Content(unpacked)/Maps/Farm_Fishing.tmx
 Content(unpacked)/Maps/Farm_Foraging.tmx
@@ -2347,6 +2348,7 @@ Content(unpacked)/Maps/Summit.tmx
 Content(unpacked)/Maps/Sunroom.tmx
 Content(unpacked)/Maps/TargetGame.tmx
 Content(unpacked)/Maps/Tent.tmx
+Content(unpacked)/Maps/TestMap.tmx
 Content(unpacked)/Maps/Town-Christmas.tmx
 Content(unpacked)/Maps/Town-Christmas2.tmx
 Content(unpacked)/Maps/Town-DogHouse.tmx
@@ -3575,7 +3577,6 @@ Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
 Content/PC Computer - Stardew Valley - Clock.png
-Content/minecraft.zip
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
 Moz/MapEditor/Tile sets/biome.json

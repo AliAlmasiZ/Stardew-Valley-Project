@@ -30,7 +30,6 @@ public static Result placeOnTile(Entity entity, Tile tile){
     if(entity.getComponent(Placeable.class) == null) return placeOnMap(entity, tile.getPosition(), tile.getMap());
 
     tile.setContent(entity);
-    entity.addObserver(tile);
     tile.getMap().addEntity(entity);
 
     if(entity.getComponent(PositionComponent.class) == null){

@@ -1,5 +1,11 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.models.App;
+import com.ap.stardew.models.Game;
+import com.ap.stardew.models.entities.CollisionEvent;
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Placeable;
+import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
@@ -22,7 +28,6 @@ public class PlayerController implements InputProcessor {
     private GameScreen screen;
     private Vector2 direction = new Vector2();
 
-
     public PlayerController(GameScreen screen, Player player) {
         this.screen = screen;
         this.player = player;
@@ -31,7 +36,6 @@ public class PlayerController implements InputProcessor {
         up = false;
         down = false;
     }
-
 
     @Override
     public boolean keyDown(int keycode) {
@@ -126,14 +130,22 @@ public class PlayerController implements InputProcessor {
         }
 
 
-        if(!up && !down && !right && !left) {
+        //Todo: that walkable check i wrote is ass
+        Tile destTile = App.getActiveGame().getActiveMap().
+            getTileByPosition(player.getPosition().copy().add(direction.x, direction.y));
+
+        if((!up && !down && !right && !left) || destTile == null || (!destTile.isWalkable())) {
             player.setState(Player.State.IDLE);
-        } else {
+        }else {
+            Entity entity = null;
+            if (destTile != null && (entity = destTile.getContent()) != null) {
+                Placeable placeable = entity.getComponent(Placeable.class);
+                for (CollisionEvent c : placeable.getCollisionEvents()) {
+                    c.onEnter();
+                }
+            }
             player.move(direction, delta);
             player.setState(Player.State.WALKING);
         }
-
     }
-
-
 }

@@ -59,8 +59,10 @@ public class Game implements Serializable {
             addPlayer(new Player(account));
         }
         setCurrentPlayer(players.get(0));
+        players.get(0).setPosition(new Position(10, 10));
+        setActiveMap(new GameMap("./Content(unpacked)/Maps/TestMap.tmx"));
 
-//        mainMap = new WorldMap(WorldMapType.DEFAULT.getData());
+//        mainMap = new GameMap("./Content(unpacked)/Maps/TestMap.tmx");
 //        setActiveMap(mainMap);
 //
 //        this.todayWeather = Weather.SUNNY;
