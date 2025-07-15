@@ -18,6 +18,7 @@ public class PlayerController implements InputProcessor {
     private boolean right;
     private boolean up;
     private boolean down;
+    private boolean advanceTime;
     private GameScreen screen;
     private Vector2 direction = new Vector2();
 
@@ -30,8 +31,6 @@ public class PlayerController implements InputProcessor {
         up = false;
         down = false;
     }
-
-
 
 
     @Override
@@ -57,6 +56,8 @@ public class PlayerController implements InputProcessor {
             this.down = false;
         if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D)
             this.right = false;
+        if (keycode == Input.Keys.T)
+            this.advanceTime = true;
         return false;
     }
 

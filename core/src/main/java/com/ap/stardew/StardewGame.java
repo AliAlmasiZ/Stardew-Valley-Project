@@ -43,7 +43,7 @@ public class StardewGame extends Game {
 
     private static void loadDatas() {
         App.getView().log("Loading Game...");
-        App.shopRegistry.load("./data/shops");
+        App.shopRegistry.load("data/shops");
         /* should load recipes first (because artisan has recipes) */
         App.recipeRegistry.loadRecipes("./data/recipes");
         App.entityRegistry.load("./data/entities");

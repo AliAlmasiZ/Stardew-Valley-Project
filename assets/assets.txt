@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -3575,6 +3574,8 @@ Content(unpacked)/TileSheets/weapons.png
 Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
+Content/PC Computer - Stardew Valley - Clock.png
+Content/minecraft.zip
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
 Moz/MapEditor/Tile sets/biome.json

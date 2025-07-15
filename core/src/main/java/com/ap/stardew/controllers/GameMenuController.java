@@ -30,6 +30,8 @@ import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.models.utils.StringUtils;
 import com.ap.stardew.records.Result;
 import com.ap.stardew.records.WalkProposal;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 
 import java.io.*;
 import java.util.*;
@@ -2028,6 +2030,9 @@ public class GameMenuController implements Controller {    @Override
 
 
     public void update(float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            advanceTime(1);
+        }
 
     }
 }
