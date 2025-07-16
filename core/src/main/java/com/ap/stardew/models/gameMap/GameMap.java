@@ -1,5 +1,6 @@
 package com.ap.stardew.models.gameMap;
 
+import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.building.Door;
@@ -85,49 +86,51 @@ public class GameMap implements Serializable {
         TiledMapTileLayer backLayer = (TiledMapTileLayer) mapData.getLayers().get("Back");
         TiledMapTileLayer buildingsLayer = (TiledMapTileLayer) mapData.getLayers().get("Buildings");
 
-        height = backLayer.getHeight();
-        width = backLayer.getWidth();
 
-        tiles = new Tile[height][width];
+        if(backLayer != null){
+            height = backLayer.getHeight();
+            width = backLayer.getWidth();
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+            tiles = new Tile[height][width];
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    TiledMapTileLayer.Cell cell = backLayer.getCell(j, i);
 
-                TiledMapTileLayer.Cell cell = backLayer.getCell(j, i);
-                if(cell == null){
-                    tiles[i][j] = new Tile(new Position(j, i), TileType.WATER, this);
-                    continue;
+                    tiles[i][j] = null;
+                    if(cell != null){
+                        TiledMapTile tileData = cell.getTile();
+
+                        boolean diggable = tileData.getProperties().get("Diggable") != null;
+                        boolean isWater = tileData.getProperties().get("Water")  != null;
+
+                        Tile tile = new Tile(new Position(j, i), TileType.GRASS, this);
+
+                        if(diggable){
+                            tile.setType(TileType.DIRT);
+                        }else if(isWater){
+                            tile.setType(TileType.WATER);
+                        }
+                        tiles[i][j] = tile;
+                    }
+                    if(buildingsLayer!=null){
+                        TiledMapTileLayer.Cell buildingCell = buildingsLayer.getCell(j, i);
+                        if(buildingCell != null){
+                            tiles[i][j] = new Tile(new Position(j, i), TileType.GRASS, this);
+                            tiles[i][j].setWalkable(false);
+                        }
+                    }
+
                 }
-                TiledMapTile tileData = cell.getTile();
-
-                boolean diggable = tileData.getProperties().get("Diggable") != null;
-                boolean isWater = tileData.getProperties().get("Water")  != null;
-
-                Tile tile = new Tile(new Position(j, i), TileType.GRASS, this);
-
-                if(diggable){
-                    tile.setType(TileType.DIRT);
-                }else if(isWater){
-                    tile.setType(TileType.WATER);
-                }
-
-                if(buildingsLayer!=null){
-                    if(buildingsLayer.getCell(j, i) != null) tile.setWalkable(false);
-                }
-
-                tiles[i][j] = tile;
             }
         }
 
         MapLayer objectsLayer = mapData.getLayers().get("Objects");
         if(objectsLayer != null){
             for (MapObject object : objectsLayer.getObjects()) {
-                if(object.getName().equals("Door")){
-                    GameMap destinationMap = new GameMap("./Content(unpacked)/Maps/" + object.getProperties().get("destinationMap", String.class)+ ".tmx");
-                    Door door = new Door();
-                    door.setDestination(new Position(32, 32, destinationMap));
-                    EntityPlacementSystem.placeOnTile(door, tiles[(int)((object.getProperties().get("y", Float.class) - 16) / 16)]
-                            [(int)(object.getProperties().get("x", Float.class) / 16)]);
+                if(object.getName().equals("Building")){
+                    Entity building = App.entityRegistry.makeEntity(object.getProperties().get("building", String.class));
+                    EntityPlacementSystem.placeEntity(building, new Vec2(object.getProperties().get("x", Float.class),
+                        object.getProperties().get("y", Float.class)), this);
                 }
             }
         }
@@ -150,7 +153,9 @@ public class GameMap implements Serializable {
             return null;
         return tiles[row][col];
     }
-
+    public Tile getTileByPosition(float row, float col) {
+        return getTileByPosition((int) Math.round(row / 16), (int) Math.round(col / 16));
+    }
 
     public int getWidth() {
         return width;

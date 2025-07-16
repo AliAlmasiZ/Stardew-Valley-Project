@@ -212,7 +212,7 @@ public class GameMenuController implements Controller {    @Override
         if (tile != null && (entity = tile.getContent()) != null) {
             Placeable placeable = entity.getComponent(Placeable.class);
             for (CollisionEvent c : placeable.getCollisionEvents()) {
-                c.onEnter();
+                //c.onEnter();
             }
         }
         return new Result(true, "you walked to "

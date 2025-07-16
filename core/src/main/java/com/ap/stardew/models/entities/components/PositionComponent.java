@@ -64,8 +64,8 @@ public class PositionComponent extends EntityComponent implements Serializable {
     }
 
     public Position setPosition(Position position){
-        this.position.setX(position.getCol());
-        this.position.setY(position.getRow());
+        this.position.setX(position.getX());
+        this.position.setY(position.getY());
         return this.position;
     }
 

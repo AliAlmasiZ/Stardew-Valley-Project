@@ -35,6 +35,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+
 public class GameScreen implements Screen {
 
 
@@ -98,6 +100,7 @@ public class GameScreen implements Screen {
         }
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
+        renderer.getBatch().enableBlending();
         tileHeight = map.getProperties().get("tileheight", Integer.class);
         tileWidth = map.getProperties().get("tilewidth", Integer.class);
         mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
@@ -128,22 +131,38 @@ public class GameScreen implements Screen {
         camera.position.y = Math.max(cameraHalfHeight, camera.position.y);
         camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
 
-
         camera.update();
+
+        ArrayList<Integer> backLayers = new ArrayList<>();
+        ArrayList<Integer> frontLayers = new ArrayList<>();
+        for (int i = 0; i < App.getActiveGame().getActiveMap().getMapData().getLayers().size(); i++) {
+            MapLayer mapLayer = App.getActiveGame().getActiveMap().getMapData().getLayers().get(i);
+            if(mapLayer.getName().contains("Back") || mapLayer.getName().contains("Buildings")){
+                backLayers.add(i);
+            }else{
+                frontLayers.add(i);
+            }
+        }
+        int[] backLayerIndices = new int[backLayers.size()];
+        for (int i = 0; i < backLayers.size(); i++) {
+            backLayerIndices[i] = backLayers.get(i);
+        }
+
+        int[] frontLayerIndices = new int[frontLayers.size()];
+        for (int i = 0; i < frontLayers.size(); i++) {
+            frontLayerIndices[i] = frontLayers.get(i);
+        }
 
         renderer.setMap(App.getActiveGame().getActiveMap().getMapData());
         renderer.setView(camera);
-        renderer.render();
-        batch.setProjectionMatrix(camera.combined);
+        renderer.render(backLayerIndices);
 
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         currentPlayerSprite.draw(batch);
-
-
         batch.end();
 
-
-
+        renderer.render(frontLayerIndices);
         gameStage.act(delta);
         gameStage.draw();
 

@@ -6,10 +6,10 @@ import com.ap.stardew.records.Result;
 import java.io.Serializable;
 
 public abstract class CollisionEvent implements Serializable {
-    public Result onCollision(Player player, Entity entity){
+    public Result onCollision(Player player){
         return new Result(false, "");
     }
-    public Result onEnter(){
+    public Result onEnter(Player player){
         return new Result(false, "");
     };
     public Result onExit(){
