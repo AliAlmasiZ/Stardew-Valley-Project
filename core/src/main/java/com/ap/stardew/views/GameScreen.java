@@ -5,6 +5,7 @@ import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.Gdx;
@@ -66,9 +67,7 @@ public class GameScreen implements Screen {
     private MapObject object;
 
     // Clock
-    private Label timeLabel;
-    private Label dateLabel;
-    private Label moneyLabel;
+    private ClockActor clockActor;
 
     public GameScreen() {
         controller = new GameMenuController();
@@ -78,6 +77,11 @@ public class GameScreen implements Screen {
         playerController = new PlayerController(this, player);
 
         skin = GameAssetManager.getInstance().getSkin();
+
+        // Create clock
+        ClockActor clock = new ClockActor();
+        clock.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 80);
+
 
         //TODO
     }
@@ -112,7 +116,7 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        createClockUI();
+        uiStage.addActor(clockActor);
     }
 
     @Override
@@ -169,7 +173,7 @@ public class GameScreen implements Screen {
         uiStage.act(delta);
         uiStage.draw();
 
-        updateClockUI();
+        clockActor.update(delta);
     }
 
     @Override
@@ -195,20 +199,5 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         gameStage.dispose();
-    }
-
-    private void createClockUI() {
-        Table table = new Table();
-        table.setFillParent(true);
-
-        timeLabel = new Label("", skin);
-
-        table.add(timeLabel);
-        table.left().top();
-        uiStage.addActor(table);
-    }
-
-    private void updateClockUI() {
-        timeLabel.setText(controller.getDateTime().message());
     }
 }
