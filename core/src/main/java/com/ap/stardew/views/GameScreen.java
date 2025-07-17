@@ -7,6 +7,7 @@ import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.animal.FishingMiniGame;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -54,6 +55,7 @@ public class GameScreen implements Screen {
     private Batch batch;
     private Stage gameStage;
     private Stage uiStage;
+    private Stage minigameStage;
     private ShapeRenderer shapeRenderer;
     public OrthographicCamera camera;
     private Viewport gameView;
@@ -93,6 +95,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, gameView.getWorldWidth(), gameView.getWorldHeight());
         gameStage = new Stage(gameView, batch);
         uiStage = new Stage(new ScreenViewport());
+        minigameStage = new Stage(new ScreenViewport());
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
         map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
@@ -174,6 +177,9 @@ public class GameScreen implements Screen {
         uiStage.act(delta);
         uiStage.draw();
 
+        minigameStage.act(delta);
+        minigameStage.draw();
+
         clockActor.update(delta);
     }
 
@@ -200,5 +206,24 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         gameStage.dispose();
+    }
+
+    public void startFishing() {
+        //TODO: phase 1 logic implementation
+
+        FishingMiniGame fishingMiniGame = new FishingMiniGame(this);
+        minigameStage.addActor(fishingMiniGame);
+        Gdx.input.setInputProcessor(minigameStage);
+
+
+    }
+
+    public void stopFishing(boolean result) {
+        minigameStage.clear();
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(playerController);
+        inputMultiplexer.addProcessor(gameStage);
+        inputMultiplexer.addProcessor(uiStage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 }

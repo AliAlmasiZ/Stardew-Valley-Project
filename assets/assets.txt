@@ -3585,6 +3585,9 @@ Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
 Content/ClockImages/PC Computer - Stardew Valley - Clock.png
+Content/FishingMiniGame/Salmon.png
+Content/FishingMiniGame/catchZone.png
+Content/FishingMiniGame/fishing bar.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
 Content/font/info.txt
 Content/font/khodayaBaseDige.fnt
