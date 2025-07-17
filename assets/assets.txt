@@ -2045,6 +2045,7 @@ Content(unpacked)/LooseSprites/terraria_cat.png
 Content(unpacked)/LooseSprites/textBox.png
 Content(unpacked)/LooseSprites/troutDerbyLetterBG.png
 Content(unpacked)/LooseSprites/yellowLettersLogo.png
+Content(unpacked)/Maps/1.tsx
 Content(unpacked)/Maps/AbandonedJojaMart.tmx
 Content(unpacked)/Maps/AdventureGuild.tmx
 Content(unpacked)/Maps/AnimalShop.tmx
@@ -2113,6 +2114,7 @@ Content(unpacked)/Maps/FarmHouse1.tmx
 Content(unpacked)/Maps/FarmHouse1_marriage.tmx
 Content(unpacked)/Maps/FarmHouse2.tmx
 Content(unpacked)/Maps/FarmHouse2_marriage.tmx
+Content(unpacked)/Maps/FarmHouseExterior.tmx
 Content(unpacked)/Maps/FarmHouse_Bedroom_Normal.tmx
 Content(unpacked)/Maps/FarmHouse_Bedroom_Open.tmx
 Content(unpacked)/Maps/FarmHouse_Cellar.tmx
@@ -2206,6 +2208,7 @@ Content(unpacked)/Maps/Island_Shrine.tmx
 Content(unpacked)/Maps/Island_W.tmx
 Content(unpacked)/Maps/Island_W_Obelisk.tmx
 Content(unpacked)/Maps/JojaMart.tmx
+Content(unpacked)/Maps/JojaMartExterior.tmx
 Content(unpacked)/Maps/JojaRuins_TileSheet.png
 Content(unpacked)/Maps/JoshHouse.tmx
 Content(unpacked)/Maps/LeahHouse.tmx
@@ -2323,10 +2326,12 @@ Content(unpacked)/Maps/MovieTheaterScreen_TileSheet.png
 Content(unpacked)/Maps/MovieTheater_TileSheet.png
 Content(unpacked)/Maps/NightSceneMaruMap.tmx
 Content(unpacked)/Maps/NightSceneMaruMap2.tmx
+Content(unpacked)/Maps/PierresExterior.tmx
 Content(unpacked)/Maps/QiNutRoom.tmx
 Content(unpacked)/Maps/Railroad.tmx
 Content(unpacked)/Maps/RefurbishedSaloonRoom.tmx
 Content(unpacked)/Maps/Saloon.tmx
+Content(unpacked)/Maps/SaloonExterior.tmx
 Content(unpacked)/Maps/SamHouse.tmx
 Content(unpacked)/Maps/SamShow.tmx
 Content(unpacked)/Maps/SandyHouse.tmx

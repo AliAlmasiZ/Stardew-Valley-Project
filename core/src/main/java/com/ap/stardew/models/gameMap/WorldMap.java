@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class WorldMap extends GameMap implements Serializable {
     private final ArrayList<MapRegion> regions = new ArrayList<>();
-    private final MapRegion[][] regionMap;
-    private final BiomeType[][] biomeMap;
+    private MapRegion[][] regionMap;
+    private BiomeType[][] biomeMap;
     private transient final Map<MapRegion, FarmDetails> farmsDetail = new HashMap<>();
 
     public WorldMap(MapData data) {
@@ -45,7 +45,9 @@ public class WorldMap extends GameMap implements Serializable {
                 EntityPlacementSystem.placeEntity(building, new Vec2(d.x, d.y));
             }
         }
-
+    }
+    public WorldMap(String path){
+        super(path);
     }
 
     public MapRegion getRegion(int x, int y) {

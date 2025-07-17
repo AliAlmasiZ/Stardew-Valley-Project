@@ -1,63 +1,20 @@
-<?xml version="1.0"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="48" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="25">
-  <properties>
-    <property name="DayTiles" type="string" value="Front 6 1 256 Front 6 2 288 Front 7 1 256 Front 7 2 288 Front 27 1 256 Front 27 2 288 Front 36 1 225 Front 37 1 225 Front 36 2 469 Front 37 2 469 Front 36 3 501 Front 37 3 501 Front 2 14 256 Front 2 15 288 Buildings 32 2 38 Buildings 32 3 70 Back 32 4 102 Back 27 5 31 Back 27 6 63 Back 2 17 228 Back 2 18 260 Back 6 4 671 Back 6 5 703 Back 7 4 671 Back 7 5 703" />
-    <property name="Doors" type="string" value="13 11 1 120 20 11 1 120 14 16 1 120" />
-    <property name="NightTiles" type="string" value="Front 6 1 1253 Front 6 2 1285 Front 7 1 1253 Front 7 2 1285 Front 27 1 1253 Front 27 2 1285 Front 36 1 1222 Front 37 1 1222 Front 36 2 1219 Front 37 2 1219 Front 36 3 1251 Front 37 3 1251 Front 2 14 1253 Front 2 15 1285 Buildings 32 2 39 Buildings 32 3 71 Back 32 4 103 Back 27 5 60 Back 27 6 60 Back 2 17 200 Back 2 18 2119 Back 6 4 574 Back 6 5 606 Back 7 4 575 Back 7 5 607" />
-    <property name="Warp" type="string" value="6 30 Town 43 57" />
-  </properties>
-  <tileset firstgid="1" name="1" tilewidth="16" tileheight="16" tilecount="2176" columns="32">
-    <image source="townInterior" width="512" height="1088" />
-    <tile id="546">
-      <animation>
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="547" duration="150" />
-        <frame tileid="548" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="547" duration="150" />
-        <frame tileid="548" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="547" duration="150" />
-        <frame tileid="548" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="547" duration="150" />
-        <frame tileid="548" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="547" duration="150" />
-        <frame tileid="548" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="547" duration="150" />
-        <frame tileid="548" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-        <frame tileid="546" duration="150" />
-      </animation>
-    </tile>
-  </tileset>
-  <tileset firstgid="2177" name="2" tilewidth="16" tileheight="16" tilecount="1312" columns="32">
-    <image source="townInterior_2" width="512" height="656" />
-  </tileset>
-  <tileset firstgid="3489" name="Paths" tilewidth="16" tileheight="16" tilecount="64" columns="4">
-    <image source="paths" width="64" height="256" />
-  </tileset>
-  <layer id="1" name="Back" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties />
-    <data encoding="csv">
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="48" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="26">
+ <properties>
+  <property name="DayTiles" value="Front 6 1 256 Front 6 2 288 Front 7 1 256 Front 7 2 288 Front 27 1 256 Front 27 2 288 Front 36 1 225 Front 37 1 225 Front 36 2 469 Front 37 2 469 Front 36 3 501 Front 37 3 501 Front 2 14 256 Front 2 15 288 Buildings 32 2 38 Buildings 32 3 70 Back 32 4 102 Back 27 5 31 Back 27 6 63 Back 2 17 228 Back 2 18 260 Back 6 4 671 Back 6 5 703 Back 7 4 671 Back 7 5 703"/>
+  <property name="Doors" value="13 11 1 120 20 11 1 120 14 16 1 120"/>
+  <property name="NightTiles" value="Front 6 1 1253 Front 6 2 1285 Front 7 1 1253 Front 7 2 1285 Front 27 1 1253 Front 27 2 1285 Front 36 1 1222 Front 37 1 1222 Front 36 2 1219 Front 37 2 1219 Front 36 3 1251 Front 37 3 1251 Front 2 14 1253 Front 2 15 1285 Buildings 32 2 39 Buildings 32 3 71 Back 32 4 103 Back 27 5 60 Back 27 6 60 Back 2 17 200 Back 2 18 2119 Back 6 4 574 Back 6 5 606 Back 7 4 575 Back 7 5 607"/>
+  <property name="Warp" value="6 30 Town 43 57"/>
+ </properties>
+ <tileset firstgid="1" source="1.tsx"/>
+ <tileset firstgid="2177" name="2" tilewidth="16" tileheight="16" tilecount="1312" columns="32">
+  <image source="townInterior_2.png" width="512" height="656"/>
+ </tileset>
+ <tileset firstgid="3489" name="Paths" tilewidth="16" tileheight="16" tilecount="64" columns="4">
+  <image source="paths.png" width="64" height="256"/>
+ </tileset>
+ <layer id="1" name="Back" width="48" height="32">
+  <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2773,2774,2774,2774,2774,2774,2774,2774,2774,2774,2775,1,0,0,40,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
 1,1,1,1,607,608,1,1,1,1,1,1,1,1,1,1,1,1,2805,2806,2806,2806,2806,2806,2806,2806,2806,2806,2807,1,607,608,72,608,607,608,607,608,607,608,607,1,0,0,0,0,0,0,
@@ -91,12 +48,12 @@
 0,0,0,0,0,1,1,1,232,2145,1273,1274,608,2113,1273,1274,638,639,640,639,640,639,640,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,1,1,1,232,639,640,639,640,639,640,639,640,232,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
-  </layer>
-  <layer id="2" name="Back2" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties>
-      <property name="Draw" type="string" value="Back" />
-    </properties>
-    <data encoding="csv">
+ </layer>
+ <layer id="2" name="Back2" width="48" height="32">
+  <properties>
+   <property name="Draw" value="Back"/>
+  </properties>
+  <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -130,10 +87,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
-  </layer>
-  <layer id="3" name="Buildings" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties />
-    <data encoding="csv">
+ </layer>
+ <layer id="3" name="Buildings" width="48" height="32">
+  <data encoding="csv">
 0,13,14,14,14,14,14,14,14,14,14,14,14,14,14,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,8,8,8,8,8,8,8,37,0,0,0,0,0,0,0,
 0,45,255,255,46,255,255,255,255,46,255,255,255,255,46,47,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,39,40,40,40,40,40,40,40,40,41,37,0,0,0,0,0,0,
 65,77,287,287,78,287,287,287,287,78,287,287,287,287,78,79,1,1,80,81,81,81,81,81,81,81,81,81,82,69,65,71,2215,72,72,72,72,72,72,72,73,69,0,0,0,0,0,0,
@@ -167,10 +123,9 @@
 0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,536,2243,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
-  </layer>
-  <layer id="4" name="Front" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties />
-    <data encoding="csv">
+ </layer>
+ <layer id="4" name="Front" width="48" height="32">
+  <data encoding="csv">
 0,2,3,3,3,2122,3,3,3,2122,3,3,3,3,3,4,1,1,2,3,3,3,3,2122,3,3,3,3,4,1,0,2,3,3,2122,3,3,3,2122,3,4,0,1,1,1,1,1,1,
 33,42,2904,403,1345,0,257,257,0,0,1345,179,180,533,534,44,37,33,42,0,578,579,178,0,1345,0,0,257,44,37,33,42,2183,177,531,532,226,226,246,247,44,37,1,1,1,1,1,1,
 65,0,371,279,0,0,289,289,0,0,0,211,212,565,566,0,69,65,0,0,610,611,0,740,741,742,0,289,0,69,65,0,0,0,563,564,470,470,570,571,0,69,1,1,1,1,1,1,
@@ -204,12 +159,12 @@
 1,1,1,1,1,0,1,0,97,166,2121,166,166,2121,166,166,166,2121,166,166,2121,167,168,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
-  </layer>
-  <layer id="5" name="Front2" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties>
-      <property name="Draw" type="string" value="Front" />
-    </properties>
-    <data encoding="csv">
+ </layer>
+ <layer id="5" name="Front2" width="48" height="32">
+  <properties>
+   <property name="Draw" value="Front"/>
+  </properties>
+  <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2676,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3257,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2708,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3289,0,0,0,0,0,0,0,
@@ -243,12 +198,12 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
-  </layer>
-  <layer id="6" name="Front3" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties>
-      <property name="Draw" type="string" value="Front" />
-    </properties>
-    <data encoding="csv">
+ </layer>
+ <layer id="6" name="Front3" width="48" height="32">
+  <properties>
+   <property name="Draw" value="Front"/>
+  </properties>
+  <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -282,10 +237,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
-  </layer>
-  <layer id="7" name="Paths" width="48" height="32" opacity="1" offsetx="0" offsety="0">
-    <properties />
-    <data encoding="csv">
+ </layer>
+ <layer id="7" name="Paths" width="48" height="32">
+  <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -319,133 +273,141 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
-  </layer>
-  <objectgroup id="8" name="Back" visible="false" locked="false" />
-  <objectgroup id="9" name="Back2" visible="false" locked="false" />
-  <objectgroup id="10" name="Buildings" visible="false" locked="false">
-    <object id="1" name="TileData" x="208" y="48" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.1&quot;" />
-      </properties>
-    </object>
-    <object id="2" name="TileData" x="512" y="48" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Warp_Sunroom_Door" />
-      </properties>
-    </object>
-    <object id="3" name="TileData" x="144" y="64" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.2&quot;" />
-      </properties>
-    </object>
-    <object id="4" name="TileData" x="160" y="64" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.3&quot;" />
-      </properties>
-    </object>
-    <object id="5" name="TileData" x="176" y="64" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="NPCMessage Abigail &quot;Data\ExtraDialogue:SeedShop_Abigail_Drawers/Strings\Locations:SeedShop_Abigail_Drawers&quot;" />
-      </properties>
-    </object>
-    <object id="6" name="TileData" x="320" y="64" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.4&quot;" />
-      </properties>
-    </object>
-    <object id="7" name="TileData" x="336" y="64" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.5&quot;" />
-      </properties>
-    </object>
-    <object id="8" name="TileData" x="624" y="64" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.6&quot;" />
-      </properties>
-    </object>
-    <object id="9" name="TileData" x="32" y="80" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.7&quot;" />
-      </properties>
-    </object>
-    <object id="10" name="TileData" x="400" y="112" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.8&quot;" />
-      </properties>
-    </object>
-    <object id="11" name="TileData" x="640" y="128" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Letter &quot;SeedShop.9&quot;" />
-      </properties>
-    </object>
-    <object id="12" name="TileData" x="112" y="160" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.10&quot;" />
-      </properties>
-    </object>
-    <object id="13" name="TileData" x="208" y="176" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Door Abigail" />
-      </properties>
-    </object>
-    <object id="14" name="TileData" x="320" y="176" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Door Pierre Caroline" />
-      </properties>
-    </object>
-    <object id="15" name="TileData" x="224" y="256" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Door" />
-      </properties>
-    </object>
-    <object id="16" name="TileData" x="576" y="272" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Yoba" />
-      </properties>
-    </object>
-    <object id="17" name="TileData" x="592" y="272" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Yoba" />
-      </properties>
-    </object>
-    <object id="18" name="TileData" x="608" y="272" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Yoba" />
-      </properties>
-    </object>
-    <object id="19" name="TileData" x="64" y="288" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Buy General" />
-      </properties>
-    </object>
-    <object id="20" name="TileData" x="80" y="288" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Buy General" />
-      </properties>
-    </object>
-    <object id="21" name="TileData" x="112" y="288" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="BuyBackpack" />
-      </properties>
-    </object>
-    <object id="22" name="TileData" x="304" y="304" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="Message &quot;SeedShop.12&quot;" />
-      </properties>
-    </object>
-    <object id="23" name="TileData" x="288" y="448" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="DropBox PierreBox" />
-      </properties>
-    </object>
-    <object id="24" name="TileData" x="304" y="448" width="16" height="16" rotation="0">
-      <properties>
-        <property name="Action" type="string" value="DropBox PierreBox" />
-      </properties>
-    </object>
-  </objectgroup>
-  <objectgroup id="11" name="Front" visible="false" locked="false" />
-  <objectgroup id="12" name="Front2" visible="false" locked="false" />
-  <objectgroup id="13" name="Front3" visible="false" locked="false" />
-  <objectgroup id="14" name="Paths" visible="false" locked="false" />
+ </layer>
+ <objectgroup id="8" name="Back"/>
+ <objectgroup id="9" name="Back2"/>
+ <objectgroup id="10" name="Buildings">
+  <object id="1" name="TileData" x="208" y="48" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.1&quot;"/>
+   </properties>
+  </object>
+  <object id="2" name="TileData" x="512" y="48" width="16" height="16">
+   <properties>
+    <property name="Action" value="Warp_Sunroom_Door"/>
+   </properties>
+  </object>
+  <object id="3" name="TileData" x="144" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.2&quot;"/>
+   </properties>
+  </object>
+  <object id="4" name="TileData" x="160" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.3&quot;"/>
+   </properties>
+  </object>
+  <object id="5" name="TileData" x="176" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="NPCMessage Abigail &quot;Data\ExtraDialogue:SeedShop_Abigail_Drawers/Strings\Locations:SeedShop_Abigail_Drawers&quot;"/>
+   </properties>
+  </object>
+  <object id="6" name="TileData" x="320" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.4&quot;"/>
+   </properties>
+  </object>
+  <object id="7" name="TileData" x="336" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.5&quot;"/>
+   </properties>
+  </object>
+  <object id="8" name="TileData" x="624" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.6&quot;"/>
+   </properties>
+  </object>
+  <object id="9" name="TileData" x="32" y="80" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.7&quot;"/>
+   </properties>
+  </object>
+  <object id="10" name="TileData" x="400" y="112" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.8&quot;"/>
+   </properties>
+  </object>
+  <object id="11" name="TileData" x="640" y="128" width="16" height="16">
+   <properties>
+    <property name="Action" value="Letter &quot;SeedShop.9&quot;"/>
+   </properties>
+  </object>
+  <object id="12" name="TileData" x="112" y="160" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.10&quot;"/>
+   </properties>
+  </object>
+  <object id="13" name="TileData" x="208" y="176" width="16" height="16">
+   <properties>
+    <property name="Action" value="Door Abigail"/>
+   </properties>
+  </object>
+  <object id="14" name="TileData" x="320" y="176" width="16" height="16">
+   <properties>
+    <property name="Action" value="Door Pierre Caroline"/>
+   </properties>
+  </object>
+  <object id="15" name="TileData" x="224" y="256" width="16" height="16">
+   <properties>
+    <property name="Action" value="Door"/>
+   </properties>
+  </object>
+  <object id="16" name="TileData" x="576" y="272" width="16" height="16">
+   <properties>
+    <property name="Action" value="Yoba"/>
+   </properties>
+  </object>
+  <object id="17" name="TileData" x="592" y="272" width="16" height="16">
+   <properties>
+    <property name="Action" value="Yoba"/>
+   </properties>
+  </object>
+  <object id="18" name="TileData" x="608" y="272" width="16" height="16">
+   <properties>
+    <property name="Action" value="Yoba"/>
+   </properties>
+  </object>
+  <object id="19" name="TileData" x="64" y="288" width="16" height="16">
+   <properties>
+    <property name="Action" value="Buy General"/>
+   </properties>
+  </object>
+  <object id="20" name="TileData" x="80" y="288" width="16" height="16">
+   <properties>
+    <property name="Action" value="Buy General"/>
+   </properties>
+  </object>
+  <object id="21" name="TileData" x="112" y="288" width="16" height="16">
+   <properties>
+    <property name="Action" value="BuyBackpack"/>
+   </properties>
+  </object>
+  <object id="22" name="TileData" x="304" y="304" width="16" height="16">
+   <properties>
+    <property name="Action" value="Message &quot;SeedShop.12&quot;"/>
+   </properties>
+  </object>
+  <object id="23" name="TileData" x="288" y="448" width="16" height="16">
+   <properties>
+    <property name="Action" value="DropBox PierreBox"/>
+   </properties>
+  </object>
+  <object id="24" name="TileData" x="304" y="448" width="16" height="16">
+   <properties>
+    <property name="Action" value="DropBox PierreBox"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="11" name="Front"/>
+ <objectgroup id="12" name="Front2"/>
+ <objectgroup id="13" name="Front3"/>
+ <objectgroup id="14" name="Paths"/>
+ <objectgroup id="15" name="Objects">
+  <object id="25" name="Door" x="96" y="464" width="16" height="16">
+   <properties>
+    <property name="destId" type="int" value="1"/>
+    <property name="id" type="int" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

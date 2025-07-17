@@ -8,16 +8,16 @@
   ],
   "entities": [
     {
-      "name": "Stardrop Saloon",
+      "name": "Saloon",
       "tags": [],
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "stardropSaloonInterior"
+          "interiorName": "Saloon"
         },
         {
           "type": "Placeable",
-          "exteriorName": "stardropSaloonExterior"
+          "exteriorName": "SaloonExterior"
         },{
           "type" : "Shop",
           "name" : "Stardrop Saloon"
@@ -25,16 +25,16 @@
       ]
     },
     {
-      "name": "Pierre's General Store",
+      "name": "Pierres",
       "tags": [],
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "pierresGeneralStoreInterior"
+          "interiorName": "SeedShop"
         },
         {
           "type": "Placeable",
-          "exteriorName": "pierresGeneralStoreExterior"
+          "exteriorName": "PierresExterior"
         },{
           "type" : "Shop",
           "name" : "Pierre's General Store"
@@ -65,11 +65,11 @@
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "jojaMartInterior"
+          "interiorName": "JojaMart"
         },
         {
           "type": "Placeable",
-          "exteriorName": "jojaMartExterior"
+          "exteriorName": "JojaMartExterior"
         },{
           "type" : "Shop",
           "name" : "JojaMart"

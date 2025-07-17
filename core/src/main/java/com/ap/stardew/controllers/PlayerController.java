@@ -134,18 +134,30 @@ public class PlayerController implements InputProcessor {
         Tile destTile = App.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().copy().add(direction.x, direction.y));
 
-        if((!up && !down && !right && !left) || destTile == null || (!destTile.isWalkable())) {
+        if((!up && !down && !right && !left) || destTile == null) {
             player.setState(Player.State.IDLE);
         }else {
+            boolean canWalk = destTile.isWalkable();
             Entity entity = null;
-            if (destTile != null && (entity = destTile.getContent()) != null) {
+            if ((entity = destTile.getContent()) != null) {
                 Placeable placeable = entity.getComponent(Placeable.class);
-                for (CollisionEvent c : placeable.getCollisionEvents()) {
-                    c.onEnter();
+                if(placeable.isWalkable() && destTile.isWalkable()){
+                    for (CollisionEvent c : placeable.getCollisionEvents()) {
+                        c.onEnter(player);
+                    }
+                }else{
+                    canWalk = false;
+                    for (CollisionEvent c : placeable.getCollisionEvents()) {
+                        c.onCollision(player);
+                    }
                 }
             }
-            player.move(direction, delta);
-            player.setState(Player.State.WALKING);
+            if(canWalk){
+                player.move(direction, delta);
+                player.setState(Player.State.WALKING);
+            }else{
+                player.setState(Player.State.IDLE);
+            }
         }
     }
 }

@@ -8,16 +8,16 @@
   ],
   "entities" : [
     {
-      "name": "Cottage",
+      "name": "FarmHouse",
       "tags": [],
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "cottageInterior"
+          "interiorName": "FarmHouse"
         },
         {
           "type": "Placeable",
-          "exteriorName": "cottageExterior"
+          "exteriorName": "FarmHouseExterior"
         }
       ]
     }
