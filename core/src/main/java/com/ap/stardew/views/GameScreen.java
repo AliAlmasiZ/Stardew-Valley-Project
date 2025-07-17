@@ -78,9 +78,7 @@ public class GameScreen implements Screen {
 
         skin = GameAssetManager.getInstance().getSkin();
 
-        // Create clock
-        ClockActor clock = new ClockActor();
-        clock.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 80);
+
 
 
         //TODO
@@ -116,6 +114,9 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
+        // Create clock
+        clockActor = new ClockActor();
+        clockActor.setPosition(Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 240);
         uiStage.addActor(clockActor);
     }
 

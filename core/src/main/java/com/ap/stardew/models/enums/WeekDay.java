@@ -1,13 +1,19 @@
 package com.ap.stardew.models.enums;
 
 public enum WeekDay {
-    SUNDAY,
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY;
+    SUNDAY("SUN"),
+    MONDAY("MON"),
+    TUESDAY("TUE"),
+    WEDNESDAY("WED"),
+    THURSDAY("THU"),
+    FRIDAY("FRI"),
+    SATURDAY("SAT");
+
+    private final String shortName;
+
+    WeekDay(String shortName) {
+        this.shortName = shortName;
+    }
 
     public static WeekDay getWeekDay(int day) {
         switch (day) {
@@ -37,4 +43,7 @@ public enum WeekDay {
         return null;
     }
 
+    public String getShortName() {
+        return shortName;
+    }
 }

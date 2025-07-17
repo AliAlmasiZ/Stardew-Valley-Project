@@ -65,8 +65,8 @@ public class Game implements Serializable {
         setActiveMap(mainMap);
 //        setActiveMap(mainMap);
 //
-//        this.todayWeather = Weather.SUNNY;
-//        this.tomorrowWeather = Weather.SUNNY;
+        this.todayWeather = Weather.SUNNY;
+        this.tomorrowWeather = Weather.SUNNY;
 //
 //        // init player's friendships
 //        for (int i = 0; i < players.size(); i++) {

@@ -20,6 +20,7 @@ public class GameAssetManager extends AssetManager {
 
     private GameAssetManager(){
         this.font = new BitmapFont(Gdx.files.internal("Content/font/khodayaBaseDige.fnt"));
+        this.font.getData().setScale(0.65f);
 
         // Clock Images
         clock = new TextureRegion(new Texture(Gdx.files.internal("Content/ClockImages/Clock.png")));
