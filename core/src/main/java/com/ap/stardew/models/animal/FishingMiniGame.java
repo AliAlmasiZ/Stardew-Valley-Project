@@ -1,40 +1,40 @@
 package com.ap.stardew.models.animal;
 
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Sellable;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 public class FishingMiniGame extends Group {
     private final GameScreen gameScreen;
     private Image fishingPole;
-    private Image fish;
+    private Image fishImage;
     private Image bar;
     private Image catchZone;
-
-    private double fishMovementDelay;
-    private double catchingProgress = 0.25;
     private Image progressBar;
 
+    private double catchingProgress = 0.25;
     private final FishMovement fishMovement;
     private int lastMove = 1; //-1 for down, 1 for up, 0 for not moving
     private float timeToMove = 0.5f;
 
+    private final Entity fish;
+    private boolean isPerfect = true;
+    private boolean isSuccessful = false;
 
-    public FishingMiniGame(GameScreen gameScreen, FishMovement fishMovement) {
+
+    public FishingMiniGame(GameScreen gameScreen, FishMovement fishMovement, Entity fish) {
         this.gameScreen = gameScreen;
         this.fishMovement = fishMovement;
+        this.fish = fish;
         // adding Bar
         bar = new Image(new Texture("Content/FishingMiniGame/fishing bar.png"));
         bar.setSize(300, 750);
@@ -42,15 +42,18 @@ public class FishingMiniGame extends Group {
         addActor(bar);
 
         // fish
-        fish = new Image(new Texture("Content/FishingMiniGame/Salmon.png"));
-        fish.setSize(bar.getWidth() / 3 - 50, bar.getWidth() / 3 - 50);
-        fish.setPosition(bar.getX() + bar.getWidth() / 3 + 25, bar.getY() + bar.getHeight() / 2);
-        addActor(fish);
+        fishImage = new Image(new Texture("Content/FishingMiniGame/Salmon.png"));
+        if (fish.getComponent(Sellable.class).getBasePrice() > 500) {
+            fishImage = new Image(new Texture("Content/FishingMiniGame/" + fish.getEntityName() + ".png"));
+        }
+        fishImage.setSize(bar.getWidth() / 3 - 50, bar.getWidth() / 3 - 50);
+        fishImage.setPosition(bar.getX() + bar.getWidth() / 3 + 25, bar.getY() + bar.getHeight() / 2);
+        addActor(fishImage);
 
         // catch Zone
         catchZone = new Image(new Texture("Content/FishingMiniGame/catchZone.png"));
-        catchZone.setSize(fish.getWidth(), fish.getHeight() * 2.5f);
-        catchZone.setPosition(fish.getX(), fish.getY() - 20);
+        catchZone.setSize(fishImage.getWidth(), fishImage.getHeight() * 3.5f);
+        catchZone.setPosition(fishImage.getX(), fishImage.getY() - 20);
         catchZone.setColor(1, 1, 1, 0.5f);
         addActor(catchZone);
 
@@ -77,30 +80,51 @@ public class FishingMiniGame extends Group {
 
         // Fish Movement
         if (timeToMove < 0) {
-            lastMove = fishMovement.moveFish(fish, bar.getY() + 25, bar.getY() + bar.getHeight() - fish.getHeight() - 25, lastMove);
+            lastMove = fishMovement.moveFish(fishImage, bar.getY() + 25, bar.getY() + bar.getHeight() - fishImage.getHeight() - 25, lastMove);
             timeToMove = 0.5f;
         } else {
             timeToMove -= delta;
         }
 
         // progress
-        if (fish.getY() + fish.getHeight() / 3 > catchZone.getY() && fish.getY() + fish.getHeight() / 3 < catchZone.getHeight() + catchZone.getY() ) {
+        if (fishImage.getY() + fishImage.getHeight() / 3 > catchZone.getY() && fishImage.getY() + fishImage.getHeight() / 3 < catchZone.getHeight() + catchZone.getY() ) {
             catchingProgress += delta * 0.07f;
         } else {
+            isPerfect = false;
             catchingProgress -= delta * 0.07f;
         }
         progressBar.setHeight((float) (bar.getHeight() * catchingProgress));
 
-        if (catchingProgress >= 1) gameScreen.stopFishing(true);
-        if (catchingProgress < 0) gameScreen.stopFishing(false);
+        if (catchingProgress >= 1) {
+            isSuccessful = true;
+            gameScreen.stopFishing(this);
+        }
+        if (catchingProgress < 0) {
+            isSuccessful = false;
+            gameScreen.stopFishing(this);
+        }
 
         // Handle input
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) catchZone.setY(catchZone.getY() + delta * 200);
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) catchZone.setY(catchZone.getY() - delta * 200);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) gameScreen.stopFishing(false);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) gameScreen.stopFishing(this);
+        if (Gdx.input.isKeyPressed(Input.Keys.B))
+            gameScreen.showTemporaryMessage(fish.getEntityName(), 2, Color.CYAN, bar.getX(), bar.getY() + bar.getHeight() / 2, 3f );
 
         // fix catch Zone
         catchZone.setPosition(catchZone.getX(), MathUtils.clamp(catchZone.getY(), bar.getY() + 25,
             bar.getY() + bar.getHeight() - catchZone.getHeight()));
+    }
+
+    public boolean isSuccessful() {
+        return isSuccessful;
+    }
+
+    public boolean isPerfect() {
+        return isPerfect;
+    }
+
+    public Entity getFish() {
+        return fish;
     }
 }

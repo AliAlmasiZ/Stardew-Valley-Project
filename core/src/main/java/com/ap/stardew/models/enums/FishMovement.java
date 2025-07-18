@@ -58,7 +58,6 @@ public enum FishMovement {
                     else actor.setY(MathUtils.clamp(actor.getY() + movement, min, max));
                     return -1;
                 case 1:
-                    movement = 0;
                     return 0;
             }
 
@@ -114,7 +113,7 @@ public enum FishMovement {
 
     public abstract int moveFish(Actor actor, float min, float max, int lastMove);
 
-    public FishMovement getRandomFishMovement() {
+    public static FishMovement getRandomFishMovement() {
         int random = (int) (Math.random() * 5);
         switch (random) {
             case 0:

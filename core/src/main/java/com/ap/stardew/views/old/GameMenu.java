@@ -259,7 +259,7 @@ public class GameMenu implements AppMenu {
             App.getView().log(controller.showShippingBin());
 
         } else if ((matcher = GameMenuCommands.FISHING.getMatcher(input)) != null) {
-            App.getView().log(controller.fishing(matcher.group(1).trim()));
+            App.getView().log(controller.fishingPhae1(matcher.group(1).trim()));
 
         } else if ((matcher = GameMenuCommands.PLACE_ITEM.getMatcher(input)) != null) {
             App.getView().log(controller.placeItem(matcher.group(1).trim(), Integer.parseInt(matcher.group(2))));

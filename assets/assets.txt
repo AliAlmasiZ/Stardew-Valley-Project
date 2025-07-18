@@ -3585,6 +3585,10 @@ Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
 Content/ClockImages/PC Computer - Stardew Valley - Clock.png
+Content/FishingMiniGame/Angler.png
+Content/FishingMiniGame/Crimsonfish.png
+Content/FishingMiniGame/Glacierfish.png
+Content/FishingMiniGame/Legend.png
 Content/FishingMiniGame/Salmon.png
 Content/FishingMiniGame/catchZone.png
 Content/FishingMiniGame/fishing bar.png

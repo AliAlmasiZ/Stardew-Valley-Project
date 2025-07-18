@@ -102,6 +102,8 @@ public class Game implements Serializable {
         //mainMap.initRandomElements();
         //initNPCs();
         //currentPlayer.getOwnedTiles();
+
+
     }
 
     public void initNPCs() {
