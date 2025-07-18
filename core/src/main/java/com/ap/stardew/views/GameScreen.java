@@ -8,6 +8,7 @@ import com.ap.stardew.models.App;
 import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.animal.FishingMiniGame;
+import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -211,7 +212,7 @@ public class GameScreen implements Screen {
     public void startFishing() {
         //TODO: phase 1 logic implementation
 
-        FishingMiniGame fishingMiniGame = new FishingMiniGame(this);
+        FishingMiniGame fishingMiniGame = new FishingMiniGame(this, FishMovement.DART);
         minigameStage.addActor(fishingMiniGame);
         Gdx.input.setInputProcessor(minigameStage);
 
