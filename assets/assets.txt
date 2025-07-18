@@ -3582,6 +3582,7 @@ Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
 Content/PC Computer - Stardew Valley - Clock.png
+Content/font/viafont_6918416.zip
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
 Moz/MapEditor/Tile sets/biome.json
