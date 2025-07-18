@@ -1,7 +1,10 @@
 package com.ap.stardew.models.enums;
 
+import com.ap.stardew.controllers.GameAssetManager;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 public enum Season {
-    SPRING {
+    SPRING(3) {
         @Override
         public Weather getWeather() {
             int random = (int) (Math.random() * 3);
@@ -12,7 +15,7 @@ public enum Season {
             };
         }
     },
-    SUMMER {
+    SUMMER(1) {
         @Override
         public Weather getWeather() {
             int random = (int) (Math.random() * 3);
@@ -23,7 +26,7 @@ public enum Season {
             };
         }
     },
-    FALL {
+    FALL(2) {
         @Override
         public Weather getWeather() {
             int random = (int) (Math.random() * 3);
@@ -34,18 +37,24 @@ public enum Season {
             };
         }
     },
-    WINTER {
+    WINTER(10) {
         @Override
         public Weather getWeather() {
             return Weather.SNOWY;
         }
     };
 
+    Season(int imageNumber) {
+        this.imageNumber = imageNumber;
+    }
+
     public void updatePlant() {
 
     }
 
     ;
+
+    private final int imageNumber;
 
     public static Season nextSeason(Season season) {
         switch (season) {
@@ -72,5 +81,13 @@ public enum Season {
     @Override
     public String toString() {
         return name().charAt(0) + name().substring(1).toLowerCase();
+    }
+
+    public int getImageNumber() {
+        return imageNumber;
+    }
+
+    public TextureRegion getTextureRegion() {
+        return GameAssetManager.getInstance().icons[imageNumber];
     }
 }

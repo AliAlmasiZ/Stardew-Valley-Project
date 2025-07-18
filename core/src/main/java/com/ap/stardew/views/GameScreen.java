@@ -5,8 +5,20 @@ import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.ClockActor;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.animal.FishingMiniGame;
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Pickable;
+import com.ap.stardew.models.entities.components.Sellable;
+import com.ap.stardew.models.entities.components.inventory.Inventory;
+import com.ap.stardew.models.enums.FishMovement;
+import com.ap.stardew.models.enums.ProductQuality;
+import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.player.Player;
+import com.ap.stardew.models.player.Skill;
+import com.ap.stardew.records.EntityResult;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -25,6 +37,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -42,6 +55,7 @@ public class GameScreen implements Screen {
 
     public static final float WORLD_WIDTH = 800;
     public static final float WORLD_HEIGHT = 450;
+    public static final float ERROR_MESSAGE_DELAY = 5;
 
     private GameMenuController controller;
     private PlayerController playerController;
@@ -53,6 +67,7 @@ public class GameScreen implements Screen {
     private Batch batch;
     private Stage gameStage;
     private Stage uiStage;
+    private Stage minigameStage;
     private ShapeRenderer shapeRenderer;
     public OrthographicCamera camera;
     private Viewport gameView;
@@ -66,9 +81,7 @@ public class GameScreen implements Screen {
     private MapObject object;
 
     // Clock
-    private Label timeLabel;
-    private Label dateLabel;
-    private Label moneyLabel;
+    private ClockActor clockActor;
 
     public GameScreen() {
         controller = new GameMenuController();
@@ -78,6 +91,16 @@ public class GameScreen implements Screen {
         playerController = new PlayerController(this, player);
 
         skin = GameAssetManager.getInstance().getSkin();
+
+
+        //TODO: remove it later
+        controller.cheatGiveItem("Training Rod", 1);
+        controller.cheatAddSkill("fishing", 200);
+        controller.cheatAddSkill("fishing", 200);
+        controller.cheatAddSkill("fishing", 200);
+        controller.cheatAddSkill("fishing", 200);
+        controller.cheatAddSkill("fishing", 200);
+
 
         //TODO
     }
@@ -91,6 +114,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, gameView.getWorldWidth(), gameView.getWorldHeight());
         gameStage = new Stage(gameView, batch);
         uiStage = new Stage(new ScreenViewport());
+        minigameStage = new Stage(new ScreenViewport());
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
         map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
@@ -112,7 +136,10 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        createClockUI();
+        // Create clock
+        clockActor = new ClockActor();
+        clockActor.setPosition(Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 240);
+        uiStage.addActor(clockActor);
     }
 
     @Override
@@ -169,7 +196,10 @@ public class GameScreen implements Screen {
         uiStage.act(delta);
         uiStage.draw();
 
-        updateClockUI();
+        minigameStage.act(delta);
+        minigameStage.draw();
+
+        clockActor.update(delta);
     }
 
     @Override
@@ -197,18 +227,111 @@ public class GameScreen implements Screen {
         gameStage.dispose();
     }
 
-    private void createClockUI() {
-        Table table = new Table();
-        table.setFillParent(true);
+    public void showTemporaryMessage(String message, float duration, Color color) {
+        Label label = new Label(message, skin);
+        label.setPosition(
+            (uiStage.getWidth() - label.getWidth()) / 2f,
+            (uiStage.getHeight() - label.getHeight() - 50)
+        );
 
-        timeLabel = new Label("", skin);
+        label.setColor(color);
+        label.scaleBy(2);
+        label.getColor().a = 0; // start invisible
 
-        table.add(timeLabel);
-        table.left().top();
-        uiStage.addActor(table);
+        // Sequence of actions: fade in → wait → fade out → remove
+        label.addAction(Actions.sequence(
+            Actions.fadeIn(0.5f),
+            Actions.delay(duration),
+            Actions.fadeOut(0.5f),
+            Actions.removeActor()
+        ));
+
+        uiStage.addActor(label);
     }
 
-    private void updateClockUI() {
-        timeLabel.setText(controller.getDateTime().message());
+    public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
+        Label label = new Label(message, skin);
+        label.setPosition(
+            x,y
+        );
+
+        label.setColor(color);
+        label.scaleBy(scale);
+        label.getColor().a = 0; // start invisible
+
+        // Sequence of actions: fade in → wait → fade out → remove
+        label.addAction(Actions.sequence(
+            Actions.fadeIn(0.5f),
+            Actions.delay(duration),
+            Actions.fadeOut(0.5f),
+            Actions.removeActor()
+        ));
+
+        uiStage.addActor(label);
     }
+
+
+    public void startFishing() {
+        //TODO: Ilia doesnt know how to get equipped tool
+        EntityResult entityResult = controller.fishing("Training Rod"); // This is just for test
+
+        if (entityResult.entity() == null) {
+            System.out.println(entityResult.message());
+            showTemporaryMessage(entityResult.message(), ERROR_MESSAGE_DELAY, Color.RED);
+            return;
+        }
+
+
+        FishingMiniGame fishingMiniGame = new FishingMiniGame(this, FishMovement.getRandomFishMovement(), entityResult.entity());
+        minigameStage.addActor(fishingMiniGame);
+        Gdx.input.setInputProcessor(minigameStage);
+
+
+    }
+
+    public void stopFishing(FishingMiniGame fishingMiniGame) {
+        minigameStage.clear();
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(playerController);
+        inputMultiplexer.addProcessor(gameStage);
+        inputMultiplexer.addProcessor(uiStage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
+        if (!fishingMiniGame.isSuccessful()) {
+            showTemporaryMessage("You lost the mini game!\n Better luck next time!", ERROR_MESSAGE_DELAY, Color.RED);
+            return;
+        }
+
+        Game game = App.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        Skill skill = player.getSkill(SkillType.FISHING);
+        Inventory inventory = currentPlayer.getComponent(Inventory.class);
+
+        StringBuilder message = new StringBuilder();
+        Color color = Color.GREEN;
+        Entity fish = fishingMiniGame.getFish();
+
+        if (fishingMiniGame.isPerfect()) {
+            skill.addExperience(40);
+            color = Color.GOLD;
+            ProductQuality productQuality = fish.getComponent(Sellable.class).getProductQuality();
+            switch (productQuality) {
+                case SILVER -> {
+                    fish.getComponent(Sellable.class).setProductQuality(ProductQuality.GOLD);
+                }
+                case GOLD -> {
+                    fish.getComponent(Sellable.class).setProductQuality(ProductQuality.IRIDIUM);
+                }
+            }
+            message.append("\t PERFECT!\t\n");
+        }
+
+        message.append("You caught ").append(fish.getComponent(Pickable.class).getStackSize())
+            .append(" ").append(fish.getEntityName()).append(" of quality ").append(fish.getComponent(Sellable.class).getProductQuality().name());
+        skill.addExperience(10);
+        inventory.addItem(fish);
+
+        showTemporaryMessage(message.toString(), 7, color);
+    }
+
 }

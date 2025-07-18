@@ -62,6 +62,8 @@ public class PlayerController implements InputProcessor {
             this.right = false;
         if (keycode == Input.Keys.T)
             this.advanceTime = true;
+        if (keycode == Input.Keys.P) //Temporarily
+            screen.startFishing();
         return false;
     }
 

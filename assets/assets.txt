@@ -3581,7 +3581,25 @@ Content(unpacked)/TileSheets/weapons.png
 Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
-Content/PC Computer - Stardew Valley - Clock.png
+Content/ClockImages/Clock.png
+Content/ClockImages/ClockHand.png
+Content/ClockImages/ClockIcons.png
+Content/ClockImages/PC Computer - Stardew Valley - Clock.png
+Content/FishingMiniGame/Angler.png
+Content/FishingMiniGame/Crimsonfish.png
+Content/FishingMiniGame/Glacierfish.png
+Content/FishingMiniGame/Legend.png
+Content/FishingMiniGame/Salmon.png
+Content/FishingMiniGame/catchZone.png
+Content/FishingMiniGame/fishing bar.png
+Content/font/PixelatedEleganceRegular-ovyAA.ttf
+Content/font/info.txt
+Content/font/khodayaBaseDige.fnt
+Content/font/khodayaBaseDige.png
+Content/font/misc/Buy GGBotNet a Coffee-543f.url
+Content/font/misc/GGBotNet - itch.io-3086.url
+Content/font/misc/License-473a.txt
+Content/font/misc/Pixelated Elegance v0.3-7344.pxf
 Content/font/viafont_6918416.zip
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
