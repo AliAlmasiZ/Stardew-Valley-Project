@@ -16,27 +16,28 @@ import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.views.widgets.TabWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -44,7 +45,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -86,7 +86,6 @@ public class GameScreen implements Screen {
     public GameScreen() {
         controller = new GameMenuController();
         player = App.getActiveGame().getCurrentPlayer();
-        player.setSprite(new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png")));
         currentPlayerSprite = player.getSprite();
         playerController = new PlayerController(this, player);
 
@@ -186,7 +185,12 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        currentPlayerSprite.draw(batch);
+        for (Entity entity : App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class)) {
+            Sprite sprite = entity.getComponent(Renderable.class).getSprite();
+            if(sprite != null){
+                sprite.draw(batch);
+            }
+        }
         batch.end();
 
         renderer.render(frontLayerIndices);
@@ -205,6 +209,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gameView.update(width, height, true);
+        uiStage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -287,6 +292,28 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(minigameStage);
 
 
+    }
+
+    public void openTestDialog(){
+        Dialog dialog = new Dialog("", skin);
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget(skin);
+
+        Table table = new Table();
+        table.add(new Label("test", skin)).row();
+        table.add(new Label("test2", skin));
+
+        Table table2 = new Table();
+        table2.add(new Label("test3", skin)).row();
+        table2.add(new Label("test4", skin));
+
+        tabWidget.addTab(table);
+        tabWidget.addTab(table2);
+
+        dialog.getContentTable().add(tabWidget).fill().size(600, 400);
+
+        dialog.show(uiStage);
     }
 
     public void stopFishing(FishingMiniGame fishingMiniGame) {

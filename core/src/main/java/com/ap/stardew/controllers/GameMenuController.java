@@ -44,21 +44,6 @@ public class GameMenuController implements Controller {
         return null;
     }
 
-    public Result gameMap() {
-        //TODO
-        return null;
-    }
-
-    public Result exitGame() {
-        //TODO
-        return null;
-    }
-
-    public Result deleteGame() {
-        //TODO
-        return null;
-    }
-
     public Result nextTurn() {
         Game game = App.getActiveGame();
         game.nextTurn();

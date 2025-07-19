@@ -3600,7 +3600,9 @@ Content/font/misc/Buy GGBotNet a Coffee-543f.url
 Content/font/misc/GGBotNet - itch.io-3086.url
 Content/font/misc/License-473a.txt
 Content/font/misc/Pixelated Elegance v0.3-7344.pxf
-Content/font/viafont_6918416.zip
+Content/frame.png
+Content/frameBackground.png
+Content/frameNinePatch.9.png
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
 Moz/MapEditor/Tile sets/biome.json
@@ -3707,6 +3709,10 @@ data/recipes/artisanRecipes.json
 data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
+skin/Stardew Valley Skin/skin.atlas
+skin/Stardew Valley Skin/skin.json
+skin/Stardew Valley Skin/skin.png
+skin/Stardew Valley Skin/skin.scmp
 skin/font-export.fnt
 skin/font-subtitle-export.fnt
 skin/font-title-export.fnt

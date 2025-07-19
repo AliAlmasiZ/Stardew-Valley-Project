@@ -15,6 +15,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PlayerController implements InputProcessor {
     private static final float ZOOM_SPEED = 0.1f;
     private static final float MIN_ZOOM = 0.5f;
@@ -27,6 +30,7 @@ public class PlayerController implements InputProcessor {
     private boolean advanceTime;
     private GameScreen screen;
     private Vector2 direction = new Vector2();
+    private final Map<Integer, Boolean> keysState = new HashMap<>();
 
     public PlayerController(GameScreen screen, Player player) {
         this.screen = screen;
@@ -62,6 +66,8 @@ public class PlayerController implements InputProcessor {
             this.right = false;
         if (keycode == Input.Keys.T)
             this.advanceTime = true;
+        if (keycode == Input.Keys.TAB)
+            screen.openTestDialog();
         if (keycode == Input.Keys.P) //Temporarily
             screen.startFishing();
         return false;

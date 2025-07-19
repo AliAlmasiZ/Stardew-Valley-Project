@@ -21,6 +21,7 @@ import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.old.inGame.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -83,6 +84,8 @@ public class Player extends Entity implements Serializable {
         this.account = account;
 
         this.accountUsername = account.getUsername();
+
+        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
     }
 
     public GameMap getCurrentMap() {
@@ -554,5 +557,6 @@ public class Player extends Entity implements Serializable {
 
     public void update(float delta) {
         sprite.setPosition((float) getPosition().getX(), (float) getPosition().getY());
+        getComponent(Renderable.class).setSprite(sprite);
     }
 }

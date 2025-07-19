@@ -1,0 +1,79 @@
+package com.ap.stardew.views.widgets;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
+
+public class TabWidget extends Table {
+    private static class TabDetails{
+        private final Table tab;
+        private final Image button;
+
+        public TabDetails(Table tab, Image button) {
+            this.tab = tab;
+            this.button = button;
+        }
+    }
+
+    private final Table tabHeaderTable;
+    private final Stack contentStack;
+    private final ArrayList<TabDetails> tabs = new ArrayList<>();
+    private final Skin skin;
+    private TabDetails currentTab = null;
+
+    public TabWidget(Skin skin) {
+        this.skin = skin;
+
+        tabHeaderTable = new Table();
+        tabHeaderTable.pad(0);
+        contentStack = new Stack();
+
+        Table wrapperTable = new Table(skin);
+        wrapperTable.setBackground("window");
+        wrapperTable.add(contentStack).grow();
+
+        tabHeaderTable.left();
+
+        this.top();
+        this.add(tabHeaderTable).growX().row();
+        this.add(wrapperTable).grow().row();
+    }
+
+    public void addTab(final Table content) {
+        Image tabButton = new Image(skin, "window");
+        tabButton.setSize(10, 30);
+        TabDetails tabDetails = new TabDetails(content, tabButton);
+        tabs.add(tabDetails);
+        contentStack.add(content);
+
+        content.setFillParent(true);
+        content.setVisible(false);
+
+        tabButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                selectTab(tabDetails);
+            }
+        });
+        tabHeaderTable.add(tabButton).bottom().fill().size(40, 50);
+    }
+
+    private void selectTab(TabDetails tabDetails) {
+        if(currentTab != null){
+            if(currentTab == tabDetails) return;
+            currentTab.button.moveBy(0, 10);
+            currentTab.tab.setVisible(false);
+        }
+        currentTab = tabDetails;
+        tabDetails.tab.setVisible(true);
+        currentTab.button.moveBy(0, -10);
+    }
+}

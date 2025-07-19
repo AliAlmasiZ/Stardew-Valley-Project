@@ -1,5 +1,7 @@
 package com.ap.stardew.models.entities.components;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.views.old.inGame.Color;
 
@@ -10,6 +12,8 @@ public class Renderable extends EntityComponent implements Serializable {
     protected char character;
     @JsonProperty("color")
     protected Color color;
+    @JsonIgnore
+    protected Sprite sprite;
 
 
     public Renderable(char character, Color color) {
@@ -34,5 +38,13 @@ public class Renderable extends EntityComponent implements Serializable {
     @Override
     public EntityComponent clone() {
         return new Renderable(this);
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 }
