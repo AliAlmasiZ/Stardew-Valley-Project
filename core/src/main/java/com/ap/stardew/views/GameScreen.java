@@ -442,13 +442,28 @@ public class GameScreen implements Screen {
 
         collectProduceButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                Result result = controller.collectProduces(animal.getName());
+                if (!result.isSuccessful()) {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                } else {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                }
+                setGameInput();
+                dialog.remove();
             }
         });
 
         sellAnimalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                Result result = controller.sellAnimal(animal.getName());
+                if (!result.isSuccessful()) {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                } else {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                }
+                setGameInput();
+                dialog.remove();
             }
         });
 
@@ -468,6 +483,15 @@ public class GameScreen implements Screen {
         });
 
 
+    }
+
+    public void openAnimalMovementMenu(Animal animal) {
+        Dialog dialog = new Dialog("Move Animal", skin);
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget(skin);
+
+        //TODO: ILIA
     }
 
     public GameMenuController getController() {
