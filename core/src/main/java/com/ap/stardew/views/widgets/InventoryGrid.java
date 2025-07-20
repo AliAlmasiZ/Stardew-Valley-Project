@@ -23,7 +23,7 @@ public class InventoryGrid extends Table {
 
             InventorySlotWidget slotWidget = new InventorySlotWidget(slot);
 
-            add(slotWidget).size(15, 15).pad(0.3f);
+            add(slotWidget).size(18, 18).pad(0.5f);
 
             k++;
         }

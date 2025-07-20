@@ -42,5 +42,8 @@ public class FramedImage extends Group {
 
         // Reset alpha to prevent affecting subsequent draws
         batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, oldAlpha);
+
     }
+
+
 }
