@@ -313,4 +313,12 @@ public class EntityPlacementSystem {
             emptyTile(map.getTileByPosition(y, x));
         }
     }
+    public static void removeFromMap(Entity entity){
+        PositionComponent position = entity.getComponent(PositionComponent.class);
+        GameMap map = position.getMap();
+
+        if(map == null) return;
+        map.removeEntity(entity);
+        position.setMap(null);
+    }
 }
