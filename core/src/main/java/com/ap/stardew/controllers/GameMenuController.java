@@ -1094,6 +1094,7 @@ public class GameMenuController implements Controller {
         int price = animal.calculatePrice();
         currentPlayer.getWallet().changeBalance(price);
         currentPlayer.getAnimals().remove(animal);
+        EntityPlacementSystem.removeExterior(animal);
         //TODO: remove form his house if needed
 
         return new Result(true, animal.getName() + " sold successfully!");
