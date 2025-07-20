@@ -126,6 +126,4 @@ public class MainMenuController implements Controller{    @Override
         App.setCurrentMenu(Menu.GAME_MENU);
         return new Result(true, "loaded!");
     }
-
-
 }

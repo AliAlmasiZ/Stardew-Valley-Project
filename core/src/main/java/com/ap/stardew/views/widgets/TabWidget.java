@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
@@ -48,9 +49,8 @@ public class TabWidget extends Table {
         this.add(wrapperTable).grow().row();
     }
 
-    public void addTab(final Table content) {
-        Image tabButton = new Image(skin, "window");
-        tabButton.setSize(10, 30);
+    public void addTab(final Table content, Drawable tabIcon) {
+        Image tabButton = new Image(tabIcon);
         TabDetails tabDetails = new TabDetails(content, tabButton);
         tabs.add(tabDetails);
         contentStack.add(content);
@@ -63,17 +63,17 @@ public class TabWidget extends Table {
                 selectTab(tabDetails);
             }
         });
-        tabHeaderTable.add(tabButton).bottom().fill().size(40, 50);
+        tabHeaderTable.add(tabButton).bottom();
     }
 
     private void selectTab(TabDetails tabDetails) {
         if(currentTab != null){
             if(currentTab == tabDetails) return;
-            currentTab.button.moveBy(0, 10);
+            currentTab.button.moveBy(0, 1);
             currentTab.tab.setVisible(false);
         }
         currentTab = tabDetails;
         tabDetails.tab.setVisible(true);
-        currentTab.button.moveBy(0, -10);
+        currentTab.button.moveBy(0, -1);
     }
 }

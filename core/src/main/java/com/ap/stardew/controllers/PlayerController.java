@@ -1,7 +1,6 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.App;
-import com.ap.stardew.models.Game;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Placeable;
@@ -11,7 +10,6 @@ import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
@@ -112,7 +110,6 @@ public class PlayerController implements InputProcessor {
             cam.zoom = Math.min(MAX_ZOOM, cam.zoom);
             return true;
         }
-
         return false;
     }
 

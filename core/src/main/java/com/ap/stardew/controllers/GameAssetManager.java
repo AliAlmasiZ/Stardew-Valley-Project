@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GameAssetManager extends AssetManager {
     private static GameAssetManager instance;
     private Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+    private Skin customSkin = new Skin(Gdx.files.internal("skin/Stardew Valley Skin/skin.json"));
     private BitmapFont font;
 
     // Clock Images
@@ -18,9 +19,13 @@ public class GameAssetManager extends AssetManager {
     public TextureRegion clockHand;
     public TextureRegion[] icons = new TextureRegion[12];
 
+    //inGameMenu
+    public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
+
     private GameAssetManager(){
         this.font = new BitmapFont(Gdx.files.internal("Content/font/khodayaBaseDige.fnt"));
-        this.font.getData().setScale(0.65f);
+        this.font.getData().setScale(Gdx.graphics.getDensity() * 0.3f);
+        System.out.println(Gdx.graphics.getDensity());
 
         // Clock Images
         clock = new TextureRegion(new Texture(Gdx.files.internal("Content/ClockImages/Clock.png")));
@@ -33,6 +38,15 @@ public class GameAssetManager extends AssetManager {
                 icons[index++] = tempIcons[i][j];
             }
         }
+
+        inventoryIcon = new TextureRegion(new Texture("Content/InventoryIcon.png"));
+        mapIcon = new TextureRegion(new Texture("Content/MapIcon.png"));
+        buildMenuIcon = new TextureRegion(new Texture("Content/BuildingMenuIcon.png"));
+
+        inventoryIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        mapIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        buildMenuIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
 
     }
 
@@ -49,5 +63,9 @@ public class GameAssetManager extends AssetManager {
 
     public BitmapFont getFont() {
         return font;
+    }
+
+    public Skin getCustomSkin() {
+        return customSkin;
     }
 }

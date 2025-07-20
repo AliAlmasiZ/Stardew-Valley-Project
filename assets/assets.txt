@@ -1930,6 +1930,7 @@ Content(unpacked)/LooseSprites/Cursors.it-IT.png
 Content(unpacked)/LooseSprites/Cursors.ja-JP.png
 Content(unpacked)/LooseSprites/Cursors.ko-KR.png
 Content(unpacked)/LooseSprites/Cursors.png
+Content(unpacked)/LooseSprites/Cursors.png-autosave.kra
 Content(unpacked)/LooseSprites/Cursors.pt-BR.png
 Content(unpacked)/LooseSprites/Cursors.ru-RU.png
 Content(unpacked)/LooseSprites/Cursors.tr-TR.png
@@ -3581,10 +3582,12 @@ Content(unpacked)/TileSheets/weapons.png
 Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
+Content/BuildingMenuIcon.png
 Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
 Content/ClockImages/PC Computer - Stardew Valley - Clock.png
+Content/Cursors.png
 Content/FishingMiniGame/Angler.png
 Content/FishingMiniGame/Crimsonfish.png
 Content/FishingMiniGame/Glacierfish.png
@@ -3592,6 +3595,9 @@ Content/FishingMiniGame/Legend.png
 Content/FishingMiniGame/Salmon.png
 Content/FishingMiniGame/catchZone.png
 Content/FishingMiniGame/fishing bar.png
+Content/InventoryIcon.png
+Content/MapIcon.png
+Content/TabMenuIcons.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
 Content/font/info.txt
 Content/font/khodayaBaseDige.fnt

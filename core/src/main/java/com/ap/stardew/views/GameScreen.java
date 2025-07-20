@@ -45,6 +45,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -62,6 +63,7 @@ public class GameScreen implements Screen {
     private Player player;
     private Sprite currentPlayerSprite;
     private Skin skin;
+    private Skin customSkin;
 
     //Renderers
     private Batch batch;
@@ -90,6 +92,7 @@ public class GameScreen implements Screen {
         playerController = new PlayerController(this, player);
 
         skin = GameAssetManager.getInstance().getSkin();
+        customSkin = GameAssetManager.getInstance().getCustomSkin();
 
 
         //TODO: remove it later
@@ -112,8 +115,13 @@ public class GameScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         camera.setToOrtho(false, gameView.getWorldWidth(), gameView.getWorldHeight());
         gameStage = new Stage(gameView, batch);
-        uiStage = new Stage(new ScreenViewport());
         minigameStage = new Stage(new ScreenViewport());
+        uiStage = new Stage(new FitViewport(320,
+            (((float) Gdx.graphics.getHeight()) / Gdx.graphics.getWidth()) * 320));
+//        uiStage.getViewport().setCamera(new OrthographicCamera(1920,
+//            (((float) Gdx.graphics.getHeight()) / Gdx.graphics.getWidth()) * 1920));
+//        uiStage.getViewport().getCamera().position.set(1920 / 2,
+//            ((float) Gdx.graphics.getHeight()) / Gdx.graphics.getWidth() * 1920 / 2, 0f);
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
         map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
@@ -137,7 +145,7 @@ public class GameScreen implements Screen {
 
         // Create clock
         clockActor = new ClockActor();
-        clockActor.setPosition(Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 240);
+        clockActor.setPosition(uiStage.getWidth() - clockActor.getWidth() - 30, uiStage.getHeight() - clockActor.getHeight()- 30);
         uiStage.addActor(clockActor);
     }
 
@@ -286,12 +294,9 @@ public class GameScreen implements Screen {
             return;
         }
 
-
         FishingMiniGame fishingMiniGame = new FishingMiniGame(this, FishMovement.getRandomFishMovement(), entityResult.entity());
         minigameStage.addActor(fishingMiniGame);
         Gdx.input.setInputProcessor(minigameStage);
-
-
     }
 
     public void openTestDialog(){
@@ -308,10 +313,16 @@ public class GameScreen implements Screen {
         table2.add(new Label("test3", skin)).row();
         table2.add(new Label("test4", skin));
 
-        tabWidget.addTab(table);
-        tabWidget.addTab(table2);
+        Table table3 = new Table();
+        table3.add(new Label("test3", skin)).row();
+        table3.add(new Label("test4", skin));
 
-        dialog.getContentTable().add(tabWidget).fill().size(600, 400);
+        tabWidget.addTab(table, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(table2, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
+        tabWidget.addTab(table3, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
+
+
+        dialog.getContentTable().add(tabWidget).fill().size(200, 130);
 
         dialog.show(uiStage);
     }

@@ -82,7 +82,7 @@ public class ClockActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        final float SCALE = 3f; // Scaling factor
+        final float SCALE = 1f; // Scaling factor
 
         // Draw background (3x size)
         batch.draw(background,

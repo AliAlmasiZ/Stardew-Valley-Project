@@ -1,19 +1,40 @@
 
 skin.png
-size: 32, 32
+size: 64, 64
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-frame
+BuildingMenuIcon
   rotate: false
   xy: 1, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+InventoryIcon
+  rotate: false
+  xy: 1, 19
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+MapIcon
+  rotate: false
+  xy: 27, 45
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+frame
+  rotate: false
+  xy: 1, 37
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 1, 1
+  xy: 1, 37
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
