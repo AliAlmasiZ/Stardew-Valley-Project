@@ -1,5 +1,6 @@
 package com.ap.stardew.views.widgets;
 
+import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,8 +32,8 @@ public class TabWidget extends Table {
     private final Skin skin;
     private TabDetails currentTab = null;
 
-    public TabWidget(Skin skin) {
-        this.skin = skin;
+    public TabWidget() {
+        this.skin = GameAssetManager.getInstance().getCustomSkin();
 
         tabHeaderTable = new Table();
         tabHeaderTable.pad(0);

@@ -3776,12 +3776,11 @@ Content/font/misc/Buy GGBotNet a Coffee-543f.url
 Content/font/misc/GGBotNet - itch.io-3086.url
 Content/font/misc/License-473a.txt
 Content/font/misc/Pixelated Elegance v0.3-7344.pxf
-Content/font/viafont_6918416.zip
 Content/frame.png
 Content/frame2.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png
-Content/frameNinePatch2.9.png
+Content/frameNinePatch2.png
 Content/shit.png
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session

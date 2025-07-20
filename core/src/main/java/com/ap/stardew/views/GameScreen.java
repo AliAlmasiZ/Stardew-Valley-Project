@@ -327,7 +327,7 @@ public class GameScreen implements Screen {
         Dialog dialog = new Dialog("", skin);
         dialog.setBackground((Drawable) null);
 
-        TabWidget tabWidget = new TabWidget(customSkin);
+        TabWidget tabWidget = new TabWidget();
 
         Table table = new Table();
         InventoryGrid inventoryGrid = new InventoryGrid(player.getComponent(Inventory.class), 10);
@@ -404,7 +404,7 @@ public class GameScreen implements Screen {
         Dialog dialog = new Dialog("Animal Menu", skin);
         dialog.setBackground((Drawable) null);
 
-        TabWidget tabWidget = new TabWidget(skin);
+        TabWidget tabWidget = new TabWidget();
 
         Table infoTab = new Table();
         Label animalLabel = new Label(animal.getDetail(), skin);
@@ -423,6 +423,8 @@ public class GameScreen implements Screen {
         TextButton shepherdAnimalButton = new TextButton("Shephered Animal", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
+        feedButton.setScale(0.5f);
+
         buttonTab.add(feedButton).row();
         buttonTab.add(petButton).row();
         buttonTab.add(collectProduceButton).row();
@@ -434,7 +436,7 @@ public class GameScreen implements Screen {
         tabWidget.addTab(infoTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
         tabWidget.addTab(buttonTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
 
-        dialog.getContentTable().add(tabWidget).fill().size(600, 800);
+        dialog.getContentTable().add(tabWidget).fill().size(50, 200);
 
         dialog.show(uiStage);
         Gdx.input.setInputProcessor(uiStage);
@@ -515,7 +517,7 @@ public class GameScreen implements Screen {
         Dialog dialog = new Dialog("Move Animal", skin);
         dialog.setBackground((Drawable) null);
 
-        TabWidget tabWidget = new TabWidget(skin);
+        TabWidget tabWidget = new TabWidget();
 
         //TODO: ILIA
     }

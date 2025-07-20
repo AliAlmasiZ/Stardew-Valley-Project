@@ -21,6 +21,7 @@ public class GameAssetManager extends AssetManager {
 
     //inGameMenu
     public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
+    public final Texture menuBackground;
 
     //inventory
     public final Texture inventorySlotFrame;
@@ -57,6 +58,8 @@ public class GameAssetManager extends AssetManager {
 
         testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
+
+        menuBackground = new Texture("Content/frameNinePatch2.png");
 
     }
 
