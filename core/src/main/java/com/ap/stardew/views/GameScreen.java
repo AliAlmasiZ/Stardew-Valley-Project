@@ -23,6 +23,7 @@ import com.ap.stardew.models.entities.components.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.records.Result;
 import com.ap.stardew.views.widgets.TabWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -95,18 +96,21 @@ public class GameScreen implements Screen {
 
 
         //TODO: remove it later
+        //**************************************
         controller.cheatGiveItem("Training Rod", 1);
+        controller.cheatGiveItem("Hay", 500);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
+
 
         Player player = App.getActiveGame().getCurrentPlayer();
         Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
         System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
         player.getAnimals().add(animal1);
-
+        //**************************************
 
 
         //TODO
@@ -135,7 +139,7 @@ public class GameScreen implements Screen {
         tileHeight = map.getProperties().get("tileheight", Integer.class);
         tileWidth = map.getProperties().get("tilewidth", Integer.class);
         mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
-        mapHeight = map.getProperties().get("height", Integer.class)* tileHeight;
+        mapHeight = map.getProperties().get("height", Integer.class) * tileHeight;
 
         setGameInput();
 
@@ -167,9 +171,9 @@ public class GameScreen implements Screen {
         ArrayList<Integer> frontLayers = new ArrayList<>();
         for (int i = 0; i < App.getActiveGame().getActiveMap().getMapData().getLayers().size(); i++) {
             MapLayer mapLayer = App.getActiveGame().getActiveMap().getMapData().getLayers().get(i);
-            if(mapLayer.getName().contains("Back") || mapLayer.getName().contains("Buildings")){
+            if (mapLayer.getName().contains("Back") || mapLayer.getName().contains("Buildings")) {
                 backLayers.add(i);
-            }else{
+            } else {
                 frontLayers.add(i);
             }
         }
@@ -190,8 +194,8 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Entity entity : App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class)) {
-            Sprite sprite = entity.getComponent(Renderable.class).getSprite();
-            if(sprite != null){
+            Sprite sprite = entity.getComponent(Renderable.class).getRenderingSprite(delta);
+            if (sprite != null) {
                 sprite.setPosition((float) entity.getComponent(PositionComponent.class).getX(), (float) entity.getComponent(PositionComponent.class).getY());
                 sprite.draw(batch);
             }
@@ -262,7 +266,7 @@ public class GameScreen implements Screen {
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
         Label label = new Label(message, skin);
         label.setPosition(
-            x,y
+            x, y
         );
 
         label.setColor(color);
@@ -299,7 +303,7 @@ public class GameScreen implements Screen {
 
     }
 
-    public void openTestDialog(){
+    public void openTestDialog() {
         Dialog dialog = new Dialog("", skin);
         dialog.setBackground((Drawable) null);
 
@@ -389,8 +393,9 @@ public class GameScreen implements Screen {
         TextButton petButton = new TextButton("Pet", skin);
         TextButton collectProduceButton = new TextButton("Collect produce", skin);
         TextButton sellAnimalButton = new TextButton("Sell animal", skin);
-        /*TODO: check if in house*/ TextButton shepherdAnimalButton = new TextButton("Shephered Animal", skin);
-        TextButton exitButton = new TextButton("Exit",skin);
+        /*TODO: check if in house*/
+        TextButton shepherdAnimalButton = new TextButton("Shephered Animal", skin);
+        TextButton exitButton = new TextButton("Exit", skin);
 
         buttonTab.add(feedButton).row();
         buttonTab.add(petButton).row();
@@ -398,8 +403,6 @@ public class GameScreen implements Screen {
         buttonTab.add(sellAnimalButton).row();
         buttonTab.add(shepherdAnimalButton).row();
         buttonTab.add(exitButton).row();
-
-
 
 
         tabWidget.addTab(infoTab);
@@ -412,18 +415,34 @@ public class GameScreen implements Screen {
 
         feedButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                Result result = controller.feedHay(animal.getName());
+                if (!result.isSuccessful()) {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                } else {
+                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
 
+                }
+                setGameInput();
+                dialog.remove();
             }
         });
 
         petButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
+                Result result = controller.pet(animal.getName());
+                if (!result.isSuccessful()) {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                } else {
+                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.PET, 5);
+                }
+                setGameInput();
+                dialog.remove();
             }
         });
 
         collectProduceButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {}
+            public void clicked(InputEvent event, float x, float y) {
+            }
         });
 
         sellAnimalButton.addListener(new ClickListener() {
