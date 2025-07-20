@@ -6,38 +6,46 @@ filter: Linear, Linear
 repeat: none
 BuildingMenuIcon
   rotate: false
-  xy: 1, 1
+  xy: 27, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 InventoryIcon
   rotate: false
-  xy: 1, 19
+  xy: 1, 1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 MapIcon
   rotate: false
-  xy: 27, 45
+  xy: 19, 1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 frame
   rotate: false
-  xy: 1, 37
+  xy: 1, 39
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 1, 37
+  xy: 1, 39
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
   orig: 24, 24
+  offset: 0, 0
+  index: -1
+frameNinePatch2
+  rotate: false
+  xy: 1, 19
+  size: 18, 18
+  split: 6, 6, 7, 6
+  orig: 18, 18
   offset: 0, 0
   index: -1

@@ -39,13 +39,13 @@ public class TabWidget extends Table {
         contentStack = new Stack();
 
         Table wrapperTable = new Table(skin);
-        wrapperTable.setBackground("window");
+        wrapperTable.setBackground("frameNinePatch2");
         wrapperTable.add(contentStack).grow();
 
         tabHeaderTable.left();
 
         this.top();
-        this.add(tabHeaderTable).growX().row();
+        this.add(tabHeaderTable).growX().padLeft(5).row();
         this.add(wrapperTable).grow().row();
     }
 

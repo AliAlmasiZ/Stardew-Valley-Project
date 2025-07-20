@@ -22,7 +22,15 @@ public class GameAssetManager extends AssetManager {
     //inGameMenu
     public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
 
+    //inventory
+    public final Texture inventorySlotFrame;
+    public final Texture testSlot;
+
     private GameAssetManager(){
+        for (Texture texture : customSkin.getAtlas().getTextures()) {
+            texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        }
+
         this.font = new BitmapFont(Gdx.files.internal("Content/font/khodayaBaseDige.fnt"));
         this.font.getData().setScale(Gdx.graphics.getDensity() * 0.3f);
         System.out.println(Gdx.graphics.getDensity());
@@ -47,6 +55,8 @@ public class GameAssetManager extends AssetManager {
         mapIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         buildMenuIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
+        testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
+        inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
 
     }
 

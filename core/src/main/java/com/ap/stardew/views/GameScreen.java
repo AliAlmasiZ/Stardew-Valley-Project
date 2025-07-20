@@ -21,6 +21,7 @@ import com.ap.stardew.models.entities.components.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.views.widgets.InventoryGrid;
 import com.ap.stardew.views.widgets.TabWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -44,19 +45,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-
-
     public static final float WORLD_WIDTH = 800;
     public static final float WORLD_HEIGHT = 450;
     public static final float ERROR_MESSAGE_DELAY = 5;
+    public static final float UI_SCALING = 1.3f;
 
     private GameMenuController controller;
     private PlayerController playerController;
@@ -102,8 +99,6 @@ public class GameScreen implements Screen {
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
-
-
         //TODO
     }
 
@@ -114,14 +109,14 @@ public class GameScreen implements Screen {
         gameView = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         camera.setToOrtho(false, gameView.getWorldWidth(), gameView.getWorldHeight());
+
         gameStage = new Stage(gameView, batch);
         minigameStage = new Stage(new ScreenViewport());
-        uiStage = new Stage(new FitViewport(320,
-            (((float) Gdx.graphics.getHeight()) / Gdx.graphics.getWidth()) * 320));
-//        uiStage.getViewport().setCamera(new OrthographicCamera(1920,
-//            (((float) Gdx.graphics.getHeight()) / Gdx.graphics.getWidth()) * 1920));
-//        uiStage.getViewport().getCamera().position.set(1920 / 2,
-//            ((float) Gdx.graphics.getHeight()) / Gdx.graphics.getWidth() * 1920 / 2, 0f);
+        uiStage = new Stage(new ScreenViewport());
+        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 50 / UI_SCALING;
+        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 50 / UI_SCALING;
+        camera.update();
+
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
         map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
@@ -129,9 +124,11 @@ public class GameScreen implements Screen {
         for (MapLayer layer : map.getLayers()) {
             System.out.println(layer.getName());
         }
+
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
         renderer.getBatch().enableBlending();
+
         tileHeight = map.getProperties().get("tileheight", Integer.class);
         tileWidth = map.getProperties().get("tilewidth", Integer.class);
         mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
@@ -146,7 +143,11 @@ public class GameScreen implements Screen {
         // Create clock
         clockActor = new ClockActor();
         clockActor.setPosition(uiStage.getWidth() - clockActor.getWidth() - 30, uiStage.getHeight() - clockActor.getHeight()- 30);
-        uiStage.addActor(clockActor);
+        Table clockTable = new Table();
+        clockTable.setFillParent(true);
+        clockTable.top().right().pad(10);
+        clockTable.add(clockActor);
+        uiStage.addActor(clockTable);
     }
 
     @Override
@@ -216,8 +217,16 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        gameView.update(width, height, true);
-        uiStage.getViewport().update(width, height, true);
+        gameStage.getViewport().update(width, height, true);
+
+        //this sucks i guess
+        uiStage.getViewport().setScreenSize(width, height);
+        uiStage.getViewport().setWorldWidth(width / Gdx.graphics.getPpiX() * 50 / UI_SCALING);
+        uiStage.getViewport().setWorldHeight(height / Gdx.graphics.getPpiY() * 50 / UI_SCALING);
+        uiStage.getCamera().viewportHeight = height / Gdx.graphics.getPpiY() * 50 / UI_SCALING;
+        uiStage.getCamera().viewportWidth = width / Gdx.graphics.getPpiX() * 50 / UI_SCALING;
+        uiStage.getCamera().position.x = uiStage.getCamera().viewportWidth / 2;
+        uiStage.getCamera().position.y = uiStage.getCamera().viewportHeight / 2;
     }
 
     @Override
@@ -303,11 +312,12 @@ public class GameScreen implements Screen {
         Dialog dialog = new Dialog("", skin);
         dialog.setBackground((Drawable) null);
 
-        TabWidget tabWidget = new TabWidget(skin);
+        TabWidget tabWidget = new TabWidget(customSkin);
 
         Table table = new Table();
-        table.add(new Label("test", skin)).row();
-        table.add(new Label("test2", skin));
+        InventoryGrid inventoryGrid = new InventoryGrid(player.getComponent(Inventory.class), 10);
+        inventoryGrid.top();
+        table.add(inventoryGrid).grow();
 
         Table table2 = new Table();
         table2.add(new Label("test3", skin)).row();
@@ -320,7 +330,6 @@ public class GameScreen implements Screen {
         tabWidget.addTab(table, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
         tabWidget.addTab(table2, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
         tabWidget.addTab(table3, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
-
 
         dialog.getContentTable().add(tabWidget).fill().size(200, 130);
 
