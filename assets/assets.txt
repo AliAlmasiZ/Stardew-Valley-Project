@@ -3581,6 +3581,14 @@ Content(unpacked)/TileSheets/weapons.png
 Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
+Content/Animal/chicken.png
+Content/Animal/cow.png
+Content/Animal/dinosaur.png
+Content/Animal/duck.png
+Content/Animal/goat.png
+Content/Animal/pig.png
+Content/Animal/rabbit.png
+Content/Animal/sheep.png
 Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
@@ -3600,6 +3608,7 @@ Content/font/misc/Buy GGBotNet a Coffee-543f.url
 Content/font/misc/GGBotNet - itch.io-3086.url
 Content/font/misc/License-473a.txt
 Content/font/misc/Pixelated Elegance v0.3-7344.pxf
+Content/font/viafont_6918416.zip
 Content/frame.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png

@@ -7,16 +7,18 @@ import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
-import com.ap.stardew.models.Position;
+import com.ap.stardew.models.animal.Animal;
+import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.animal.FishingMiniGame;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Pickable;
+import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.entities.components.Sellable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
+import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
-import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
@@ -35,15 +37,15 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -100,6 +102,12 @@ public class GameScreen implements Screen {
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
 
+        Player player = App.getActiveGame().getCurrentPlayer();
+        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
+        System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
+        player.getAnimals().add(animal1);
+
+
 
         //TODO
     }
@@ -129,11 +137,7 @@ public class GameScreen implements Screen {
         mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
         mapHeight = map.getProperties().get("height", Integer.class)* tileHeight;
 
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(playerController);
-        inputMultiplexer.addProcessor(gameStage);
-        inputMultiplexer.addProcessor(uiStage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        setGameInput();
 
         // Create clock
         clockActor = new ClockActor();
@@ -188,6 +192,7 @@ public class GameScreen implements Screen {
         for (Entity entity : App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class)) {
             Sprite sprite = entity.getComponent(Renderable.class).getSprite();
             if(sprite != null){
+                sprite.setPosition((float) entity.getComponent(PositionComponent.class).getX(), (float) entity.getComponent(PositionComponent.class).getY());
                 sprite.draw(batch);
             }
         }
@@ -318,11 +323,7 @@ public class GameScreen implements Screen {
 
     public void stopFishing(FishingMiniGame fishingMiniGame) {
         minigameStage.clear();
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(playerController);
-        inputMultiplexer.addProcessor(gameStage);
-        inputMultiplexer.addProcessor(uiStage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        setGameInput();
 
         if (!fishingMiniGame.isSuccessful()) {
             showTemporaryMessage("You lost the mini game!\n Better luck next time!", ERROR_MESSAGE_DELAY, Color.RED);
@@ -361,4 +362,100 @@ public class GameScreen implements Screen {
         showTemporaryMessage(message.toString(), 7, color);
     }
 
+    private void setGameInput() {
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(playerController);
+        inputMultiplexer.addProcessor(gameStage);
+        inputMultiplexer.addProcessor(uiStage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    public void openAnimalMenu(Animal animal) {
+        Dialog dialog = new Dialog("Animal Menu", skin);
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget(skin);
+
+        Table infoTab = new Table();
+        Label animalLabel = new Label(animal.getDetail(), skin);
+        animalLabel.setFontScale(1.2f);
+        animalLabel.setColor(Color.WHITE);
+        infoTab.add(new Label(animal.getDetail(), skin)).row();
+
+
+        Table buttonTab = new Table();
+
+        TextButton feedButton = new TextButton("Feed", skin);
+        TextButton petButton = new TextButton("Pet", skin);
+        TextButton collectProduceButton = new TextButton("Collect produce", skin);
+        TextButton sellAnimalButton = new TextButton("Sell animal", skin);
+        /*TODO: check if in house*/ TextButton shepherdAnimalButton = new TextButton("Shephered Animal", skin);
+        TextButton exitButton = new TextButton("Exit",skin);
+
+        buttonTab.add(feedButton).row();
+        buttonTab.add(petButton).row();
+        buttonTab.add(collectProduceButton).row();
+        buttonTab.add(sellAnimalButton).row();
+        buttonTab.add(shepherdAnimalButton).row();
+        buttonTab.add(exitButton).row();
+
+
+
+
+        tabWidget.addTab(infoTab);
+        tabWidget.addTab(buttonTab);
+
+        dialog.getContentTable().add(tabWidget).fill().size(600, 800);
+
+        dialog.show(uiStage);
+        Gdx.input.setInputProcessor(uiStage);
+
+        feedButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        petButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        collectProduceButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {}
+        });
+
+        sellAnimalButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        shepherdAnimalButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.remove();
+                setGameInput();
+            }
+        });
+
+
+    }
+
+    public GameMenuController getController() {
+        return controller;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
 }

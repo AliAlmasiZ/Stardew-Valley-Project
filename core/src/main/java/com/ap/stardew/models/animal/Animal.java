@@ -6,6 +6,8 @@ import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.old.inGame.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class Animal extends Entity implements Serializable {
     public Animal(AnimalType animalType, String name) {
         super(animalType.name().toLowerCase());
         this.addComponent(new Renderable('A', new Color(255, 255, 255)));
+        /*TODO: Check this later*/ this.addComponent(new Placeable(true));
+        this.getComponent(Renderable.class).setSprite(new Sprite(new Texture("Content/Animal/" + animalType.name().toLowerCase() + ".png")));
+        this.getComponent(Renderable.class).getSprite().setSize(32, 32);
         this.name = name;
         this.animalType = animalType;
     }
