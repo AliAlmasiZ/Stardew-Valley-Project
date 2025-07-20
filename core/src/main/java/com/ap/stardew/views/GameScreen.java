@@ -431,8 +431,8 @@ public class GameScreen implements Screen {
         buttonTab.add(exitButton).row();
 
 
-        tabWidget.addTab(infoTab);
-        tabWidget.addTab(buttonTab);
+        tabWidget.addTab(infoTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(buttonTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
 
         dialog.getContentTable().add(tabWidget).fill().size(600, 800);
 

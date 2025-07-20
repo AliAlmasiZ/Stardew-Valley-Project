@@ -3582,8 +3582,6 @@ Content(unpacked)/TileSheets/weapons.png
 Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
-Content/BuildingMenuIcon.png
-Content/BuildingMenuIcon\.png
 Content/Animal/chicken/Brown Chicken.png
 Content/Animal/chicken/eating.png
 Content/Animal/chicken/idle.png
@@ -3631,6 +3629,7 @@ Content/Animal/sheep/idle.png
 Content/Animal/sheep/normal.png
 Content/Animal/sheep/pet.png
 Content/Animal/sheep/walking.png
+Content/BuildingMenuIcon.png
 Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
@@ -3783,6 +3782,7 @@ Content/frame2.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png
 Content/frameNinePatch2.9.png
+Content/shit.png
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
 Moz/MapEditor/Tile sets/biome.json
