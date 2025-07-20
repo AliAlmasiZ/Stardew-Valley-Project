@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +69,7 @@ public class PlayerController implements InputProcessor {
             screen.openTestDialog();
         if (keycode == Input.Keys.P) //Temporarily
             screen.startFishing();
+
         return false;
     }
 
@@ -78,6 +80,15 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.RIGHT) {
+            Vector3 mouseScreenPos = new Vector3(screenX, screenY, 0);
+            screen.getCamera().unproject(mouseScreenPos); // convert to world coordinates
+
+            float x = mouseScreenPos.x;
+            float y = mouseScreenPos.y;
+            screen.getController().handleRightClick(x, y, screen);
+            return true; // input was handled
+        }
         return false;
     }
 

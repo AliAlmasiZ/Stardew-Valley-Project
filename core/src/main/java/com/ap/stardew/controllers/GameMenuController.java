@@ -31,8 +31,10 @@ import com.ap.stardew.models.utils.StringUtils;
 import com.ap.stardew.records.EntityResult;
 import com.ap.stardew.records.Result;
 import com.ap.stardew.records.WalkProposal;
+import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.MathUtils;
 
 import java.io.*;
@@ -1092,6 +1094,7 @@ public class GameMenuController implements Controller {
         int price = animal.calculatePrice();
         currentPlayer.getWallet().changeBalance(price);
         currentPlayer.getAnimals().remove(animal);
+        EntityPlacementSystem.removeExterior(animal);
         //TODO: remove form his house if needed
 
         return new Result(true, animal.getName() + " sold successfully!");
@@ -2080,6 +2083,21 @@ public class GameMenuController implements Controller {
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             advanceTime(1);
+        }
+    }
+
+    public void handleRightClick(float x, float y, GameScreen screen) {
+        Game game = App.getActiveGame();
+        Player player = game.getCurrentPlayer();
+        System.out.println("right clicked at" + x + " " + y); //TODO: remove
+
+        // check for Animals
+        for (Animal animal : player.getAnimals()) {
+            if (animal.getComponent(Renderable.class).getSprite().getBoundingRectangle().contains(x, y)) {
+                System.out.println("animal clicked");
+                screen.openAnimalMenu(animal);
+                return;
+            }
         }
     }
 }

@@ -3584,6 +3584,53 @@ Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
 Content/BuildingMenuIcon.png
 Content/BuildingMenuIcon\.png
+Content/Animal/chicken/Brown Chicken.png
+Content/Animal/chicken/eating.png
+Content/Animal/chicken/idle.png
+Content/Animal/chicken/normal.png
+Content/Animal/chicken/pet.png
+Content/Animal/chicken/walking.png
+Content/Animal/cow/Brown Cow.png
+Content/Animal/cow/Idle.png
+Content/Animal/cow/eating.png
+Content/Animal/cow/normal.png
+Content/Animal/cow/pet.png
+Content/Animal/cow/walking.png
+Content/Animal/dinosaur/eating.png
+Content/Animal/dinosaur/idle.png
+Content/Animal/dinosaur/noraml.png
+Content/Animal/dinosaur/pet.png
+Content/Animal/dinosaur/walking.png
+Content/Animal/duck/Duck.png
+Content/Animal/duck/eating.png
+Content/Animal/duck/idle.png
+Content/Animal/duck/normal.png
+Content/Animal/duck/pet.png
+Content/Animal/duck/walking.png
+Content/Animal/goat/Goat.png
+Content/Animal/goat/eating.png
+Content/Animal/goat/idle.png
+Content/Animal/goat/normal.png
+Content/Animal/goat/pet.png
+Content/Animal/goat/walking.png
+Content/Animal/pig/Pig.png
+Content/Animal/pig/eating.png
+Content/Animal/pig/idle.png
+Content/Animal/pig/normal.png
+Content/Animal/pig/pet.png
+Content/Animal/pig/walking.png
+Content/Animal/rabbit/Rabbit.png
+Content/Animal/rabbit/eating.png
+Content/Animal/rabbit/idle.png
+Content/Animal/rabbit/normal.png
+Content/Animal/rabbit/pet.png
+Content/Animal/rabbit/walking.png
+Content/Animal/sheep/Sheep.png
+Content/Animal/sheep/eating.png
+Content/Animal/sheep/idle.png
+Content/Animal/sheep/normal.png
+Content/Animal/sheep/pet.png
+Content/Animal/sheep/walking.png
 Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
@@ -3730,6 +3777,7 @@ Content/font/misc/Buy GGBotNet a Coffee-543f.url
 Content/font/misc/GGBotNet - itch.io-3086.url
 Content/font/misc/License-473a.txt
 Content/font/misc/Pixelated Elegance v0.3-7344.pxf
+Content/font/viafont_6918416.zip
 Content/frame.png
 Content/frame2.png
 Content/frameBackground.png
