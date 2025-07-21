@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class GameAssetManager extends AssetManager {
     private static GameAssetManager instance;
@@ -59,7 +60,7 @@ public class GameAssetManager extends AssetManager {
         testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
 
-        menuBackground = new Texture("Content/frameNinePatch2.png");
+        menuBackground = new Texture("Content/frameNinePatch2.9.png");
 
     }
 

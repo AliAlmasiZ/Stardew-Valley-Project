@@ -28,20 +28,19 @@ import com.ap.stardew.records.Result;
 import com.ap.stardew.views.widgets.TabWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -52,15 +51,13 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.*;
 
 import java.util.ArrayList;
 
-public class GameScreen implements Screen {
+public class GameScreen extends AbstractScreen {
     public static final float WORLD_WIDTH = 800;
     public static final float WORLD_HEIGHT = 450;
     public static final float ERROR_MESSAGE_DELAY = 5;
-    public static final float UI_SCALING = 1.3f;
 
     private GameMenuController controller;
     private PlayerController playerController;
@@ -72,7 +69,6 @@ public class GameScreen implements Screen {
     //Renderers
     private Batch batch;
     private Stage gameStage;
-    private Stage uiStage;
     private Stage minigameStage;
     private ShapeRenderer shapeRenderer;
     public OrthographicCamera camera;
@@ -84,12 +80,17 @@ public class GameScreen implements Screen {
     private int mapWidth, mapHeight;
     private int tileWidth, tileHeight;
 
-    private MapObject object;
+    // ui
+    private final Stack stack;
 
     // Clock
     private ClockActor clockActor;
 
     public GameScreen() {
+        super(2.5f);
+        stack = new Stack();
+        rootTable.add(stack).grow();
+
         controller = new GameMenuController();
         player = App.getActiveGame().getCurrentPlayer();
         currentPlayerSprite = player.getSprite();
@@ -97,7 +98,6 @@ public class GameScreen implements Screen {
 
         skin = GameAssetManager.getInstance().getSkin();
         customSkin = GameAssetManager.getInstance().getCustomSkin();
-
 
         //TODO: remove it later
         //**************************************
@@ -122,6 +122,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        super.show();
         batch = StardewGame.getInstance().getBatch();
         camera = new OrthographicCamera();
         gameView = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -130,18 +131,14 @@ public class GameScreen implements Screen {
 
         gameStage = new Stage(gameView, batch);
         minigameStage = new Stage(new ScreenViewport());
-        uiStage = new Stage(new ScreenViewport());
-        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 50 / UI_SCALING;
-        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 50 / UI_SCALING;
+//        uiStage = new Stage(new ScreenViewport());
+//        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 50 / UI_SCALING;
+//        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 50 / UI_SCALING;
         camera.update();
-
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
         map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
         System.out.println(map.getProperties());
-        for (MapLayer layer : map.getLayers()) {
-            System.out.println(layer.getName());
-        }
 
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
@@ -156,12 +153,10 @@ public class GameScreen implements Screen {
 
         // Create clock
         clockActor = new ClockActor();
-        clockActor.setPosition(uiStage.getWidth() - clockActor.getWidth() - 30, uiStage.getHeight() - clockActor.getHeight()- 30);
         Table clockTable = new Table();
-        clockTable.setFillParent(true);
-        clockTable.top().right().pad(10);
-        clockTable.add(clockActor);
-        uiStage.addActor(clockTable);
+        clockTable.top().right();
+        clockTable.add(clockActor).pad(10);
+        stack.add(clockTable);
     }
 
     @Override
@@ -232,16 +227,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        super.resize(width, height);
         gameStage.getViewport().update(width, height, true);
-
-        //this sucks i guess
-        uiStage.getViewport().setScreenSize(width, height);
-        uiStage.getViewport().setWorldWidth(width / Gdx.graphics.getPpiX() * 50 / UI_SCALING);
-        uiStage.getViewport().setWorldHeight(height / Gdx.graphics.getPpiY() * 50 / UI_SCALING);
-        uiStage.getCamera().viewportHeight = height / Gdx.graphics.getPpiY() * 50 / UI_SCALING;
-        uiStage.getCamera().viewportWidth = width / Gdx.graphics.getPpiX() * 50 / UI_SCALING;
-        uiStage.getCamera().position.x = uiStage.getCamera().viewportWidth / 2;
-        uiStage.getCamera().position.y = uiStage.getCamera().viewportHeight / 2;
     }
 
     @Override
@@ -407,36 +394,31 @@ public class GameScreen implements Screen {
         TabWidget tabWidget = new TabWidget();
 
         Table infoTab = new Table();
-        Label animalLabel = new Label(animal.getDetail(), skin);
-        animalLabel.setFontScale(1.2f);
+        Label animalLabel = new Label(animal.getDetail(), customSkin);
         animalLabel.setColor(Color.WHITE);
-        infoTab.add(new Label(animal.getDetail(), skin)).row();
-
+        infoTab.add(new Label(animal.getDetail(), customSkin)).row();
 
         Table buttonTab = new Table();
 
-        TextButton feedButton = new TextButton("Feed", skin);
-        TextButton petButton = new TextButton("Pet", skin);
-        TextButton collectProduceButton = new TextButton("Collect produce", skin);
-        TextButton sellAnimalButton = new TextButton("Sell animal", skin);
+        TextButton feedButton = new TextButton("Feed", customSkin);
+        TextButton petButton = new TextButton("Pet", customSkin);
+        TextButton collectProduceButton = new TextButton("Collect produce", customSkin);
+        TextButton sellAnimalButton = new TextButton("Sell animal", customSkin);
         /*TODO: check if in house*/
-        TextButton shepherdAnimalButton = new TextButton("Shephered Animal", skin);
-        TextButton exitButton = new TextButton("Exit", skin);
+        TextButton shepherdAnimalButton = new TextButton("Shephered Animal", customSkin);
+        TextButton exitButton = new TextButton("Exit", customSkin);
 
-        feedButton.setScale(0.5f);
-
-        buttonTab.add(feedButton).row();
-        buttonTab.add(petButton).row();
-        buttonTab.add(collectProduceButton).row();
-        buttonTab.add(sellAnimalButton).row();
-        buttonTab.add(shepherdAnimalButton).row();
-        buttonTab.add(exitButton).row();
-
-
+        buttonTab.add(feedButton).growX().row();
+        buttonTab.add(petButton).growX().row();
+        buttonTab.add(collectProduceButton).growX().row();
+        buttonTab.add(sellAnimalButton).growX().row();
+        buttonTab.add(shepherdAnimalButton).growX().row();
+        buttonTab.add(exitButton).growX().row();
+//
         tabWidget.addTab(infoTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
         tabWidget.addTab(buttonTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
 
-        dialog.getContentTable().add(tabWidget).fill().size(50, 200);
+        dialog.getContentTable().add(tabWidget).fill().grow();
 
         dialog.show(uiStage);
         Gdx.input.setInputProcessor(uiStage);

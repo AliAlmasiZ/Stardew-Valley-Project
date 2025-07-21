@@ -122,12 +122,93 @@ atlasData: {
 			type: NINE_PATCH
 			hidden: false
 		}
+		{
+			file: "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content/buttonDown.9.png"
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: buttonDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: NINE_PATCH
+			hidden: false
+		}
+		{
+			file: "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content/buttonUp.9.png"
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: buttonUp
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: NINE_PATCH
+			hidden: false
+		}
 	]
-	fontDrawables: []
+	fontDrawables: [
+		{
+			file: "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content/font/khodayaBaseDige.png"
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: khodayaBaseDige
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: FONT
+			hidden: false
+		}
+	]
 }
 jsonData: {
-	colors: []
-	fonts: []
+	colors: [
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0.5647059
+				g: 0.5647059
+				b: 0.5647059
+				a: 1
+			}
+			name: RGBA_144_144_144_255
+		}
+	]
+	fonts: [
+		{
+			class: com.ray3k.skincomposer.data.FontData
+			name: khodayaBaseDige
+			flip: false
+			markupEnabled: false
+			scaling: 14
+			file: "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content/font/khodayaBaseDige.fnt"
+		}
+	]
 	freeTypeFonts: []
 	classStyleMap: {
 		com.badlogic.gdx.scenes.scene2d.ui.CheckBox: [
@@ -743,13 +824,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: up
 						optional: true
-						value: null
+						value: buttonUp
 					}
 					down: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: down
 						optional: true
-						value: null
+						value: buttonDown
 					}
 					over: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -973,7 +1054,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: null
+						value: khodayaBaseDige
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -985,7 +1066,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.Color
 						name: downFontColor
 						optional: true
-						value: null
+						value: RGBA_144_144_144_255
 					}
 					overFontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1033,13 +1114,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: up
 						optional: true
-						value: null
+						value: buttonUp
 					}
 					down: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: down
 						optional: true
-						value: null
+						value: buttonDown
 					}
 					over: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -1455,7 +1536,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: null
+						value: khodayaBaseDige
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1719,6 +1800,17 @@ preferences: {
 	id: {
 		class: java.lang.Integer
 		value: 636113425
+	}
+	preview-bg-color: {
+		class: com.badlogic.gdx.graphics.Color
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+	last-import-export-path: {
+		class: java.lang.String
+		value: "/home/parsa/Projects/University/AP/Stardew Valley/assets/skin/Stardew Valley Skin/skin.json"
 	}
 	resources-relative: {
 		class: java.lang.Boolean

@@ -1,24 +1,16 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.StardewGame;
-import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.records.GameStartingDetails;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.util.ArrayList;
 
 public class MainScreen extends AbstractScreen {
     private TextButton registerButton;
@@ -75,24 +67,19 @@ public class MainScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(uiStage);
     }
 
     @Override
     public void render(float delta) {
-        stage.act(delta);
+        uiStage.act(delta);
         //test---------------
         Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
-        stage.getBatch().begin();
-        stage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.getBatch().end();
+        uiStage.getBatch().begin();
+        uiStage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        uiStage.getBatch().end();
         //---------------------
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        uiStage.draw();
     }
 
     @Override
@@ -112,6 +99,6 @@ public class MainScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+        uiStage.dispose();
     }
 }

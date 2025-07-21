@@ -15,10 +15,7 @@ public class MainMenuScreen extends AbstractScreen {
     public MainMenuScreen() {
         super();
         setupUI();
-
-
     }
-
 
     private void setupUI() {
         menuTitle = new Label("Main Menu", skin, "title");

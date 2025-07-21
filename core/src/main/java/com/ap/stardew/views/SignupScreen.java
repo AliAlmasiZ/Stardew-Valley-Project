@@ -1,27 +1,18 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.StardewGame;
-import com.ap.stardew.controllers.Controller;
-import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.records.Result;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.io.File;
 
 public class SignupScreen extends AbstractScreen {
     LoginMenuController controller;
@@ -213,7 +204,7 @@ public class SignupScreen extends AbstractScreen {
 
         dialog.setMovable(false);
         dialog.setResizable(false);
-        dialog.show(stage);
+        dialog.show(uiStage);
         dialog.center();
         dialog.getTitleTable().padTop(20).padBottom(20);
         dialog.getButtonTable().center();
@@ -223,13 +214,13 @@ public class SignupScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        stage.act(delta);
+        uiStage.act(delta);
         //test---------------
         Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
-        stage.getBatch().begin();
-        stage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.getBatch().end();
+        uiStage.getBatch().begin();
+        uiStage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        uiStage.getBatch().end();
         //---------------------
-        stage.draw();
+        uiStage.draw();
     }
 }

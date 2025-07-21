@@ -37,7 +37,6 @@ public class ClockActor extends Actor {
         this.seasonIcon = App.getActiveGame().getDate().getSeason().getTextureRegion();
         this.font = manager.getFont();
 
-
         // Set size to background size
         setSize(background.getRegionWidth(), background.getRegionHeight());
         setOrigin(getWidth() / 2, getHeight() / 2);

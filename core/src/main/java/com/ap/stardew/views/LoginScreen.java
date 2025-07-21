@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,13 +88,13 @@ public class LoginScreen extends AbstractScreen{
     public void render(float delta) {
         //test---------------
         Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
-        stage.getBatch().begin();
-        stage.getBatch().setColor(1, 1, 1, 1);
-        stage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.getBatch().end();
+        uiStage.getBatch().begin();
+        uiStage.getBatch().setColor(1, 1, 1, 1);
+        uiStage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        uiStage.getBatch().end();
         //---------------------
-        stage.act(delta);
-        stage.draw();
+        uiStage.act(delta);
+        uiStage.draw();
     }
 
     public void showForgotPasswordDialogPhase1(){
@@ -137,7 +136,7 @@ public class LoginScreen extends AbstractScreen{
                 showForgotPasswordDialogPhase2(dialog, account);
             }
         });
-        dialog.show(stage);
+        dialog.show(uiStage);
     }
     public void showForgotPasswordDialogPhase2(Dialog dialog, Account account){
         Table contentTable = dialog.getContentTable();
@@ -179,7 +178,7 @@ public class LoginScreen extends AbstractScreen{
                 }
             }
         });
-        dialog.show(stage);
+        dialog.show(uiStage);
     }
 
     public void showForgotPasswordDialogPhase3(Dialog dialog, Account account){
@@ -209,6 +208,6 @@ public class LoginScreen extends AbstractScreen{
                 contentTable.add(new Label("changed the password", skin));
             }
         });
-        dialog.show(stage);
+        dialog.show(uiStage);
     }
 }

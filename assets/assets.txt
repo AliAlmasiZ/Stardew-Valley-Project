@@ -3768,6 +3768,10 @@ Content/Tools/fishingRod/ToolsSpriteshe56et.png
 Content/Tools/fishingRod/ToolsSpritesheet.png
 Content/Tools/fishingRod/bamboo.png
 Content/Tools/fishingRod/training.png
+Content/button1.png
+Content/button2.png
+Content/buttonDown.9.png
+Content/buttonUp.9.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
 Content/font/info.txt
 Content/font/khodayaBaseDige.fnt
@@ -3780,7 +3784,7 @@ Content/frame.png
 Content/frame2.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png
-Content/frameNinePatch2.png
+Content/frameNinePatch2.9.png
 Content/shit.png
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
@@ -3888,6 +3892,7 @@ data/recipes/artisanRecipes.json
 data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
+skin/Stardew Valley Skin/khodayaBaseDige.fnt
 skin/Stardew Valley Skin/skin.atlas
 skin/Stardew Valley Skin/skin.json
 skin/Stardew Valley Skin/skin.png

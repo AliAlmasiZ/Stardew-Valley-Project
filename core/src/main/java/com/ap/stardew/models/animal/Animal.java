@@ -180,7 +180,6 @@ public class Animal extends Entity implements Serializable {
         result.append("IsPetToday: ").append(isPetToday).append("\n");
         result.append("IsFedToday: ").append(isFedToday).append("\n");
         result.append("FriendshipLevel: ").append(friendshipLevel).append("\n");
-        result.append("---------------------------------------------------------------\n");
 
         return result.toString();
     }

@@ -1,40 +1,63 @@
 
 skin.png
-size: 64, 64
+size: 1024, 1024
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 BuildingMenuIcon
   rotate: false
-  xy: 27, 47
+  xy: 515, 532
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 InventoryIcon
   rotate: false
-  xy: 1, 1
+  xy: 1, 12
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 MapIcon
   rotate: false
-  xy: 19, 1
+  xy: 27, 38
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
+buttonDown
+  rotate: false
+  xy: 535, 559
+  size: 13, 9
+  split: 3, 3, 3, 3
+  orig: 13, 9
+  offset: 0, 0
+  index: -1
+buttonUp
+  rotate: false
+  xy: 1, 1
+  size: 13, 9
+  split: 3, 3, 3, 3
+  orig: 13, 9
+  offset: 0, 0
+  index: -1
+khodayaBaseDige
+  rotate: false
+  xy: 1, 56
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 frame
   rotate: false
-  xy: 1, 39
+  xy: 1, 30
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 1, 39
+  xy: 1, 30
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
@@ -43,7 +66,7 @@ frameNinePatch
   index: -1
 frameNinePatch2
   rotate: false
-  xy: 1, 19
+  xy: 515, 550
   size: 18, 18
   split: 6, 6, 7, 6
   orig: 18, 18

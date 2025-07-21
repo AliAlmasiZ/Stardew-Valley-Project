@@ -4,39 +4,65 @@ import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class AbstractScreen implements Screen {
-    protected Stage stage;
+    private float uiScaling = 1;
+
+    protected Stage uiStage;
     protected Table rootTable;
     protected Skin skin;
+    protected Skin customSkin;
 
-    public AbstractScreen() {
-        stage = new Stage(new ScreenViewport(), StardewGame.getInstance().getBatch());
+    public AbstractScreen(float uiScaling) {
+        this.uiScaling = uiScaling;
+
+        uiStage = new Stage(new ScreenViewport(), StardewGame.getInstance().getBatch());
+        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 120 / this.uiScaling;
+        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 120 / this.uiScaling;
+
         rootTable = new Table();
         rootTable.setFillParent(true);
         rootTable.center();
-        stage.addActor(rootTable);
+        uiStage.addActor(rootTable);
         skin = GameAssetManager.getInstance().getSkin();
+        customSkin = GameAssetManager.getInstance().getCustomSkin();
+    }
+    public AbstractScreen(){
+        this(1);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        for (ObjectMap.Entry<String, BitmapFont> entry : skin.getAll(BitmapFont.class)) {
+            entry.value.getData().setScale(0.6f / uiScaling);
+        }
+        for (ObjectMap.Entry<String, BitmapFont> entry : customSkin.getAll(BitmapFont.class)) {
+            entry.value.getData().setScale(0.6f / uiScaling);
+        }
+        Gdx.input.setInputProcessor(uiStage);
     }
 
     @Override
     public void render(float delta) {
-        stage.act(delta);
-        stage.draw();
+        uiStage.act(delta);
+        uiStage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        uiStage.getViewport().setScreenSize(width, height);
+        uiStage.getViewport().setWorldWidth(width / Gdx.graphics.getPpiX() * 120 / uiScaling);
+        uiStage.getViewport().setWorldHeight(height / Gdx.graphics.getPpiY() * 120 / uiScaling);
+        uiStage.getCamera().viewportHeight = height / Gdx.graphics.getPpiY() * 120 / uiScaling;
+        uiStage.getCamera().viewportWidth = width / Gdx.graphics.getPpiX() * 120 / uiScaling;
+        uiStage.getCamera().position.x = uiStage.getCamera().viewportWidth / 2;
+        uiStage.getCamera().position.y = uiStage.getCamera().viewportHeight / 2;
     }
 
 
@@ -57,6 +83,6 @@ public class AbstractScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+        uiStage.dispose();
     }
 }

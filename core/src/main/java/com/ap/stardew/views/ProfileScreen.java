@@ -7,7 +7,6 @@ import com.ap.stardew.controllers.validators.PasswordValidator;
 import com.ap.stardew.controllers.validators.UsernameValidator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
-import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.records.Result;
 import com.ap.stardew.views.widgets.ValidatedTextField;
 import com.badlogic.gdx.Gdx;
@@ -29,7 +28,7 @@ public class ProfileScreen extends AbstractScreen {
     public ProfileScreen() {
         super();
         controller = new ProfileMenuController();
-         activeAccount = App.getLoggedInAccount();
+        activeAccount = App.getLoggedInAccount();
 
          setupUI();
          setupDialog();
@@ -66,7 +65,7 @@ public class ProfileScreen extends AbstractScreen {
         changePassBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                changePassDialog.show(stage);
+                changePassDialog.show(uiStage);
             }
         });
 

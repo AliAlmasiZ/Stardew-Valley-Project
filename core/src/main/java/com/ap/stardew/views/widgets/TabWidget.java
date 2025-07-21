@@ -65,6 +65,8 @@ public class TabWidget extends Table {
             }
         });
         tabHeaderTable.add(tabButton).bottom();
+
+        selectTab(tabDetails);
     }
 
     private void selectTab(TabDetails tabDetails) {
