@@ -836,8 +836,8 @@ public class GameMenuController implements Controller {
             return new Result(false, "Animal not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > 2) {
-            return new Result(false, "You are too far from this animal!");
+        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > 200) {
+            return new Result(false, "You are too far from this animal!\n" + currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()));
         }
 
         if (!animal.isPetToday()) {
@@ -1587,7 +1587,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "NPC with name " + npcName + " not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > 2) {
+        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > 200) {
             return new Result(false, "You are too far from this NPC");
         }
 
@@ -2097,6 +2097,14 @@ public class GameMenuController implements Controller {
                 System.out.println("animal clicked");
                 screen.openAnimalMenu(animal);
                 return;
+            }
+        }
+
+        // check for NPCs
+        for (NPC npc : game.getGameNPCs()) {
+            if (npc.getComponent(Renderable.class).getSprite().getBoundingRectangle().contains(x, y)) {
+                System.out.println("npc clicked");
+                screen.openNPCMenu(npc);
             }
         }
     }

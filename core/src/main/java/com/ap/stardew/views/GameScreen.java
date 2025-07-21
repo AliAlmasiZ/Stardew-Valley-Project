@@ -7,6 +7,7 @@ import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.animal.FishingMiniGame;
@@ -114,6 +115,11 @@ public class GameScreen extends AbstractScreen {
         Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
         System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
         player.getAnimals().add(animal1);
+
+
+        NPC npc = App.getActiveGame().findNPC("Robin");
+        npc.getComponent(PositionComponent.class).setPosition(player.getPosition().getX() + 20, player.getPosition().getY() + 200);
+        System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
         //**************************************
 
 
@@ -393,11 +399,13 @@ public class GameScreen extends AbstractScreen {
 
         TabWidget tabWidget = new TabWidget();
 
+        // Info Tab
         Table infoTab = new Table();
         Label animalLabel = new Label(animal.getDetail(), customSkin);
         animalLabel.setColor(Color.WHITE);
         infoTab.add(new Label(animal.getDetail(), customSkin)).row();
 
+        // Functions Tab
         Table buttonTab = new Table();
 
         TextButton feedButton = new TextButton("Feed", customSkin);
@@ -443,7 +451,7 @@ public class GameScreen extends AbstractScreen {
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
-                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.PET, 5);
+                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.PET, 2);
                 }
                 setGameInput();
                 dialog.remove();
@@ -502,6 +510,57 @@ public class GameScreen extends AbstractScreen {
         TabWidget tabWidget = new TabWidget();
 
         //TODO: ILIA
+    }
+
+    public void openNPCMenu(NPC npc) {
+        Dialog dialog = new Dialog("NPC Menu", skin);
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget();
+
+        /**
+         * @Tab: Give gift
+         */
+        Table giftTable = new Table();
+        TextButton chooseGift = new TextButton("Choose Gift", customSkin);
+        // TODO: Icon for gift
+        TextButton sendGift = new TextButton("Send Gift", customSkin);
+        TextButton exit = new TextButton("Exit", customSkin);
+
+        giftTable.add(chooseGift).growX().row();
+        giftTable.add(sendGift).growX().row();
+        giftTable.add(exit).growX().row();
+
+        exit.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.remove();
+                setGameInput();
+            }
+        });
+
+        /**
+         * @Tab: Quests
+         */
+        Table questTable = new Table();
+
+
+        /**
+         * @Tab: info
+         */
+        Table infoTable = new Table();
+        infoTable.add(new Label(player.npcFriendshipDetails(npc), customSkin)).growX().row();
+
+        /**/
+
+        tabWidget.addTab(giftTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(questTable, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
+        tabWidget.addTab(infoTable, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
+
+
+        dialog.getContentTable().add(tabWidget).fill().grow();
+
+        Gdx.input.setInputProcessor(uiStage);
+        dialog.show(uiStage);
     }
 
     public GameMenuController getController() {

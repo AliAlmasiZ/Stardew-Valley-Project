@@ -25,7 +25,8 @@ public class Renderable extends EntityComponent implements Serializable {
     public enum Statue {
         NORMAL,
         IDLE,
-        WALKING,
+        RIGHT_WALKING,
+        LEFT_WALKING,
         EATING,
         PET,
     }
@@ -72,10 +73,17 @@ public class Renderable extends EntityComponent implements Serializable {
             case NORMAL -> {
                 return sprite;
             }
-            case IDLE -> {
-                return sprite;
+            case LEFT_WALKING -> {
+                timeLeftForStatue -= deltaTime;
+                if (timeLeftForStatue <= 0.0f) {
+                    currentStatue = Statue.NORMAL;
+                }
+
+                Sprite result = walkingSprites.getKeyFrame(200 - timeLeftForStatue);
+                result.flip(false, true);
+                return result;
             }
-            case WALKING -> {
+            case RIGHT_WALKING -> {
                 timeLeftForStatue -= deltaTime;
                 if (timeLeftForStatue <= 0.0f) {
                     currentStatue = Statue.NORMAL;
@@ -108,13 +116,13 @@ public class Renderable extends EntityComponent implements Serializable {
     }
 
     public void setEatingSprites(Texture idleImage, int number) {
-        eatingSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
-        eatingSprites.setPlayMode(Animation.PlayMode.LOOP);
+        eatingSprites = new Animation<>(0.3f, getSplitSprites(idleImage, number));
+        eatingSprites.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
     }
 
     public void setPetSprites(Texture idleImage, int number) {
-        petSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
-        petSprites.setPlayMode(Animation.PlayMode.LOOP);
+        petSprites = new Animation<>(0.01f, getSplitSprites(idleImage, number));
+        petSprites.setPlayMode(Animation.PlayMode.LOOP_RANDOM);
     }
 
     public void setStatue(Statue statue, float duration) {

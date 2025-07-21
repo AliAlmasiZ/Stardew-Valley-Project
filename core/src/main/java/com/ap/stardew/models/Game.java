@@ -521,4 +521,7 @@ public class Game implements Serializable {
         crowAttack();
     }
 
+    public ArrayList<NPC> getGameNPCs() {
+        return gameNPCs;
+    }
 }
