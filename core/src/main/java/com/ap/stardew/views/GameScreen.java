@@ -4,9 +4,11 @@ import com.ap.stardew.StardewGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
+import com.ap.stardew.models.Actors.DialogActor;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.NPC.Dialogue;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
@@ -31,13 +33,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -58,6 +63,7 @@ import java.util.ArrayList;
 public class GameScreen extends AbstractScreen {
     public static final float WORLD_WIDTH = 800;
     public static final float WORLD_HEIGHT = 450;
+    public static final int DISTANCE = 200;
     public static final float ERROR_MESSAGE_DELAY = 5;
 
     private GameMenuController controller;
@@ -110,6 +116,8 @@ public class GameScreen extends AbstractScreen {
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
 
+        initNPCDialogs();
+
 
         Player player = App.getActiveGame().getCurrentPlayer();
         Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
@@ -124,6 +132,18 @@ public class GameScreen extends AbstractScreen {
 
 
         //TODO
+    }
+
+    public void initNPCDialogs(){
+        Game game = App.getActiveGame();
+        Player currentPlayer = App.getActiveGame().getCurrentPlayer();
+
+        for (NPC npc : game.getGameNPCs()) {
+            if (npc.getComponent(PositionComponent.class).getX() <= 0) continue;
+            DialogActor dialogShow = new DialogActor(npc, this);
+            gameStage.addActor(dialogShow);
+            dialogShow.draw(gameStage.getBatch(), 1);
+        }
     }
 
     @Override
@@ -561,6 +581,51 @@ public class GameScreen extends AbstractScreen {
 
         Gdx.input.setInputProcessor(uiStage);
         dialog.show(uiStage);
+    }
+
+    public void showNPCDialog(NPC npc) {
+        // Root table aligned to bottom
+        Table dialogTable = new Table();
+        dialogTable.setFillParent(true);
+        dialogTable.bottom().pad(10); // Align to bottom with optional padding
+
+        // --- Avatar image
+        Image npcAvatar = npc.getAvatar();
+
+        // --- Dialog background with label
+        TextureRegionDrawable bgDrawable = new TextureRegionDrawable(new TextureRegion(GameAssetManager.getInstance().textBox));
+        Table dialogBox = new Table();
+        dialogBox.setBackground(bgDrawable);
+        dialogBox.pad(10); // inner padding inside background
+
+        // Dialog text
+        Label dialogLabel = new Label(controller.meetNPC(npc.getName()).message(), customSkin);
+        dialogLabel.setWrap(true); // allow wrapping if needed
+        dialogBox.add(dialogLabel).width(400).left(); // fix width as needed
+
+        // --- Continue button
+        TextButton continueButton = new TextButton("Continue", customSkin);
+
+        // --- Sub-table to hold dialog box and button vertically
+        Table dialogContent = new Table();
+        dialogContent.add(dialogBox).left().row();
+        dialogContent.add(continueButton).left().padTop(10).row();
+
+        // --- Final layout: avatar | (dialog + button)
+        dialogTable.add(npcAvatar).bottom().padRight(10);
+        dialogTable.add(dialogContent).bottom();
+
+        // --- Add to stage
+        uiStage.addActor(dialogTable);
+        Gdx.input.setInputProcessor(uiStage);
+
+        continueButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                dialogTable.remove();
+                setGameInput();
+            }
+        });
+
     }
 
     public GameMenuController getController() {

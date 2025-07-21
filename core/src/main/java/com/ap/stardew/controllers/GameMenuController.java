@@ -836,7 +836,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "Animal not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > 200) {
+        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
             return new Result(false, "You are too far from this animal!\n" + currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()));
         }
 
@@ -1587,7 +1587,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "NPC with name " + npcName + " not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > 200) {
+        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
             return new Result(false, "You are too far from this NPC");
         }
 
