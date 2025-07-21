@@ -23,6 +23,7 @@ import com.ap.stardew.models.entities.components.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.InventoryGrid;
 import com.ap.stardew.records.Result;
 import com.ap.stardew.views.widgets.TabWidget;
@@ -311,8 +312,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openTestDialog() {
-        Dialog dialog = new Dialog("", skin);
-        dialog.setBackground((Drawable) null);
+        InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();
 
@@ -333,9 +333,11 @@ public class GameScreen extends AbstractScreen {
         tabWidget.addTab(table2, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
         tabWidget.addTab(table3, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
 
-        dialog.getContentTable().add(tabWidget).fill().size(200, 130);
+//        dialog.getContentTable().add(tabWidget).fill().size(200, 130);
+        tabWidget.setSize(100, 130);
+        dialog.add(tabWidget).grow();
 
-        dialog.show(uiStage);
+        dialog.show();
     }
 
     public void stopFishing(FishingMiniGame fishingMiniGame) {
@@ -388,8 +390,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openAnimalMenu(Animal animal) {
-        Dialog dialog = new Dialog("Animal Menu", skin);
-        dialog.setBackground((Drawable) null);
+        InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();
 
@@ -418,9 +419,9 @@ public class GameScreen extends AbstractScreen {
         tabWidget.addTab(infoTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
         tabWidget.addTab(buttonTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
 
-        dialog.getContentTable().add(tabWidget).fill().grow();
+        dialog.add(tabWidget).fill().grow();
 
-        dialog.show(uiStage);
+        dialog.show();
         Gdx.input.setInputProcessor(uiStage);
 
         feedButton.addListener(new ClickListener() {

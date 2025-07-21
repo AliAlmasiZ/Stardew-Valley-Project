@@ -3788,6 +3788,7 @@ Content/button1.png
 Content/button2.png
 Content/buttonDown.9.png
 Content/buttonUp.9.png
+Content/closeButton.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
 Content/font/info.txt
 Content/font/khodayaBaseDige.fnt

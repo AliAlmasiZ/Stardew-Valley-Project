@@ -23,6 +23,8 @@ public class GameAssetManager extends AssetManager {
     //inGameMenu
     public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
     public final Texture menuBackground;
+    public final Texture closeButton;
+
 
     //inventory
     public final Texture inventorySlotFrame;
@@ -61,6 +63,7 @@ public class GameAssetManager extends AssetManager {
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
 
         menuBackground = new Texture("Content/frameNinePatch2.9.png");
+        closeButton = new Texture("Content/closeButton.png");
 
     }
 
