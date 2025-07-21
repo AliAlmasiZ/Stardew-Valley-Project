@@ -49,6 +49,7 @@ public class NPC extends Entity implements Serializable {
     public void giveQuestToPlayer(Player player){
 
     }
+
     public String talk(Player player){
         return null;
     }

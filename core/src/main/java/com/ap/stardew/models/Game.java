@@ -100,7 +100,7 @@ public class Game implements Serializable {
 //        }
 
         //mainMap.initRandomElements();
-        //initNPCs();
+        initNPCs();
         //currentPlayer.getOwnedTiles();
 
 
@@ -178,17 +178,17 @@ public class Game implements Serializable {
 
         //initialize
 
-        // Put NPC on the Map
-        ArrayList<MapData.MapLayerData<String>.ObjectData> npcDatas = WorldMapType.DEFAULT.getData().getNpcs();
-        for (NPC npc : gameNPCs) {
-            MapData.MapLayerData<String>.ObjectData data = null;
-            for (MapData.MapLayerData<String>.ObjectData d : npcDatas) {
-                if(d.type.equals(npc.getName())){
-                    data = d;
-                }
-            }
-            EntityPlacementSystem.placeOnMap(npc, new Position(data.x, data.y), mainMap);
-        }
+        //TODO: Put NPC on the Map
+//        ArrayList<MapData.MapLayerData<String>.ObjectData> npcDatas = WorldMapType.DEFAULT.getData().getNpcs();
+//        for (NPC npc : gameNPCs) {
+//            MapData.MapLayerData<String>.ObjectData data = null;
+//            for (MapData.MapLayerData<String>.ObjectData d : npcDatas) {
+//                if(d.type.equals(npc.getName())){
+//                    data = d;
+//                }
+//            }
+//            EntityPlacementSystem.placeOnMap(npc, new Position(data.x, data.y), mainMap);
+//        }
 
     }
 
