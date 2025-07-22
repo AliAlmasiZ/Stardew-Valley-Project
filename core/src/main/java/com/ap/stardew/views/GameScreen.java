@@ -242,6 +242,8 @@ public class GameScreen extends AbstractScreen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Entity entity : App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class)) {
+            //update animals:
+            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
             Sprite sprite = entity.getComponent(Renderable.class).getRenderingSprite(delta);
             if (sprite != null) {
                 sprite.setPosition((float) entity.getComponent(PositionComponent.class).getX(), (float) entity.getComponent(PositionComponent.class).getY());
@@ -260,7 +262,14 @@ public class GameScreen extends AbstractScreen {
         minigameStage.act(delta);
         minigameStage.draw();
 
+        /**
+         * UPDATES
+         */
+        // Clock
         clockActor.update(delta);
+
+
+
     }
 
     @Override

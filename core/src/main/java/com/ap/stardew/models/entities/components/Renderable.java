@@ -43,6 +43,10 @@ public class Renderable extends EntityComponent implements Serializable {
         this.color = other.color;
     }
 
+    public Statue getCurrentStatue() {
+        return currentStatue;
+    }
+
     public Renderable() {
         this(' ', null);
     }
@@ -79,8 +83,8 @@ public class Renderable extends EntityComponent implements Serializable {
                     currentStatue = Statue.NORMAL;
                 }
 
-                Sprite result = walkingSprites.getKeyFrame(200 - timeLeftForStatue);
-                result.flip(false, true);
+                Sprite result = new Sprite(walkingSprites.getKeyFrame(2000000 - timeLeftForStatue));
+                result.flip(true, false);
                 return result;
             }
             case RIGHT_WALKING -> {
@@ -88,14 +92,14 @@ public class Renderable extends EntityComponent implements Serializable {
                 if (timeLeftForStatue <= 0.0f) {
                     currentStatue = Statue.NORMAL;
                 }
-                return walkingSprites.getKeyFrame(200 - timeLeftForStatue);
+                return walkingSprites.getKeyFrame(2000000 - timeLeftForStatue);
             }
             case EATING -> {
                 timeLeftForStatue -= deltaTime;
                 if (timeLeftForStatue <= 0.0f) {
                     currentStatue = Statue.NORMAL;
                 }
-                return eatingSprites.getKeyFrame(200 - timeLeftForStatue);
+                return eatingSprites.getKeyFrame(2000000 - timeLeftForStatue);
             }
             case PET -> {
                 timeLeftForStatue -= deltaTime;
@@ -110,7 +114,7 @@ public class Renderable extends EntityComponent implements Serializable {
     }
 
     public void setWalkingSprites(Texture idleImage, int number) {
-        walkingSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
+        walkingSprites = new Animation<>(0.5f, getSplitSprites(idleImage, number));
         walkingSprites.setPlayMode(Animation.PlayMode.LOOP);
     }
 
@@ -120,7 +124,7 @@ public class Renderable extends EntityComponent implements Serializable {
     }
 
     public void setPetSprites(Texture idleImage, int number) {
-        petSprites = new Animation<>(0.01f, getSplitSprites(idleImage, number));
+        petSprites = new Animation<>(0.05f, getSplitSprites(idleImage, number));
         petSprites.setPlayMode(Animation.PlayMode.LOOP_RANDOM);
     }
 

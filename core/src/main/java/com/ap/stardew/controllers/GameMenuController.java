@@ -34,7 +34,6 @@ import com.ap.stardew.records.WalkProposal;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.MathUtils;
 
 import java.io.*;
@@ -1094,13 +1093,13 @@ public class GameMenuController implements Controller {
         int price = animal.calculatePrice();
         currentPlayer.getWallet().changeBalance(price);
         currentPlayer.getAnimals().remove(animal);
-        EntityPlacementSystem.removeExterior(animal);
+        EntityPlacementSystem.removeFromMap(animal);
         //TODO: remove form his house if needed
 
         return new Result(true, animal.getName() + " sold successfully!");
     }
 
-    public Result fishingPhae1(String fishingPole) {
+    public Result fishingPhase1(String fishingPole) {
         Game game = App.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
