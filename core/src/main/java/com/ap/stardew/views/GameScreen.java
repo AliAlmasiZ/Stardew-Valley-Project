@@ -104,6 +104,9 @@ public class GameScreen extends AbstractScreen {
         //**************************************
         controller.cheatGiveItem("Training Rod", 1);
         controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Axe", 1);
+        controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Hay", 500);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
@@ -334,8 +337,7 @@ public class GameScreen extends AbstractScreen {
         tabWidget.addTab(table3, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
 
 //        dialog.getContentTable().add(tabWidget).fill().size(200, 130);
-        tabWidget.setSize(100, 130);
-        dialog.add(tabWidget).grow();
+        dialog.add(tabWidget).size(230, 130).fill();
 
         dialog.show();
     }

@@ -4,36 +4,35 @@ size: 1024, 1024
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
+white-pixel
+  rotate: false
+  xy: 541, 557
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
 BuildingMenuIcon
   rotate: false
-  xy: 515, 532
+  xy: 541, 560
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 InventoryIcon
   rotate: false
-  xy: 1, 12
+  xy: 31, 46
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 MapIcon
   rotate: false
-  xy: 27, 38
+  xy: 515, 534
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 buttonDown
-  rotate: false
-  xy: 535, 559
-  size: 13, 9
-  split: 3, 3, 3, 3
-  orig: 13, 9
-  offset: 0, 0
-  index: -1
-buttonUp
   rotate: false
   xy: 1, 1
   size: 13, 9
@@ -41,23 +40,31 @@ buttonUp
   orig: 13, 9
   offset: 0, 0
   index: -1
+buttonUp
+  rotate: false
+  xy: 31, 35
+  size: 13, 9
+  split: 3, 3, 3, 3
+  orig: 13, 9
+  offset: 0, 0
+  index: -1
 khodayaBaseDige
   rotate: false
-  xy: 1, 56
+  xy: 1, 64
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 frame
   rotate: false
-  xy: 1, 30
+  xy: 515, 552
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 1, 30
+  xy: 515, 552
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
@@ -66,9 +73,46 @@ frameNinePatch
   index: -1
 frameNinePatch2
   rotate: false
-  xy: 515, 550
+  xy: 1, 12
   size: 18, 18
   split: 6, 6, 7, 6
   orig: 18, 18
+  offset: 0, 0
+  index: -1
+inventoryQuantityNumbers export
+  rotate: false
+  xy: 1, 32
+  size: 28, 30
+  orig: 28, 30
+  offset: 0, 0
+  index: -1
+sliderButton
+  rotate: false
+  xy: 515, 523
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
+sliderButtonDown
+  rotate: false
+  xy: 49, 53
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
+sliderButtonUp
+  rotate: false
+  xy: 21, 21
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
+sliderNinePatch
+  rotate: false
+  xy: 533, 544
+  size: 6, 6
+  split: 2, 2, 2, 2
+  pad: 1, 1, 1, 1
+  orig: 6, 6
   offset: 0, 0
   index: -1

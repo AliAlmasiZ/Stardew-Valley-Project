@@ -65,7 +65,7 @@ public class Inventory extends EntityComponent implements Serializable {
         this(0);
     }
 
-    public Entity addItemToSlot(Entity entity, InventorySlot slot) {
+    public static Entity addItemToSlot(Entity entity, InventorySlot slot) {
         Pickable pickable = entity.getComponent(Pickable.class);
         if(pickable == null){
             throw new RuntimeException("trying to add a " + entity.getEntityName() + " to an slot, but it doesnt have a" +
@@ -98,6 +98,7 @@ public class Inventory extends EntityComponent implements Serializable {
 
         return entity;
     }
+
     public boolean canAddItem(Entity item, int amount) {
         if(unlimited) return true;
         for (InventorySlot slot : slots) {

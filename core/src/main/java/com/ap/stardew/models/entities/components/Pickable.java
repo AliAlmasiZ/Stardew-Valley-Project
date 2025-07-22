@@ -10,10 +10,16 @@ public class Pickable extends EntityComponent implements Serializable {
     private int maxStack;
     @JsonProperty("stackSize")
     private int stackSize;
+    @JsonProperty("icon")
+    private String icon;
 
-    public Pickable(int maxStack, int stackSize){
+    public Pickable(int maxStack, int stackSize, String iconPath){
         this.maxStack = maxStack;
         this.stackSize = stackSize;
+        icon = iconPath;
+    }
+    public Pickable(int maxStack, int stackSize){
+        this(maxStack, stackSize, null);
     }
     public Pickable(int maxStack){
         this(maxStack, 0);
@@ -21,6 +27,7 @@ public class Pickable extends EntityComponent implements Serializable {
     private Pickable(Pickable other){
         this.maxStack = other.maxStack;
         this.stackSize = other.stackSize;
+        this.icon = other.icon;
     }
     public Pickable(){
         this(1, 0);
@@ -59,5 +66,9 @@ public class Pickable extends EntityComponent implements Serializable {
     @Override
     public EntityComponent clone() {
         return new Pickable(this);
+    }
+
+    public String getIcon() {
+        return icon;
     }
 }

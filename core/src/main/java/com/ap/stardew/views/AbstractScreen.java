@@ -42,9 +42,9 @@ public class AbstractScreen implements Screen {
         for (ObjectMap.Entry<String, BitmapFont> entry : skin.getAll(BitmapFont.class)) {
             entry.value.getData().setScale(0.6f / uiScaling);
         }
-        for (ObjectMap.Entry<String, BitmapFont> entry : customSkin.getAll(BitmapFont.class)) {
-            entry.value.getData().setScale(0.6f / uiScaling);
-        }
+//        for (ObjectMap.Entry<String, BitmapFont> entry : customSkin.getAll(BitmapFont.class)) {
+//            entry.value.getData().setScale(2f / uiScaling);
+//        }
         Gdx.input.setInputProcessor(uiStage);
     }
 

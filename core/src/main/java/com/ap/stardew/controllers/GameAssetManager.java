@@ -2,6 +2,8 @@ package com.ap.stardew.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,15 +27,20 @@ public class GameAssetManager extends AssetManager {
     public final Texture menuBackground;
     public final Texture closeButton;
 
-
     //inventory
     public final Texture inventorySlotFrame;
     public final Texture testSlot;
+    public final Texture redCross;
+    public final Texture emptyTexture;
 
     private GameAssetManager(){
         for (Texture texture : customSkin.getAtlas().getTextures()) {
             texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         }
+//        for (ObjectMap.Entry<String, BitmapFont> entry : customSkin.getAll(BitmapFont.class)) {
+//            entry.value.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//            entry.value.setUseIntegerPositions(false);
+//        }
 
         this.font = new BitmapFont(Gdx.files.internal("Content/font/khodayaBaseDige.fnt"));
         this.font.getData().setScale(Gdx.graphics.getDensity() * 0.3f);
@@ -65,6 +72,14 @@ public class GameAssetManager extends AssetManager {
         menuBackground = new Texture("Content/frameNinePatch2.9.png");
         closeButton = new Texture("Content/closeButton.png");
 
+        redCross = new Texture("Content/redCross.png");
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 0);
+        pixmap.fill();
+
+        emptyTexture = new Texture(pixmap);
+        pixmap.dispose();
     }
 
     public static GameAssetManager getInstance() {
@@ -85,4 +100,16 @@ public class GameAssetManager extends AssetManager {
     public Skin getCustomSkin() {
         return customSkin;
     }
+
+    public void loadTexturesRecursively(FileHandle dir) {
+        for (FileHandle file : dir.list()) {
+            if (file.isDirectory()) {
+                loadTexturesRecursively(file);
+            } else if (file.extension().equalsIgnoreCase("png")) {
+                String path = file.path();
+                load(path, Texture.class);
+            }
+        }
+    }
+
 }

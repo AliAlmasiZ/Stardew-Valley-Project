@@ -1,8 +1,20 @@
 {
 "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+	"inventoryQuantityNumbers": {
+		"file": "inventoryQuantityNumbers export.fnt",
+		"scaledSize": 20,
+		"markupEnabled": false,
+		"flip": false
+	},
+	"inventoryQuantityNumbers2": {
+		"file": "inventoryQuantityNumbers export.fnt",
+		"scaledSize": 20,
+		"markupEnabled": false,
+		"flip": false
+	},
 	"khodayaBaseDige": {
 		"file": "khodayaBaseDige.fnt",
-		"scaledSize": 14,
+		"scaledSize": 5,
 		"markupEnabled": false,
 		"flip": false
 	}
@@ -13,6 +25,20 @@
 		"g": 0.5647059,
 		"b": 0.5647059,
 		"a": 1
+	},
+	"RGBA_247_221_76_255": {
+		"r": 0.96862745,
+		"g": 0.8666667,
+		"b": 0.29803923,
+		"a": 1
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+	"sliderFill": {
+		"name": "white-pixel",
+		"color": "RGBA_247_221_76_255",
+		"minWidth": 10,
+		"minHeight": 10
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -24,6 +50,18 @@
 "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
 	"default": {
 		"font": "khodayaBaseDige"
+	},
+	"inventoryQuantity": {
+		"font": "inventoryQuantityNumbers2"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+	"default-horizontal": {
+		"knobOver": "sliderButtonUp",
+		"knobDown": "sliderButtonDown",
+		"background": "sliderNinePatch",
+		"knob": "sliderButton",
+		"knobBefore": "sliderFill"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {

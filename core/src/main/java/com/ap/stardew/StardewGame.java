@@ -1,11 +1,14 @@
 package com.ap.stardew;
 
+import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.GL32;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -53,6 +56,9 @@ public class StardewGame extends Game {
         App.entityRegistry.addChild(App.buildingRegistry);
 
 //        App.entityRegistry.listEntities();
+
+        GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Tools"));
+        GameAssetManager.getInstance().finishLoading();
 
         App.getView().log("Done.");
     }
