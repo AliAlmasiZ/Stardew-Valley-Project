@@ -93,6 +93,11 @@ public class GameScreen extends AbstractScreen {
     // Clock
     private ClockActor clockActor;
 
+    // NPC
+    ArrayList<DialogActor> dialogActors = new ArrayList<>();
+
+
+
     public GameScreen() {
         super(2.5f);
         stack = new Stack();
@@ -116,7 +121,6 @@ public class GameScreen extends AbstractScreen {
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
 
-        initNPCDialogs();
 
 
         Player player = App.getActiveGame().getCurrentPlayer();
@@ -138,11 +142,16 @@ public class GameScreen extends AbstractScreen {
         Game game = App.getActiveGame();
         Player currentPlayer = App.getActiveGame().getCurrentPlayer();
 
+        for (DialogActor dialogActor : dialogActors) {
+            dialogActor.remove();
+        }
+        dialogActors.clear();
+
         for (NPC npc : game.getGameNPCs()) {
-            if (npc.getComponent(PositionComponent.class).getX() <= 0) continue;
+            if (npc.getComponent(PositionComponent.class).getX() < 10) continue;
             DialogActor dialogShow = new DialogActor(npc, this);
             gameStage.addActor(dialogShow);
-            dialogShow.draw(gameStage.getBatch(), 1);
+            dialogActors.add(dialogShow);
         }
     }
 
@@ -183,6 +192,9 @@ public class GameScreen extends AbstractScreen {
         clockTable.top().right();
         clockTable.add(clockActor).pad(10);
         stack.add(clockTable);
+
+        //NPC
+        initNPCDialogs();
     }
 
     @Override
@@ -601,7 +613,7 @@ public class GameScreen extends AbstractScreen {
         // Dialog text
         Label dialogLabel = new Label(controller.meetNPC(npc.getName()).message(), customSkin);
         dialogLabel.setWrap(true); // allow wrapping if needed
-        dialogBox.add(dialogLabel).width(400).left(); // fix width as needed
+        dialogBox.add(dialogLabel).width(360).left().padLeft(24); // fix width as needed
 
         // --- Continue button
         TextButton continueButton = new TextButton("Continue", customSkin);

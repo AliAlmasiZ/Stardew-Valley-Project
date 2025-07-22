@@ -106,17 +106,16 @@ public class Renderable extends EntityComponent implements Serializable {
             }
         }
 
-        return null;
+        return sprite;
     }
 
     public void setWalkingSprites(Texture idleImage, int number) {
-        currentStatue = Statue.IDLE;
         walkingSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
         walkingSprites.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     public void setEatingSprites(Texture idleImage, int number) {
-        eatingSprites = new Animation<>(0.3f, getSplitSprites(idleImage, number));
+        eatingSprites = new Animation<>(0.2f, getSplitSprites(idleImage, number));
         eatingSprites.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
     }
 

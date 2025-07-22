@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.lang.reflect.Constructor;
@@ -30,9 +31,10 @@ public class DialogActor extends Actor {
 
         setSize(10, 8);
         Sprite sprite = npc.getComponent(Renderable.class).getSprite();
-        setX(sprite.getX());
+        setX(sprite.getX() + sprite.getWidth() - this.getWidth() / 2);
         setY(sprite.getY() + sprite.getHeight());
 
+        setTouchable(Touchable.enabled);
         addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -51,7 +53,7 @@ public class DialogActor extends Actor {
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                a = 0.7f;
+                a = 0.5f;
             }
         });
     }
