@@ -385,9 +385,9 @@ public class GameScreen extends AbstractScreen {
 
     private void setGameInput() {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(playerController);
-        inputMultiplexer.addProcessor(gameStage);
         inputMultiplexer.addProcessor(uiStage);
+        inputMultiplexer.addProcessor(gameStage);
+        inputMultiplexer.addProcessor(playerController);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 

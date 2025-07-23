@@ -8,7 +8,7 @@
 	},
 	"inventoryQuantityNumbers2": {
 		"file": "inventoryQuantityNumbers export.fnt",
-		"scaledSize": 20,
+		"scaledSize": 7,
 		"markupEnabled": false,
 		"flip": false
 	},
@@ -20,6 +20,12 @@
 	}
 },
 "com.badlogic.gdx.graphics.Color": {
+	"RGBA_0_0_0_255": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 1
+	},
 	"RGBA_144_144_144_255": {
 		"r": 0.5647059,
 		"g": 0.5647059,
@@ -31,14 +37,26 @@
 		"g": 0.8666667,
 		"b": 0.29803923,
 		"a": 1
+	},
+	"RGBA_255_255_255_255": {
+		"r": 1,
+		"g": 1,
+		"b": 1,
+		"a": 1
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
 	"sliderFill": {
 		"name": "white-pixel",
 		"color": "RGBA_247_221_76_255",
-		"minWidth": 10,
-		"minHeight": 10
+		"minWidth": 1,
+		"minHeight": 1
+	},
+	"curser": {
+		"name": "white-pixel",
+		"color": "RGBA_0_0_0_255",
+		"minWidth": 1,
+		"minHeight": 1
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -59,7 +77,7 @@
 	"default-horizontal": {
 		"knobOver": "sliderButtonUp",
 		"knobDown": "sliderButtonDown",
-		"background": "sliderNinePatch",
+		"background": "sliderNinePatch2",
 		"knob": "sliderButton",
 		"knobBefore": "sliderFill"
 	}
@@ -70,6 +88,14 @@
 		"downFontColor": "RGBA_144_144_144_255",
 		"up": "buttonUp",
 		"down": "buttonDown"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+	"default": {
+		"font": "khodayaBaseDige",
+		"fontColor": "RGBA_255_255_255_255",
+		"background": "textboxNinePatch",
+		"cursor": "curser"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {

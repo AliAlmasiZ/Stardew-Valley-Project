@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -50,10 +51,6 @@ public class InGameDialog extends Table {
     public void show(){
         clearActions();
 
-        stage.cancelTouchFocus();
-        stage.setKeyboardFocus(this);
-        stage.setScrollFocus(this);
-
         wrapperTable = new Table();
 
         wrapperTable.setFillParent(true);
@@ -61,6 +58,10 @@ public class InGameDialog extends Table {
 
         wrapperTable.add(this);
         stage.addActor(wrapperTable);
+
+        stage.cancelTouchFocus();
+        stage.setKeyboardFocus(this);
+        stage.setScrollFocus(this);
 
         addAction(
             Actions.sequence(
@@ -72,6 +73,44 @@ public class InGameDialog extends Table {
                 )
             )
         );
+        addListener(new InputListener() {
+            float startX, startY, lastX, lastY;
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                event.stop();
+            }
+
+            public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                event.stop();
+            }
+
+            public boolean mouseMoved (InputEvent event, float x, float y) {
+                return true;
+            }
+
+            public boolean scrolled (InputEvent event, float x, float y, int amount) {
+                return true;
+            }
+
+            public boolean keyDown (InputEvent event, int keycode) {
+                return true;
+            }
+
+            public boolean keyUp (InputEvent event, int keycode) {
+                return true;
+            }
+
+            public boolean keyTyped (InputEvent event, char character) {
+                return true;
+            }
+        });
+        toFront();
+        setTouchable(Touchable.enabled);
+        wrapperTable.setTouchable(Touchable.enabled);
     }
 
     @Override
