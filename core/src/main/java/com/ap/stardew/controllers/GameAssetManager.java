@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,10 +23,14 @@ public class GameAssetManager extends AssetManager {
     public TextureRegion clockHand;
     public TextureRegion[] icons = new TextureRegion[12];
 
+    //NPC Images
+    public final Sprite dialog = new Sprite(new Texture("Content/NPC/dialog.png"));
+
     //inGameMenu
     public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
     public final Texture menuBackground;
     public final Texture closeButton;
+    public final Texture textBox = new Texture("Content/NPC/textBox.png");
 
     //inventory
     public final Texture inventorySlotFrame;

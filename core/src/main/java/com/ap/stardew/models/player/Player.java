@@ -449,13 +449,21 @@ public class Player extends Entity implements Serializable {
     public String npcFriendshipDetails() {
         StringBuilder result = new StringBuilder();
         for (Map.Entry<NPC, NpcFriendship> entry : npcFriendships.entrySet()) {
-            NPC npc = entry.getKey();
-            NpcFriendship npcFriendship = entry.getValue();
-            result.append("Name: ").append(npc.getName()).append("\n");
-            result.append("Friendship points: ").append(npcFriendship.getXp()).append("\n");
-            result.append("Friendship level: ").append(npcFriendship.getLevel()).append("\n");
+            result.append(npcFriendshipDetails(entry.getKey()));
             result.append("----------------------------------------------------------------\n");
         }
+
+        return result.toString();
+    }
+
+    public String npcFriendshipDetails(NPC npc) {
+        StringBuilder result = new StringBuilder();
+
+        NpcFriendship npcFriendship = npcFriendships.get(npc);
+        result.append("Name: ").append(npc.getName()).append("\n");
+        result.append("Friendship points: ").append(npcFriendship.getXp()).append("\n");
+        result.append("Friendship level: ").append(npcFriendship.getLevel()).append("\n");
+
 
         return result.toString();
     }

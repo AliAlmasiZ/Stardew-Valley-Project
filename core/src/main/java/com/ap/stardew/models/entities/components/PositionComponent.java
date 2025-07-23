@@ -35,6 +35,7 @@ public class PositionComponent extends EntityComponent implements Serializable {
     }
 
     public PositionComponent() {
+        this.position = new Position(0,0);
     }
 
     public Position get(){

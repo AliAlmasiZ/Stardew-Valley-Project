@@ -34,7 +34,6 @@ import com.ap.stardew.records.WalkProposal;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.MathUtils;
 
 import java.io.*;
@@ -836,8 +835,8 @@ public class GameMenuController implements Controller {
             return new Result(false, "Animal not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > 2) {
-            return new Result(false, "You are too far from this animal!");
+        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
+            return new Result(false, "You are too far from this animal!\n" + currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()));
         }
 
         if (!animal.isPetToday()) {
@@ -1094,13 +1093,13 @@ public class GameMenuController implements Controller {
         int price = animal.calculatePrice();
         currentPlayer.getWallet().changeBalance(price);
         currentPlayer.getAnimals().remove(animal);
-        EntityPlacementSystem.removeExterior(animal);
+        EntityPlacementSystem.removeFromMap(animal);
         //TODO: remove form his house if needed
 
         return new Result(true, animal.getName() + " sold successfully!");
     }
 
-    public Result fishingPhae1(String fishingPole) {
+    public Result fishingPhase1(String fishingPole) {
         Game game = App.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
@@ -1587,7 +1586,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "NPC with name " + npcName + " not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > 2) {
+        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
             return new Result(false, "You are too far from this NPC");
         }
 
@@ -2097,6 +2096,14 @@ public class GameMenuController implements Controller {
                 System.out.println("animal clicked");
                 screen.openAnimalMenu(animal);
                 return;
+            }
+        }
+
+        // check for NPCs
+        for (NPC npc : game.getGameNPCs()) {
+            if (npc.getComponent(Renderable.class).getSprite().getBoundingRectangle().contains(x, y)) {
+                System.out.println("npc clicked");
+                screen.openNPCMenu(npc);
             }
         }
     }

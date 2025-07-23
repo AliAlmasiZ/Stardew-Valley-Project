@@ -1,5 +1,7 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.StardewGame;
+import com.ap.stardew.views.GameScreen;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ap.stardew.models.NPC.Dialogue;
@@ -489,6 +491,8 @@ public class Game implements Serializable {
             player.updatePerHour();
         }
 
+        ((GameScreen) StardewGame.getInstance().getScreen()).initNPCDialogs();
+
     }
 
     public void updateGamePerDay() {
@@ -521,4 +525,7 @@ public class Game implements Serializable {
         crowAttack();
     }
 
+    public ArrayList<NPC> getGameNPCs() {
+        return gameNPCs;
+    }
 }

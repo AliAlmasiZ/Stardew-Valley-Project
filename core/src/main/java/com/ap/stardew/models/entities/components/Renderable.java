@@ -25,7 +25,8 @@ public class Renderable extends EntityComponent implements Serializable {
     public enum Statue {
         NORMAL,
         IDLE,
-        WALKING,
+        RIGHT_WALKING,
+        LEFT_WALKING,
         EATING,
         PET,
     }
@@ -40,6 +41,10 @@ public class Renderable extends EntityComponent implements Serializable {
     private Renderable(Renderable other) {
         this.character = other.character;
         this.color = other.color;
+    }
+
+    public Statue getCurrentStatue() {
+        return currentStatue;
     }
 
     public Renderable() {
@@ -72,22 +77,29 @@ public class Renderable extends EntityComponent implements Serializable {
             case NORMAL -> {
                 return sprite;
             }
-            case IDLE -> {
-                return sprite;
-            }
-            case WALKING -> {
+            case LEFT_WALKING -> {
                 timeLeftForStatue -= deltaTime;
                 if (timeLeftForStatue <= 0.0f) {
                     currentStatue = Statue.NORMAL;
                 }
-                return walkingSprites.getKeyFrame(200 - timeLeftForStatue);
+
+                Sprite result = new Sprite(walkingSprites.getKeyFrame(2000000 - timeLeftForStatue));
+                result.flip(true, false);
+                return result;
+            }
+            case RIGHT_WALKING -> {
+                timeLeftForStatue -= deltaTime;
+                if (timeLeftForStatue <= 0.0f) {
+                    currentStatue = Statue.NORMAL;
+                }
+                return walkingSprites.getKeyFrame(2000000 - timeLeftForStatue);
             }
             case EATING -> {
                 timeLeftForStatue -= deltaTime;
                 if (timeLeftForStatue <= 0.0f) {
                     currentStatue = Statue.NORMAL;
                 }
-                return eatingSprites.getKeyFrame(200 - timeLeftForStatue);
+                return eatingSprites.getKeyFrame(2000000 - timeLeftForStatue);
             }
             case PET -> {
                 timeLeftForStatue -= deltaTime;
@@ -98,23 +110,22 @@ public class Renderable extends EntityComponent implements Serializable {
             }
         }
 
-        return null;
+        return sprite;
     }
 
     public void setWalkingSprites(Texture idleImage, int number) {
-        currentStatue = Statue.IDLE;
-        walkingSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
+        walkingSprites = new Animation<>(0.25f, getSplitSprites(idleImage, number));
         walkingSprites.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     public void setEatingSprites(Texture idleImage, int number) {
-        eatingSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
-        eatingSprites.setPlayMode(Animation.PlayMode.LOOP);
+        eatingSprites = new Animation<>(0.2f, getSplitSprites(idleImage, number));
+        eatingSprites.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
     }
 
     public void setPetSprites(Texture idleImage, int number) {
-        petSprites = new Animation<>(0.1f, getSplitSprites(idleImage, number));
-        petSprites.setPlayMode(Animation.PlayMode.LOOP);
+        petSprites = new Animation<>(0.05f, getSplitSprites(idleImage, number));
+        petSprites.setPlayMode(Animation.PlayMode.LOOP_RANDOM);
     }
 
     public void setStatue(Statue statue, float duration) {
