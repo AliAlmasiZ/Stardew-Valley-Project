@@ -34,7 +34,7 @@ MapIcon
   index: -1
 buttonDown
   rotate: false
-  xy: 1, 1
+  xy: 51, 67
   size: 13, 9
   split: 3, 3, 3, 3
   orig: 13, 9
@@ -42,7 +42,7 @@ buttonDown
   index: -1
 buttonUp
   rotate: false
-  xy: 31, 35
+  xy: 564, 581
   size: 13, 9
   split: 3, 3, 3, 3
   orig: 13, 9
@@ -50,7 +50,7 @@ buttonUp
   index: -1
 khodayaBaseDige
   rotate: false
-  xy: 1, 64
+  xy: 1, 78
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
@@ -88,31 +88,57 @@ inventoryQuantityNumbers export
   index: -1
 sliderButton
   rotate: false
-  xy: 515, 523
+  xy: 31, 35
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
 sliderButtonDown
   rotate: false
-  xy: 49, 53
+  xy: 21, 21
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
 sliderButtonUp
   rotate: false
-  xy: 21, 21
+  xy: 1, 1
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
 sliderNinePatch
   rotate: false
-  xy: 533, 544
+  xy: 515, 526
   size: 6, 6
   split: 2, 2, 2, 2
   pad: 1, 1, 1, 1
   orig: 6, 6
+  offset: 0, 0
+  index: -1
+sliderNinePatch2
+  rotate: false
+  xy: 533, 547
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+smallPanelNinePatch
+  rotate: false
+  xy: 515, 578
+  size: 47, 12
+  split: 4, 5, 4, 4
+  pad: 4, 4, 4, 4
+  orig: 47, 12
+  offset: 0, 0
+  index: -1
+textboxNinePatch
+  rotate: false
+  xy: 1, 64
+  size: 48, 12
+  split: 5, 3, 3, 4
+  pad: 5, 3, 3, 3
+  orig: 48, 12
   offset: 0, 0
   index: -1
