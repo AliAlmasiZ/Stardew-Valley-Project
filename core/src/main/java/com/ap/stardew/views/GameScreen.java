@@ -42,6 +42,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -97,7 +98,6 @@ public class GameScreen extends AbstractScreen {
     ArrayList<DialogActor> dialogActors = new ArrayList<>();
 
 
-
     public GameScreen() {
         super(2.5f);
         stack = new Stack();
@@ -122,7 +122,6 @@ public class GameScreen extends AbstractScreen {
         controller.cheatAddSkill("fishing", 200);
 
 
-
         Player player = App.getActiveGame().getCurrentPlayer();
         Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
         System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
@@ -138,7 +137,7 @@ public class GameScreen extends AbstractScreen {
         //TODO
     }
 
-    public void initNPCDialogs(){
+    public void initNPCDialogs() {
         Game game = App.getActiveGame();
         Player currentPlayer = App.getActiveGame().getCurrentPlayer();
 
@@ -267,7 +266,6 @@ public class GameScreen extends AbstractScreen {
          */
         // Clock
         clockActor.update(delta);
-
 
 
     }
@@ -529,7 +527,8 @@ public class GameScreen extends AbstractScreen {
         shepherdAnimalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                dialog.remove();
+                openAnimalMovementMenu(animal);
             }
         });
 
@@ -550,7 +549,84 @@ public class GameScreen extends AbstractScreen {
 
         TabWidget tabWidget = new TabWidget();
 
-        //TODO: ILIA
+        //
+        Table mainTable = new Table();
+
+        Label infoLabel = new Label("Enter the vector that you want to move your animal:", skin);
+        TextField xField = new TextField("", skin);
+
+        xField.setMessageText("x");
+        TextField yField = new TextField("", skin);
+        yField.setMessageText("y");
+
+        xField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                if (c == '-' && textField.getText().isEmpty()) {
+                    return true;
+                }
+                return Character.isDigit(c);
+            }
+        });
+
+        yField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                if (c == '-' && textField.getText().isEmpty()) {
+                    return true;
+                }
+                return Character.isDigit(c);
+            }
+        });
+
+        Label errorLabel = new Label("x, y must be less than 200!", skin);
+        errorLabel.setVisible(false);
+        errorLabel.setColor(Color.RED);
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
+        TextButton exitButton = new TextButton("Exit", customSkin);
+
+        confirmButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float dx, float dy) {
+                if (xField.getText().length() == 0 || yField.getText().length() == 0) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("You haven't entered any coordinates!");
+                    return;
+                }
+                float x = Float.parseFloat(xField.getText());
+                float y = Float.parseFloat(yField.getText());
+                if (Math.abs(x) > 200 || Math.abs(y) > 200) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("|x|, |y| must be less than 200!");
+                    return;
+                }
+
+                animal.move(x, y);
+                dialog.remove();
+                setGameInput();
+            }
+        });
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.remove();
+                setGameInput();
+            }
+        });
+
+        mainTable.add(infoLabel).growX().row();
+        mainTable.add(xField);
+        mainTable.add(yField).row();
+        mainTable.add(errorLabel).growX().row();
+        mainTable.add(confirmButton).growX().row();
+        mainTable.add(exitButton).growX().row();
+
+        tabWidget.addTab(mainTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+
+        dialog.getContentTable().add(tabWidget).fill().grow();
+
+        dialog.show(uiStage);
     }
 
     public void openNPCMenu(NPC npc) {

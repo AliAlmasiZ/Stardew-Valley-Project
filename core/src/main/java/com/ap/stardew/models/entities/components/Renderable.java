@@ -114,7 +114,7 @@ public class Renderable extends EntityComponent implements Serializable {
     }
 
     public void setWalkingSprites(Texture idleImage, int number) {
-        walkingSprites = new Animation<>(0.5f, getSplitSprites(idleImage, number));
+        walkingSprites = new Animation<>(0.25f, getSplitSprites(idleImage, number));
         walkingSprites.setPlayMode(Animation.PlayMode.LOOP);
     }
 

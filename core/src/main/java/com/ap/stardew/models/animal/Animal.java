@@ -213,7 +213,7 @@ public class Animal extends Entity implements Serializable {
     }
 
     public void renderUpdate(float delta) {
-        //movement Update
+        //movement Update TODO: check that it doesnt go to baghalies
         PositionComponent positionComponent = getComponent(PositionComponent.class);
         if (timeLeftToMove > 0 && getComponent(Renderable.class).getCurrentStatue() == Renderable.Statue.NORMAL) {
             timeLeftToMove -= delta;
@@ -238,11 +238,23 @@ public class Animal extends Entity implements Serializable {
             movementVector.x = destination.x - (float) positionComponent.getX();
             movementVector.y = destination.y - (float) positionComponent.getY();
             if (movementVector.len() < 0.1f) {
-                timeLeftToMove = 7;
+                timeLeftToMove = 30;
                 getComponent(Renderable.class).setStatue(Renderable.Statue.NORMAL, 0);
             }
             movementVector.nor();
             position.add(movementVector.x * delta * moveFactor, movementVector.y * delta * moveFactor);
         }
+    }
+
+    public void move(float x, float y) {
+        PositionComponent positionComponent = getComponent(PositionComponent.class);
+        destination.x = (float) (positionComponent.getX() + x);
+        destination.y = (float) (positionComponent.getY() + y);
+        if (x > 0) {
+            getComponent(Renderable.class).setStatue(Renderable.Statue.RIGHT_WALKING, 10000);
+        } else {
+            getComponent(Renderable.class).setStatue(Renderable.Statue.LEFT_WALKING, 10000);
+        }
+        timeLeftToMove = 0;
     }
 }
