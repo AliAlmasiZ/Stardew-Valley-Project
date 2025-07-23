@@ -437,7 +437,13 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openAnimalMenu(Animal animal) {
-        InGameDialog dialog = new InGameDialog(uiStage);
+        InGameDialog dialog = new InGameDialog(uiStage) {
+            @Override
+            public void hide() {
+                super.hide();
+                setGameInput();
+            }
+        };
 
         TabWidget tabWidget = new TabWidget();
 
@@ -547,7 +553,13 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openAnimalMovementMenu(Animal animal) {
-        Dialog dialog = new Dialog("Move Animal", skin);
+        InGameDialog dialog = new InGameDialog(uiStage) {
+            @Override
+            public void hide() {
+                super.hide();
+                setGameInput();
+            }
+        };
         dialog.setBackground((Drawable) null);
 
         TabWidget tabWidget = new TabWidget();
@@ -627,13 +639,20 @@ public class GameScreen extends AbstractScreen {
 
         tabWidget.addTab(mainTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
 
-        dialog.getContentTable().add(tabWidget).fill().grow();
+        dialog.add(tabWidget).fill().grow();
 
-        dialog.show(uiStage);
+        dialog.show();
+        Gdx.input.setInputProcessor(uiStage);
     }
 
     public void openNPCMenu(NPC npc) {
-        Dialog dialog = new Dialog("NPC Menu", skin);
+        InGameDialog dialog = new InGameDialog(uiStage) {
+            @Override
+            public void hide() {
+                super.hide();
+                setGameInput();
+            }
+        };
         dialog.setBackground((Drawable) null);
 
         TabWidget tabWidget = new TabWidget();
@@ -677,10 +696,10 @@ public class GameScreen extends AbstractScreen {
         tabWidget.addTab(infoTable, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
 
 
-        dialog.getContentTable().add(tabWidget).fill().grow();
+        dialog.add(tabWidget).fill().grow();
 
+        dialog.show();
         Gdx.input.setInputProcessor(uiStage);
-        dialog.show(uiStage);
     }
 
     public void showNPCDialog(NPC npc) {
