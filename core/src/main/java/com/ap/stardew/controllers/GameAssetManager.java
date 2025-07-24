@@ -74,6 +74,12 @@ public class GameAssetManager extends AssetManager {
 
         redCross = new Texture("Content/redCross.png");
 
+
+        this.load("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class);
+        this.load("Content(unpacked)/Characters/Farmer/hairstyles.png", Texture.class);
+        this.load("Content(unpacked)/Characters/Farmer/pants.png", Texture.class);
+        this.load("Content(unpacked)/Characters/Farmer/shirts.png", Texture.class);
+
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0);
         pixmap.fill();

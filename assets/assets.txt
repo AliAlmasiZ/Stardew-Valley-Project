@@ -1,4 +1,5 @@
 .gitkeep
+Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -961,6 +962,7 @@ Content(unpacked)/Characters/schedules/Shane.json
 Content(unpacked)/Characters/schedules/Vincent.json
 Content(unpacked)/Characters/schedules/Willy.json
 Content(unpacked)/Characters/schedules/template.json
+Content(unpacked)/Characters/stardew skirt mod.jpg
 Content(unpacked)/Data/Achievements.de-DE.json
 Content(unpacked)/Data/Achievements.es-ES.json
 Content(unpacked)/Data/Achievements.fr-FR.json
@@ -3919,6 +3921,9 @@ data/recipes/artisanRecipes.json
 data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
+debug_fbo0.png
+debug_fbo1.png
+debug_fbo2.png
 skin/Stardew Valley Skin/inventoryQuantityNumbers export.fnt
 skin/Stardew Valley Skin/khodayaBaseDige.fnt
 skin/Stardew Valley Skin/skin.atlas

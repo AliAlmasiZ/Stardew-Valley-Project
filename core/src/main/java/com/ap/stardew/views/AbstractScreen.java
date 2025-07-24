@@ -26,6 +26,7 @@ public class AbstractScreen implements Screen {
         uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 120 / this.uiScaling;
         uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 120 / this.uiScaling;
 
+
         rootTable = new Table();
         rootTable.setFillParent(true);
         rootTable.center();

@@ -208,17 +208,22 @@ public class GameScreen extends AbstractScreen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Entity entity : App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class)) {
+//            if(entity instanceof Player) continue;
             Sprite sprite = entity.getComponent(Renderable.class).getRenderingSprite(delta);
             if (sprite != null) {
                 sprite.setPosition((float) entity.getComponent(PositionComponent.class).getX(), (float) entity.getComponent(PositionComponent.class).getY());
                 sprite.draw(batch);
             }
         }
+
+
+
         batch.end();
 
         renderer.render(frontLayerIndices);
         gameStage.act(delta);
         gameStage.draw();
+
 
         uiStage.act(delta);
         uiStage.draw();
