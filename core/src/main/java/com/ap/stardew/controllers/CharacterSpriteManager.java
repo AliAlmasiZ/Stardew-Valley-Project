@@ -22,7 +22,7 @@ import java.util.Map;
 public class CharacterSpriteManager {
     public static final int FRAME_WIDTH = 16;
     public static final int FRAME_HEIGHT = 32;
-    private static final float FRAME_DURATION = 0.15f;
+    private static final float FRAME_DURATION = 0.1f;
 
     private final Texture baseTexture;
     private final Texture hairTexture;
@@ -97,18 +97,19 @@ public class CharacterSpriteManager {
 
         fbo.begin();
 
+        int y = baseBody[1] > 0 ? -2 : -1;
 
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         fbBatch.begin();
 
-        fbBatch.draw(baseFrames[baseBody[0]][baseBody[0]], 0, 0);//body
+        fbBatch.draw(baseFrames[baseBody[0]][baseBody[1]], 0, 0);//body
         fbBatch.draw(baseFrames[baseHand[0]][baseHand[1]], 0, 0); //hand
-        fbBatch.draw(shirtFrames[shirt[0]][shirt[1]], 4, 8);
+        fbBatch.draw(shirtFrames[shirt[0]][shirt[1]], 4, 10 + y);
 
         fbBatch.setColor(Color.BROWN);
-        fbBatch.draw(hairFrames[hair[0]][hair[1]],0 ,0);
+        fbBatch.draw(hairFrames[hair[0]][hair[1]],0 ,y);
 
         fbBatch.setColor(Color.BLUE);
         fbBatch.draw(pantFrames[pants[0]][pants[1]], 0, 0);

@@ -542,7 +542,7 @@ public class Player extends Entity implements Serializable {
     }
 
     public void move(Vector2 direction, float delta) {
-
+        lastDir = direction;
         getComponent(PositionComponent.class).move(direction, delta * speed);
     }
 
