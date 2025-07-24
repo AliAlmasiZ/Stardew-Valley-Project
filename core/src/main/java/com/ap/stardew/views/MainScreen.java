@@ -78,6 +78,7 @@ public class MainScreen extends AbstractScreen {
         uiStage.getBatch().begin();
         uiStage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         uiStage.getBatch().end();
+
         //---------------------
         uiStage.draw();
     }

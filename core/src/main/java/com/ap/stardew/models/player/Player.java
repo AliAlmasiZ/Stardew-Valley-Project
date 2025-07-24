@@ -1,5 +1,6 @@
 package com.ap.stardew.models.player;
 
+import com.ap.stardew.controllers.CharacterSpriteManager;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
@@ -22,6 +23,7 @@ import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.old.inGame.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -58,9 +60,12 @@ public class Player extends Entity implements Serializable {
     private Buff activeBuff;
     //for graphic
     private Sprite sprite;
+    private float stateTime = 0f;
     private Rectangle bounds;
     private float speed = 200f;
     private State state = State.IDLE;
+    private CharacterSpriteManager spriteManager;
+    private Vector2 lastDir = new Vector2(0, -1);
 
 
     private transient ArrayList<Tile> ownedTiles = null;
@@ -85,7 +90,10 @@ public class Player extends Entity implements Serializable {
 
         this.accountUsername = account.getUsername();
 
-        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
+        this.spriteManager = new CharacterSpriteManager();
+
+//        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
+        sprite = new Sprite(spriteManager.getFrame(0, lastDir, state));
     }
 
     public GameMap getCurrentMap() {
@@ -542,6 +550,7 @@ public class Player extends Entity implements Serializable {
     }
 
     public void move(Vector2 direction, float delta) {
+        lastDir = direction;
         getComponent(PositionComponent.class).move(direction, delta * speed);
     }
 
@@ -564,7 +573,13 @@ public class Player extends Entity implements Serializable {
     }
 
     public void update(float delta) {
+        stateTime += delta;
+        if(state.equals(State.IDLE)) {
+            stateTime = 0;
+        }
+        sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
         sprite.setPosition((float) getPosition().getX(), (float) getPosition().getY());
         getComponent(Renderable.class).setSprite(sprite);
     }
+
 }

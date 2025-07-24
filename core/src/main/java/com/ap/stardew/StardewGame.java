@@ -1,7 +1,9 @@
 package com.ap.stardew;
 
+import com.ap.stardew.controllers.CharacterSpriteManager;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.enums.Direction;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
@@ -9,19 +11,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class StardewGame extends Game {
     private static StardewGame instance;
-    private Batch batch;
+    private SpriteBatch batch;
 
     public static StardewGame getInstance() {
         return instance;
     }
 
-    public Batch getBatch() {
+    public SpriteBatch getBatch() {
         return batch;
     }
 
@@ -40,6 +44,8 @@ public class StardewGame extends Game {
         Gdx.gl.glClearColor(0f, 0.1f, 0f, 1);
         Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
         super.render();
+
+
     }
 
     private static void loadDatas() {
