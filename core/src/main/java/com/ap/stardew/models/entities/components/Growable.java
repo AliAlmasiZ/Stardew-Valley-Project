@@ -64,6 +64,10 @@ public class Growable extends EntityComponent implements Serializable {
         this.fruit = null;
     }
 
+    public void loadPostInit() {
+
+    }
+
     public int getTotalHarvestTime() {
         return totalHarvestTime;
     }

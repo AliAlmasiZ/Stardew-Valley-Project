@@ -64,6 +64,8 @@ public class StardewGame extends Game {
 //        App.entityRegistry.listEntities();
 
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Tools"));
+        GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Crops"));
+        GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Trees"));
         GameAssetManager.getInstance().finishLoading();
 
         App.getView().log("Done.");

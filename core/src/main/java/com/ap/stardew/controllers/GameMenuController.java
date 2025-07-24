@@ -1080,7 +1080,6 @@ public class GameMenuController implements Controller {
     }
 
     /* -------------------------------------------------- -------------------------------------------------- */
-
     public Result sellAnimal(String animalName) {
         Game game = App.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
