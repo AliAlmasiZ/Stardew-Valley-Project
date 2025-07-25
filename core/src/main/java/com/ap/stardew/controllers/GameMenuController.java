@@ -34,7 +34,13 @@ import com.ap.stardew.records.WalkProposal;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.io.*;
 import java.util.*;
@@ -426,7 +432,7 @@ public class GameMenuController implements Controller {
     }
     /* --------------------------------------  -------------------------------------- */
 
-    public Result craftInfo(String name) {
+    public Result craftInfoPhase1(String name) {
         if (!App.entityRegistry.doesEntityExist(name)) {
             return new Result(false, "There is no crop with name" + name);
         }
@@ -468,7 +474,121 @@ public class GameMenuController implements Controller {
 
         return new Result(true, message.toString());
     }
+/*
+    public Table craftInfo(String name) {
+        try {
+            Entity crop = App.entityRegistry.makeEntity(name);
+            Growable growable = crop.getComponent(Growable.class);
+            Edible edible = crop.getComponent(Edible.class);
+            Sellable sellable = crop.getComponent(Sellable.class);
+            GameAssetManager gameAssetManager = GameAssetManager.getInstance();
 
+            Table table = new Table();
+
+            Label nameLabel = new Label("Name: ", gameAssetManager.getCustomSkin());
+            Label cropNameLabel = new Label(crop.getEntityName(), gameAssetManager.getCustomSkin());
+            nameLabel.setColor(Color.BLACK);
+            cropNameLabel.setColor(Color.GREEN);
+            table.add(nameLabel);
+            table.add(cropNameLabel);
+            table.row();
+
+            Entity seedEntity = App.entityRegistry.makeEntity(growable.getSeed());
+            Label sourceLabel = new Label("Source: ", gameAssetManager.getCustomSkin());
+            Label sourceNameLabel = new Label(seedEntity.getEntityName(), gameAssetManager.getCustomSkin());
+            Texture seedTexture = gameAssetManager.get(seedEntity.getComponent(Pickable.class).getIcon());
+            sourceLabel.setColor(Color.BLACK);
+            sourceNameLabel.setColor(Color.GREEN);
+            table.add(sourceLabel);
+            table.add(sourceNameLabel);
+            table.add(new Image(seedTexture));
+            table.row();
+
+//            Label stagesLabel = new Label("Stages: ", gameAssetManager.getCustomSkin());
+//            table.add(stagesLabel).row();
+//            for (int i = 0; i < growable.getStages().size(); i++) {
+//                Image image = new Image(growable.getSprites()[i].getTexture());
+////                image.scaleBy(0.);
+//                table.add(image);
+//            }
+//            table.row();
+
+            Label totalHarvestTimeLabel = new Label("Total Harvest Time: ", gameAssetManager.getCustomSkin());
+            Label cropTimeLabel = new Label(String.valueOf(growable.getTotalHarvestTime()), gameAssetManager.getCustomSkin());
+            totalHarvestTimeLabel.setColor(Color.BLACK);
+            cropTimeLabel.setColor(Color.GREEN);
+            table.add(totalHarvestTimeLabel);
+            table.add(cropTimeLabel).row();
+
+            Label oneTimeLabel = new Label("One Time: ", gameAssetManager.getCustomSkin());
+            boolean oneTime = growable.isOneTime();
+            Label cropOneTimeLabel = new Label(String.valueOf(oneTime), gameAssetManager.getCustomSkin());
+            oneTimeLabel.setColor(Color.BLACK);
+            if (oneTime) {
+                cropOneTimeLabel.setColor(Color.GREEN);
+            } else {
+                cropOneTimeLabel.setColor(Color.RED);
+            }
+            table.add(oneTimeLabel);
+            table.add(cropOneTimeLabel).row();
+
+            Label regrowthTimeLabel = new Label("Regrowth Time: ", gameAssetManager.getCustomSkin());
+            Label cropRegrowthTimeLabel = new Label("", gameAssetManager.getCustomSkin());
+            if (growable.getRegrowthTime() > 0) {
+                cropRegrowthTimeLabel.setText(growable.getRegrowthTime());
+                cropRegrowthTimeLabel.setColor(Color.GREEN);
+            } else {
+                cropRegrowthTimeLabel.setText("NONE");
+                cropRegrowthTimeLabel.setColor(Color.RED);
+            }
+            table.add(regrowthTimeLabel);
+            table.add(cropRegrowthTimeLabel).row();
+
+            Label baseSellPriceLabel = new Label("Base Sell Price: ", gameAssetManager.getCustomSkin());
+            Label cropBaseSellPriceLabel = new Label(String.valueOf(sellable.getBasePrice()), gameAssetManager.getCustomSkin());
+            baseSellPriceLabel.setColor(Color.BLACK);
+            cropBaseSellPriceLabel.setColor(Color.GOLD);
+            table.add(baseSellPriceLabel);
+            table.add(cropBaseSellPriceLabel).row();
+
+            Label isEdibleLabel = new Label("IsEdible: ", gameAssetManager.getCustomSkin());
+            table.add(isEdibleLabel);
+            boolean isEdible = (edible != null);
+            Label cropIsEdibleLabel;
+            if (isEdible) {
+                cropIsEdibleLabel = new Label("True", gameAssetManager.getCustomSkin());
+                cropIsEdibleLabel.setColor(Color.GREEN);
+                table.add(cropIsEdibleLabel);
+                Label energyLabel = new Label("Energy: ", gameAssetManager.getCustomSkin());
+                energyLabel.setColor(Color.BLACK);
+                table.add(energyLabel);
+                Label cropEnergyLabel = new Label(String.valueOf(edible.getEnergy()), gameAssetManager.getCustomSkin());
+                cropEnergyLabel.setColor(Color.GREEN);
+                table.add(cropEnergyLabel);
+            } else {
+                cropIsEdibleLabel = new Label("False", gameAssetManager.getCustomSkin());
+                cropIsEdibleLabel.setColor(Color.RED);
+                table.add(cropIsEdibleLabel);
+            }
+            table.row();
+
+            Label seasonLabel = new Label("Season: ", gameAssetManager.getCustomSkin());
+            seasonLabel.setColor(Color.BLACK);
+            table.add(seasonLabel);
+            for (Season season : growable.getGrowingSeasons()) {
+                Image image = new Image(season.getTextureRegion());
+                table.add(image);
+            }
+            table.row();
+
+
+            return table;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+*/
     public Result plant(String seedString, String direction) {
         Game game = App.getActiveGame();
         Player player = game.getCurrentPlayer();
@@ -2107,6 +2227,9 @@ public class GameMenuController implements Controller {
         }
 
         // check for plants
-        // TODO
+        ArrayList<Entity> plants = App.getActiveGame().getActiveMap().getEntitiesWithComponent(Growable.class);
+        for (Entity entity : plants) {
+
+        }
     }
 }

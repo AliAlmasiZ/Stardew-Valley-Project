@@ -94,7 +94,7 @@ public class GameMenu implements AppMenu {
             App.getView().log(controller.energyUnlimited());
 
         }else if ((matcher = GameMenuCommands.CRAFTINFO.getMatcher(input)) != null) {
-            App.getView().log(controller.craftInfo(matcher.group(1).trim()));
+            App.getView().log(controller.craftInfoPhase1(matcher.group(1).trim()));
 
         } else if (input.toLowerCase().equals("tm") || (matcher = GameMenuCommands.TOGGLE_MAP.getMatcher(input)) != null) {
             App.getView().log(controller.toggleMap());

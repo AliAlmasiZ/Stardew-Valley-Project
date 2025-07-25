@@ -135,28 +135,28 @@ public class GameScreen extends AbstractScreen {
         System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
 
         // put some trees and crops to test
-        Entity tree1 = App.entityRegistry.makeEntity("Pine Tree");
-        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
-        Vec2 vec2 = new Vec2(player.getPosition().getX() + 50, player.getPosition().getY() + 200);
-        System.out.println("Pine tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
-
-        Entity tree2 = App.entityRegistry.makeEntity("Pine Tree");
-        tree2.getComponent(Growable.class).setDaysPastFromPlant(22);
-        vec2 = new Vec2(player.getPosition().getX() + 80, player.getPosition().getY() + 200);
-        System.out.println("Pine tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
-
-        Entity tree3 = App.entityRegistry.makeEntity("Pine Tree");
-        tree3.getComponent(Growable.class).setDaysPastFromPlant(22);
-        vec2 = new Vec2(player.getPosition().getX() + 110, player.getPosition().getY() + 200);
-        System.out.println("Pine tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
-
-
-        for (int i = 0; i < 7; i++) {
-            Entity crop1 = App.entityRegistry.makeEntity("Kale");
-            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
-            vec2 = new Vec2(player.getPosition().getX() + 110 + 30 * i, player.getPosition().getY() + 100);
-            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
-        }
+//        Entity tree1 = App.entityRegistry.makeEntity("Pine Tree");
+//        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
+//        Vec2 vec2 = new Vec2(player.getPosition().getX() + 50, player.getPosition().getY() + 200);
+//        System.out.println("Pine tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
+//
+//        Entity tree2 = App.entityRegistry.makeEntity("Pine Tree");
+//        tree2.getComponent(Growable.class).setDaysPastFromPlant(22);
+//        vec2 = new Vec2(player.getPosition().getX() + 80, player.getPosition().getY() + 200);
+//        System.out.println("Pine tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
+//
+//        Entity tree3 = App.entityRegistry.makeEntity("Pine Tree");
+//        tree3.getComponent(Growable.class).setDaysPastFromPlant(22);
+//        vec2 = new Vec2(player.getPosition().getX() + 110, player.getPosition().getY() + 200);
+//        System.out.println("Pine tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
+//
+//
+//        for (int i = 0; i < 7; i++) {
+//            Entity crop1 = App.entityRegistry.makeEntity("Kale");
+//            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
+//            vec2 = new Vec2(player.getPosition().getX() + 110 + 30 * i, player.getPosition().getY() + 100);
+//            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
+//        }
         //**************************************
 
 
@@ -766,6 +766,76 @@ public class GameScreen extends AbstractScreen {
                 setGameInput();
             }
         });
+
+    }
+/*
+    public void showCraftInfoDialog() {
+        InGameDialog dialog = new InGameDialog(uiStage) {
+            @Override
+            public void hide() {
+                super.hide();
+                setGameInput();
+            }
+        };
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget();
+
+        Table craftTable = new Table();
+        Label label = new Label("Enter your crop name to get info: ", customSkin);
+        TextField cropNameField = new TextField("", skin);
+        cropNameField.setMessageText("Crop Name...");
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setWrap(true);
+        errorLabel.setVisible(false);
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
+
+        craftTable.add(label).growX().row();
+        craftTable.add(cropNameField).growX().row();
+        craftTable.add(errorLabel).growX().row();
+        craftTable.add(confirmButton).growX().row();
+
+
+        confirmButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                String cropName = cropNameField.getText();
+                Result result = controller.craftInfoPhase1(cropName);
+                if (result.isSuccessful()) {
+                    showTable(controller.craftInfo(cropName));
+                } else {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText(result.toString());
+                }
+            }
+        });
+
+        tabWidget.addTab(craftTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+
+        dialog.show();
+        Gdx.input.setInputProcessor(uiStage);
+    }
+*/
+    /**
+     * This will show table in InGameDialog
+     * @param table the table which will be shown
+     */
+    public void showTable(Table table) {
+        InGameDialog dialog = new InGameDialog(uiStage) {
+            @Override
+            public void hide() {
+                super.hide();
+                setGameInput();
+            }
+        };
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget();
+
+        tabWidget.addTab(table, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+        Gdx.input.setInputProcessor(uiStage);
 
     }
 

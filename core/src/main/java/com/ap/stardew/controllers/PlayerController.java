@@ -67,8 +67,10 @@ public class PlayerController implements InputProcessor {
             this.advanceTime = true;
         if (keycode == Input.Keys.TAB)
             screen.openTestDialog();
-        if (keycode == Input.Keys.P) //Temporarily
+        if (keycode == Input.Keys.P) //TODO: Temporarily
             screen.startFishing();
+        if (keycode == Input.Keys.F1); // TODO: add this to other menu
+//            screen.showCraftInfoDialog();
 
         return false;
     }

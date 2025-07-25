@@ -4,6 +4,7 @@ import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
@@ -42,6 +43,7 @@ public class Growable extends EntityComponent implements Serializable {
     private boolean oneTime;
     private boolean grown;
 
+    @JsonIgnore
     private boolean isSpritesLoaded = false; // Guess its the safest way
     private Sprite[] sprites = new Sprite[10];
 
@@ -95,6 +97,10 @@ public class Growable extends EntityComponent implements Serializable {
 
     public ArrayList<Integer> getStages() {
         return stages;
+    }
+
+    public Sprite[] getSprites() {
+        return sprites;
     }
 
     public boolean isWateredToday() {
@@ -289,7 +295,6 @@ public class Growable extends EntityComponent implements Serializable {
     public Sprite getCurrentSprite() {
         if (!isSpritesLoaded) loadSprites();
 
-        Entity entity = getEntity();
         int currentStage = getStage();
 
         if (entity.hasTag(EntityTag.CROP)) {
@@ -305,7 +310,6 @@ public class Growable extends EntityComponent implements Serializable {
     }
 
     private void loadSprites() {
-        Entity entity = getEntity();
         String name = entity.getEntityName().replaceAll(" ", "_");
         GameAssetManager gameAssetManager = GameAssetManager.getInstance();
 
