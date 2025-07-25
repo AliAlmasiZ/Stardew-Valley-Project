@@ -1,5 +1,7 @@
 package com.ap.stardew.models.entities.components;
 
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.enums.EntityTag;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -29,8 +31,10 @@ public class Renderable extends EntityComponent implements Serializable {
         LEFT_WALKING,
         EATING,
         PET,
+        GROWABLE,
     }
-    protected Statue currentStatue = Statue.NORMAL;
+    protected Statue currentStatue;
+
 
 
     public Renderable(char character, Color color) {
@@ -73,6 +77,9 @@ public class Renderable extends EntityComponent implements Serializable {
     }
 
     public Sprite getRenderingSprite(float deltaTime) {
+        if (getEntity().hasTag(EntityTag.CROP) || getEntity().hasTag(EntityTag.TREE)) { // This is stupid. this lines need to run once but ilia doesn't know how to handle this with json
+            currentStatue = Statue.GROWABLE;
+        }
         switch (currentStatue) {
             case NORMAL -> {
                 return sprite;
@@ -107,6 +114,9 @@ public class Renderable extends EntityComponent implements Serializable {
                     currentStatue = Statue.NORMAL;
                 }
                 return petSprites.getKeyFrame(200 - timeLeftForStatue);
+            }
+            case GROWABLE -> {
+                return getGrowingSprite();
             }
         }
 
@@ -145,5 +155,11 @@ public class Renderable extends EntityComponent implements Serializable {
             sprites[i] = new Sprite(tiles[0][i]);
         }
         return sprites;
+    }
+
+    private Sprite getGrowingSprite() {
+        Entity entity = getEntity();
+        Growable growable = entity.getComponent(Growable.class);
+        return growable.getCurrentSprite();
     }
 }

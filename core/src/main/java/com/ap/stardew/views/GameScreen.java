@@ -10,19 +10,17 @@ import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.NPC.Dialogue;
 import com.ap.stardew.models.NPC.NPC;
+import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.animal.FishingMiniGame;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.components.Pickable;
-import com.ap.stardew.models.entities.components.PositionComponent;
-import com.ap.stardew.models.entities.components.Sellable;
+import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
-import com.ap.stardew.models.entities.components.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
@@ -112,7 +110,7 @@ public class GameScreen extends AbstractScreen {
         skin = GameAssetManager.getInstance().getSkin();
         customSkin = GameAssetManager.getInstance().getCustomSkin();
 
-        //TODO: remove it later
+        //TODO: remove this later
         //**************************************
         controller.cheatGiveItem("Training Rod", 1);
         controller.cheatGiveItem("Hay", 500);
@@ -135,6 +133,30 @@ public class GameScreen extends AbstractScreen {
         NPC npc = App.getActiveGame().findNPC("Robin");
         npc.getComponent(PositionComponent.class).setPosition(player.getPosition().getX() + 20, player.getPosition().getY() + 200);
         System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
+
+        // put some trees and crops to test
+        Entity tree1 = App.entityRegistry.makeEntity("Pine Tree");
+        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
+        Vec2 vec2 = new Vec2(player.getPosition().getX() + 50, player.getPosition().getY() + 200);
+        System.out.println("Pine tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
+
+        Entity tree2 = App.entityRegistry.makeEntity("Pine Tree");
+        tree2.getComponent(Growable.class).setDaysPastFromPlant(22);
+        vec2 = new Vec2(player.getPosition().getX() + 80, player.getPosition().getY() + 200);
+        System.out.println("Pine tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
+
+        Entity tree3 = App.entityRegistry.makeEntity("Pine Tree");
+        tree3.getComponent(Growable.class).setDaysPastFromPlant(22);
+        vec2 = new Vec2(player.getPosition().getX() + 110, player.getPosition().getY() + 200);
+        System.out.println("Pine tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
+
+
+        for (int i = 0; i < 7; i++) {
+            Entity crop1 = App.entityRegistry.makeEntity("Kale");
+            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
+            vec2 = new Vec2(player.getPosition().getX() + 110 + 30 * i, player.getPosition().getY() + 100);
+            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
+        }
         //**************************************
 
 

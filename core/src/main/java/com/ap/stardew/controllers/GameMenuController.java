@@ -2105,5 +2105,8 @@ public class GameMenuController implements Controller {
                 screen.openNPCMenu(npc);
             }
         }
+
+        // check for plants
+        // TODO
     }
 }
