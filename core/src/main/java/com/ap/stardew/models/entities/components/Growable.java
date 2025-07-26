@@ -99,6 +99,7 @@ public class Growable extends EntityComponent implements Serializable {
         return stages;
     }
 
+    @JsonIgnore
     public Sprite[] getSprites() {
         return sprites;
     }

@@ -768,7 +768,7 @@ public class GameScreen extends AbstractScreen {
         });
 
     }
-/*
+
     public void showCraftInfoDialog() {
         InGameDialog dialog = new InGameDialog(uiStage) {
             @Override
@@ -786,13 +786,14 @@ public class GameScreen extends AbstractScreen {
         TextField cropNameField = new TextField("", skin);
         cropNameField.setMessageText("Crop Name...");
         Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
         errorLabel.setWrap(true);
         errorLabel.setVisible(false);
         TextButton confirmButton = new TextButton("Confirm", customSkin);
 
-        craftTable.add(label).growX().row();
+        craftTable.add(label).pad(4).growX().row();
         craftTable.add(cropNameField).growX().row();
-        craftTable.add(errorLabel).growX().row();
+        craftTable.add(errorLabel).pad(4).growX().row();
         craftTable.add(confirmButton).growX().row();
 
 
@@ -801,6 +802,7 @@ public class GameScreen extends AbstractScreen {
                 String cropName = cropNameField.getText();
                 Result result = controller.craftInfoPhase1(cropName);
                 if (result.isSuccessful()) {
+                    dialog.hide();
                     showTable(controller.craftInfo(cropName));
                 } else {
                     errorLabel.setVisible(true);
@@ -810,11 +812,12 @@ public class GameScreen extends AbstractScreen {
         });
 
         tabWidget.addTab(craftTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        dialog.add(tabWidget).fill().grow();
 
         dialog.show();
         Gdx.input.setInputProcessor(uiStage);
     }
-*/
+
     /**
      * This will show table in InGameDialog
      * @param table the table which will be shown

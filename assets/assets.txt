@@ -4813,6 +4813,8 @@ data/shops/ShopDatas.json
 debug_fbo0.png
 debug_fbo1.png
 debug_fbo2.png
+skin/Stardew Valley Skin/Brawl.fnt
+skin/Stardew Valley Skin/Brawl.png
 skin/Stardew Valley Skin/inventoryQuantityNumbers export.fnt
 skin/Stardew Valley Skin/khodayaBaseDige.fnt
 skin/Stardew Valley Skin/skin.atlas

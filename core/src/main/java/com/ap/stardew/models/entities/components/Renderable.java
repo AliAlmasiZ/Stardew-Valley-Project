@@ -33,7 +33,7 @@ public class Renderable extends EntityComponent implements Serializable {
         PET,
         GROWABLE,
     }
-    protected Statue currentStatue;
+    protected Statue currentStatue = Statue.NORMAL;
 
 
 

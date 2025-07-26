@@ -434,11 +434,11 @@ public class GameMenuController implements Controller {
 
     public Result craftInfoPhase1(String name) {
         if (!App.entityRegistry.doesEntityExist(name)) {
-            return new Result(false, "There is no crop with name" + name);
+            return new Result(false, "There is no crop with name " + name);
         }
         Entity crop = App.entityRegistry.makeEntity(name);
         if (!crop.hasTag(EntityTag.CROP)) {
-            return new Result(false, "There is no crop with name" + name);
+            return new Result(false, "There is no crop with name " + name);
         }
         Growable growable = crop.getComponent(Growable.class);
         Edible edible = crop.getComponent(Edible.class);
@@ -474,9 +474,10 @@ public class GameMenuController implements Controller {
 
         return new Result(true, message.toString());
     }
-/*
+
     public Table craftInfo(String name) {
         try {
+            int pad = 3;
             Entity crop = App.entityRegistry.makeEntity(name);
             Growable growable = crop.getComponent(Growable.class);
             Edible edible = crop.getComponent(Edible.class);
@@ -491,18 +492,18 @@ public class GameMenuController implements Controller {
             cropNameLabel.setColor(Color.GREEN);
             table.add(nameLabel);
             table.add(cropNameLabel);
-            table.row();
+            table.pad(pad).row();
 
             Entity seedEntity = App.entityRegistry.makeEntity(growable.getSeed());
             Label sourceLabel = new Label("Source: ", gameAssetManager.getCustomSkin());
             Label sourceNameLabel = new Label(seedEntity.getEntityName(), gameAssetManager.getCustomSkin());
-            Texture seedTexture = gameAssetManager.get(seedEntity.getComponent(Pickable.class).getIcon());
+            Texture seedTexture = gameAssetManager.getTexture(seedEntity.getComponent(Pickable.class).getIcon());
             sourceLabel.setColor(Color.BLACK);
             sourceNameLabel.setColor(Color.GREEN);
             table.add(sourceLabel);
             table.add(sourceNameLabel);
             table.add(new Image(seedTexture));
-            table.row();
+            table.pad(pad).row();
 
 //            Label stagesLabel = new Label("Stages: ", gameAssetManager.getCustomSkin());
 //            table.add(stagesLabel).row();
@@ -518,7 +519,7 @@ public class GameMenuController implements Controller {
             totalHarvestTimeLabel.setColor(Color.BLACK);
             cropTimeLabel.setColor(Color.GREEN);
             table.add(totalHarvestTimeLabel);
-            table.add(cropTimeLabel).row();
+            table.add(cropTimeLabel).pad(pad).row();
 
             Label oneTimeLabel = new Label("One Time: ", gameAssetManager.getCustomSkin());
             boolean oneTime = growable.isOneTime();
@@ -530,9 +531,10 @@ public class GameMenuController implements Controller {
                 cropOneTimeLabel.setColor(Color.RED);
             }
             table.add(oneTimeLabel);
-            table.add(cropOneTimeLabel).row();
+            table.add(cropOneTimeLabel).pad(pad).row();
 
             Label regrowthTimeLabel = new Label("Regrowth Time: ", gameAssetManager.getCustomSkin());
+            regrowthTimeLabel.setColor(Color.BLACK);
             Label cropRegrowthTimeLabel = new Label("", gameAssetManager.getCustomSkin());
             if (growable.getRegrowthTime() > 0) {
                 cropRegrowthTimeLabel.setText(growable.getRegrowthTime());
@@ -542,16 +544,17 @@ public class GameMenuController implements Controller {
                 cropRegrowthTimeLabel.setColor(Color.RED);
             }
             table.add(regrowthTimeLabel);
-            table.add(cropRegrowthTimeLabel).row();
+            table.add(cropRegrowthTimeLabel).pad(pad).row();
 
             Label baseSellPriceLabel = new Label("Base Sell Price: ", gameAssetManager.getCustomSkin());
             Label cropBaseSellPriceLabel = new Label(String.valueOf(sellable.getBasePrice()), gameAssetManager.getCustomSkin());
             baseSellPriceLabel.setColor(Color.BLACK);
             cropBaseSellPriceLabel.setColor(Color.GOLD);
             table.add(baseSellPriceLabel);
-            table.add(cropBaseSellPriceLabel).row();
+            table.add(cropBaseSellPriceLabel).pad(pad).row();
 
             Label isEdibleLabel = new Label("IsEdible: ", gameAssetManager.getCustomSkin());
+            isEdibleLabel.setColor(Color.BLACK);
             table.add(isEdibleLabel);
             boolean isEdible = (edible != null);
             Label cropIsEdibleLabel;
@@ -570,7 +573,7 @@ public class GameMenuController implements Controller {
                 cropIsEdibleLabel.setColor(Color.RED);
                 table.add(cropIsEdibleLabel);
             }
-            table.row();
+            table.pad(pad).row();
 
             Label seasonLabel = new Label("Season: ", gameAssetManager.getCustomSkin());
             seasonLabel.setColor(Color.BLACK);
@@ -579,16 +582,17 @@ public class GameMenuController implements Controller {
                 Image image = new Image(season.getTextureRegion());
                 table.add(image);
             }
-            table.row();
+            table.pad(pad).row();
 
 
             return table;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
     }
-*/
+
     public Result plant(String seedString, String direction) {
         Game game = App.getActiveGame();
         Player player = game.getCurrentPlayer();

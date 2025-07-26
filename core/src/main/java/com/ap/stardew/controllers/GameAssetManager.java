@@ -122,5 +122,11 @@ public class GameAssetManager extends AssetManager {
             }
         }
     }
-
+    public Texture getTexture(String filePath){
+        try {
+            return super.get(filePath);
+        } catch (Exception e) {
+            return redCross;
+        }
+    }
 }
