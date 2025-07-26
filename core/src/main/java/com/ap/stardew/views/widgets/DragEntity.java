@@ -1,6 +1,7 @@
 package com.ap.stardew.views.widgets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -32,5 +33,11 @@ public class DragEntity extends Image {
         Vector2 mouse = new Vector2(Gdx.input.getX(), Gdx.input.getY());
         getStage().screenToStageCoordinates(mouse);
         setPosition(mouse.x + offsetX, mouse.y + offsetX);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        batch.setColor(1, 1, 1, 1);
     }
 }

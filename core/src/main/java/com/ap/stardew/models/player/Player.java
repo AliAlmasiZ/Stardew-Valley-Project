@@ -78,11 +78,13 @@ public class Player extends Entity implements Serializable {
     private boolean haveNewSuitor = false;
 
     public Player(Account account){
-        super("Player", new Inventory(12), new Renderable('@',  new Color(255, 255, 50)), new PositionComponent(0, 0));
+        super("Player", new Inventory(30), new Renderable('@',  new Color(255, 255, 50)), new PositionComponent(0, 0));
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
         for (SkillType s : SkillType.values()) {
             skills.put(s, new Skill());
         }
+
+        setActiveSlot(getComponent(Inventory.class).getSlots().get(0));
 
         this.trashcan = App.entityRegistry.makeEntity("Trashcan");
 
