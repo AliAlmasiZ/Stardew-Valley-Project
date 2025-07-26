@@ -34,6 +34,7 @@ public class GameAssetManager extends AssetManager {
 
     //inventory
     public final Texture inventorySlotFrame;
+    public final Texture inventorySlotFrameSelected;
     public final Texture testSlot;
     public final Texture redCross;
     public final Texture emptyTexture;
@@ -73,12 +74,12 @@ public class GameAssetManager extends AssetManager {
 
         testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
+        inventorySlotFrameSelected = new Texture("Content/inventorySlotFrameSelected.png");
 
         menuBackground = new Texture("Content/frameNinePatch2.9.png");
         closeButton = new Texture("Content/closeButton.png");
 
         redCross = new Texture("Content/redCross.png");
-
 
         this.load("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class);
         this.load("Content(unpacked)/Characters/Farmer/hairstyles.png", Texture.class);

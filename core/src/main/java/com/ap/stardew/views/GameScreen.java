@@ -117,6 +117,7 @@ public class GameScreen extends AbstractScreen {
         controller.cheatGiveItem("Training Rod", 1);
         controller.cheatGiveItem("Hay", 500);
         controller.cheatGiveItem("Axe", 1);
+        controller.cheatGiveItem("Hoe", 1);
         controller.cheatGiveItem("Hay", 500);
         controller.cheatGiveItem("Hay", 500);
         controller.cheatAddSkill("fishing", 200);
@@ -195,6 +196,19 @@ public class GameScreen extends AbstractScreen {
         clockTable.top().right();
         clockTable.add(clockActor).pad(10);
         stack.add(clockTable);
+
+        //inventory
+        Table inventoryWrapper = new Table();
+        inventoryWrapper.setFillParent(true);
+        inventoryWrapper.bottom();
+        uiStage.addActor(inventoryWrapper);
+
+        Table inventoryTable = new Table();
+        InventoryGrid inventoryGrid = new InventoryGrid(player.getComponent(Inventory.class), 10, 10, InventoryGrid.Type.TOOLBAR);
+        inventoryGrid.setSlotSize(15);
+        inventoryTable.setBackground(customSkin.getDrawable("smallPanelNinePatch"));
+        inventoryTable.add(inventoryGrid).grow();
+        inventoryWrapper.add(inventoryTable).pad(1);
 
         //NPC
         initNPCDialogs();
@@ -365,7 +379,7 @@ public class GameScreen extends AbstractScreen {
         TabWidget tabWidget = new TabWidget();
 
         Table table = new Table();
-        InventoryGrid inventoryGrid = new InventoryGrid(player.getComponent(Inventory.class), 10);
+        InventoryGrid inventoryGrid = new InventoryGrid(player.getComponent(Inventory.class), 10, InventoryGrid.Type.PLAYER_INVENTORY);
         inventoryGrid.top();
         table.add(inventoryGrid).grow();
 
@@ -430,9 +444,9 @@ public class GameScreen extends AbstractScreen {
 
     private void setGameInput() {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(playerController);
-        inputMultiplexer.addProcessor(gameStage);
         inputMultiplexer.addProcessor(uiStage);
+        inputMultiplexer.addProcessor(gameStage);
+        inputMultiplexer.addProcessor(playerController);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 

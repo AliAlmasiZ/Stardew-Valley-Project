@@ -11,9 +11,15 @@ import com.ap.stardew.models.enums.EntityTag;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.enums.TileType;
+import com.ap.stardew.models.gameMap.GameMap;
+import com.ap.stardew.models.gameMap.TIlePlower;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.records.Result;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 import java.util.ArrayList;
 
@@ -36,6 +42,9 @@ public enum UseFunction {
 
             player.reduceEnergy(Math.max(energyCost, 0), App.getActiveGame().getTodayWeather());
             player.addExperince(SkillType.FARMING, 5);
+
+            TIlePlower.plowTile(tile);
+
             return new Result(true, "Ground converted to Hoed ground");
         }
     },
@@ -91,8 +100,6 @@ public enum UseFunction {
             }
 
             mineral.delete();
-
-
 
             for(Entity e : harvestedEntities){
                 player.getComponent(Inventory.class).addItem(e);

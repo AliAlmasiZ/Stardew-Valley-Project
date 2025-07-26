@@ -3,7 +3,11 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.UseFunction;
 import com.ap.stardew.models.entities.components.Placeable;
+import com.ap.stardew.models.entities.components.Useable;
+import com.ap.stardew.models.entities.components.inventory.Inventory;
+import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
@@ -50,6 +54,9 @@ public class PlayerController implements InputProcessor {
             this.down = true;
         if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D)
             this.right = true;
+        if((Input.Keys.NUM_1 <= keycode)  && (keycode <= Input.Keys.NUM_9)){
+           player.setActiveSlot(player.getComponent(Inventory.class).getSlots().get(keycode - 8));
+        }
         return true;
     }
 
@@ -80,14 +87,25 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.RIGHT) {
-            Vector3 mouseScreenPos = new Vector3(screenX, screenY, 0);
-            screen.getCamera().unproject(mouseScreenPos); // convert to world coordinates
+        Vector3 mouseScreenPos = new Vector3(screenX, screenY, 0);
+        screen.getCamera().unproject(mouseScreenPos); // convert to world coordinates
 
-            float x = mouseScreenPos.x;
-            float y = mouseScreenPos.y;
+        float x = mouseScreenPos.x;
+        float y = mouseScreenPos.y;
+
+        if (button == Input.Buttons.RIGHT) {
             screen.getController().handleRightClick(x, y, screen);
             return true; // input was handled
+        }
+        if(button == Input.Buttons.LEFT){
+            InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
+            if(activeSlot == null) return false;
+            Entity entity = activeSlot.getEntity();
+            Useable useable = entity.getComponent(Useable.class);
+            if(useable == null) return false;
+            for (UseFunction function : useable.getFunctions()) {
+                function.use(entity, App.getActiveGame().getActiveMap().getTileByPosition(player.getPosition().copy()));
+            }
         }
         return false;
     }

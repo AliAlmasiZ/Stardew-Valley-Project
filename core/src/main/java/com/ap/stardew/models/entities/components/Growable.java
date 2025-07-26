@@ -84,8 +84,6 @@ public class Growable extends EntityComponent implements Serializable {
         return seed;
     }
 
-
-
     public ArrayList<Integer> getStages() {
         return stages;
     }

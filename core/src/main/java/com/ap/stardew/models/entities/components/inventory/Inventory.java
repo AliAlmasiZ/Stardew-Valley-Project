@@ -19,6 +19,7 @@ public class Inventory extends EntityComponent implements Serializable {
     private int capacity;
     @JsonProperty("unlimited")
     private boolean unlimited;
+    private int selected = 0;
 
 
     public Inventory(int capacity) {
@@ -409,6 +410,10 @@ public class Inventory extends EntityComponent implements Serializable {
 
     public int getSize() {
         return slots.size();
+    }
+
+    public int getSelected() {
+        return selected;
     }
 
     @Override

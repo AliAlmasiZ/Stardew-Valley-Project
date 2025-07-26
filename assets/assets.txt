@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -2565,6 +2564,7 @@ Content(unpacked)/Maps/summer_town.pt-BR.png
 Content(unpacked)/Maps/summer_town.ru-RU.png
 Content(unpacked)/Maps/summer_town.tr-TR.png
 Content(unpacked)/Maps/summer_town.zh-CN.png
+Content(unpacked)/Maps/tilledSoil.tsx
 Content(unpacked)/Maps/townInterior.de-DE.png
 Content(unpacked)/Maps/townInterior.es-ES.png
 Content(unpacked)/Maps/townInterior.fr-FR.png
@@ -3639,7 +3639,6 @@ Content/ClockImages/ClockHand.png
 Content/ClockImages/ClockIcons.png
 Content/ClockImages/PC Computer - Stardew Valley - Clock.png
 Content/Cursors.png
-Content/Cursors.png-autosave.kra
 Content/FishingMiniGame/Angler.png
 Content/FishingMiniGame/Crimsonfish.png
 Content/FishingMiniGame/Glacierfish.png
@@ -4080,8 +4079,10 @@ Content/frameNinePatch2.9.png
 Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
 Content/inventoryQuantityNumbers.png
+Content/inventorySlotFrameSelected.png
 Content/redCross.png
 Content/shit.png
+Content/skillMenuIcon.png
 Content/sliderBarEmpty.png
 Content/sliderBarEmpty2.png
 Content/sliderButton.png
@@ -4093,6 +4094,7 @@ Content/smallPanel.png
 Content/smallPanelNinePatch.9.png
 Content/textBox.png
 Content/textboxNinePatch.9.png
+Content/tilledSoil.png
 Content/—Pngtree—hand-drawn comic dialog_517429.png
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session

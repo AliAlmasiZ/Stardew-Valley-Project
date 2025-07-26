@@ -9,6 +9,7 @@ import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +29,7 @@ public class InventorySlotWidget extends FramedImage{
     private static InventorySlotWidget sourceSlot;
     private static InventorySlotWidget destSlot = null;
     private static DragEntity ghost;
+
     private static void startDrag(Entity entity, InventorySlotWidget sourceSlot, float offsetX, float offsetY){
         InventorySlotWidget.sourceSlot = sourceSlot;
         destSlot = sourceSlot;
@@ -40,6 +42,9 @@ public class InventorySlotWidget extends FramedImage{
         ghost.setSize(sourceSlot.getWidth(), sourceSlot.getHeight());
         ghost.setOffsetX(-offsetX);
         ghost.setOffsetY(offsetY);
+    }
+    private static void endDrag(){
+
     }
 
     private Entity entity;
@@ -57,7 +62,6 @@ public class InventorySlotWidget extends FramedImage{
 
         quantityLabel = new Label("", GameAssetManager.getInstance().getCustomSkin(), "inventoryQuantity");
         quantityLabel.setFontScale(.7f);
-//        quantityLabel.setColor(0, 0, 0, 1);
         labelTable.add(quantityLabel);
 
         this.slot = slot;
@@ -241,5 +245,9 @@ public class InventorySlotWidget extends FramedImage{
             image.setDrawable(new TextureRegionDrawable(GameAssetManager.getInstance().emptyTexture));
             quantityLabel.setVisible(false);
         }
+    }
+
+    public void setQuantityScale(float scale){
+        quantityLabel.setFontScale(scale);
     }
 }
