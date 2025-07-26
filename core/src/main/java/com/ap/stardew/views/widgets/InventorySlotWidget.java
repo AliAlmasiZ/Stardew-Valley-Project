@@ -39,7 +39,7 @@ public class InventorySlotWidget extends FramedImage{
 
         ghost = new DragEntity(item, sourceSlot.getStage());
         ghost.setColor(1, 1, 1, 0.5f);
-        ghost.setSize(sourceSlot.getWidth(), sourceSlot.getHeight());
+        ghost.setSize(sourceSlot.image.getImageWidth() , sourceSlot.image.getHeight());
         ghost.setOffsetX(-offsetX);
         ghost.setOffsetY(offsetY);
     }

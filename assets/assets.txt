@@ -4135,7 +4135,6 @@ Content/NPC/Abigael/parts/image_part_051.png
 Content/NPC/Abigael/parts/image_part_052.png
 Content/NPC/Abigael/parts/image_part_053.png
 Content/NPC/Abigael/parts/image_part_054.png
-Content/NPC/Abigael/split.zip
 Content/NPC/Cursors.png
 Content/NPC/Harvey.png
 Content/NPC/Harvey/Harvey_Beach.png
@@ -4202,7 +4201,6 @@ Content/NPC/Lia.png
 Content/NPC/Lia/Leah_Beach.png
 Content/NPC/Lia/Leah_Winter.png
 Content/NPC/Lia/Leah_normal.png
-Content/NPC/Lia/parts.zip
 Content/NPC/Lia/parts/image_part_001.png
 Content/NPC/Lia/parts/image_part_002.png
 Content/NPC/Lia/parts/image_part_003.png
@@ -4260,7 +4258,6 @@ Content/NPC/Robin.png
 Content/NPC/Robin/Robin_Beach.png
 Content/NPC/Robin/Robin_Winter.png
 Content/NPC/Robin/Robin_normal.png
-Content/NPC/Robin/parts.zip
 Content/NPC/Robin/parts/image_part_001.png
 Content/NPC/Robin/parts/image_part_002.png
 Content/NPC/Robin/parts/image_part_003.png
@@ -4305,7 +4302,6 @@ Content/NPC/Sebastian.png
 Content/NPC/Sebastian/Sebastian_Beach.png
 Content/NPC/Sebastian/Sebastian_Winter.png
 Content/NPC/Sebastian/Sebastian_normal.png
-Content/NPC/Sebastian/parts.zip
 Content/NPC/Sebastian/parts/image_part_001.png
 Content/NPC/Sebastian/parts/image_part_002.png
 Content/NPC/Sebastian/parts/image_part_003.png
@@ -4681,7 +4677,6 @@ Content/font/misc/Buy GGBotNet a Coffee-543f.url
 Content/font/misc/GGBotNet - itch.io-3086.url
 Content/font/misc/License-473a.txt
 Content/font/misc/Pixelated Elegance v0.3-7344.pxf
-Content/font/viafont_6918416.zip
 Content/frame.png
 Content/frame2.png
 Content/frameBackground.png

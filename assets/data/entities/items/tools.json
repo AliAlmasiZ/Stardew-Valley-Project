@@ -38,7 +38,7 @@
           ]
         },{
           "type": "Pickable",
-          "icon" : "Content/Tools/Axe/stone/icon.png",
+          "icon" : "Content/Tools/Hoe/stone/icon.png",
           "maxStack": 1
         }
       ]
