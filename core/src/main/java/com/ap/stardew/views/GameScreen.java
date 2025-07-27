@@ -19,6 +19,7 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
+import com.ap.stardew.models.entities.systems.GrowthSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
@@ -137,28 +138,28 @@ public class GameScreen extends AbstractScreen {
         System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
 
         // put some trees and crops to test
-//        Entity tree1 = App.entityRegistry.makeEntity("Pine Tree");
-//        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
-//        Vec2 vec2 = new Vec2(player.getPosition().getX() + 50, player.getPosition().getY() + 200);
-//        System.out.println("Pine tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
-//
-//        Entity tree2 = App.entityRegistry.makeEntity("Pine Tree");
-//        tree2.getComponent(Growable.class).setDaysPastFromPlant(15);
-//        vec2 = new Vec2(player.getPosition().getX() + 80, player.getPosition().getY() + 200);
-//        System.out.println("Pine tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
-//
-//        Entity tree3 = App.entityRegistry.makeEntity("Pine Tree");
-//        tree3.getComponent(Growable.class).setDaysPastFromPlant(28);
-//        vec2 = new Vec2(player.getPosition().getX() + 110, player.getPosition().getY() + 200);
-//        System.out.println("Pine tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
-//
-//
-//        for (int i = 0; i < 7; i++) {
-//            Entity crop1 = App.entityRegistry.makeEntity("Kale");
-//            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
-//            vec2 = new Vec2(player.getPosition().getX() + 110 + 40 * i, player.getPosition().getY() + 100);
-//            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
-//        }
+        Entity tree1 = App.entityRegistry.makeEntity("Apple Tree");
+        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
+        Vec2 vec2 = new Vec2(player.getPosition().x + 50, player.getPosition().y + 200);
+        System.out.println("Apple tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
+
+        Entity tree2 = App.entityRegistry.makeEntity("Apple Tree");
+        tree2.getComponent(Growable.class).setDaysPastFromPlant(15);
+        vec2 = new Vec2(player.getPosition().x + 80, player.getPosition().y + 200);
+        System.out.println("Apple tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
+
+        Entity tree3 = App.entityRegistry.makeEntity("Apple Tree");
+        tree3.getComponent(Growable.class).setDaysPastFromPlant(27);
+        vec2 = new Vec2(player.getPosition().x + 110, player.getPosition().y + 200);
+        System.out.println("Apple tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
+
+
+        for (int i = 0; i < 7; i++) {
+            Entity crop1 = App.entityRegistry.makeEntity("Kale");
+            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
+            vec2 = new Vec2(player.getPosition().x + 110 + 40 * i, player.getPosition().y + 100);
+            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
+        }
         //**************************************
 
 
