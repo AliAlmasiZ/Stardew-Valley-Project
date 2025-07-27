@@ -2,6 +2,7 @@ package com.ap.stardew.models.gameMap;
 
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
+
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.entities.Entity;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -154,7 +156,7 @@ public class GameMap implements Serializable {
         return tiles[row][col];
     }
     public Tile getTileByPosition(float row, float col) {
-        return getTileByPosition((int) Math.round(row / 16), (int) Math.round(col / 16));
+        return getTileByPosition(Math.round(row), Math.round(col));
     }
 
     public int getWidth() {

@@ -4,12 +4,8 @@ import com.ap.stardew.models.enums.TileType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-
-import java.util.Map;
 
 public class TIlePlower {
     private static Texture plowTexture = new Texture("Content/tilledSoil.png");
@@ -46,10 +42,10 @@ public class TIlePlower {
 
         updateTile(tile);
 
-        Tile top = activeMap.getTileByPosition(tile.getPosition().copy().add(0, 16));
-        Tile right = activeMap.getTileByPosition(tile.getPosition().copy().add(16, 0));
-        Tile bottom = activeMap.getTileByPosition(tile.getPosition().copy().add(0, -16));
-        Tile left = activeMap.getTileByPosition(tile.getPosition().copy().add(-16, 0));
+        Tile top = activeMap.getTileByPosition(tile.getPosition().cpy().add(0, 16));
+        Tile right = activeMap.getTileByPosition(tile.getPosition().cpy().add(16, 0));
+        Tile bottom = activeMap.getTileByPosition(tile.getPosition().cpy().add(0, -16));
+        Tile left = activeMap.getTileByPosition(tile.getPosition().cpy().add(-16, 0));
 
         if(top != null){
             if(top.getType() == TileType.PLOWED){
@@ -80,10 +76,10 @@ public class TIlePlower {
         GameMap activeMap = tile.getMap();
         int index = 0;
 
-        Tile top = activeMap.getTileByPosition(tile.getPosition().copy().add(0, 16));
-        Tile right = activeMap.getTileByPosition(tile.getPosition().copy().add(16, 0));
-        Tile bottom = activeMap.getTileByPosition(tile.getPosition().copy().add(0, -16));
-        Tile left = activeMap.getTileByPosition(tile.getPosition().copy().add(-16, 0));
+        Tile top = activeMap.getTileByPosition(tile.getPosition().cpy().add(0, 16));
+        Tile right = activeMap.getTileByPosition(tile.getPosition().cpy().add(16, 0));
+        Tile bottom = activeMap.getTileByPosition(tile.getPosition().cpy().add(0, -16));
+        Tile left = activeMap.getTileByPosition(tile.getPosition().cpy().add(-16, 0));
 
         if(top != null){
             if(top.getType() == TileType.PLOWED){

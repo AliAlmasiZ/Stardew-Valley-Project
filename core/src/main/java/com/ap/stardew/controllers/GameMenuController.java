@@ -36,7 +36,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -606,7 +605,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "There is no seed with name" + seedString);
         }
 
-        Position position = new Position(player.getPosition().getX(), player.getPosition().getY());
+        Position position = new Position(player.getPosition().x, player.getPosition().y);
         position.changeByDirection(direction);
         if (position == null) {
             return new Result(false, "type a valid direction");
@@ -693,7 +692,7 @@ public class GameMenuController implements Controller {
 
 
         // get the position
-        Position position = new Position(currentPlayer.getPosition().getX(), currentPlayer.getPosition().getY());
+        Position position = new Position(currentPlayer.getPosition().x, currentPlayer.getPosition().y);
         position = position.changeByDirection(direction);
         if (position == null) {
             return new Result(false, "type a valid direction");
@@ -959,8 +958,8 @@ public class GameMenuController implements Controller {
             return new Result(false, "Animal not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
-            return new Result(false, "You are too far from this animal!\n" + currentPlayer.getPosition().getDistance(animal.getComponent(PositionComponent.class).get()));
+        if (currentPlayer.getPosition().dst(animal.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
+            return new Result(false, "You are too far from this animal!\n" + currentPlayer.getPosition().dst(animal.getComponent(PositionComponent.class).get()));
         }
 
         if (!animal.isPetToday()) {
@@ -1709,7 +1708,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "NPC with name " + npcName + " not found");
         }
 
-        if (currentPlayer.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
+        if (currentPlayer.getPosition().dst(npc.getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
             return new Result(false, "You are too far from this NPC");
         }
 
@@ -1795,7 +1794,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "You dont have enough \"" + item.getEntityName() + "\" items");
         }
 
-        if (currentPlayer.getPosition().getDistance(quest.getNpc().getComponent(PositionComponent.class).get()) > 2) {
+        if (currentPlayer.getPosition().dst(quest.getNpc().getComponent(PositionComponent.class).get()) > 2) {
             return new Result(false, "You are too far from this NPC");
         }
 
@@ -2065,7 +2064,7 @@ public class GameMenuController implements Controller {
 
         ;
 
-        return EntityPlacementSystem.placeEntity(entity, player.getPosition().copy().add(dir.dx, dir.dy));
+        return EntityPlacementSystem.placeEntity(entity, player.getPosition().cpy().add(dir.dx, dir.dy));
     }
 
     public Result pickupNearItems() {
@@ -2083,7 +2082,7 @@ public class GameMenuController implements Controller {
         for (Pickable pickable : pickables) {
             Entity entity = pickable.getEntity();
 
-            if (playerPos.getDistance(entity.getComponent(PositionComponent.class).get()) > 2) continue;
+            if (playerPos.dst(entity.getComponent(PositionComponent.class).get()) > 2) continue;
 
             if (!inventory.canAddItem(entity)) continue;
 

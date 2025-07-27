@@ -2,6 +2,7 @@ package com.ap.stardew.models.entities.systems;
 
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
+
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.entities.Entity;
@@ -52,7 +53,7 @@ public class EntityPlacementSystem {
         //TODO o(n ^ 123123123)
         for(int z = 0; z < pickables.size(); z++){
             Pickable pickable = pickables.get(z);
-            if(pickable.getEntity().getComponent(PositionComponent.class).get().getDistance(tile.getPosition()) < 0.1){
+            if(pickable.getEntity().getComponent(PositionComponent.class).get().dst(tile.getPosition()) < 0.1){
                 pickable.getEntity().delete();
             }
         }
@@ -301,7 +302,7 @@ public class EntityPlacementSystem {
                     //TODO o(n ^ 123123123)
                     for(int z = 0; z < pickables.size(); z++){
                         Pickable pickable = pickables.get(z);
-                        if(pickable.getEntity().getComponent(PositionComponent.class).get().getDistance(tile.getPosition()) < 0.1){
+                        if(pickable.getEntity().getComponent(PositionComponent.class).get().dst(tile.getPosition()) < 0.1){
                             pickable.getEntity().delete();
                         }
                     }

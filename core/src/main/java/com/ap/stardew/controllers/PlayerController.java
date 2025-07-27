@@ -1,6 +1,8 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.App;
+
+import com.ap.stardew.models.Position;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.UseFunction;
@@ -33,7 +35,9 @@ public class PlayerController implements InputProcessor {
     private boolean advanceTime;
     private GameScreen screen;
     private Vector2 direction = new Vector2();
-    private final Map<Integer, Boolean> keysState = new HashMap<>();
+
+    private Position cursorPos = new Position(0, 0);
+    private boolean drawCursorRect = false;
 
     public PlayerController(GameScreen screen, Player player) {
         this.screen = screen;
@@ -92,21 +96,25 @@ public class PlayerController implements InputProcessor {
         Vector3 mouseScreenPos = new Vector3(screenX, screenY, 0);
         screen.getCamera().unproject(mouseScreenPos); // convert to world coordinates
 
-        float x = mouseScreenPos.x;
-        float y = mouseScreenPos.y;
+        cursorPos.x = mouseScreenPos.x;
+        cursorPos.y = mouseScreenPos.y;
 
         if (button == Input.Buttons.RIGHT) {
-            screen.getController().handleRightClick(x, y, screen);
+            screen.getController().handleRightClick(cursorPos.x, cursorPos.y, screen);
             return true; // input was handled
         }
         if(button == Input.Buttons.LEFT){
+            if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() > 1.6f) return false;
             InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
             if(activeSlot == null) return false;
             Entity entity = activeSlot.getEntity();
+            if(entity == null) return false;
             Useable useable = entity.getComponent(Useable.class);
             if(useable == null) return false;
+
+
             for (UseFunction function : useable.getFunctions()) {
-                function.use(entity, App.getActiveGame().getActiveMap().getTileByPosition(player.getPosition().copy()));
+                function.use(entity, App.getActiveGame().getActiveMap().getTileByPosition(cursorPos));
             }
         }
         return false;
@@ -129,6 +137,25 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        Vector3 mouseScreenPos = new Vector3(screenX, screenY, 0);
+        screen.getCamera().unproject(mouseScreenPos); // convert to world coordinates
+
+        cursorPos.x = mouseScreenPos.x;
+        cursorPos.y = mouseScreenPos.y;
+
+        drawCursorRect = false;
+
+        InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
+        if(activeSlot == null) return false;
+        Entity entity = activeSlot.getEntity();
+        if(entity == null) return false;
+        Useable useable = entity.getComponent(Useable.class);
+        if(useable == null) return false;
+
+        if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f){
+            drawCursorRect = true;
+        }
+
         return false;
     }
 
@@ -168,7 +195,7 @@ public class PlayerController implements InputProcessor {
 
         //Todo: that walkable check i wrote is ass
         Tile destTile = App.getActiveGame().getActiveMap().
-            getTileByPosition(player.getPosition().copy().add(direction.x, direction.y));
+            getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
 
         if((!up && !down && !right && !left) || destTile == null) {
             player.setState(Player.State.IDLE);
@@ -195,5 +222,13 @@ public class PlayerController implements InputProcessor {
                 player.setState(Player.State.IDLE);
             }
         }
+    }
+
+    public Position getCursorPos() {
+        return cursorPos;
+    }
+
+    public boolean isDrawCursorRect() {
+        return drawCursorRect;
     }
 }

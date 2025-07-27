@@ -1,30 +1,31 @@
 package com.ap.stardew.models;
 
 import com.ap.stardew.models.gameMap.GameMap;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 
 public class Position extends Vec2 implements Serializable {
     GameMap map;
 
-    public Position(double x, double y, GameMap map){
+    public Position(float x, float y, GameMap map){
         super(x, y);
         this.map = map;
     }
-    public Position(double x, double y) {
+    public Position(float x, float y) {
         this(x, y, null);
     }
     public Position(int x, int y){
-        this(x * tileSize, y * tileSize, null);
+        this(x * 16, y * 16, null);
     }
-    public Position(Vec2 vec){
+    public Position(Vector2 vec){
         this(vec.x, vec.y, null);
     }
-    public Position(Vec2 vec, GameMap map){
+    public Position(Vector2 vec, GameMap map){
         this(vec.x, vec.y, map);
     }
-    public Position copy(){
-        return new Position(super.copy(), map);
+    public Position cpy(){
+        return new Position(super.cpy(), map);
     }
 
     public GameMap getMap() {
@@ -77,4 +78,5 @@ public class Position extends Vec2 implements Serializable {
             default -> null;
         };
     }
+
 }

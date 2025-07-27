@@ -10,7 +10,7 @@ import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.NPC.Dialogue;
 import com.ap.stardew.models.NPC.NPC;
-import com.ap.stardew.models.Vec2;
+
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.animal.FishingMiniGame;
@@ -132,7 +132,7 @@ public class GameScreen extends AbstractScreen {
 
 
         NPC npc = App.getActiveGame().findNPC("Robin");
-        npc.getComponent(PositionComponent.class).setPosition(player.getPosition().getX() + 20, player.getPosition().getY() + 200);
+        npc.getComponent(PositionComponent.class).setPosition(player.getPosition().x + 20, player.getPosition().y + 200);
         System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
 
         // put some trees and crops to test
@@ -285,10 +285,18 @@ public class GameScreen extends AbstractScreen {
             if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
             Sprite sprite = entity.getComponent(Renderable.class).getRenderingSprite(delta);
             if (sprite != null) {
-                sprite.setPosition((float) entity.getComponent(PositionComponent.class).getX(), (float) entity.getComponent(PositionComponent.class).getY());
+                sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
                 sprite.draw(batch);
             }
         }
+
+        if(playerController.isDrawCursorRect()){
+            batch.setColor(1, 1, 1, 0.3f);
+            batch.draw(GameAssetManager.getInstance().inventorySlotFrameSelected, playerController.getCursorPos().getCol()*16
+                , playerController.getCursorPos().getRow() * 16, 16, 16);
+            batch.setColor(1, 1, 1, 1f);
+        }
+
         batch.end();
 
         renderer.render(frontLayerIndices);

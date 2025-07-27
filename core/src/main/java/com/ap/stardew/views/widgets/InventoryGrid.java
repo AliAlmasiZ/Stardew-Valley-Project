@@ -6,12 +6,16 @@ import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 
@@ -71,6 +75,26 @@ public class InventoryGrid extends Table {
                 .getSlots().indexOf(App.getActiveGame().getCurrentPlayer().getActiveSlot());
             slotWidgets.get(selected).getActor()
                 .frame.setDrawable(new TextureRegionDrawable(GameAssetManager.getInstance().inventorySlotFrameSelected));
+
+            for (Cell<InventorySlotWidget> cell : slotWidgets) {
+                InventorySlotWidget slotWidget = cell.getActor();
+
+                slotWidget.clearListeners();
+
+                slotWidget.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        App.getActiveGame().getCurrentPlayer().setActiveSlot(slotWidget.getSlot());
+                    }
+                });
+                addListener(new InputListener(){
+                    @Override
+                    public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
+                        System.out.println("asd");
+                        return super.scrolled(event, x, y, amountX, amountY);
+                    }
+                });
+            }
         }
     }
     public void setSlotSize(float size){

@@ -69,7 +69,7 @@ public class DialogActor extends Actor {
 
     private boolean isInRange() {
         Player player = App.getActiveGame().getCurrentPlayer();
-        return player.getPosition().getDistance(npc.getComponent(PositionComponent.class).get()) < GameScreen.DISTANCE;
+        return player.getPosition().dst(npc.getComponent(PositionComponent.class).get()) < GameScreen.DISTANCE;
     }
 
 

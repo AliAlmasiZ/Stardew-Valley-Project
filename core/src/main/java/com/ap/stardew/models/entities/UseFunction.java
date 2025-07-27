@@ -1,6 +1,7 @@
 package com.ap.stardew.models.entities;
 
 import com.ap.stardew.models.App;
+
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.entities.components.*;
@@ -328,7 +329,7 @@ public enum UseFunction {
                 Vec2 tilePosition = tile.getPosition();
 
                 for(Pickable p : pickables){
-                    if(p.getEntity().getComponent(PositionComponent.class).get().getDistance(tilePosition) < 0.1){
+                    if(p.getEntity().getComponent(PositionComponent.class).get().dst(tilePosition) < 0.1){
                         out.append(p.getEntity()).append("\n");
                     }
                 }

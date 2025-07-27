@@ -1,81 +1,84 @@
 package com.ap.stardew.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 
-public class Vec2 implements Serializable {
-    protected double x;
-    protected double y;
-    protected static float tileSize = 16;
-
-    @JsonCreator
-    public Vec2(
-            @JsonProperty("x") double x,
-            @JsonProperty("y") double y
-    ){
-        this.x = x;
-        this.y = y;
+public class Vec2 extends Vector2 implements Serializable {
+    public Vec2() {
     }
-    public Vec2 copy(){
+
+    public Vec2(float x, float y) {
+        super(x, y);
+    }
+
+    public Vec2(Vector2 v) {
+        super(v);
+    }
+
+    public int getCol(){
+        return (int) x / 16;
+    }
+    public int getRow(){
+        return (int) y / 16;
+    }
+
+    @Override
+    public Vec2 add(Vector2 v) {
+        super.add(v);
+        return this;
+    }
+
+    @Override
+    public Vec2 add(float x, float y) {
+        super.add(x, y);
+        return this;
+    }
+
+    @Override
+    public Vec2 sub(Vector2 v) {
+        super.sub(v);
+        return this;
+    }
+
+    @Override
+    public Vec2 sub(float x, float y) {
+        super.sub(x, y);
+        return this;
+    }
+
+    @Override
+    public Vec2 scl(Vector2 v) {
+        super.scl(v);
+        return this;
+    }
+
+    @Override
+    public Vec2 scl(float scalar) {
+        super.scl(scalar);
+        return this;
+    }
+
+    @Override
+    public Vec2 scl(float x, float y) {
+        super.scl(x, y);
+        return this;
+    }
+
+    @Override
+    public Vec2 nor() {
+        super.nor();
+        return this;
+    }
+
+    @Override
+    public Vec2 cpy() {
         return new Vec2(x, y);
     }
 
-    public double getX() {
-        return x;
-    }
-    public double getY() {
-        return y;
-    }
-    public int getCol(){
-        return (int) Math.floor(this.x / tileSize);
-    }
-    public int getRow(){
-        return (int) Math.floor(this.y / tileSize);
-    }
-    public double getDistance(Vec2 other){
-        return Math.hypot(x - other.x, y - other.y);
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-    public void set(Vec2 v){
-        this.x = v.x;
-        this.y = v.y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-    public Vec2 add(int x, int y){
-        this.x += x;
-        this.y += y;
-        return this;
-    }
-    public Vec2 add(double x, double y){
-        this.x += x;
-        this.y += y;
-        return this;
-    }
-    public Vec2 add(Vec2 v){
-        this.add(v.getX(), v.getY());
-        return this;
-    }
-    public Vec2 subtract(Vec2 v){
-        this.x -= v.x;
-        this.y -= v.y;
-        return this;
-    }
-    public Vec2 multiply(double m){
-        this.x *= m;
-        this.y *= m;
-        return this;
-    }
-    public Vec2 divide(double m){
-        this.x /= m;
-        this.y /= m;
+    public Vec2 convertToInt(){
+        x = getCol();
+        y = getRow();
         return this;
     }
 }

@@ -42,12 +42,15 @@ public class CharacterSpriteManager {
     public CharacterSpriteManager() {
         GameAssetManager assets = GameAssetManager.getInstance();
 
-
-
         baseTexture = assets.get("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class);
         hairTexture = assets.get("Content(unpacked)/Characters/Farmer/hairstyles.png", Texture.class);
         pantsTexture = assets.get("Content(unpacked)/Characters/Farmer/pants.png", Texture.class);
         shirtsTexture = assets.get("Content(unpacked)/Characters/Farmer/shirts.png", Texture.class);
+
+        baseTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        hairTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        pantsTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        shirtsTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         baseFrames = TextureRegion.split(baseTexture, FRAME_WIDTH, FRAME_HEIGHT);
         hairFrames = TextureRegion.split(hairTexture, FRAME_WIDTH, FRAME_HEIGHT);
@@ -90,6 +93,7 @@ public class CharacterSpriteManager {
     private TextureRegion loadTexture(int[] baseBody, int[] baseHand, int[] shirt, int[] pants, int[] hair) {
         SpriteBatch fbBatch = new SpriteBatch();
         FrameBuffer fbo = new FrameBuffer(Pixmap.Format.RGBA8888, 16, 32, false);
+        fbo.getColorBufferTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         Matrix4 m = new Matrix4();
         m.setToOrtho2D(0, 0, fbo.getWidth(), fbo.getHeight());
@@ -121,6 +125,7 @@ public class CharacterSpriteManager {
         TextureRegion frame = new TextureRegion(fbo.getColorBufferTexture());
 
         fbBatch.dispose();
+
         return frame;
 
     }

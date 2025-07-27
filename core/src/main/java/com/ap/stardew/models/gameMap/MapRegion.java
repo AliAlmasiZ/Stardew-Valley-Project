@@ -16,8 +16,7 @@ public class MapRegion implements Serializable {
     private boolean isFarm = false;
 
     public void addTile(Tile tile) {
-        //position is not double so we cant do this:
-        this.center.multiply(this.tiles.size()).add(tile.getPosition()).multiply((double) 1 / (this.tiles.size() + 1));
+        this.center.scl(this.tiles.size()).add(tile.getPosition()).scl(1f / (this.tiles.size() + 1));
         tiles.add(tile);
     }
 

@@ -1,6 +1,7 @@
 package com.ap.stardew.models.entities.components;
 
 import com.ap.stardew.models.Position;
+
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.badlogic.gdx.math.Vector2;
@@ -11,19 +12,19 @@ public class PositionComponent extends EntityComponent implements Serializable {
     private Position position;
 
 
-    public PositionComponent(double x, double y, GameMap map){
+    public PositionComponent(float x, float y, GameMap map){
         position = new Position(x, y, map);
     }
-    public PositionComponent(double x, double y){
+    public PositionComponent(float x, float y){
         position = new Position(x, y);
     }
 
     public PositionComponent(Vec2 position, GameMap map) {
-        this(position.getX(), position.getY(), map);
+        this(position.x, position.y, map);
     }
 
     public PositionComponent(Vec2 position) {
-        this(position.getX(), position.getY());
+        this(position.x, position.y);
     }
 
     public PositionComponent(Position position) {
@@ -42,12 +43,12 @@ public class PositionComponent extends EntityComponent implements Serializable {
         return position;
     }
 
-    public double getX(){
-        return position.getX();
+    public float getX(){
+        return position.x;
     }
 
-    public double getY(){
-        return position.getY();
+    public float getY(){
+        return position.y;
     }
 
     public int getCol(){
@@ -59,26 +60,26 @@ public class PositionComponent extends EntityComponent implements Serializable {
     }
 
     public Position setPosition(Vec2 position) {
-        this.position.setX(position.getX());
-        this.position.setY(position.getY());
+        this.position.x = position.x;
+        this.position.y = position.y;
         return this.position;
     }
 
     public Position setPosition(Position position){
-        this.position.setX(position.getX());
-        this.position.setY(position.getY());
+        this.position.x = position.x;
+        this.position.y = position.y;
         return this.position;
     }
 
     public Position setPosition(int x, int y){
-        this.position.setX(x);
-        this.position.setY(y);
+        this.position.x = x;
+        this.position.y = y;
         return this.position;
     }
 
-    public Position setPosition(double x, double y){
-        this.position.setX(x);
-        this.position.setY(y);
+    public Position setPosition(float x, float y){
+        this.position.x = x;
+        this.position.y = y;
         return this.position;
     }
 

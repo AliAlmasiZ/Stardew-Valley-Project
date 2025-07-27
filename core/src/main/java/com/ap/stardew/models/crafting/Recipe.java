@@ -1,9 +1,10 @@
 package com.ap.stardew.models.crafting;
 
+import com.ap.stardew.models.Vec2;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.ap.stardew.models.App;
-import com.ap.stardew.models.Vec2;
+
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Edible;
 import com.ap.stardew.models.entities.components.Sellable;
@@ -97,13 +98,13 @@ public class Recipe implements Serializable {
         int baseEnergy = baseEntity.getComponent(Edible.class) != null ? baseEntity.getComponent(Edible.class).getEnergy() : 0;
         Entity entity = App.entityRegistry.makeEntity(name);
         if(price != null) {
-            entity.addComponent(new Sellable((int) (basePrice * price.getX() + price.getY())));
+            entity.addComponent(new Sellable((int) (basePrice * price.x + price.x)));
         }
         if(energy != null) {
             if(entity.getComponent(Edible.class) != null){
-                entity.getComponent(Edible.class).setEnergy((int) (baseEnergy * energy.getX() + energy.getY()));
+                entity.getComponent(Edible.class).setEnergy((int) (baseEnergy * energy.x + energy.y));
             }else{
-                entity.addComponent(new Edible((int) (baseEnergy * energy.getX() + energy.getY())));
+                entity.addComponent(new Edible((int) (baseEnergy * energy.x + energy.y)));
             }
         }
 

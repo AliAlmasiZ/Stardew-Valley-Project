@@ -250,4 +250,8 @@ public class InventorySlotWidget extends FramedImage{
     public void setQuantityScale(float scale){
         quantityLabel.setFontScale(scale);
     }
+
+    public InventorySlot getSlot() {
+        return slot;
+    }
 }
