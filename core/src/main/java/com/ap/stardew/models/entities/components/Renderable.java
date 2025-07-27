@@ -77,9 +77,9 @@ public class Renderable extends EntityComponent implements Serializable {
     }
 
     public Sprite getRenderingSprite(float deltaTime) {
-//        if (entity.hasTag(EntityTag.CROP) || entity.hasTag(EntityTag.TREE)) { // This is stupid. this lines need to run once but ilia doesn't know how to handle this with json
-//            currentStatue = Statue.GROWABLE;
-//        }
+        if (entity.hasTag(EntityTag.CROP) || entity.hasTag(EntityTag.TREE)) { // This is stupid. this lines need to run once but ilia doesn't know how to handle this with json
+            currentStatue = Statue.GROWABLE;
+        }
         switch (currentStatue) {
             case NORMAL -> {
                 return sprite;
