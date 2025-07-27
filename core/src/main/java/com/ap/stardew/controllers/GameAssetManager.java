@@ -26,6 +26,10 @@ public class GameAssetManager extends AssetManager {
     //NPC Images
     public final Sprite dialog = new Sprite(new Texture("Content/NPC/dialog.png"));
 
+    //Energy bar
+    public final Texture energyBar = new Texture("Content/energyBar.png");
+    public final Texture energyBarFill = new Texture("Content/energyBarFill.png");
+
     //inGameMenu
     public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
     public final Texture menuBackground;

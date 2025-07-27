@@ -26,6 +26,7 @@ import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.views.widgets.EnergyBar;
 import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.InventoryGrid;
 import com.ap.stardew.records.Result;
@@ -91,6 +92,7 @@ public class GameScreen extends AbstractScreen {
 
     // ui
     private final Stack stack;
+    private EnergyBar energyBar;
 
     // Clock
     private ClockActor clockActor;
@@ -220,6 +222,15 @@ public class GameScreen extends AbstractScreen {
         clockTable.top().right();
         clockTable.add(clockActor).pad(10);
         stack.add(clockTable);
+
+        // Energy bar
+        energyBar = new EnergyBar();
+        Table energyBarTable = new Table();
+        energyBarTable.right().bottom();
+        energyBarTable.pad(5);
+        energyBarTable.add(energyBar);
+        stack.add(energyBarTable);
+
 
         //inventory
         Table inventoryWrapper = new Table();
