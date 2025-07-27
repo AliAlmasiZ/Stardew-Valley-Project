@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -22,7 +22,7 @@ public class AbstractScreen implements Screen {
     public AbstractScreen(float uiScaling) {
         this.uiScaling = uiScaling;
 
-        uiStage = new Stage(new ScreenViewport(), StardewGame.getInstance().getBatch());
+        uiStage = new Stage(new ScreenViewport(), ClientGame.getInstance().getBatch());
         uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 120 / this.uiScaling;
         uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 120 / this.uiScaling;
 

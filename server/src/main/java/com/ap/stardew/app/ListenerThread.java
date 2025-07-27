@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static com.ap.stardew.GameServer.PORT;
+
 public class ListenerThread extends Thread{
 
     private final ServerSocket serverSocket;
@@ -29,10 +31,11 @@ public class ListenerThread extends Thread{
 
     @Override
     public void run() {
-        while (ServerApp.isEnded()) {
+        while (!ServerApp.isEnded()) {
             try {
+                System.out.println("Server is listening on port " + PORT);
                 var socket = serverSocket.accept();
-                System.out.println("New client connected");
+                System.out.println("New client connected : " + socket.getInetAddress().getHostAddress());
                 handleConnection(socket);
             } catch (IOException e) {
                 e.printStackTrace();

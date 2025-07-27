@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
@@ -8,7 +8,6 @@ import com.ap.stardew.models.Actors.DialogActor;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
-import com.ap.stardew.models.NPC.Dialogue;
 import com.ap.stardew.models.NPC.NPC;
 
 import com.ap.stardew.models.Vec2;
@@ -19,7 +18,6 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
-import com.ap.stardew.models.entities.systems.GrowthSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
@@ -35,7 +33,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -44,12 +41,9 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -188,7 +182,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
-        batch = StardewGame.getInstance().getBatch();
+        batch = ClientGame.getInstance().getBatch();
         camera = new OrthographicCamera();
         gameView = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();

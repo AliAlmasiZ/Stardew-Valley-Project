@@ -1,12 +1,10 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
-import com.ap.stardew.models.App;
+import com.ap.stardew.ClientGame;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import org.checkerframework.checker.units.qual.C;
 
 public class MainMenuScreen extends AbstractScreen {
     TextButton gameMenuBtn, profileMenuBtn, logoutBtn;
@@ -39,14 +37,14 @@ public class MainMenuScreen extends AbstractScreen {
         profileMenuBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new ProfileScreen());
+                ClientGame.getInstance().setScreen(new ProfileScreen());
                 dispose();
             }
         });
         logoutBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new MainScreen());
+                ClientGame.getInstance().setScreen(new MainScreen());
                 dispose();
             }
         });

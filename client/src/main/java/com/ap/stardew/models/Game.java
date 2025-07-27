@@ -1,6 +1,6 @@
 package com.ap.stardew.models;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.views.GameScreen;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.NPC.Quest;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Growable;
-import com.ap.stardew.models.entities.components.InteriorComponent;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.entities.systems.ForageSpawnSystem;
 import com.ap.stardew.models.entities.systems.GrowthSystem;
@@ -24,7 +23,6 @@ import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.models.player.Wallet;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
-import com.ap.stardew.models.utils.StringUtils;
 import com.ap.stardew.records.GameStartingDetails;
 
 import java.io.File;
@@ -32,7 +30,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class Game implements Serializable {
@@ -491,7 +488,7 @@ public class Game implements Serializable {
             player.updatePerHour();
         }
 
-        ((GameScreen) StardewGame.getInstance().getScreen()).initNPCDialogs();
+        ((GameScreen) ClientGame.getInstance().getScreen()).initNPCDialogs();
 
     }
 

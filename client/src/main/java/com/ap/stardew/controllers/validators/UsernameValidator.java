@@ -1,6 +1,5 @@
 package com.ap.stardew.controllers.validators;
 
-import com.ap.stardew.StardewGame;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.records.Result;

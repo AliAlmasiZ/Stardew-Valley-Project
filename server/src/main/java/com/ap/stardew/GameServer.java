@@ -13,6 +13,7 @@ public class GameServer {
     public static void main(String[] args) {
 
         try {
+            System.out.println("starting server...");
             ServerApp.setListenerThread(new ListenerThread(PORT));
             ServerApp.startListening();
         } catch (IOException e) {

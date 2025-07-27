@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.records.Result;
@@ -140,7 +140,7 @@ public class SignupScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new MainScreen());
+                ClientGame.getInstance().setScreen(new MainScreen());
             }
         });
 
@@ -186,7 +186,7 @@ public class SignupScreen extends AbstractScreen {
                     return;
                 }
 
-                StardewGame.getInstance().setScreen(new MainScreen()); //TODO: go to proper screen
+                ClientGame.getInstance().setScreen(new MainScreen()); //TODO: go to proper screen
             }
 
         });

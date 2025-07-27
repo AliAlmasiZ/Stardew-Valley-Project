@@ -1,27 +1,20 @@
 package com.ap.stardew;
 
-import com.ap.stardew.controllers.CharacterSpriteManager;
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.models.App;
-import com.ap.stardew.models.enums.Direction;
-import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.GL32;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class StardewGame extends Game {
-    private static StardewGame instance;
+public class ClientGame extends Game {
+    private static ClientGame instance;
     private SpriteBatch batch;
 
-    public static StardewGame getInstance() {
+    public static ClientGame getInstance() {
         return instance;
     }
 

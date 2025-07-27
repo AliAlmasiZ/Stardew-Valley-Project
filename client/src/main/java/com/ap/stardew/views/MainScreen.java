@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
@@ -34,7 +34,7 @@ public class MainScreen extends AbstractScreen {
         registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new SignupScreen());
+                ClientGame.getInstance().setScreen(new SignupScreen());
                 dispose();
             }
         });
@@ -42,7 +42,7 @@ public class MainScreen extends AbstractScreen {
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new LoginScreen());
+                ClientGame.getInstance().setScreen(new LoginScreen());
             }
         });
 
@@ -56,7 +56,7 @@ public class MainScreen extends AbstractScreen {
 
                 game.initGame(new GameStartingDetails(true, "asd", accounts, null, null, null));
                 App.setCurrentMenu(Menu.GAME_MENU);
-                StardewGame.getInstance().setScreen(new GameScreen());
+                ClientGame.getInstance().setScreen(new GameScreen());
             }
         });
     }

@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.validators.NonEmptyValidator;
 import com.ap.stardew.controllers.validators.PasswordValidator;
 import com.ap.stardew.models.Account;
@@ -51,7 +51,7 @@ public class LoginScreen extends AbstractScreen{
         backBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new MainScreen());
+                ClientGame.getInstance().setScreen(new MainScreen());
             }
         });
         submitButton.addListener(new ClickListener(){
@@ -74,7 +74,7 @@ public class LoginScreen extends AbstractScreen{
                 }
 
                 App.setLoggedInAccount(account);
-                StardewGame.getInstance().setScreen(new MainMenuScreen());
+                ClientGame.getInstance().setScreen(new MainMenuScreen());
             }
         });
         forgotPassworBtn.addListener(new ClickListener(){

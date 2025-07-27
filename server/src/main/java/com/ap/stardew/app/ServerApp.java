@@ -35,7 +35,6 @@ public class ServerApp {
     public static void startListening() {
         if (listenerThread != null && !listenerThread.isAlive()) {
             listenerThread.start();
-            System.out.println("Server is listening on port " + PORT);
 
         } else {
             throw new IllegalStateException("Listener thread is already running or not set.");

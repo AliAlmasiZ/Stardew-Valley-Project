@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.StardewGame;
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.ProfileMenuController;
 import com.ap.stardew.controllers.validators.NonEmptyValidator;
 import com.ap.stardew.controllers.validators.PasswordValidator;
@@ -112,7 +112,7 @@ public class ProfileScreen extends AbstractScreen {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StardewGame.getInstance().setScreen(new MainMenuScreen());
+                ClientGame.getInstance().setScreen(new MainMenuScreen());
                 dispose();
             }
         });
