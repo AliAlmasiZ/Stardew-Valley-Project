@@ -4069,6 +4069,7 @@ Content/Crops/Yam_Stage_3.png
 Content/Crops/Yam_Stage_4.png
 Content/Crops/Yam_Stage_5.png
 Content/Cursors.png
+Content/Cursors.png-autosave.kra
 Content/FishingMiniGame/Angler.png
 Content/FishingMiniGame/Crimsonfish.png
 Content/FishingMiniGame/Glacierfish.png
@@ -4669,6 +4670,11 @@ Content/button2.png
 Content/buttonDown.9.png
 Content/buttonUp.9.png
 Content/closeButton.png
+Content/energyBar.png
+Content/energyBarFill.png
+Content/energyBarFill2NinePatch.9.png
+Content/energyBarFillNinePatch.9.png
+Content/energyBarNinePatch.9.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
 Content/font/info.txt
 Content/font/khodayaBaseDige.fnt
@@ -4686,6 +4692,7 @@ Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
 Content/inventoryQuantityNumbers.png
 Content/inventorySlotFrameSelected.png
+Content/pixil-frame-0.png
 Content/redCross.png
 Content/shit.png
 Content/skillMenuIcon.png

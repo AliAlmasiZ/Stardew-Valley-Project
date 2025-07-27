@@ -106,4 +106,8 @@ public class Energy implements Serializable{
         this.isGhashed = true;
         this.setModifier(0.75, 1);
     }
+
+    public double getMaxEnergy() {
+        return maxEnergy;
+    }
 }

@@ -192,7 +192,6 @@ public class PlayerController implements InputProcessor {
             direction.y -= 1;
         }
 
-
         //Todo: that walkable check i wrote is ass
         Tile destTile = App.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
