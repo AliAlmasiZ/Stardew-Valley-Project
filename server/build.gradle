@@ -1,0 +1,24 @@
+
+plugins {
+  id "application"
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+mainClassName = 'com.ap.stardew.GameServer'
+application.setMainClass(mainClassName)
+eclipse.project.name = appName + '-server'
+java.sourceCompatibility = 17
+java.targetCompatibility = 17
+if (JavaVersion.current().isJava9Compatible()) {
+  compileJava.options.release.set(17)
+}
+
+dependencies {
+  implementation project(':common')
+}
+
+run {
+  group = "Application"
+  description = "Runs the Stardew Online Server"
+}
+
