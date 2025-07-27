@@ -315,54 +315,85 @@ public class Growable extends EntityComponent implements Serializable {
         GameAssetManager gameAssetManager = GameAssetManager.getInstance();
 
         if (entity.hasTag(EntityTag.CROP)) {
-            ArrayList<Sprite> spritesToLoad = new ArrayList<>();
-            for (int i = 0; i < stages.size() * 2; i++) {
-                int j = i + 1;
-                try {
-                Sprite s = new Sprite(gameAssetManager.get("Content/Crops/" + name + "_Stage_" + j + ".png", Texture.class));
+            try {
+                setCropSprites(gameAssetManager, name);
+            } catch (Exception e) {
+                name = "Artichoke";
+                setCropSprites(gameAssetManager, name);
+            }
 
-                spritesToLoad.add(s);
-                } catch (Exception e) {
-                    break;
+            for (int i = 0; i <= stages.size() + 1; i++) {
+                if (sprites[i] != null) {
+                    sprites[i].setSize(18, 18); //TODO : It should be tile size
                 }
             }
-
-            for (int i = 0; i < stages.size(); i++) {
-                sprites[i] = spritesToLoad.get(i);
-            }
-            sprites[stages.size()] = spritesToLoad.get(spritesToLoad.size() - 1);
-
         } else if (entity.hasTag(EntityTag.TREE)) {
-            for (int i = 0; i < stages.size(); i++) {
-                int j = i + 1;
-                sprites[i] = new Sprite(gameAssetManager.get("Content/Trees/" + name + "_Stage_" + j + ".png", Texture.class));
-            }
-
             try {
-                int t = stages.size() + 1;
-                Texture texture = gameAssetManager.get("Content/Trees/" + name + "_Stage_" + t + ".png", Texture.class);
-                TextureRegion textureRegion = new TextureRegion(texture);
-                float width = texture.getWidth();
-                float height = texture.getHeight();
-                if (width > height * 2) {
-                    textureRegion = new TextureRegion(texture, 0 , 0, height, width / 4);
+                setTreeSpritesByName(name, gameAssetManager);
+
+            } catch (Exception e) {
+                try {
+                    name = name.replace("_Tree", "");
+                    setTreeSpritesByName(name, gameAssetManager);
+                }  catch (Exception e1) {
+                    name = "Mango";
+                    setTreeSpritesByName(name, gameAssetManager);
                 }
-                sprites[stages.size()] = new Sprite(textureRegion);
-            } catch (Exception e) {
-                sprites[stages.size()] = sprites[stages.size() - 1];
             }
 
+            for (int i = 0; i <= stages.size() + 1; i++) {
+                if (sprites[i] != null) {
+                    sprites[i].setSize(20, 40);
+                }
+            }
+        }
+
+    }
+
+    private void setCropSprites(GameAssetManager gameAssetManager, String name) {
+        ArrayList<Sprite> spritesToLoad = new ArrayList<>();
+        for (int i = 0; i < stages.size() * 2; i++) {
+            int j = i + 1;
             try {
-                sprites[stages.size() + 1] = new Sprite(gameAssetManager.get("Content/Trees/" + name + "_Stage_5_Fruit" + ".png", Texture.class));
+            Sprite s = new Sprite(gameAssetManager.get("Content/Crops/" + name + "_Stage_" + j + ".png", Texture.class));
+
+            spritesToLoad.add(s);
             } catch (Exception e) {
-                sprites[stages.size() + 1] = sprites[stages.size() - 1];
+                break;
             }
         }
 
-        for (int i = 0; i <= stages.size() + 1; i++) {
-            sprites[i].scale(0.8f);
+        for (int i = 0; i < stages.size(); i++) {
+            sprites[i] = spritesToLoad.get(i);
+        }
+        sprites[stages.size()] = spritesToLoad.get(spritesToLoad.size() - 1);
+    }
+
+    private void setTreeSpritesByName(String name, GameAssetManager gameAssetManager) {
+        for (int i = 0; i < stages.size(); i++) {
+            int j = i + 1;
+            sprites[i] = new Sprite(gameAssetManager.get("Content/Trees/" + name + "_Stage_" + j + ".png", Texture.class));
         }
 
+        try {
+            int t = stages.size() + 1;
+            Texture texture = gameAssetManager.get("Content/Trees/" + name + "_Stage_" + t + ".png", Texture.class);
+            TextureRegion textureRegion = new TextureRegion(texture);
+            float width = texture.getWidth();
+            float height = texture.getHeight();
+            if (width > height * 2) {
+                textureRegion = new TextureRegion(texture, 0, 0, height, width / 4);
+            }
+            sprites[stages.size()] = new Sprite(textureRegion);
+        } catch (Exception e) {
+            sprites[stages.size()] = sprites[stages.size() - 1];
+        }
+
+        try {
+            sprites[stages.size() + 1] = new Sprite(gameAssetManager.get("Content/Trees/" + name + "_Stage_5_Fruit" + ".png", Texture.class));
+        } catch (Exception e) {
+            sprites[stages.size() + 1] = sprites[stages.size() - 1];
+        }
     }
 
     private boolean isInGreenhouse() {

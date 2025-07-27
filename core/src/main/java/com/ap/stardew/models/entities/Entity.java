@@ -26,7 +26,6 @@ import java.util.Set;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property  = "id")
 public class Entity implements Serializable, Cloneable{    private static int entityCounter = 1;
-
     //jsonProperty tells jackson to serialize and deserialize according to these names
     @JsonProperty("id")
     private int id;
@@ -37,6 +36,8 @@ public class Entity implements Serializable, Cloneable{    private static int en
     @JsonProperty("tags")
     private HashSet<EntityTag> tags = new HashSet<>();
     private ArrayList<EntityObserver> observers = new ArrayList<>();
+
+    private boolean entitySetForComponents = false;
 
     public Entity(String entityName, ArrayList<EntityComponent> components, HashSet<EntityTag> tags, int id){
         if(entityName == null){
@@ -61,12 +62,12 @@ public class Entity implements Serializable, Cloneable{    private static int en
         }else{
             this.id = id;
         }
+
     }
     public Entity() {
         this.entityName = "Unnamed Entity";
         this.id = entityCounter++;
     }
-
     public Entity(String entityName, HashSet<EntityTag> tags, EntityComponent... components){
         this(entityName, new ArrayList<>(Arrays.asList(components)), tags, 0);
     }
@@ -76,7 +77,8 @@ public class Entity implements Serializable, Cloneable{    private static int en
     private Entity(Builder b){
         this(b.entityName, b.components, b.tags, b.id);
     }
-    public ArrayList<EntityComponent> getComponents(){
+
+    public ArrayList<EntityComponent> getComponents() {
         return components;
     }
     public <T extends EntityComponent> T getComponent(Class<T> componentClass) {
@@ -171,6 +173,18 @@ public class Entity implements Serializable, Cloneable{    private static int en
             Entity entity = new Entity(this);
             reset();
             return entity;
+        }
+    }
+
+    /**
+     * add this after each constructor
+     */
+    public void setEntityForComponents() {
+        if (!entitySetForComponents) {
+            for (EntityComponent entityComponent : components) {
+            entityComponent.setEntity(this);
+            }
+            entitySetForComponents = true;
         }
     }
 

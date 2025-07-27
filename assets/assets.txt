@@ -4638,12 +4638,12 @@ Content/Trees/Peach_Stage_4.png
 Content/Trees/Peach_Stage_5.png
 Content/Trees/Peach_Stage_5_Fruit.png
 Content/Trees/Pine_Cone.png
-Content/Trees/Pine_Stage_1.png
-Content/Trees/Pine_Stage_2.png
-Content/Trees/Pine_Stage_3.png
-Content/Trees/Pine_Stage_4.png
-Content/Trees/Pine_Stage_5.png
 Content/Trees/Pine_Tar.png
+Content/Trees/Pine_Tree_Stage_1.png
+Content/Trees/Pine_Tree_Stage_2.png
+Content/Trees/Pine_Tree_Stage_3.png
+Content/Trees/Pine_Tree_Stage_4.png
+Content/Trees/Pine_Tree_Stage_5.png
 Content/Trees/Pine_stump_Fall.png
 Content/Trees/Pine_stump_Spring.png
 Content/Trees/Pine_stump_Winter.png
