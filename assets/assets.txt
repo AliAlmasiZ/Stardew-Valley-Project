@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -4070,7 +4069,6 @@ Content/Crops/Yam_Stage_3.png
 Content/Crops/Yam_Stage_4.png
 Content/Crops/Yam_Stage_5.png
 Content/Cursors.png
-Content/Cursors.png-autosave.kra
 Content/FishingMiniGame/Angler.png
 Content/FishingMiniGame/Crimsonfish.png
 Content/FishingMiniGame/Glacierfish.png
@@ -4422,11 +4420,11 @@ Content/Tools/Hoe/steel/7.png
 Content/Tools/Hoe/steel/8.png
 Content/Tools/Hoe/steel/9.png
 Content/Tools/Hoe/steel/icon.png
-Content/Tools/Hoe/stone/0.png
 Content/Tools/Hoe/stone/1.png
 Content/Tools/Hoe/stone/2.png
 Content/Tools/Hoe/stone/3.png
 Content/Tools/Hoe/stone/4.png
+Content/Tools/Hoe/stone/5.png
 Content/Tools/Hoe/stone/icon.png
 Content/Tools/Pickaxe/copper/0.png
 Content/Tools/Pickaxe/copper/1.png
@@ -4490,6 +4488,8 @@ Content/Tools/fishingRod/ToolsSpriteshe56et.png
 Content/Tools/fishingRod/ToolsSpritesheet.png
 Content/Tools/fishingRod/bamboo.png
 Content/Tools/fishingRod/training.png
+Content/Tools/trashCan.png
+Content/Tools/trashCanLid.png
 Content/Trees/Acorn.png
 Content/Trees/Apple.png
 Content/Trees/AppleTreeLightning.png
@@ -4671,6 +4671,7 @@ Content/button2.png
 Content/buttonDown.9.png
 Content/buttonUp.9.png
 Content/closeButton.png
+Content/daybg.png
 Content/energyBar.png
 Content/energyBarFill.png
 Content/energyBarFill2NinePatch.9.png
@@ -4697,6 +4698,10 @@ Content/pixil-frame-0.png
 Content/redCross.png
 Content/shit.png
 Content/skillMenuIcon.png
+Content/skills/farmingSkillIcon.png
+Content/skills/fishingSkillIcon.png
+Content/skills/foragingSkillIcon.png
+Content/skills/miningSkillIcon.png
 Content/sliderBarEmpty.png
 Content/sliderBarEmpty2.png
 Content/sliderButton.png

@@ -10,7 +10,8 @@ public enum SkillType {
                     2, List.of("Quality Sprinkler" , "Deluxe Scarecrow", "Cheese Press", "Preserves Jar"),
                     3, List.of("Iridium Sprinkler", "Keg", "Loom", "Oil Maker")
 
-            )
+            ),
+        "farmingSkillIcon"
     ),
     FORAGING (
             Map.of(
@@ -18,26 +19,31 @@ public enum SkillType {
                     2, List.of("vegetable medley"),
                     3, List.of("survival burger"),
                     4, List.of("Mystic Tree Seed")
-            )
+            ),
+        "foragingSkillIcon"
     ),
     MINING (
             Map.of(
                     1, List.of("miner's treat"),
                     2, List.of(),
                     3, List.of()
-            )
+            ),
+        "miningSkillIcon"
     ),
     FISHING(
             Map.of(
                     1, List.of(),
                     2, List.of("dish O' the Sea"),
                     3, List.of("seaform Pudding")
-            )
+            ),
+        "fishingSkillIcon"
     );
 
+    public final String icon;
 
-    SkillType(Map<Integer, List<String>> recipes) {
+    SkillType(Map<Integer, List<String>> recipes, String icon) {
         this.recipes = recipes;
+        this.icon = icon;
     }
 
     Map<Integer, List<String>> recipes;
