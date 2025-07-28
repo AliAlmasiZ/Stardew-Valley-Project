@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ObjectMap;
+import org.w3c.dom.Text;
 
 public class GameAssetManager extends AssetManager {
     private static GameAssetManager instance;
@@ -31,7 +32,6 @@ public class GameAssetManager extends AssetManager {
     public final Texture energyBarFill = new Texture("Content/energyBarFill.png");
 
     //inGameMenu
-    public final TextureRegion inventoryIcon, buildMenuIcon, mapIcon;
     public final Texture menuBackground;
     public final Texture closeButton;
     public final Texture textBox = new Texture("Content/NPC/textBox.png");
@@ -67,14 +67,6 @@ public class GameAssetManager extends AssetManager {
                 icons[index++] = tempIcons[i][j];
             }
         }
-
-        inventoryIcon = new TextureRegion(new Texture("Content/InventoryIcon.png"));
-        mapIcon = new TextureRegion(new Texture("Content/MapIcon.png"));
-        buildMenuIcon = new TextureRegion(new Texture("Content/BuildingMenuIcon.png"));
-
-        inventoryIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        mapIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        buildMenuIcon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");

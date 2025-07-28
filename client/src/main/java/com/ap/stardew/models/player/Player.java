@@ -179,6 +179,10 @@ public class Player extends Entity implements Serializable {
 
     }
 
+    public CharacterSpriteManager getSpriteManager() {
+        return spriteManager;
+    }
+
     public Energy getEnergy() {
         return energy;
     }

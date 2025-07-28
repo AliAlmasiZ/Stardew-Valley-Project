@@ -25,12 +25,12 @@ import com.badlogic.gdx.utils.Null;
 
 public class InventorySlotWidget extends FramedImage{
     private final static DragAndDrop dragAndDrop = new DragAndDrop();
-    private static Entity draggedEntity;
-    private static InventorySlotWidget sourceSlot;
-    private static InventorySlotWidget destSlot = null;
-    private static DragEntity ghost;
+    public static Entity draggedEntity;
+    public static InventorySlotWidget sourceSlot;
+    public static InventorySlotWidget destSlot = null;
+    public static DragEntity ghost;
 
-    private static void startDrag(Entity entity, InventorySlotWidget sourceSlot, float offsetX, float offsetY){
+    public static void startDrag(Entity entity, InventorySlotWidget sourceSlot, float offsetX, float offsetY){
         InventorySlotWidget.sourceSlot = sourceSlot;
         destSlot = sourceSlot;
         draggedEntity = entity;
@@ -42,9 +42,6 @@ public class InventorySlotWidget extends FramedImage{
         ghost.setSize(sourceSlot.image.getImageWidth() , sourceSlot.image.getHeight());
         ghost.setOffsetX(-offsetX);
         ghost.setOffsetY(offsetY);
-    }
-    private static void endDrag(){
-
     }
 
     private Entity entity;

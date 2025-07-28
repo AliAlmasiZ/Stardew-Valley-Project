@@ -39,4 +39,7 @@ public class Skill implements Serializable {
         experience = 0;
         level = 0;
     }
+    public int getMaxXp(){
+        return 100 * this.level + 50;
+    }
 }

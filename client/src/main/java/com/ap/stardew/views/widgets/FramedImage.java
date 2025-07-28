@@ -16,7 +16,7 @@ public class FramedImage extends Group {
     protected Image frame;
     protected Image image;
 
-    public FramedImage(Texture frameTexture, Texture imageTexture, float padPercent) {
+    public FramedImage(TextureRegion frameTexture, TextureRegion imageTexture, float padPercent) {
         frame = new Image(frameTexture);
 
         if(imageTexture == null){
@@ -26,7 +26,7 @@ public class FramedImage extends Group {
         }
 
         Table imageTable = new Table();
-        imageTable.pad(Value.percentHeight(padPercent));
+//        imageTable.pad(Value.percentHeight(padPercent));
         imageTable.center();
         addActor(frame);
         imageTable.add(image).grow();
@@ -37,7 +37,7 @@ public class FramedImage extends Group {
         image.setScaling(Scaling.fit);
     }
     public FramedImage(Texture frameTexture, Texture imageTexture){
-        this(frameTexture, imageTexture, 0);
+        this(new TextureRegion(frameTexture), new TextureRegion(imageTexture), 0);
     }
 
     @Override

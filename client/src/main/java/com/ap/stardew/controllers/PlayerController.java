@@ -20,9 +20,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class PlayerController implements InputProcessor {
     private static final float ZOOM_SPEED = 0.1f;
     private static final float MIN_ZOOM = 0.5f;
@@ -77,7 +74,7 @@ public class PlayerController implements InputProcessor {
         if (keycode == Input.Keys.T)
             this.advanceTime = true;
         if (keycode == Input.Keys.TAB)
-            screen.openTestDialog();
+            screen.openJournal();
         if (keycode == Input.Keys.P) //TODO: Temporarily
             screen.startFishing();
         if (keycode == Input.Keys.F1) // TODO: add this to other menu

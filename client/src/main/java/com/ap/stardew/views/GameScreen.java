@@ -24,11 +24,8 @@ import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.records.EntityResult;
-import com.ap.stardew.views.widgets.EnergyBar;
-import com.ap.stardew.views.widgets.InGameDialog;
-import com.ap.stardew.views.widgets.InventoryGrid;
+import com.ap.stardew.views.widgets.*;
 import com.ap.stardew.records.Result;
-import com.ap.stardew.views.widgets.TabWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
@@ -41,6 +38,8 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -50,6 +49,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -96,7 +96,7 @@ public class GameScreen extends AbstractScreen {
 
 
     public GameScreen() {
-        super(2.5f);
+        super(3f);
         stack = new Stack();
         rootTable.add(stack).grow();
 
@@ -411,15 +411,120 @@ public class GameScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(minigameStage);
     }
 
-    public void openTestDialog() {
+
+    public void showSkillDetails(SkillType type, Table table){
+        table.clearChildren();
+        table.setBackground(customSkin.getDrawable("smallPanelNinePatch"));
+        table.top().left();
+
+        Label title = new Label(type.name().substring(0,1) + type.name().toLowerCase().substring(1)
+            + ":", customSkin);
+        title.setColor(Color.BLACK);
+
+        table.add(title);
+    }
+    public void openJournal() {
         InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();
 
-        Table table = new Table();
+        Table inventoryTable = new Table();
         InventoryGrid inventoryGrid = new InventoryGrid(player.getComponent(Inventory.class), 10, InventoryGrid.Type.PLAYER_INVENTORY);
         inventoryGrid.top();
-        table.add(inventoryGrid).grow();
+        TrashCanActor trashCan = new TrashCanActor();
+        Table trashCanTable = new Table();
+        trashCanTable.setFillParent(true);
+        trashCanTable.bottom().right();
+        trashCanTable.add(trashCan);
+        inventoryTable.add(inventoryGrid).grow();
+        inventoryTable.addActor(trashCanTable);
+
+        Table skillTable = new Table();
+        Table bottom = new Table();
+
+        {
+            Table skillTableDivider = new Table();
+            Table topLeft = new Table();
+            Table portrait = new Table();
+            portrait.setBackground(customSkin.getDrawable("daybg"));
+            portrait.center();
+            portrait.add(new Image(App.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
+            topLeft.add(portrait).row();
+            topLeft.add(new Label(player.getAccount().getNickname(), customSkin){
+                {
+                    setColor(Color.BLACK);
+                }
+            });
+            skillTableDivider.add(topLeft).pad(4).expandY().top();
+
+            Table top = new Table();
+
+            for (SkillType type : SkillType.values()) {
+                Skill skill = player.getSkill(type);
+
+                Label name = new Label(type.name().substring(0,1) + type.name().toLowerCase().substring(1), customSkin);
+                name.setColor(Color.BLACK);
+                name.setAlignment(Align.left);
+
+                top.defaults().expandY();
+                top.left();
+
+                top.add(name).left().spaceRight(3);
+
+                Image icon = new Image(customSkin.getDrawable(type.icon));
+                icon.addListener(new ClickListener(){
+                    @Override
+                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                        if(pointer != -1) return;
+
+                        icon.addAction(Actions.alpha(0.5f, 0.15f, Interpolation.smooth));
+                    }
+                    @Override
+                    public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                        if(pointer != -1) return;
+
+                        icon.addAction(Actions.alpha(1f, 0.15f, Interpolation.smooth));
+                    }
+
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        showSkillDetails(type, bottom);
+                    }
+                });
+                top.add(icon);
+
+                top.defaults().spaceRight(3);
+
+                for (int i = 0; i < skill.getLevel(); i++) {
+                    if(i != 3){
+                        top.add(new Image(customSkin.getDrawable("sliderButtonUp")));
+                    }else{
+                        top.add(new Image(customSkin.getDrawable("buttonUp")));
+                    }
+                }
+                for (int i = 0; i < 4 - skill.getLevel(); i++) {
+                    if(i == 3 - skill.getLevel()){
+                        top.add(new Image(customSkin.getDrawable("buttonDown")));
+                    }else{
+                        top.add(new Image(customSkin.getDrawable("sliderButtonDown")));
+                    }
+                }
+                if(skill.getLevel() != 4){
+                    top.defaults().spaceLeft(5);
+                    top.add(new Label("xp :", customSkin){{setColor(Color.BLACK);}});
+                    top.add(new Label(Integer.toString(skill.getExperience()), customSkin){{setColor(Color.BLACK);}});
+                    top.add(new Label("/", customSkin){{setColor(Color.BLACK);}});
+                    top.add(new Label(Integer.toString(skill.getMaxXp()), customSkin){{setColor(Color.BLACK);}});
+                }
+
+                top.row();
+            }
+
+            skillTableDivider.add(top).fill().expand().pad(4).row();
+            skillTableDivider.add(bottom).fill().colspan(2).growX().height(30);
+            skillTable.add(skillTableDivider).grow();
+        }
+
 
         Table table2 = new Table();
         table2.add(new Label("test3", skin)).row();
@@ -429,9 +534,11 @@ public class GameScreen extends AbstractScreen {
         table3.add(new Label("test3", skin)).row();
         table3.add(new Label("test4", skin));
 
-        tabWidget.addTab(table, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
-        tabWidget.addTab(table2, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
-        tabWidget.addTab(table3, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
+
+        tabWidget.addTab(inventoryTable, customSkin.getDrawable("InventoryIcon"));
+        tabWidget.addTab(skillTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(table2, customSkin.getDrawable("MapIcon"));
+        tabWidget.addTab(table3, customSkin.getDrawable("shit"));
 
 //        dialog.getContentTable().add(tabWidget).fill().size(200, 130);
         dialog.add(tabWidget).size(230, 130).fill();
@@ -523,8 +630,8 @@ public class GameScreen extends AbstractScreen {
         buttonTab.add(shepherdAnimalButton).growX().row();
         buttonTab.add(exitButton).growX().row();
 //
-        tabWidget.addTab(infoTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
-        tabWidget.addTab(buttonTab, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(infoTab, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(buttonTab, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 
@@ -689,7 +796,7 @@ public class GameScreen extends AbstractScreen {
         mainTable.add(confirmButton).growX().row();
         mainTable.add(exitButton).growX().row();
 
-        tabWidget.addTab(mainTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(mainTable, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 
@@ -743,9 +850,9 @@ public class GameScreen extends AbstractScreen {
 
         /**/
 
-        tabWidget.addTab(giftTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
-        tabWidget.addTab(questTable, new TextureRegionDrawable(GameAssetManager.getInstance().mapIcon));
-        tabWidget.addTab(infoTable, new TextureRegionDrawable(GameAssetManager.getInstance().buildMenuIcon));
+        tabWidget.addTab(giftTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(questTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(infoTable, customSkin.getDrawable("skillMenuIcon"));
 
 
         dialog.add(tabWidget).fill().grow();
@@ -841,7 +948,7 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
-        tabWidget.addTab(craftTable, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(craftTable, customSkin.getDrawable("skillMenuIcon"));
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
@@ -864,7 +971,7 @@ public class GameScreen extends AbstractScreen {
 
         TabWidget tabWidget = new TabWidget();
 
-        tabWidget.addTab(table, new TextureRegionDrawable(GameAssetManager.getInstance().inventoryIcon));
+        tabWidget.addTab(table, customSkin.getDrawable("skillMenuIcon"));
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
