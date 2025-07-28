@@ -12,7 +12,7 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.enums.EntityTag;
 import com.ap.stardew.models.enums.Season;
 import com.ap.stardew.models.enums.Weather;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 import com.ap.stardew.records.Result;
 
 import java.io.Serializable;

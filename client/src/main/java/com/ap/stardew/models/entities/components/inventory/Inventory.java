@@ -6,7 +6,7 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.EntityComponent;
 import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.enums.EntityTag;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -12,7 +12,7 @@ import com.ap.stardew.models.enums.Material;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Wallet;
 import com.ap.stardew.models.shop.*;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 import com.ap.stardew.records.Result;
 
 public class ShopSystem {

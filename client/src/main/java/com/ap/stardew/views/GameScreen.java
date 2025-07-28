@@ -15,6 +15,7 @@ import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.animal.FishingMiniGame;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;

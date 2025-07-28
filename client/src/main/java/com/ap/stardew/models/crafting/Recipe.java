@@ -9,7 +9,7 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Edible;
 import com.ap.stardew.models.entities.components.Sellable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

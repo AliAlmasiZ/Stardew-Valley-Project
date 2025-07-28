@@ -3,6 +3,7 @@ package com.ap.stardew.models.animal;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.player.Player;

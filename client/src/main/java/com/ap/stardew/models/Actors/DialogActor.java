@@ -4,11 +4,9 @@ import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.entities.components.PositionComponent;
-import com.ap.stardew.models.entities.components.Renderable;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,8 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
-import java.lang.reflect.Constructor;
 
 public class DialogActor extends Actor {
     private final NPC npc;
