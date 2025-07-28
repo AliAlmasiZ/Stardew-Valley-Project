@@ -61,7 +61,7 @@ public class CharacterSpriteManager {
 
     private void loadAnimations() {
         loadWalkAnim(Direction.DOWN, 0, 0, 0, 0, new boolean[]{false, true});
-        loadWalkAnim(Direction.UP, 2, 2, 2, 2, new boolean[]{false, true});
+        loadWalkAnim(Direction.UP, 2, 3, 2, 2, new boolean[]{false, true});
         loadWalkAnim(Direction.RIGHT, 1, 1, 1, 1, new boolean[]{false, true});
         loadWalkAnim(Direction.LEFT, 1, 1, 1, 1, new boolean[]{true, true});
 
