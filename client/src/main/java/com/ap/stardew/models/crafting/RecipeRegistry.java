@@ -3,7 +3,7 @@ package com.ap.stardew.models.crafting;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;

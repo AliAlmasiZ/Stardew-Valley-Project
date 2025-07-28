@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.components.EntityComponent;
 import com.ap.stardew.models.enums.EntityTag;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -10,6 +10,7 @@ import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
@@ -22,8 +23,6 @@ import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.old.inGame.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -262,6 +261,7 @@ public class Player extends Entity implements Serializable {
     public Account getAccount() {
         return account;
     }
+
 
     public InventorySlot getActiveSlot() {
         return activeSlot;

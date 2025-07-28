@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.components.Renderable;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.enums.Season;
 import com.ap.stardew.models.enums.Weather;
 import com.ap.stardew.models.player.Player;

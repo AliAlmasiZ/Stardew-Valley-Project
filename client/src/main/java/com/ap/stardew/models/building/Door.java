@@ -5,7 +5,7 @@ import com.ap.stardew.models.Position;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Placeable;
-import com.ap.stardew.models.entities.components.Renderable;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.records.Result;

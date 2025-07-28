@@ -26,7 +26,10 @@ public class ServerConnectionThread extends ConnectionThread {
 
     @Override
     protected boolean handleMessage(JSONMessage message) {
-        //TODO
-        return false;
+        JSONMessage response = ClientConnectionController.handleCommand(message);
+        if(response == null)
+            return false;
+        sendMessage(response);
+        return true;
     }
 }

@@ -1,6 +1,7 @@
-package com.ap.stardew.models.entities.components;
+package com.ap.stardew.models.entities;
 
-import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.EntityComponent;
+import com.ap.stardew.models.entities.components.Growable;
 import com.ap.stardew.models.enums.EntityTag;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;

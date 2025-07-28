@@ -1,4 +1,4 @@
-package com.ap.stardew.models.utils;
+package com.ap.stardew.utils;
 
 import java.io.Serializable;
 

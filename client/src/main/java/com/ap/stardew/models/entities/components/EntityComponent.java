@@ -1,5 +1,6 @@
 package com.ap.stardew.models.entities.components;
 
+import com.ap.stardew.models.entities.Renderable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

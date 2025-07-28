@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.ap.stardew.models.entities.components.EntityComponent;
 import com.ap.stardew.models.enums.EntityTag;
-import com.ap.stardew.models.utils.StringUtils;
+import com.ap.stardew.utils.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +25,8 @@ import java.util.Set;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property  = "id")
-public class Entity implements Serializable, Cloneable{    private static int entityCounter = 1;
+public class Entity implements Serializable, Cloneable{
+    private static int entityCounter = 1;
     //jsonProperty tells jackson to serialize and deserialize according to these names
     @JsonProperty("id")
     private int id;
@@ -208,10 +209,13 @@ public class Entity implements Serializable, Cloneable{    private static int en
         for(EntityComponent c : this.components){
             EntityComponent c2 = other.getComponent(c.getClass());
             if(c2 == null) return false;
-
             if(!c2.isTheSame(c))return false;
         }
         return true;
     }
 
+
+    public int getId() {
+        return id;
+    }
 }
