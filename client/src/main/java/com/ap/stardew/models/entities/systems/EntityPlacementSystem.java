@@ -265,7 +265,7 @@ public class EntityPlacementSystem {
     public static boolean canPlace(int x, int y, Placeable placeable, GameMap map) {
         if (placeable == null || placeable.getExteriorName() == null) {
             Tile tile = map.getTileByPosition(y, x);
-            return tile.getType().isWalkable && (tile.getContent() == null) ;
+            return tile.isWalkable() && (tile.getContent() == null) ;
         }
         TileType[][] exterior = App.mapRegistry.getData(placeable.getExteriorName()).getTypeMap();
 
@@ -286,7 +286,7 @@ public class EntityPlacementSystem {
         return canPlace(x, y, null, map);
     }
     public static boolean canPlace(int x, int y) {
-        return canPlace(x, y, null, App.getActiveGame().getMainMap());
+        return canPlace(x, y, null, App.getActiveGame().getActiveMap());
     }
     public static boolean canPlace(Tile tile){
         return canPlace(tile.getCol(), tile.getRow());

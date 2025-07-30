@@ -167,7 +167,7 @@ public class PlayerController implements InputProcessor {
         equippedItemState = EquippedItemState.NONE;
 
 
-        if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() > 1.6f) return false;
+
         InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
         if(activeSlot == null) return false;
         Entity entity = activeSlot.getEntity();
@@ -176,6 +176,8 @@ public class PlayerController implements InputProcessor {
 
         Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
 
+        if(tile == null) return false;
+
         if(useable != null){
             if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f){
                 equippedItemState = EquippedItemState.USEABLE;
@@ -183,6 +185,7 @@ public class PlayerController implements InputProcessor {
         }
         Placeable placeable = entity.getComponent(Placeable.class);
         if(placeable != null){
+            System.out.println(tile.isWalkable());
             if(!EntityPlacementSystem.canPlace(tile)){
                 equippedItemState = EquippedItemState.PLACEABLE_INVALID;
             }else{

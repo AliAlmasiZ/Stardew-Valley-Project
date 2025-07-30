@@ -243,7 +243,7 @@ public class GameMenuController implements Controller {
                 if (newCol >= 0 && newCol < cols && newRow >= 0 && newRow < rows) {
                     Tile neighbor = tiles[newRow][newCol];
                     if ((neighbor.getContent() == null || neighbor.getContent().getComponent(Placeable.class).isWalkable()) &&
-                        (neighbor.getType() != null && neighbor.getType().isWalkable))
+                        (neighbor.getType() != null && neighbor.isWalkable()))
                         if (!cameFrom.containsKey(neighbor)) {
                             queue.add(neighbor);
                             cameFrom.put(neighbor, current);
