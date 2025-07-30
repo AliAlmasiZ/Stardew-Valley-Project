@@ -1,10 +1,6 @@
 {
   "common components": [
     {
-      "type": "Pickable",
-      "maxStack": 1
-    },
-    {
       "type": "Placeable",
       "isWalkable": false
     },
@@ -30,6 +26,10 @@
           "recipes": [
             "Honey"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/BeeHouse.png"
         }
       ]
     },
@@ -42,6 +42,10 @@
             "Cheese",
             "Goat Cheese"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/CheesePress.png"
         }
       ]
     },
@@ -59,6 +63,10 @@
             "Pale Ale",
             "Wine"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/Keg.png"
         }
       ]
     },
@@ -72,6 +80,10 @@
             "Dried Fruit",
             "Raisins"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/Dehydrator.png"
         }
       ]
     },
@@ -83,6 +95,10 @@
           "recipes": [
             "Coal"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/CharcoalKlin.png"
         }
       ]
     },
@@ -94,6 +110,10 @@
           "recipes": [
             "Cloth"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/Loom.png"
         }
       ]
     },
@@ -107,6 +127,10 @@
             "Duck Mayonnaise",
             "Dinosaur Mayonnaise"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/MayonnaiseMachine.png"
         }
       ]
     },
@@ -119,6 +143,10 @@
             "Truffle Oil",
             "Oil"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/OilMaker.png"
         }
       ]
     },
@@ -131,6 +159,10 @@
             "Pickles",
             "Jelly"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/PreservesJar.png"
         }
       ]
     },
@@ -142,6 +174,10 @@
           "recipes": [
             "Smoked Fish"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/FishSmoker.png"
         }
       ]
     },
@@ -156,6 +192,10 @@
             "Gold Ore",
             "Irirdium Ore"
           ]
+        },{
+          "type": "Pickable",
+          "maxStack": 1,
+          "icon" : "Content/Workstations/Furnace.png"
         }
       ]
     }

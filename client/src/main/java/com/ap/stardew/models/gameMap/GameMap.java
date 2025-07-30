@@ -133,6 +133,10 @@ public class GameMap implements Serializable {
                     Entity building = App.entityRegistry.makeEntity(object.getProperties().get("building", String.class));
                     EntityPlacementSystem.placeEntity(building, new Vec2(object.getProperties().get("x", Float.class),
                         object.getProperties().get("y", Float.class)), this);
+                }else if(object.getName().equals("Fridge")){
+                    Entity fridge = App.entityRegistry.makeEntity("fridge");
+                    EntityPlacementSystem.placeEntity(fridge, new Vec2(object.getProperties().get("x", Float.class),
+                        object.getProperties().get("y", Float.class)), this);
                 }
             }
         }

@@ -68,7 +68,6 @@ public class Placeable extends EntityComponent implements Serializable {
 //        return exterior;
 //    }
 
-
     @Override
     public EntityComponent clone() {
         return new Placeable(this);

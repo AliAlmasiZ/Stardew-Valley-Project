@@ -142,7 +142,6 @@ public class CharacterSpriteManager {
             return animations.get(lastDir).getKeyFrame(0, true);
 
         return animations.get(lastDir).getKeyFrame(stateTime, true);
-
     }
 
 }

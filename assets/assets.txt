@@ -4078,6 +4078,7 @@ Content/FishingMiniGame/catchZone.png
 Content/FishingMiniGame/fishing bar.png
 Content/InventoryIcon.png
 Content/InventorySlotFrame.png
+Content/InventorySlotFrame2.png
 Content/MapIcon.png
 Content/NPC/Abigael.png
 Content/NPC/Abigael/all.png
@@ -4666,6 +4667,23 @@ Content/Trees/Wild_Tree_stump_Fall.png
 Content/Trees/Wild_Tree_stump_Spring.png
 Content/Trees/Wild_Tree_stump_Winter.png
 Content/Trees/Wood.png
+Content/Workstations/BeeHouse.png
+Content/Workstations/BeeHouseFull.png
+Content/Workstations/CharcoalKlin.png
+Content/Workstations/CharcoalKlinWorking.png
+Content/Workstations/CheesePress.png
+Content/Workstations/Dehydrator.png
+Content/Workstations/FishSmoker.png
+Content/Workstations/FishSmokerWorking.png
+Content/Workstations/Furnace.png
+Content/Workstations/FurnaceWorking.png
+Content/Workstations/Keg.png
+Content/Workstations/Loom.png
+Content/Workstations/LoomFull.png
+Content/Workstations/MayonnaiseMachine.png
+Content/Workstations/OilMaker.png
+Content/Workstations/PC _ Computer - Stardew Valley - Tilesets - Craftables.png
+Content/Workstations/PreservesJar.png
 Content/button1.png
 Content/button2.png
 Content/buttonDown.9.png
@@ -4690,6 +4708,7 @@ Content/frame2.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png
 Content/frameNinePatch2.9.png
+Content/inventoryIconRotated.png
 Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
 Content/inventoryQuantityNumbers.png
@@ -4711,8 +4730,10 @@ Content/sliderNinePatch.9.png
 Content/sliderNinePatch2.9.png
 Content/smallPanel.png
 Content/smallPanelNinePatch.9.png
+Content/storageIcon.png
 Content/textBox.png
 Content/textboxNinePatch.9.png
+Content/tileSelectBox.png
 Content/tilledSoil.png
 Content/—Pngtree—hand-drawn comic dialog_517429.png
 Moz/MapEditor/Stardew Valley.tiled-project

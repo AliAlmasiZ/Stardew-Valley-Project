@@ -2235,5 +2235,14 @@ public class GameMenuController implements Controller {
         for (Entity entity : plants) {
 
         }
+
+        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
+        Entity tileEntity = tile.getContent();
+
+        if(tileEntity != null){
+            if(tileEntity.getEntityName().equals("Fridge")){
+                screen.showStorage(tileEntity.getComponent(Inventory.class));
+            }
+        }
     }
 }

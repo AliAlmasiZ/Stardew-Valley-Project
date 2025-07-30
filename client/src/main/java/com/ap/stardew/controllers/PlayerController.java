@@ -5,11 +5,13 @@ import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.UseFunction;
 import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.components.Useable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
+import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
@@ -24,6 +26,9 @@ public class PlayerController implements InputProcessor {
     private static final float ZOOM_SPEED = 0.1f;
     private static final float MIN_ZOOM = 0.5f;
     private static final float MAX_ZOOM = 1.5f;
+
+    private final GameMenuController gameMenuController;
+
     private Player player;
     private boolean left;
     private boolean right;
@@ -34,11 +39,21 @@ public class PlayerController implements InputProcessor {
     private Vector2 direction = new Vector2();
 
     private Position cursorPos = new Position(0, 0);
-    private boolean drawCursorRect = false;
 
-    public PlayerController(GameScreen screen, Player player) {
+    public enum EquippedItemState{
+        USEABLE,
+        USEABLE_INVALID,
+        PLACEABLE,
+        PLACEABLE_INVALID,
+        NONE
+    }
+
+    private EquippedItemState equippedItemState = EquippedItemState.NONE;
+
+    public PlayerController(GameScreen screen, Player player, GameMenuController gameMenuController) {
         this.screen = screen;
         this.player = player;
+        this.gameMenuController = gameMenuController;
         left = false;
         right = false;
         up = false;
@@ -106,12 +121,21 @@ public class PlayerController implements InputProcessor {
             if(activeSlot == null) return false;
             Entity entity = activeSlot.getEntity();
             if(entity == null) return false;
+            Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
+
             Useable useable = entity.getComponent(Useable.class);
-            if(useable == null) return false;
+            if(useable != null){
 
+                for (UseFunction function : useable.getFunctions()) {
+                    function.use(entity, tile);
+                }
+            }
 
-            for (UseFunction function : useable.getFunctions()) {
-                function.use(entity, App.getActiveGame().getActiveMap().getTileByPosition(cursorPos));
+            Placeable placeable = entity.getComponent(Placeable.class);
+            if(placeable != null){
+                activeSlot.setEntity(null);
+                EntityPlacementSystem.placeOnTile(entity, tile);
+                equippedItemState = EquippedItemState.NONE;
             }
         }
         return false;
@@ -140,17 +164,30 @@ public class PlayerController implements InputProcessor {
         cursorPos.x = mouseScreenPos.x;
         cursorPos.y = mouseScreenPos.y;
 
-        drawCursorRect = false;
+        equippedItemState = EquippedItemState.NONE;
 
+
+        if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() > 1.6f) return false;
         InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
         if(activeSlot == null) return false;
         Entity entity = activeSlot.getEntity();
         if(entity == null) return false;
         Useable useable = entity.getComponent(Useable.class);
-        if(useable == null) return false;
 
-        if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f){
-            drawCursorRect = true;
+        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
+
+        if(useable != null){
+            if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f){
+                equippedItemState = EquippedItemState.USEABLE;
+            }
+        }
+        Placeable placeable = entity.getComponent(Placeable.class);
+        if(placeable != null){
+            if(!EntityPlacementSystem.canPlace(tile)){
+                equippedItemState = EquippedItemState.PLACEABLE_INVALID;
+            }else{
+                equippedItemState = EquippedItemState.PLACEABLE;
+            }
         }
 
         return false;
@@ -224,7 +261,7 @@ public class PlayerController implements InputProcessor {
         return cursorPos;
     }
 
-    public boolean isDrawCursorRect() {
-        return drawCursorRect;
+    public EquippedItemState getEquippedItemState() {
+        return equippedItemState;
     }
 }

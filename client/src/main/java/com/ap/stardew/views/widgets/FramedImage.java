@@ -6,13 +6,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import org.w3c.dom.Text;
 
-public class FramedImage extends Group {
+public class FramedImage extends Table {
     protected Image frame;
     protected Image image;
 
@@ -24,39 +25,26 @@ public class FramedImage extends Group {
         }else {
             image = new Image(imageTexture);
         }
-
+        Stack stack = new Stack();
         Table imageTable = new Table();
-//        imageTable.pad(Value.percentHeight(padPercent));
-        imageTable.center();
-        addActor(frame);
-        imageTable.add(image).grow();
-        addActor(imageTable);
+        Table frameTable = new Table();
 
-        imageTable.setFillParent(true);
-        frame.setFillParent(true);
+        stack.add(frameTable);
+        stack.add(imageTable);
+
+        frame.setScaling(Scaling.fit);
+        frameTable.add(frame).grow();
+
         image.setScaling(Scaling.fit);
+        imageTable.center().pad(padPercent);
+        imageTable.add(image).grow().center();
+
+        add(stack).grow();
+    }
+    public FramedImage(Texture frameTexture, Texture imageTexture, float padPercent){
+        this(new TextureRegion(frameTexture), new TextureRegion(imageTexture), padPercent);
     }
     public FramedImage(Texture frameTexture, Texture imageTexture){
         this(new TextureRegion(frameTexture), new TextureRegion(imageTexture), 0);
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        Color color = getColor();
-        float oldAlpha = batch.getColor().a;
-        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-
-        super.draw(batch, parentAlpha);
-
-        // Reset alpha to prevent affecting subsequent draws
-        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, oldAlpha);
-    }
-
-    public Drawable getFrame() {
-        return frame.getDrawable();
-    }
-
-    public Drawable getImage() {
-        return image.getDrawable();
     }
 }

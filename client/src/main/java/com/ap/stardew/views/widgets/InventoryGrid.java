@@ -26,7 +26,7 @@ public class InventoryGrid extends Table {
 
     private final Inventory inventory;
     private final ArrayList<Cell<InventorySlotWidget>> slotWidgets = new ArrayList<>();
-    private float slotSize = 20;
+    private float slotSize = 18;
     private int selected = 0;
     private final Type type;
 
@@ -55,6 +55,7 @@ public class InventoryGrid extends Table {
             InventorySlotWidget slotWidget = new InventorySlotWidget(slot);
             Cell<InventorySlotWidget> cell = add(slotWidget).size(slotSize, slotSize).pad(0.5f);
             slotWidgets.add(cell);
+            slotWidget.setInventory(inventory);
 
             if(i == k){
                 if(type == Type.PLAYER_INVENTORY){

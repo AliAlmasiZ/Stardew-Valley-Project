@@ -90,6 +90,43 @@ public class InGameDialog extends Table {
             }
 
             public boolean mouseMoved (InputEvent event, float x, float y) {
+                event.stop();
+                return true;
+            }
+
+            public boolean scrolled (InputEvent event, float x, float y, int amount) {
+                return true;
+            }
+
+            public boolean keyDown (InputEvent event, int keycode) {
+                return true;
+            }
+
+            public boolean keyUp (InputEvent event, int keycode) {
+                return true;
+            }
+
+            public boolean keyTyped (InputEvent event, char character) {
+                return true;
+            }
+        });
+        wrapperTable.addListener(new InputListener() {
+            float startX, startY, lastX, lastY;
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                event.stop();
+            }
+
+            public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                event.stop();
+            }
+
+            public boolean mouseMoved (InputEvent event, float x, float y) {
+                event.stop();
                 return true;
             }
 
@@ -111,6 +148,7 @@ public class InGameDialog extends Table {
         });
         toFront();
         setTouchable(Touchable.enabled);
+        wrapperTable.toFront();
         wrapperTable.setTouchable(Touchable.enabled);
     }
 

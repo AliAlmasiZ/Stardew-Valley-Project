@@ -59,6 +59,7 @@ public class ClientGame extends Game {
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Tools"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Crops"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Trees"));
+        GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Workstations"));
         GameAssetManager.getInstance().finishLoading();
 
         App.getView().log("Done.");

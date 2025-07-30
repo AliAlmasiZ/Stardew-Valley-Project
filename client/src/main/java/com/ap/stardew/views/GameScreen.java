@@ -19,6 +19,7 @@ import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
+import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
@@ -31,6 +32,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -104,7 +106,7 @@ public class GameScreen extends AbstractScreen {
         controller = new GameMenuController();
         player = App.getActiveGame().getCurrentPlayer();
         currentPlayerSprite = player.getSprite();
-        playerController = new PlayerController(this, player);
+        playerController = new PlayerController(this, player, controller);
 
         skin = GameAssetManager.getInstance().getSkin();
         customSkin = GameAssetManager.getInstance().getCustomSkin();
@@ -116,6 +118,19 @@ public class GameScreen extends AbstractScreen {
         controller.cheatGiveItem("Axe", 1);
         controller.cheatGiveItem("Hoe", 1);
         controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Apple", 10);
+        controller.cheatGiveItem("Bee House", 1);
+        controller.cheatGiveItem("Cheese Press", 1);
+        controller.cheatGiveItem("Keg", 1);
+        controller.cheatGiveItem("    Dehydrator", 1);
+        controller.cheatGiveItem("Charcoal Klin", 1);
+        controller.cheatGiveItem("Loom", 1);
+        controller.cheatGiveItem("Mayonnaise Machine", 1);
+        controller.cheatGiveItem("Oil Maker", 1);
+        controller.cheatGiveItem("Preserves Jar", 1);
+        controller.cheatGiveItem("Fish Smoker", 1);
+        controller.cheatGiveItem("Furnace", 1);
+
         controller.cheatGiveItem("Hay", 500);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
@@ -299,11 +314,33 @@ public class GameScreen extends AbstractScreen {
             }
         }
 
-        if(playerController.isDrawCursorRect()){
-            batch.setColor(1, 1, 1, 0.3f);
-            batch.draw(GameAssetManager.getInstance().inventorySlotFrameSelected, playerController.getCursorPos().getCol()*16
-                , playerController.getCursorPos().getRow() * 16, 16, 16);
-            batch.setColor(1, 1, 1, 1f);
+        switch (playerController.getEquippedItemState()){
+            case PLACEABLE -> {
+                batch.setColor(0, 1, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol()*16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.draw(GameAssetManager.getInstance()
+                    .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol()*16
+                    , playerController.getCursorPos().getRow() * 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+            case PLACEABLE_INVALID -> {
+                batch.setColor(1, 0, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol()*16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.draw(GameAssetManager.getInstance()
+                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol()*16
+                    , playerController.getCursorPos().getRow() * 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+            case USEABLE -> {
+                batch.setColor(0, 1, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol()*16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.setColor(1, 1, 1, 1);
+            }
         }
 
         batch.end();
@@ -545,6 +582,56 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).size(230, 130).fill();
 
         dialog.show();
+    }
+    public void showStorage(Inventory inventory){
+        Table panel = new Table();
+        panel.setBackground(customSkin.getDrawable("frameNinePatch2"));
+
+        Table storageGrid = new InventoryGrid(inventory, 10);
+
+        panel.add(storageGrid).grow();
+
+        Image icon = new Image(customSkin.getDrawable("storageIcon"));
+
+        panel.addActor(icon);
+        icon.setPosition(-icon.getWidth(), panel.getPrefHeight() - icon.getHeight() - 4);
+
+        openMenuWithInventory(panel);
+    }
+
+    public void openMenuWithInventory(Table menu){
+        InGameDialog dialog = new InGameDialog(uiStage);
+
+        Table inventoryPanel = new Table();
+        inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
+
+        inventoryPanel.add(new InventoryGrid(player.getComponent(Inventory.class), 10)).grow();
+
+        Image icon = new Image(customSkin.getDrawable("inventoryIconRotated"));
+
+        inventoryPanel.addActor(icon);
+        icon.setPosition(-icon.getWidth(), inventoryPanel.getPrefHeight() - icon.getHeight() - 4);
+
+        dialog.add(menu).colspan(2).row();
+        dialog.add().height(10).growX();
+        dialog.add().height(10).growX().row();
+        dialog.add(inventoryPanel).colspan(2).row();
+
+        dialog.show();
+
+        inventoryPanel.invalidateHierarchy();
+
+        inventoryPanel.addAction(
+            Actions.sequence(
+                Actions.moveBy(0, 15),
+                Actions.delay(0.1f),
+                Actions.parallel(
+                    Actions.moveTo(0, 0, 0.5f, Interpolation.swingOut),
+                    Actions.alpha(1, 0.5f)
+                )
+            )
+        );
+
     }
 
     public void stopFishing(FishingMiniGame fishingMiniGame) {

@@ -9,7 +9,8 @@
       "components" : [
         {
           "type" : "Inventory",
-          "capacity" : 50
+          "capacity" : 50,
+          "onlyEdible" : true
         },{
           "type" : "Placeable",
           "isWalkable" : false

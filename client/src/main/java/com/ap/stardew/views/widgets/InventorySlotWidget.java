@@ -1,10 +1,13 @@
 package com.ap.stardew.views.widgets;
 
 import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Edible;
 import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
+import com.ap.stardew.views.ColorPalette;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -30,27 +33,26 @@ public class InventorySlotWidget extends FramedImage{
     public static InventorySlotWidget destSlot = null;
     public static DragEntity ghost;
 
-    public static void startDrag(Entity entity, InventorySlotWidget sourceSlot, float offsetX, float offsetY){
+    public static void startDrag(Entity entity, InventorySlotWidget sourceSlot){
         InventorySlotWidget.sourceSlot = sourceSlot;
         destSlot = sourceSlot;
         draggedEntity = entity;
 
-        Drawable item = sourceSlot.getImage();
+        Drawable item = sourceSlot.image.getDrawable();
 
         ghost = new DragEntity(item, sourceSlot.getStage());
         ghost.setColor(1, 1, 1, 0.5f);
         ghost.setSize(sourceSlot.image.getImageWidth() , sourceSlot.image.getHeight());
-        ghost.setOffsetX(-offsetX);
-        ghost.setOffsetY(offsetY);
     }
 
+    private Inventory inventory;
     private Entity entity;
     private InventorySlot slot;
     private Label quantityLabel;
     private Table labelTable;
 
     public InventorySlotWidget(InventorySlot slot) {
-        super(GameAssetManager.getInstance().inventorySlotFrame, GameAssetManager.getInstance().emptyTexture);
+        super(GameAssetManager.getInstance().inventorySlotFrame, GameAssetManager.getInstance().emptyTexture, 1);
 
         labelTable = new Table();
         labelTable.setFillParent(true);
@@ -95,7 +97,7 @@ public class InventorySlotWidget extends FramedImage{
                     }
                 }else{
                     image.addAction(
-                            Actions.moveTo(0, 2, 0.2f, Interpolation.swingOut)
+                            Actions.moveBy(0, 2, 0.2f, Interpolation.swingOut)
                     );
                 }
             }
@@ -113,7 +115,7 @@ public class InventorySlotWidget extends FramedImage{
                     );
                 }else{
                     image.addAction(
-                            Actions.moveTo(0, 0, 0.2f, Interpolation.swingOut)
+                            Actions.moveBy(0, -2, 0.2f, Interpolation.swingOut)
                     );
                 }
             }
@@ -155,19 +157,28 @@ public class InventorySlotWidget extends FramedImage{
 
                                 Entity split = slot.getEntity().getComponent(Pickable.class).split((int) slider.getValue());
 
-                                startDrag(split, InventorySlotWidget.this, InventorySlotWidget.this.image.getWidth()/2,
-                                    InventorySlotWidget.this.image.getHeight()/2);
+                                startDrag(split, InventorySlotWidget.this);
                             }
                         });
                     }
                 }else {
                     if(draggedEntity != null){
                         if(destSlot == null) return;
+                        if(destSlot.getInventory() != null){
+                            if(destSlot.getInventory().isOnlyEdible() && draggedEntity.getComponent(Edible.class) == null){
+                                LabelMessage message = new LabelMessage(InventorySlotWidget.this, "Only edibles",
+                                    GameAssetManager.getInstance().getCustomSkin());
+                                message.setColor(ColorPalette.red);
+                                message.show();
+                                return;
+                            }
+                        }
 
                         Entity leftOver = Inventory.addItemToSlot(draggedEntity, destSlot.slot);
                         if(sourceSlot != destSlot && leftOver != null){
                             Inventory.addItemToSlot(leftOver, sourceSlot.slot);
                         }
+                        destSlot.updateEntityIcon();
 
                         ghost.remove();
                         ghost = null;
@@ -175,18 +186,22 @@ public class InventorySlotWidget extends FramedImage{
                         sourceSlot = null;
                         destSlot = null;
 
+
                         frame.addAction(
                             Actions.parallel(
                                 Actions.scaleTo(1f, 1f, 0.2f, Interpolation.swingOut),
                                 Actions.alpha(1f, 0.2f)
                             )
                         );
+                        image.addAction(
+                            Actions.moveBy(0, 2)
+                        );
                     }else{
                         Entity entity = slot.getEntity();
 
                         if(entity == null) return;
 
-                        startDrag(InventorySlotWidget.this.slot.getEntity(), InventorySlotWidget.this, x, y);
+                        startDrag(InventorySlotWidget.this.slot.getEntity(), InventorySlotWidget.this);
 
                         sourceSlot.slot.setEntity(null);
                     }
@@ -250,5 +265,13 @@ public class InventorySlotWidget extends FramedImage{
 
     public InventorySlot getSlot() {
         return slot;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 }

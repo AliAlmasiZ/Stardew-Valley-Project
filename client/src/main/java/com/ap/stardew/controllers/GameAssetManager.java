@@ -43,6 +43,9 @@ public class GameAssetManager extends AssetManager {
     public final Texture redCross;
     public final Texture emptyTexture;
 
+    public final Texture tileSelectionBox;
+
+
     private GameAssetManager(){
         for (Texture texture : customSkin.getAtlas().getTextures()) {
             texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -71,6 +74,8 @@ public class GameAssetManager extends AssetManager {
         testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
         inventorySlotFrameSelected = new Texture("Content/inventorySlotFrameSelected.png");
+
+        tileSelectionBox = new Texture("Content/tileSelectBox.png");
 
         menuBackground = new Texture("Content/frameNinePatch2.9.png");
         closeButton = new Texture("Content/closeButton.png");

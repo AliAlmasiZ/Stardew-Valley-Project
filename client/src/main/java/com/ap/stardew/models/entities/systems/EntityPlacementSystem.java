@@ -155,16 +155,18 @@ public class EntityPlacementSystem {
             }
         }
         for (MapObject object : interiorObjects) {
-            int id = object.getProperties().get("id", Integer.class);
-            int dest = object.getProperties().get("destId", Integer.class);
+            if(object.getName().equals("Door")){
+                int id = object.getProperties().get("id", Integer.class);
+                int dest = object.getProperties().get("destId", Integer.class);
 
-            int x = Math.round(object.getProperties().get("x", Float.class) / 16);
-            int y = Math.round(object.getProperties().get("y", Float.class) / 16);
+                int x = Math.round(object.getProperties().get("x", Float.class) / 16);
+                int y = Math.round(object.getProperties().get("y", Float.class) / 16);
 
-            Door door = new Door();
-            interiorDoors.putIfAbsent(id, door);
-            EntityPlacementSystem.placeOnTile(door, interiorMap.getTileByPosition(y, x));
-            inOutRefs.putIfAbsent(id, dest);
+                Door door = new Door();
+                interiorDoors.putIfAbsent(id, door);
+                EntityPlacementSystem.placeOnTile(door, interiorMap.getTileByPosition(y, x));
+                inOutRefs.putIfAbsent(id, dest);
+            }
         }
 
         for(Map.Entry<Integer, Integer> p : outInRefs.entrySet()){

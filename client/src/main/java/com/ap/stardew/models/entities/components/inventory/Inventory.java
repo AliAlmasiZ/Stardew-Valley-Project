@@ -1,5 +1,6 @@
 package com.ap.stardew.models.entities.components.inventory;
 
+import com.ap.stardew.models.crafting.Ingredient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.Entity;
@@ -19,8 +20,9 @@ public class Inventory extends EntityComponent implements Serializable {
     private int capacity;
     @JsonProperty("unlimited")
     private boolean unlimited;
+    @JsonProperty("onlyEdible")
+    private boolean onlyEdible;
     private int selected = 0;
-
 
     public Inventory(int capacity) {
         this(capacity, false);
@@ -59,6 +61,7 @@ public class Inventory extends EntityComponent implements Serializable {
         for (int i = 0; i < capacity; i++) {
             this.slots.add(new InventorySlot());
         }
+        this.onlyEdible = other.onlyEdible;
         this.setUnlimited(other.unlimited);
     }
 
@@ -416,6 +419,9 @@ public class Inventory extends EntityComponent implements Serializable {
         return selected;
     }
 
+    public boolean isOnlyEdible() {
+        return onlyEdible;
+    }
     @Override
     public EntityComponent clone() {
         return new Inventory(this);

@@ -19,7 +19,6 @@ import java.util.Map;
 
 
 public class ArtisanComponent extends EntityComponent implements Serializable {
-
     /* Hard Codes :/ */
     private static Map<String, Integer> ingredientToPrice = new HashMap<>();
     private static Map<String, List<String>> materials = new HashMap<>();
@@ -37,7 +36,6 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
 
         ingredientToPrice.put("Egg", 190);
         ingredientToPrice.put("Large Egg", 237);
-
     }
     /*-----------------------------------------------------------------------------*/
 
@@ -55,7 +53,6 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
         this.recipes.addAll(recipes);
         this.activeProcess = process;
     }
-
 
     @Override
     public EntityComponent clone() {
@@ -86,7 +83,6 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
             hour = 24 + 9 - App.getActiveGame().getDate().getHour();
         }
         return new Result(false, "Time left : " + day + "d , " + hour + "h");
-
     }
 
     public Entity getProduct() {
@@ -134,12 +130,4 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
         }
         return new Result(false, "This artisan doesn't have recipe with this name");
     }
-
-
-
-
-
-
-
-
 }
