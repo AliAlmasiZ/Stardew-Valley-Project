@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
-public class SignupScreen extends AbstractScreen {
+public class SignupScreen extends AbstractMenuScreen {
     LoginMenuController controller;
     private TextField username;
     private TextField password;
@@ -35,57 +35,57 @@ public class SignupScreen extends AbstractScreen {
         controller = new LoginMenuController();
         float fieldWidth = Gdx.graphics.getWidth() * 0.2f;
 
-        username = new TextField("", skin);
+        username = new TextField("", customSkin);
         username.setMessageText("Username");
         username.setWidth(fieldWidth);
-        password = new TextField("", skin);
+        password = new TextField("", customSkin);
         password.setMessageText("Password");
         password.setWidth(fieldWidth);
-        confirmPassword = new TextField("", skin);
+        confirmPassword = new TextField("", customSkin);
         confirmPassword.setMessageText("Confirm Password");
         confirmPassword.setWidth(fieldWidth);
-        name = new TextField("", skin);
+        name = new TextField("", customSkin);
         name.setMessageText("Name");
-        email = new TextField("", skin);
+        email = new TextField("", customSkin);
         email.setMessageText("Email");
         email.setWidth(fieldWidth);
-        gender = new SelectBox<>(skin);
+        gender = new SelectBox<>(customSkin);
         String[] genders = {"male", "female"};
         SignupScreen.this.gender.setItems(genders);
 
-        randomPasswordButton = new TextButton("Random Password", skin);
-        registerButton = new TextButton("Register", skin);
-        backButton = new TextButton("Back", skin);
+        randomPasswordButton = new TextButton("Random Password", customSkin);
+        registerButton = new TextButton("Register", customSkin);
+        backButton = new TextButton("Back", customSkin);
 
-        message = new Label("", skin);
+        message = new Label("", customSkin);
         message.setVisible(false);
 
         float padFromLabel = 0.1f;
 
         rootTable.add(message).pad(30);
         rootTable.row();
-        rootTable.add(new Label("Username:", skin)).padBottom(padFromLabel);
+        rootTable.add(new Label("Username:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(username).width(fieldWidth);
         rootTable.row();
-        rootTable.add(new Label("Password:", skin)).padBottom(padFromLabel);
+        rootTable.add(new Label("Password:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(password).width(fieldWidth);
         rootTable.add(randomPasswordButton).pad(15);
         rootTable.row();
-        rootTable.add(new Label("Confirm Password:", skin)).padBottom(padFromLabel);
+        rootTable.add(new Label("Confirm Password:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(confirmPassword).width(fieldWidth);
         rootTable.row();
-        rootTable.add(new Label("Name", skin)).padBottom(padFromLabel);
+        rootTable.add(new Label("Name", customSkin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(name).width(fieldWidth);
         rootTable.row();
-        rootTable.add(new Label("Email:", skin)).padBottom(padFromLabel);
+        rootTable.add(new Label("Email:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
         rootTable.add(email).width(fieldWidth);
         rootTable.row();
-        rootTable.add(new Label("Gender:", skin));
+        rootTable.add(new Label("Gender:", customSkin));
         rootTable.row();
         rootTable.add(gender);
         rootTable.row();
@@ -149,27 +149,27 @@ public class SignupScreen extends AbstractScreen {
     }
 
     public void showSecurityQuestionDialog() {
-        Dialog dialog = new Dialog("Security Question", skin);
+        Dialog dialog = new Dialog("Security Question", customSkin);
 
-        SelectBox<Integer> integerSelectBox = new SelectBox<>(skin);
+        SelectBox<Integer> integerSelectBox = new SelectBox<>(customSkin);
         integerSelectBox.setItems(new Integer[]{1, 2, 3, 4, 5});
-        Label questionLabel = new Label(SecurityQuestions.getQuestionList(), skin);
-        TextField answerField = new TextField("", skin);
+        Label questionLabel = new Label(SecurityQuestions.getQuestionList(), customSkin);
+        TextField answerField = new TextField("", customSkin);
         answerField.setMessageText("Your answer");
-        TextField confirmAnswerField = new TextField("", skin);
+        TextField confirmAnswerField = new TextField("", customSkin);
         confirmAnswerField.setMessageText("Your confirm answer");
 
-        Label errorLabel = new Label("", skin);
+        Label errorLabel = new Label("", customSkin);
         errorLabel.setColor(Color.RED);
         dialog.getContentTable().add(questionLabel).padTop(10).padLeft(10).padRight(10).row();
-        dialog.getContentTable().add(new Label("which one will you answer?", skin)).padTop(10).padLeft(10).padRight(10).row();
+        dialog.getContentTable().add(new Label("which one will you answer?", customSkin)).padTop(10).padLeft(10).padRight(10).row();
         dialog.getContentTable().add(integerSelectBox).padTop(10).padLeft(10).padRight(10).row();
         dialog.getContentTable().add(answerField).width(300).padBottom(10).row();
         dialog.getContentTable().add(confirmAnswerField).width(300).padBottom(10).row();
         dialog.getContentTable().add(errorLabel).padBottom(10).row();
 
-        TextButton confirmButton = new TextButton("Confirm", skin);
-        TextButton skipButton = new TextButton("Skip", skin);
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
+        TextButton skipButton = new TextButton("Skip", customSkin);
 
         confirmButton.addListener(new ClickListener() {
             @Override
@@ -210,17 +210,5 @@ public class SignupScreen extends AbstractScreen {
         dialog.getButtonTable().center();
         dialog.getTitleLabel().setFontScale(1.2f);
         dialog.getTitleLabel().setAlignment(Align.center);
-    }
-
-    @Override
-    public void render(float delta) {
-        uiStage.act(delta);
-        //test---------------
-        Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
-        uiStage.getBatch().begin();
-        uiStage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        uiStage.getBatch().end();
-        //---------------------
-        uiStage.draw();
     }
 }

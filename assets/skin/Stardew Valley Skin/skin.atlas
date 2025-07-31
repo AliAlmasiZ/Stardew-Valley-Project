@@ -6,42 +6,92 @@ filter: Linear, Linear
 repeat: none
 white-pixel
   rotate: false
-  xy: 31, 178
+  xy: 809, 842
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 InventoryIcon
   rotate: false
-  xy: 515, 613
+  xy: 759, 518
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 MapIcon
   rotate: false
-  xy: 1, 111
+  xy: 421, 52
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 trashCan
   rotate: false
-  xy: 515, 567
+  xy: 51, 1
   size: 16, 26
   orig: 16, 26
   offset: 0, 0
   index: -1
 trashCanLid
   rotate: false
-  xy: 51, 195
+  xy: 691, 495
   size: 18, 10
   orig: 18, 10
   offset: 0, 0
   index: -1
+backButton
+  rotate: false
+  xy: 642, 725
+  size: 66, 27
+  orig: 66, 27
+  offset: 0, 0
+  index: -1
+backButtonHovered
+  rotate: false
+  xy: 642, 754
+  size: 66, 27
+  orig: 66, 27
+  offset: 0, 0
+  index: -1
+bigButton2
+  rotate: false
+  xy: 177, 29
+  size: 174, 39
+  split: 22, 19, 13, 12
+  pad: 10, 10, 8, 8
+  orig: 174, 39
+  offset: 0, 0
+  index: -1
+bigButtonHovered2
+  rotate: false
+  xy: 515, 495
+  size: 174, 39
+  split: 22, 16, 12, 12
+  pad: 10, 10, 8, 8
+  orig: 174, 39
+  offset: 0, 0
+  index: -1
+bigButtonHoveredNinePatch
+  rotate: false
+  xy: 642, 984
+  size: 174, 39
+  split: 63, 66, 17, 20
+  pad: 9, 9, 9, 9
+  orig: 174, 39
+  offset: 0, 0
+  index: -1
+bigButtonNinePatch
+  rotate: false
+  xy: 1, 29
+  size: 174, 39
+  split: 65, 78, 16, 20
+  pad: 9, 9, 9, 9
+  orig: 174, 39
+  offset: 0, 0
+  index: -1
 buttonDown
   rotate: false
-  xy: 564, 710
+  xy: 353, 30
   size: 13, 9
   split: 3, 3, 3, 3
   orig: 13, 9
@@ -49,7 +99,7 @@ buttonDown
   index: -1
 buttonUp
   rotate: false
-  xy: 35, 182
+  xy: 1000, 1014
   size: 13, 9
   split: 3, 3, 3, 3
   orig: 13, 9
@@ -57,14 +107,14 @@ buttonUp
   index: -1
 daybg
   rotate: false
-  xy: 515, 657
+  xy: 591, 222
   size: 32, 48
   orig: 32, 48
   offset: 0, 0
   index: -1
 energyBarFill2NinePatch
   rotate: false
-  xy: 533, 623
+  xy: 801, 832
   size: 6, 6
   split: 1, 1, 1, 1
   pad: 0, 0, 0, 0
@@ -73,7 +123,7 @@ energyBarFill2NinePatch
   index: -1
 energyBarFillNinePatch
   rotate: false
-  xy: 1, 181
+  xy: 767, 828
   size: 32, 10
   split: 0, 1, 1, 0
   orig: 32, 10
@@ -81,30 +131,51 @@ energyBarFillNinePatch
   index: -1
 energyBarNinePatch
   rotate: false
-  xy: 1, 12
+  xy: 639, 343
   size: 12, 56
   split: 4, 4, 15, 3
   pad: 3, 3, 14, 2
   orig: 12, 56
   offset: 0, 0
   index: -1
+exitButton
+  rotate: false
+  xy: 818, 965
+  size: 74, 58
+  orig: 74, 58
+  offset: 0, 0
+  index: -1
+exitButtonHovered
+  rotate: false
+  xy: 515, 212
+  size: 74, 58
+  orig: 74, 58
+  offset: 0, 0
+  index: -1
+svbold(2)
+  rotate: false
+  xy: 1, 70
+  size: 506, 139
+  orig: 506, 139
+  offset: 0, 0
+  index: -1
 khodayaBaseDige
   rotate: false
-  xy: 1, 207
+  xy: 1, 211
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 frame
   rotate: false
-  xy: 515, 631
+  xy: 639, 401
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 515, 631
+  xy: 639, 401
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
@@ -113,7 +184,7 @@ frameNinePatch
   index: -1
 frameNinePatch2
   rotate: false
-  xy: 1, 129
+  xy: 666, 475
   size: 18, 18
   split: 6, 6, 7, 6
   orig: 18, 18
@@ -121,84 +192,175 @@ frameNinePatch2
   index: -1
 inventoryIconRotated
   rotate: false
-  xy: 515, 544
+  xy: 970, 970
   size: 16, 21
   orig: 16, 21
   offset: 0, 0
   index: -1
 inventoryQuantityNumbers export
   rotate: false
-  xy: 1, 149
+  xy: 970, 993
   size: 28, 30
   orig: 28, 30
   offset: 0, 0
   index: -1
+loadGameButton
+  rotate: false
+  xy: 809, 905
+  size: 74, 58
+  orig: 74, 58
+  offset: 0, 0
+  index: -1
+loadGameButtonHovered
+  rotate: false
+  xy: 894, 965
+  size: 74, 58
+  orig: 74, 58
+  offset: 0, 0
+  index: -1
+logoutButton
+  rotate: false
+  xy: 691, 507
+  size: 66, 27
+  orig: 66, 27
+  offset: 0, 0
+  index: -1
+logoutButtonHovered
+  rotate: false
+  xy: 353, 41
+  size: 66, 27
+  orig: 66, 27
+  offset: 0, 0
+  index: -1
+backgroundBushesLeft
+  rotate: false
+  xy: 642, 840
+  size: 165, 142
+  orig: 165, 142
+  offset: 0, 0
+  index: -1
+backgroundBushesRight
+  rotate: false
+  xy: 515, 272
+  size: 122, 153
+  orig: 122, 153
+  offset: 0, 0
+  index: -1
+cloud1
+  rotate: false
+  xy: 515, 427
+  size: 149, 66
+  orig: 149, 66
+  offset: 0, 0
+  index: -1
+cloud2
+  rotate: false
+  xy: 642, 783
+  size: 123, 55
+  orig: 123, 55
+  offset: 0, 0
+  index: -1
+cloud3
+  rotate: false
+  xy: 885, 868
+  size: 64, 35
+  orig: 64, 35
+  offset: 0, 0
+  index: -1
+mountains1
+  rotate: false
+  xy: 1, 725
+  size: 639, 148
+  orig: 639, 148
+  offset: 0, 0
+  index: -1
+mountains2
+  rotate: false
+  xy: 1, 875
+  size: 639, 148
+  orig: 639, 148
+  offset: 0, 0
+  index: -1
+newGameButton
+  rotate: false
+  xy: 885, 905
+  size: 74, 58
+  orig: 74, 58
+  offset: 0, 0
+  index: -1
+newGameButtonHovered
+  rotate: false
+  xy: 809, 845
+  size: 74, 58
+  orig: 74, 58
+  offset: 0, 0
+  index: -1
 shit
   rotate: false
-  xy: 515, 595
+  xy: 710, 765
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 skillMenuIcon
   rotate: false
-  xy: 1, 93
+  xy: 885, 850
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 farmingSkillIcon
   rotate: false
-  xy: 21, 137
+  xy: 1015, 1013
   size: 8, 10
   orig: 8, 10
   offset: 0, 0
   index: -1
 fishingSkillIcon
   rotate: false
-  xy: 71, 195
+  xy: 666, 463
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 foragingSkillIcon
   rotate: false
-  xy: 549, 695
+  xy: 625, 260
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 miningSkillIcon
   rotate: false
-  xy: 515, 532
+  xy: 686, 483
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 sliderButton
   rotate: false
-  xy: 549, 684
+  xy: 951, 894
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
 sliderButtonDown
   rotate: false
-  xy: 1, 1
+  xy: 961, 954
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
 sliderButtonUp
   rotate: false
-  xy: 579, 710
+  xy: 809, 973
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
 sliderNinePatch
   rotate: false
-  xy: 541, 649
+  xy: 809, 965
   size: 6, 6
   split: 2, 2, 2, 2
   pad: 1, 1, 1, 1
@@ -207,7 +369,7 @@ sliderNinePatch
   index: -1
 sliderNinePatch2
   rotate: false
-  xy: 83, 202
+  xy: 509, 206
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -215,7 +377,7 @@ sliderNinePatch2
   index: -1
 smallPanelNinePatch
   rotate: false
-  xy: 515, 707
+  xy: 1, 1
   size: 47, 12
   split: 4, 5, 4, 4
   pad: 4, 4, 4, 4
@@ -224,17 +386,24 @@ smallPanelNinePatch
   index: -1
 storageIcon
   rotate: false
-  xy: 1, 70
+  xy: 767, 805
   size: 16, 21
   orig: 16, 21
   offset: 0, 0
   index: -1
 textboxNinePatch
   rotate: false
-  xy: 1, 193
+  xy: 1, 15
   size: 48, 12
   split: 5, 3, 3, 4
   pad: 5, 3, 3, 3
   orig: 48, 12
+  offset: 0, 0
+  index: -1
+titleLogo
+  rotate: false
+  xy: 515, 536
+  size: 398, 187
+  orig: 398, 187
   offset: 0, 0
   index: -1

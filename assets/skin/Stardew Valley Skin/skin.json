@@ -14,7 +14,13 @@
 	},
 	"khodayaBaseDige": {
 		"file": "khodayaBaseDige.fnt",
-		"scaledSize": 5,
+		"scaledSize": 7,
+		"markupEnabled": false,
+		"flip": false
+	},
+	"svbold2": {
+		"file": "svbold(2).fnt",
+		"scaledSize": 16,
 		"markupEnabled": false,
 		"flip": false
 	}
@@ -32,6 +38,12 @@
 		"b": 0.5647059,
 		"a": 1
 	},
+	"RGBA_206_82_82_255": {
+		"r": 0.80784315,
+		"g": 0.32156864,
+		"b": 0.32156864,
+		"a": 1
+	},
 	"RGBA_247_221_76_255": {
 		"r": 0.96862745,
 		"g": 0.8666667,
@@ -43,6 +55,35 @@
 		"g": 1,
 		"b": 1,
 		"a": 1
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable": {
+	"textboxNinePatch": {
+		"patch": "textboxNinePatch",
+		"minWidth": 48,
+		"minHeight": 15,
+		"leftWidth": 5,
+		"rightWidth": 3,
+		"topHeight": 3,
+		"bottomHeight": 3
+	},
+	"bigButtonHovered2": {
+		"patch": "bigButtonHovered2",
+		"minWidth": 50,
+		"minHeight": 30,
+		"leftWidth": 10,
+		"rightWidth": 10,
+		"topHeight": 8,
+		"bottomHeight": 8
+	},
+	"bigButton2": {
+		"patch": "bigButton2",
+		"minWidth": 50,
+		"minHeight": 30,
+		"leftWidth": 10,
+		"rightWidth": 10,
+		"topHeight": 8,
+		"bottomHeight": 8
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
@@ -63,6 +104,26 @@
 	"default": {
 		"up": "buttonUp",
 		"down": "buttonDown"
+	},
+	"logout": {
+		"up": "logoutButton",
+		"over": "logoutButtonHovered"
+	},
+	"newGame": {
+		"up": "newGameButton",
+		"over": "newGameButtonHovered"
+	},
+	"loadGame": {
+		"up": "loadGameButton",
+		"over": "loadGameButtonHovered"
+	},
+	"exit": {
+		"up": "exitButton",
+		"over": "exitButtonHovered"
+	},
+	"back": {
+		"up": "backButton",
+		"over": "backButtonHovered"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
@@ -71,6 +132,27 @@
 	},
 	"inventoryQuantity": {
 		"font": "inventoryQuantityNumbers2"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
+	"default": {
+		"font": "khodayaBaseDige",
+		"fontColorSelected": "RGBA_255_255_255_255",
+		"fontColorUnselected": "RGBA_0_0_0_255",
+		"selection": "energyBarFillNinePatch"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+	"default": {
+		"background": "frameNinePatch2"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
+	"default": {
+		"font": "khodayaBaseDige",
+		"fontColor": "RGBA_0_0_0_255",
+		"scrollStyle": "default",
+		"listStyle": "default"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
@@ -88,6 +170,12 @@
 		"downFontColor": "RGBA_144_144_144_255",
 		"up": "buttonUp",
 		"down": "buttonDown"
+	},
+	"big": {
+		"font": "svbold2",
+		"fontColor": "RGBA_206_82_82_255",
+		"up": "bigButton2",
+		"over": "bigButtonHovered2"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
@@ -101,6 +189,12 @@
 "com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
 	"default": {
 		"label": "default"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+	"default": {
+		"background": "frameNinePatch2",
+		"titleFont": "khodayaBaseDige"
 	}
 }
 }

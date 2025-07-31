@@ -16,16 +16,32 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class InGameDialog extends Table {
     private final Stage stage;
-    private final Image closeButton;
+    private Image closeButton;
     private Table wrapperTable;
 
     private int closeButtonOffsetX = 0, closeButtonOffsetY = -15;
 
     public InGameDialog(Stage stage) {
         this.stage = stage;
+    }
+
+    public void show(){
+        clearActions();
+
+        wrapperTable = new Table();
+
+        wrapperTable.setFillParent(true);
+        wrapperTable.center();
+
+        wrapperTable.add(this);
+        stage.addActor(wrapperTable);
+
+        stage.cancelTouchFocus();
+        stage.setKeyboardFocus(this);
+        stage.setScrollFocus(this);
 
         closeButton = new Image(GameAssetManager.getInstance().closeButton);
-        addActor(closeButton);
+        wrapperTable.addActor(closeButton);
 
         closeButton.addListener(new ClickListener(){
             @Override
@@ -47,22 +63,6 @@ public class InGameDialog extends Table {
                 hide();
             }
         });
-    }
-
-    public void show(){
-        clearActions();
-
-        wrapperTable = new Table();
-
-        wrapperTable.setFillParent(true);
-        wrapperTable.center();
-
-        wrapperTable.add(this);
-        stage.addActor(wrapperTable);
-
-        stage.cancelTouchFocus();
-        stage.setKeyboardFocus(this);
-        stage.setScrollFocus(this);
 
         addAction(
             Actions.sequence(
@@ -155,7 +155,7 @@ public class InGameDialog extends Table {
     @Override
     public void layout() {
         super.layout();
-        closeButton.setPosition(getWidth() + closeButtonOffsetX, getHeight() + closeButtonOffsetY);
+        closeButton.setPosition(getX() + getWidth() + closeButtonOffsetX,getY() + getHeight() + closeButtonOffsetY);
     }
 
     public Image getCloseButton() {

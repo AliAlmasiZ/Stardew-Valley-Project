@@ -31,6 +31,7 @@ import com.ap.stardew.records.Result;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -99,7 +100,7 @@ public class GameScreen extends AbstractScreen {
 
 
     public GameScreen() {
-        super(3f);
+        super();
         stack = new Stack();
         rootTable.add(stack).grow();
 
@@ -345,9 +346,17 @@ public class GameScreen extends AbstractScreen {
 
         batch.end();
 
+
         renderer.render(frontLayerIndices);
         gameStage.act(delta);
         gameStage.draw();
+
+        Gdx.gl.glEnable(GL32.GL_BLEND);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0.2f, (App.getActiveGame().getDate().getHour() - 9) / 22f);
+        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL32.GL_BLEND);
 
         uiStage.act(delta);
         uiStage.draw();
@@ -355,13 +364,12 @@ public class GameScreen extends AbstractScreen {
         minigameStage.act(delta);
         minigameStage.draw();
 
+
         /**
          * UPDATES
          */
         // Clock
         clockActor.update(delta);
-
-
     }
 
     @Override
@@ -684,13 +692,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openAnimalMenu(Animal animal) {
-        InGameDialog dialog = new InGameDialog(uiStage) {
-            @Override
-            public void hide() {
-                super.hide();
-                setGameInput();
-            }
-        };
+        InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();
 
@@ -724,7 +726,6 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
-        Gdx.input.setInputProcessor(uiStage);
 
         feedButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -800,15 +801,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openAnimalMovementMenu(Animal animal) {
-        InGameDialog dialog = new InGameDialog(uiStage) {
-            @Override
-            public void hide() {
-                super.hide();
-                setGameInput();
-            }
-        };
-        dialog.setBackground((Drawable) null);
-
+        InGameDialog dialog = new InGameDialog(uiStage);
         TabWidget tabWidget = new TabWidget();
 
         //
@@ -889,7 +882,6 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
-        Gdx.input.setInputProcessor(uiStage);
     }
 
     public void openNPCMenu(NPC npc) {

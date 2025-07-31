@@ -12,19 +12,18 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class AbstractScreen implements Screen {
-    private float uiScaling = 1;
+    protected static float uiScaling = 2.5f;
 
     protected Stage uiStage;
     protected Table rootTable;
     protected Skin skin;
     protected Skin customSkin;
 
-    public AbstractScreen(float uiScaling) {
-        this.uiScaling = uiScaling;
+    public AbstractScreen() {
 
         uiStage = new Stage(new ScreenViewport(), ClientGame.getInstance().getBatch());
-        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 120 / this.uiScaling;
-        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 120 / this.uiScaling;
+        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 120 / uiScaling;
+        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 120 / uiScaling;
 
 
         rootTable = new Table();
@@ -33,9 +32,6 @@ public class AbstractScreen implements Screen {
         uiStage.addActor(rootTable);
         skin = GameAssetManager.getInstance().getSkin();
         customSkin = GameAssetManager.getInstance().getCustomSkin();
-    }
-    public AbstractScreen(){
-        this(1);
     }
 
     @Override
