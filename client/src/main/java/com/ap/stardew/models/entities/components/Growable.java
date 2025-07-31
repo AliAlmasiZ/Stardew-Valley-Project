@@ -1,9 +1,5 @@
 package com.ap.stardew.models.entities.components;
 
-import com.ap.stardew.controllers.GameAssetManager;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.models.App;
@@ -45,7 +41,6 @@ public class Growable extends EntityComponent implements Serializable {
 
     @JsonIgnore
     private boolean isSpritesLoaded = false; // Guess its the safest way
-    private Sprite[] sprites = new Sprite[10];
 
     public Growable(ArrayList<Season> growingSeasons, String fruit, String seed, int totalHarvestTime) {
         this.growingSeasons = growingSeasons;
@@ -95,11 +90,6 @@ public class Growable extends EntityComponent implements Serializable {
 
     public ArrayList<Integer> getStages() {
         return stages;
-    }
-
-    @JsonIgnore
-    public Sprite[] getSprites() {
-        return sprites;
     }
 
     public boolean isWateredToday() {
@@ -289,109 +279,6 @@ public class Growable extends EntityComponent implements Serializable {
         }
 
         return null;
-    }
-
-    public Sprite getCurrentSprite() {
-        if (!isSpritesLoaded) loadSprites();
-
-        int currentStage = getStage();
-
-        if (entity.hasTag(EntityTag.CROP)) {
-            if (currentStage < stages.size()) return sprites[currentStage - 1];
-            if (daysPastFromPlant >= totalHarvestTime) return sprites[currentStage];
-        } else if (entity.hasTag(EntityTag.TREE)) {
-            if (currentStage < stages.size()) return sprites[currentStage - 1];
-            if (canCollectProduct().isSuccessful()) return sprites[currentStage + 1];
-            if (daysPastFromPlant >= totalHarvestTime) return sprites[currentStage];
-        }
-
-        return sprites[0];
-    }
-
-    private void loadSprites() {
-        String name = entity.getEntityName().replaceAll(" ", "_");
-        GameAssetManager gameAssetManager = GameAssetManager.getInstance();
-
-        if (entity.hasTag(EntityTag.CROP)) {
-            try {
-                setCropSprites(gameAssetManager, name);
-            } catch (Exception e) {
-                name = "Artichoke";
-                setCropSprites(gameAssetManager, name);
-            }
-
-            for (int i = 0; i <= stages.size() + 1; i++) {
-                if (sprites[i] != null) {
-                    sprites[i].setSize(18, 18); //TODO : It should be tile size
-                }
-            }
-        } else if (entity.hasTag(EntityTag.TREE)) {
-            try {
-                setTreeSpritesByName(name, gameAssetManager);
-
-            } catch (Exception e) {
-                try {
-                    name = name.replace("_Tree", "");
-                    setTreeSpritesByName(name, gameAssetManager);
-                }  catch (Exception e1) {
-                    name = "Mango";
-                    setTreeSpritesByName(name, gameAssetManager);
-                }
-            }
-
-            for (int i = 0; i <= stages.size() + 1; i++) {
-                if (sprites[i] != null) {
-                    sprites[i].setSize(20, 40);
-                }
-            }
-        }
-
-    }
-
-    private void setCropSprites(GameAssetManager gameAssetManager, String name) {
-        ArrayList<Sprite> spritesToLoad = new ArrayList<>();
-        for (int i = 0; i < stages.size() * 2; i++) {
-            int j = i + 1;
-            try {
-            Sprite s = new Sprite(gameAssetManager.get("Content/Crops/" + name + "_Stage_" + j + ".png", Texture.class));
-
-            spritesToLoad.add(s);
-            } catch (Exception e) {
-                break;
-            }
-        }
-
-        for (int i = 0; i < stages.size(); i++) {
-            sprites[i] = spritesToLoad.get(i);
-        }
-        sprites[stages.size()] = spritesToLoad.get(spritesToLoad.size() - 1);
-    }
-
-    private void setTreeSpritesByName(String name, GameAssetManager gameAssetManager) {
-        for (int i = 0; i < stages.size(); i++) {
-            int j = i + 1;
-            sprites[i] = new Sprite(gameAssetManager.get("Content/Trees/" + name + "_Stage_" + j + ".png", Texture.class));
-        }
-
-        try {
-            int t = stages.size() + 1;
-            Texture texture = gameAssetManager.get("Content/Trees/" + name + "_Stage_" + t + ".png", Texture.class);
-            TextureRegion textureRegion = new TextureRegion(texture);
-            float width = texture.getWidth();
-            float height = texture.getHeight();
-            if (width > height * 2) {
-                textureRegion = new TextureRegion(texture, 0, 0, height, width / 4);
-            }
-            sprites[stages.size()] = new Sprite(textureRegion);
-        } catch (Exception e) {
-            sprites[stages.size()] = sprites[stages.size() - 1];
-        }
-
-        try {
-            sprites[stages.size() + 1] = new Sprite(gameAssetManager.get("Content/Trees/" + name + "_Stage_5_Fruit" + ".png", Texture.class));
-        } catch (Exception e) {
-            sprites[stages.size() + 1] = sprites[stages.size() - 1];
-        }
     }
 
     private boolean isInGreenhouse() {
