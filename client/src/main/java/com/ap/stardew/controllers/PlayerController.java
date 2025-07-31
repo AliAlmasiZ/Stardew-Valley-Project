@@ -116,7 +116,6 @@ public class PlayerController implements InputProcessor {
             return true; // input was handled
         }
         if(button == Input.Buttons.LEFT){
-            if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() > 1.6f) return false;
             InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
             if(activeSlot == null) return false;
             Entity entity = activeSlot.getEntity();
@@ -124,7 +123,7 @@ public class PlayerController implements InputProcessor {
             Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
 
             Useable useable = entity.getComponent(Useable.class);
-            if(useable != null){
+            if(useable != null && (player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f)){
 
                 for (UseFunction function : useable.getFunctions()) {
                     function.use(entity, tile);
