@@ -29,7 +29,6 @@ public class ClientGame extends Game {
         instance = this;
         batch = new SpriteBatch();
         setScreen(new MainScreen());
-//        setScreen(new GameScreen());
     }
 
     @Override
@@ -37,8 +36,6 @@ public class ClientGame extends Game {
         Gdx.gl.glClearColor(0f, 0.1f, 0f, 1);
         Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
         super.render();
-
-
     }
 
     private static void loadDatas() {

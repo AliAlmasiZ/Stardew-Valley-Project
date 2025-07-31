@@ -6,17 +6,20 @@ import com.ap.stardew.controllers.validators.PasswordValidator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.enums.SecurityQuestions;
+import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.ValidatedTextField;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginScreen extends AbstractScreen{
+public class LoginScreen extends AbstractMenuScreen{
     private ValidatedTextField usernameTextfield;
     private ValidatedTextField passwordTextfield;
     private TextButton submitButton;
@@ -26,25 +29,29 @@ public class LoginScreen extends AbstractScreen{
 
     public LoginScreen(){
         super();
-
         mainBox = new Table();
         mainBox.center();
         mainBox.pack();
         mainBox.setSize(400, 200);
-        mainBox.defaults().space(10);
 
-        usernameTextfield = new ValidatedTextField(skin, new NonEmptyValidator());
-        passwordTextfield = new ValidatedTextField(skin, new NonEmptyValidator());
+        Table textFieldBox = new Table();
+        textFieldBox.setBackground(customSkin.getDrawable("frameNinePatch2"));
 
-        submitButton = new TextButton("login", skin);
-        forgotPassworBtn = new TextButton("forgot password", skin);
-        backBtn = new TextButton("back", skin);
+        usernameTextfield = new ValidatedTextField(customSkin, new NonEmptyValidator());
+        passwordTextfield = new ValidatedTextField(customSkin, new NonEmptyValidator());
 
-        mainBox.add(backBtn).left().expandX().row();
-        mainBox.add(usernameTextfield).fillX().row();
-        mainBox.add(passwordTextfield).fillX().row();
-        mainBox.add(submitButton).center().row();
-        mainBox.add(forgotPassworBtn).center().row();
+        submitButton = new TextButton("login", customSkin, "big");
+        forgotPassworBtn = new TextButton("forgot password", customSkin);
+        backBtn = new TextButton("back", customSkin, "big");
+
+        backBtn.getLabel().setFontScale(0.35f);
+
+        mainBox.add(backBtn).left().spaceBottom(5).row();
+        textFieldBox.add(usernameTextfield).fillX().spaceBottom(5).row();
+        textFieldBox.add(passwordTextfield).fillX().spaceBottom(5).row();
+        textFieldBox.add(forgotPassworBtn).center().row();
+        mainBox.add(textFieldBox).spaceBottom(5).row();
+        mainBox.add(submitButton).center().growX().pad(0, 3, 0, 3).row();
 
         rootTable.add(mainBox);
 
@@ -74,7 +81,10 @@ public class LoginScreen extends AbstractScreen{
                 }
 
                 App.setLoggedInAccount(account);
-                ClientGame.getInstance().setScreen(new MainMenuScreen());
+
+                MainMenuScreen mainMenuScreen = new MainMenuScreen();
+                mainMenuScreen.enterAnim();
+                ClientGame.getInstance().setScreen(mainMenuScreen);
             }
         });
         forgotPassworBtn.addListener(new ClickListener(){
@@ -84,42 +94,19 @@ public class LoginScreen extends AbstractScreen{
             }
         });
     }
-    @Override
-    public void render(float delta) {
-        //test---------------
-        Texture texture = new Texture("Content(unpacked)/LooseSprites/JunimoNoteMobile.png");
-        uiStage.getBatch().begin();
-        uiStage.getBatch().setColor(1, 1, 1, 1);
-        uiStage.getBatch().draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        uiStage.getBatch().end();
-        //---------------------
-        uiStage.act(delta);
-        uiStage.draw();
-    }
 
     public void showForgotPasswordDialogPhase1(){
-        Dialog dialog = new Dialog("", skin);
+        InGameDialog dialog = new InGameDialog(uiStage);
+        dialog.setBackground(customSkin.getDrawable("frameNinePatch2"));
 
-        ValidatedTextField usernameTextfield = new ValidatedTextField(skin, new NonEmptyValidator());
-        TextButton submitBtn = new TextButton("submit", skin);
-        TextButton backBtn = new TextButton("back", skin);
+        ValidatedTextField usernameTextfield = new ValidatedTextField(customSkin, new NonEmptyValidator());
+        TextButton submitBtn = new TextButton("submit", customSkin);
+        TextButton backBtn = new TextButton("back", customSkin);
 
-        Table contentTable = dialog.getContentTable();
-        contentTable.pad(20).padRight(40).padLeft(40);
+        dialog.add(new Label("Enter your username:", customSkin)).left().row();
+        dialog.add(usernameTextfield).growX().width(300).row();
+        dialog.add(submitBtn).row();
 
-        dialog.getButtonTable().pad(10);
-
-        dialog.getButtonTable().add(backBtn).expandX().left().row();
-        contentTable.add(new Label("Enter your username:", skin)).left().row();
-        contentTable.add(usernameTextfield).growX().width(300).row();
-        contentTable.add(submitBtn).row();
-
-        backBtn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dialog.hide();
-            }
-        });
         submitBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -136,29 +123,28 @@ public class LoginScreen extends AbstractScreen{
                 showForgotPasswordDialogPhase2(dialog, account);
             }
         });
-        dialog.show(uiStage);
+        dialog.show();
     }
-    public void showForgotPasswordDialogPhase2(Dialog dialog, Account account){
-        Table contentTable = dialog.getContentTable();
-        contentTable.clearChildren();
+    public void showForgotPasswordDialogPhase2(InGameDialog dialog, Account account){
+        dialog.clearChildren();
 
-        contentTable.add(new Label("Answer the questions:", skin)).left().expandX().row();
+        dialog.add(new Label("Answer the questions:", customSkin)).left().expandX().row();
 
         Map<SecurityQuestions, String> securityAnswers = account.getSecurityAnswers();
         Map<SecurityQuestions, ValidatedTextField> textFields = new HashMap<>();
 
         for (Map.Entry<SecurityQuestions, String> entry : securityAnswers.entrySet()) {
-            contentTable.add(new Label(entry.getKey().getQuestion(), skin)).left().expandX().row();
+            dialog.add(new Label(entry.getKey().getQuestion(), customSkin)).left().expandX().row();
 
-            ValidatedTextField textField = new ValidatedTextField(skin, new NonEmptyValidator());
+            ValidatedTextField textField = new ValidatedTextField(customSkin, new NonEmptyValidator());
             textFields.put(entry.getKey(), textField);
 
-            contentTable.add(textField).growX().spaceBottom(20).row();
+            dialog.add(textField).growX().spaceBottom(20).row();
         }
 
-        TextButton submitButton = new TextButton("submit", skin);
+        TextButton submitButton = new TextButton("submit", customSkin);
 
-        contentTable.add(submitButton).center();
+        dialog.add(submitButton).center();
 
         submitButton.addListener(new ClickListener(){
             @Override
@@ -178,19 +164,17 @@ public class LoginScreen extends AbstractScreen{
                 }
             }
         });
-        dialog.show(uiStage);
     }
 
-    public void showForgotPasswordDialogPhase3(Dialog dialog, Account account){
-        Table contentTable = dialog.getContentTable();
-        contentTable.clearChildren();
+    public void showForgotPasswordDialogPhase3(InGameDialog dialog, Account account){
+        dialog.clearChildren();
 
-        ValidatedTextField textField = new ValidatedTextField(skin, new PasswordValidator());
-        TextButton submitButton = new TextButton("submit", skin);
+        ValidatedTextField textField = new ValidatedTextField(customSkin, new PasswordValidator());
+        TextButton submitButton = new TextButton("submit", customSkin);
 
-        contentTable.add(new Label("Choose a new password:", skin)).left().expandX().row();
-        contentTable.add(textField).growX().row();
-        contentTable.add(submitButton).row();
+        dialog.add(new Label("Choose a new password:", customSkin)).left().expandX().row();
+        dialog.add(textField).growX().row();
+        dialog.add(submitButton).row();
 
         submitButton.addListener(new ClickListener(){
             @Override
@@ -202,12 +186,11 @@ public class LoginScreen extends AbstractScreen{
 
                 account.setPassword(textField.getText());
 
-                contentTable.clear();
-                contentTable.pad(20).padRight(40).padLeft(40);
-                contentTable.defaults().spaceBottom(10);
-                contentTable.add(new Label("changed the password", skin));
+                dialog.clear();
+                dialog.pad(20).padRight(40).padLeft(40);
+                dialog.defaults().spaceBottom(10);
+                dialog.add(new Label("changed the password", skin));
             }
         });
-        dialog.show(uiStage);
     }
 }

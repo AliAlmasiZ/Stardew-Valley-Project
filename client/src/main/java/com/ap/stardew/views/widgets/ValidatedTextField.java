@@ -26,11 +26,11 @@ public class ValidatedTextField extends WidgetGroup {
         labelContainer = new Container<>(warningLabel);
 
         warningLabel.setVisible(false);
+        warningLabel.setFontScale(0.2f);
         labelContainer.setWidth(getPrefWidth());
         labelContainer.setTransform(true);
         labelContainer.setHeight(warningLabel.getHeight());
         labelContainer.fillX().pad(10, 3 ,3 ,3);
-        warningLabel.setFontScale(1f);
         warningLabel.setColor(labelColor);
 
         addActor(labelContainer);

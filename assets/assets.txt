@@ -4370,6 +4370,7 @@ Content/NPC/Sebastian/parts/image_part_060.png
 Content/NPC/dialog box.png
 Content/NPC/dialog.png
 Content/NPC/textBox.png
+Content/PC _ Computer - Stardew Valley - Miscellaneous - Title Screen.png
 Content/TabMenuIcons.png
 Content/Tools/Axe/copper/10.png
 Content/Tools/Axe/copper/6.png
@@ -4688,6 +4689,14 @@ Content/Workstations/MayonnaiseMachine.png
 Content/Workstations/OilMaker.png
 Content/Workstations/PC _ Computer - Stardew Valley - Tilesets - Craftables.png
 Content/Workstations/PreservesJar.png
+Content/backButton.png
+Content/backButtonHovered.png
+Content/bigButton.png
+Content/bigButton2.9.png
+Content/bigButtonHovered.png
+Content/bigButtonHovered2.9.png
+Content/bigButtonHoveredNinePatch.9.png
+Content/bigButtonNinePatch.9.png
 Content/button1.png
 Content/button2.png
 Content/buttonDown.9.png
@@ -4699,7 +4708,18 @@ Content/energyBarFill.png
 Content/energyBarFill2NinePatch.9.png
 Content/energyBarFillNinePatch.9.png
 Content/energyBarNinePatch.9.png
+Content/exitButton.png
+Content/exitButtonHovered.png
+Content/font/PixelatedEleganceRegular-ovyAA.fnt
+Content/font/PixelatedEleganceRegular-ovyAA.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
+Content/font/TItle/svbold(1).fnt
+Content/font/TItle/svbold(1).png
+Content/font/TItle/svbold(2).fnt
+Content/font/TItle/svbold(2).png
+Content/font/TItle/svbold.fnt
+Content/font/TItle/svbold.png
+Content/font/TItle/svbold.ttf
 Content/font/info.txt
 Content/font/khodayaBaseDige.fnt
 Content/font/khodayaBaseDige.png
@@ -4718,6 +4738,20 @@ Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
 Content/inventoryQuantityNumbers.png
 Content/inventorySlotFrameSelected.png
+Content/loadGameButton.png
+Content/loadGameButtonHovered.png
+Content/logoutButton.png
+Content/logoutButtonHovered.png
+Content/menuBackground/Clouds.png
+Content/menuBackground/backgroundBushesLeft.png
+Content/menuBackground/backgroundBushesRight.png
+Content/menuBackground/cloud1.png
+Content/menuBackground/cloud2.png
+Content/menuBackground/cloud3.png
+Content/menuBackground/mountains1.png
+Content/menuBackground/mountains2.png
+Content/newGameButton.png
+Content/newGameButtonHovered.png
 Content/pixil-frame-0.png
 Content/redCross.png
 Content/shit.png
@@ -4740,6 +4774,7 @@ Content/textBox.png
 Content/textboxNinePatch.9.png
 Content/tileSelectBox.png
 Content/tilledSoil.png
+Content/titleLogo.png
 Content/—Pngtree—hand-drawn comic dialog_517429.png
 Moz/MapEditor/Stardew Valley.tiled-project
 Moz/MapEditor/Stardew Valley.tiled-session
@@ -4858,6 +4893,9 @@ skin/Stardew Valley Skin/skin.atlas
 skin/Stardew Valley Skin/skin.json
 skin/Stardew Valley Skin/skin.png
 skin/Stardew Valley Skin/skin.scmp
+skin/Stardew Valley Skin/svbold(1).fnt
+skin/Stardew Valley Skin/svbold(2).fnt
+skin/Stardew Valley Skin/svbold.fnt
 skin/font-export.fnt
 skin/font-subtitle-export.fnt
 skin/font-title-export.fnt
