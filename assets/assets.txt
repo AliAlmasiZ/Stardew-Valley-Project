@@ -2578,6 +2578,7 @@ Content(unpacked)/Maps/townInterior.ru-RU.png
 Content(unpacked)/Maps/townInterior.tr-TR.png
 Content(unpacked)/Maps/townInterior.zh-CN.png
 Content(unpacked)/Maps/townInterior_2.png
+Content(unpacked)/Maps/untitled.tmx
 Content(unpacked)/Maps/wallpapers_2.png
 Content(unpacked)/Maps/walls_and_floors.png
 Content(unpacked)/Maps/winter_Shadows.png

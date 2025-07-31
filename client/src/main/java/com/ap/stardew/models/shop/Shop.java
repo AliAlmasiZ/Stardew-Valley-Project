@@ -20,9 +20,6 @@ public class Shop extends EntityComponent implements Serializable {
     public final int startHour;
     public final int endHour;
 
-
-
-
     @JsonCreator
     public Shop(@JsonProperty("name") String name) {
         this.name = name;

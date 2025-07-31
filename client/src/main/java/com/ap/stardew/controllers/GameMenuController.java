@@ -2243,6 +2243,8 @@ public class GameMenuController implements Controller {
         if(tileEntity != null){
             if(tileEntity.getEntityName().equals("Fridge")){
                 screen.showStorage(tileEntity.getComponent(Inventory.class));
+            }else if(tileEntity.getEntityName().equals("shopCounter")){
+                screen.openShopMenu(tile.getMap().getBuilding().getComponent(Shop.class));
             }
         }
     }

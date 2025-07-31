@@ -4,10 +4,10 @@ import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
 
 import com.ap.stardew.models.Vec2;
-import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.components.EntityComponent;
+import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.TileType;
 import com.badlogic.gdx.maps.MapLayer;
@@ -16,8 +16,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
-import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -136,6 +134,11 @@ public class GameMap implements Serializable {
                 }else if(object.getName().equals("Fridge")){
                     Entity fridge = App.entityRegistry.makeEntity("fridge");
                     EntityPlacementSystem.placeEntity(fridge, new Vec2(object.getProperties().get("x", Float.class),
+                        object.getProperties().get("y", Float.class)), this);
+                }else if(object.getName().equals("Shop")){
+                    Entity shopCounter = new Entity("shopCounter");
+                    shopCounter.addComponent(new Placeable(false));
+                    EntityPlacementSystem.placeEntity(shopCounter, new Vec2(object.getProperties().get("x", Float.class),
                         object.getProperties().get("y", Float.class)), this);
                 }
             }

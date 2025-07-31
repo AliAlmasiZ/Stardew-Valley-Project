@@ -7358,7 +7358,7 @@
     <property name="building" value="Pierres"/>
    </properties>
   </object>
-  <object id="53" name="Building" x="2800" y="1344" width="32" height="32">
+  <object id="53" name="Building" x="624" y="2656" width="32" height="32">
    <properties>
     <property name="building" value="JojaMart"/>
    </properties>

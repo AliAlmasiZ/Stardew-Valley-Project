@@ -24,6 +24,8 @@ import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
+import com.ap.stardew.models.shop.Shop;
+import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.records.EntityResult;
 import com.ap.stardew.views.widgets.*;
 import com.ap.stardew.records.Result;
@@ -639,6 +641,23 @@ public class GameScreen extends AbstractScreen {
             )
         );
 
+    }
+
+    public void openShopMenu(Shop shop){
+        InGameDialog dialog = new InGameDialog(uiStage);
+
+        TabWidget tabWidget = new TabWidget();
+
+        Table testTable = new Table();
+        testTable.top();
+
+        for (ShopProduct availableProduct : shop.getAvailableProducts()) {
+            testTable.add(new Label(availableProduct.getName(), customSkin)).row();
+        }
+        tabWidget.addTab(testTable, customSkin.getDrawable("InventoryIcon"));
+
+        dialog.add(tabWidget);
+        dialog.show();
     }
 
     public void stopFishing(FishingMiniGame fishingMiniGame) {
