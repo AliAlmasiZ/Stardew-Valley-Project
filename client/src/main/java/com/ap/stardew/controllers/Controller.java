@@ -1,7 +1,7 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.App;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 public interface Controller {
     public Result changeMenu(String menuName);

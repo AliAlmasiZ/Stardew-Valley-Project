@@ -7,7 +7,7 @@ import com.ap.stardew.controllers.validators.PasswordValidator;
 import com.ap.stardew.controllers.validators.UsernameValidator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.views.widgets.ValidatedTextField;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

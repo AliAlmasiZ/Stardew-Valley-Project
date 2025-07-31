@@ -8,7 +8,7 @@ import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.views.old.inGame.Color;
 
 import java.io.Serializable;

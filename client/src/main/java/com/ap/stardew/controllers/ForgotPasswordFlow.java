@@ -3,7 +3,7 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.enums.SecurityQuestions;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class ForgotPasswordFlow {
                 return new Result(true, "re-enter your new password:");
             case 4:
                 if(input.equals("y")){
-                    account.setPassword(newPassword);
+                    account.setPasswordNotHashed(newPassword);
                     return new Result(false, "password was set!");
                 }else{
                     state--;
@@ -72,7 +72,7 @@ public class ForgotPasswordFlow {
                 }
             case 5:
                 if(input.equals(newPassword)){
-                    account.setPassword(newPassword);
+                    account.setPasswordNotHashed(newPassword);
                     return new Result(false, "password was set!");
                 }
                 if(input.equals("back")){

@@ -1,11 +1,14 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.app.ClientConnectionController;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.enums.SecurityQuestions;
-import com.ap.stardew.records.Result;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -71,21 +74,16 @@ public class LoginMenuController implements Controller{    @Override
     }
 
     public Result login(String username, String password, boolean stayLogged) {
-        Account account = App.getUserByUsername(username);
+        JSONMessage message = new JSONMessage(JSONMessage.Type.command);
+        message.put("command", "login");
+        message.put("username", username);
+        message.put("password", password);
 
-        if (account == null) {
-            return new Result(false, "username doesnt exist");
-        }
+        JSONMessage response = ClientApp.getServerConnectionThread().sendAndWaitForResponse(message, 1000);
 
-        if (!account.isPasswordCorrect(password)) {
-            return new Result(false, "incorrect password");
-        }
+        if(response == null) return new Result(false, "no response");
 
-        App.setStayLoggedIn(stayLogged);
-        App.setLoggedInAccount(account);
-        App.setCurrentMenu(Menu.MAIN_MENU);
-
-        return new Result(true, "logged in successfully");
+        return new Result(response.getFromBody("success"), response.getFromBody("message"));
     }
 
     public Result pickQuestion(int number, String answer,String answerConfirm) {

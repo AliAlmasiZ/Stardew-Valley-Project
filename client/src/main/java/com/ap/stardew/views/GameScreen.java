@@ -28,7 +28,7 @@ import com.ap.stardew.models.shop.Shop;
 import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.records.EntityResult;
 import com.ap.stardew.views.widgets.*;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;

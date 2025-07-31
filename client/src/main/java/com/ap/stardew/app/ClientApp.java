@@ -6,7 +6,6 @@ import java.net.Socket;
 public class ClientApp {
     public static final int TIMEOUT_MILLIS = 500;
 
-
     private static ServerConnectionThread serverConnectionThread;
 
     private static boolean exitFlag = false;
@@ -40,5 +39,11 @@ public class ClientApp {
         serverConnectionThread = new ServerConnectionThread(new Socket(ip, port));
     }
 
+    public static ServerConnectionThread getServerConnectionThread() {
+        return serverConnectionThread;
+    }
 
+    public static boolean isConnected(){
+        return serverConnectionThread != null && serverConnectionThread.isAlive();
+    }
 }

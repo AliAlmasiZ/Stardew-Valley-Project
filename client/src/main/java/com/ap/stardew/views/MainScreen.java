@@ -77,8 +77,6 @@ public class MainScreen extends AbstractMenuScreen {
                         ClientGame.getInstance().setScreen(mainMenuScreen);
                     })
                 ));
-
-
             }
         });
 
@@ -124,6 +122,8 @@ public class MainScreen extends AbstractMenuScreen {
     public void dispose() {
         uiStage.dispose();
     }
+
+
 
     public void enterAnim(){
         registerButton.addAction(

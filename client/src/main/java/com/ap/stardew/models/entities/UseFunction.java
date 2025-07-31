@@ -12,15 +12,10 @@ import com.ap.stardew.models.enums.EntityTag;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.enums.TileType;
-import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.gameMap.TIlePlower;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.records.Result;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.ap.stardew.models.Result;
 
 import java.util.ArrayList;
 

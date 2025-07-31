@@ -17,6 +17,8 @@ public class ServerConnectionThread extends ConnectionThread {
     public boolean initialHandshake() {
         try {
             socket.setSoTimeout(TIMEOUT_MILLIS);
+            //Todo i don know
+            socket.setSoTimeout(0);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());

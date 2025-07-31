@@ -2,12 +2,11 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeOffer;
-import com.ap.stardew.records.Result;
-
 public class TradeMenuController implements Controller {
     public Result trade(String username, String type, String itemName, int amount, boolean isBuyByMoney, double price, String targetItemName, int targetItemAmount) {
         Game game = App.getActiveGame();

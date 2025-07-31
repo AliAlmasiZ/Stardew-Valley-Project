@@ -12,7 +12,7 @@ import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.records.WalkProposal;
 
 import java.util.Map;

@@ -13,7 +13,7 @@ import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Wallet;
 import com.ap.stardew.models.shop.*;
 import com.ap.stardew.utils.StringUtils;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 public class ShopSystem {
     public static Result buyProduct(ShopProduct product, int amount) {

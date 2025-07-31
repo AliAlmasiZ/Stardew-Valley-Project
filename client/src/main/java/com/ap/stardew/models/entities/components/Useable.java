@@ -5,7 +5,7 @@ import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.UseFunction;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 import java.io.Serializable;
 import java.util.ArrayList;

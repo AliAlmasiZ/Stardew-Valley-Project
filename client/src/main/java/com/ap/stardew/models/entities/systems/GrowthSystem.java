@@ -5,7 +5,7 @@ import com.ap.stardew.models.entities.components.Growable;
 import com.ap.stardew.models.entities.components.InteriorComponent;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.gameMap.Tile;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 import java.util.ArrayList;
 

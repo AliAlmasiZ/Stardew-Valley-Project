@@ -13,7 +13,6 @@ public class JSONMessage {
     public JSONMessage() {
 
     }
-
     public JSONMessage(Map<String, Object> body, Type type) {
         this.body = body;
         this.type = type;
@@ -45,6 +44,9 @@ public class JSONMessage {
         command,
         response,
         player_input_command,
+    }
 
+    public Map<String, Object> getBody() {
+        return body;
     }
 }

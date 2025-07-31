@@ -1,20 +1,19 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.controllers.validators.NonEmptyValidator;
 import com.ap.stardew.controllers.validators.PasswordValidator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.ValidatedTextField;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Scaling;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +26,19 @@ public class LoginScreen extends AbstractMenuScreen{
     private TextButton backBtn;
     private Table mainBox;
 
+    LoginMenuController controller = new LoginMenuController();
+
     public LoginScreen(){
         super();
+
+
+        //Todo this is ashghal
+        if(!ClientApp.isConnected()){
+            ClientApp.connectServer("127.0.0.1", 3232);
+        }
+
+        if(!ClientApp.isConnected()) throw new RuntimeException("asd");
+
         mainBox = new Table();
         mainBox.center();
         mainBox.pack();
@@ -69,22 +79,18 @@ public class LoginScreen extends AbstractMenuScreen{
                     passwordTextfield.ping();
                     return;
                 }
-                Account account = App.getUserByUsername(usernameTextfield.getText());
-                if(account == null){
+                Result result = controller.login(usernameTextfield.getText(), passwordTextfield.getText(), true);
+                if(result.isSuccessful()){
+                    MainMenuScreen mainMenuScreen = new MainMenuScreen();
+                    mainMenuScreen.enterAnim();
+                    ClientGame.getInstance().setScreen(mainMenuScreen);
+                    return;
+                }
+                if(result.message().equals("username doesn't exist")){
                     usernameTextfield.setMessage("Username doesnt exist");
-                    return;
-                }
-                usernameTextfield.setMessage("");
-                if(!account.isPasswordCorrect(passwordTextfield.getText())){
+                }else if(result.message().equals("incorrect password")){
                     passwordTextfield.setMessage("incorrect password");
-                    return;
                 }
-
-                App.setLoggedInAccount(account);
-
-                MainMenuScreen mainMenuScreen = new MainMenuScreen();
-                mainMenuScreen.enterAnim();
-                ClientGame.getInstance().setScreen(mainMenuScreen);
             }
         });
         forgotPassworBtn.addListener(new ClickListener(){
@@ -184,7 +190,7 @@ public class LoginScreen extends AbstractMenuScreen{
                     return;
                 }
 
-                account.setPassword(textField.getText());
+                account.setPasswordNotHashed(textField.getText());
 
                 dialog.clear();
                 dialog.pad(20).padRight(40).padLeft(40);

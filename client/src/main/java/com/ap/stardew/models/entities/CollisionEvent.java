@@ -1,7 +1,7 @@
 package com.ap.stardew.models.entities;
 
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 import java.io.Serializable;
 

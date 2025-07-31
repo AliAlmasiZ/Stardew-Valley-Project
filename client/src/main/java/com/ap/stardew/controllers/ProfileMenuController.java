@@ -4,7 +4,7 @@ import com.ap.stardew.controllers.validators.Validator;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.enums.Menu;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 public class ProfileMenuController implements Controller{    @Override
     public Result changeMenu(String menuName) {
@@ -55,7 +55,7 @@ public class ProfileMenuController implements Controller{    @Override
             return Account.isPasswordValid(newPass);
         if(newPass.equals(oldPass))
             return new Result(false, "your password must be different with old one");
-        account.setPassword(newPass);
+        account.setPasswordNotHashed(newPass);
         return new Result(true, "your password changed successfully");
 
     }
@@ -66,8 +66,8 @@ public class ProfileMenuController implements Controller{    @Override
         sb
                 .append("Username : ").append(account.getUsername()).append("\n")
                 .append("Nickname : ").append(account.getNickname()).append("\n")
-                .append("Maximum Money Earned : ").append(account.getMaximumMoneyEarned()).append("\n")
-                .append("Played games : ").append(account.gamesCount()).append("\n");
+                .append("Maximum Money Earned : ").append(account.getMaximumMoneyEarned()).append("\n");
+//                .append("Played games : ").append(account.gamesCount()).append("\n");
         return new Result(true, sb.toString());
     }
 

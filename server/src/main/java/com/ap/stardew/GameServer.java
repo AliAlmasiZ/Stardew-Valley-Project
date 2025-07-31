@@ -2,6 +2,7 @@ package com.ap.stardew;
 
 import com.ap.stardew.app.ListenerThread;
 import com.ap.stardew.app.ServerApp;
+import com.ap.stardew.utils.JSONUtils;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,9 +10,7 @@ import java.util.Scanner;
 public class GameServer {
     private static final Scanner scanner = new Scanner(System.in);
     public static final int PORT = 3232;
-
     public static void main(String[] args) {
-
         try {
             System.out.println("starting server...");
             ServerApp.setListenerThread(new ListenerThread(PORT));

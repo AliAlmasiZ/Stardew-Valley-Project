@@ -2,18 +2,19 @@ package com.ap.stardew.models;
 
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SecurityQuestions;
-import com.ap.stardew.records.Result;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Account implements Serializable {
     private static final Pattern validUsernameCharacters = Pattern.compile("^[a-zA-Z0-9-]*$");
     private static final Pattern emailGroupingPattern    = Pattern.compile("^(?<mail>\\S+)@(?<domain>\\S+)\\.(?<tld>\\S+)$");
@@ -21,15 +22,17 @@ public class Account implements Serializable {
     private static final Pattern validDomainCharacters   = Pattern.compile("^[a-zA-Z0-9.-]+$");
     private static final Pattern validPasswordCharacters = Pattern.compile("^[0-9A-Za-z?<>,\"';:/\\\\|\\[\\]{}+=()*&^%$@#!]+$");
 
-
     private String username;
+    @JsonProperty("password")
     private String password;
     private String nickname;
     private String email;
-    private final Gender gender;
+    private Gender gender;
     private Map<SecurityQuestions, String> securityAnswers = new HashMap<>();
-    private Game activeGame = null;
-    private final ArrayList<Game> playedGames = new ArrayList<>();
+
+    public Account(){
+
+    }
 
     public Account(Gender gender, String email, String nickname, String password, String username) {
         this.gender = gender;
@@ -77,7 +80,7 @@ public class Account implements Serializable {
         return new Result(true, "");
     }
 
-    private static String hashPassword(String password) {
+    public static String hashPassword(String password) {
 
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -148,7 +151,7 @@ public class Account implements Serializable {
         return this.password.equals(hashPassword(password));
     }
 
-    public void setPassword(String password) {
+    public void setPasswordNotHashed(String password) {
         this.password = hashPassword(password);
     }
 
@@ -172,7 +175,6 @@ public class Account implements Serializable {
         return gender;
     }
 
-
     public Map<SecurityQuestions, String> getSecurityAnswers() {
         return securityAnswers;
     }
@@ -181,20 +183,20 @@ public class Account implements Serializable {
         this.securityAnswers = securityAnswers;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public long getMaximumMoneyEarned() {
         // TODO: implement later
         return 0;
     }
 
-    public int gamesCount() {
-        return playedGames.size();
-    }
-
-    public Game getActiveGame() {
-        return activeGame;
-    }
-
-    public void setActiveGame(Game activeGame) {
-        this.activeGame = activeGame;
-    }
+//    public int gamesCount() {
+//        return playedGames.size();
+//    }
+//
+//    public void setActiveGame(Game activeGame) {
+//        this.activeGame = activeGame;
+//    }
 }

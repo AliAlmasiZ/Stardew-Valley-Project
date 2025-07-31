@@ -8,7 +8,7 @@ import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMapType;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.records.GameStartingDetails;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 import java.io.FileInputStream;
 import java.io.IOException;

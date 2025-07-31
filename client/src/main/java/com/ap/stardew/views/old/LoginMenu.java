@@ -3,7 +3,7 @@ package com.ap.stardew.views.old;
 import com.ap.stardew.controllers.ForgotPasswordFlow;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.Commands.LoginMenuCommands;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

@@ -1,7 +1,7 @@
 package com.ap.stardew.views.widgets;
 
 import com.ap.stardew.controllers.validators.Validator;
-import com.ap.stardew.records.Result;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.views.ColorPalette;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
