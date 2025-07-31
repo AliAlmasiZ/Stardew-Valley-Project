@@ -1,5 +1,9 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.models.App;
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Growable;
+import com.ap.stardew.models.enums.EntityTag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
@@ -12,6 +16,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ObjectMap;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameAssetManager extends AssetManager {
     private static GameAssetManager instance;
@@ -44,6 +51,9 @@ public class GameAssetManager extends AssetManager {
     public final Texture emptyTexture;
 
     public final Texture tileSelectionBox;
+
+    //Trees and Crops
+    HashMap<String, Sprite[]> plantsSprites;
 
 
     private GameAssetManager(){
@@ -130,5 +140,77 @@ public class GameAssetManager extends AssetManager {
         } catch (Exception e) {
             return redCross;
         }
+    }
+
+    public Sprite getPlantSprite(String plantName, int Stage, boolean fruit) {
+        if (!plantsSprites.containsKey(plantName)) loadPlantSprite(plantName);
+        Sprite[] sprites = plantsSprites.get(plantName);
+
+        if (fruit) return sprites[Stage];
+        else return sprites[Stage - 1];
+    }
+
+    public void loadPlantSprite(String plantName) {
+        Entity plant = App.entityRegistry.makeEntity(plantName);
+        if (plant.hasTag(EntityTag.CROP))  setCropSprites(plant);
+        if (plant.hasTag(EntityTag.TREE)) setTreeSprites(plant);
+    }
+
+    private void setCropSprites(Entity plant) {
+        int stagesNumber = plant.getComponent(Growable.class).getStages().size();
+        String name = plant.getEntityName();
+        Sprite[] cropSprites = new Sprite[stagesNumber + 3];
+        ArrayList<Sprite> spritesToLoad = new ArrayList<>();
+        for (int i = 0; i < stagesNumber * 2; i++) {
+            int j = i + 1;
+            try {
+                Sprite s = new Sprite(get("Content/Crops/" + name + "_Stage_" + j + ".png", Texture.class));
+
+                spritesToLoad.add(s);
+            } catch (Exception e) {
+                break;
+            }
+        }
+
+        for (int i = 0; i < stagesNumber; i++) {
+            cropSprites[i] = spritesToLoad.get(i);
+        }
+        cropSprites[stagesNumber] = spritesToLoad.get(spritesToLoad.size() - 1);
+        plantsSprites.put(plant.getEntityName(), cropSprites);
+    }
+
+    public void setTreeSprites(Entity plant) {
+        int stagesNumber = plant.getComponent(Growable.class).getStages().size();
+        String name = plant.getEntityName();
+        Sprite[] treeSprites = new Sprite[stagesNumber + 3];
+
+        Sprite[] sprites = new Sprite[stagesNumber + 3];
+
+        for (int i = 0; i < stagesNumber; i++) {
+            int j = i + 1;
+            sprites[i] = new Sprite(get("Content/Trees/" + name + "_Stage_" + j + ".png", Texture.class));
+        }
+
+        try {
+            int t = stagesNumber + 1;
+            Texture texture = get("Content/Trees/" + name + "_Stage_" + t + ".png", Texture.class);
+            TextureRegion textureRegion = new TextureRegion(texture);
+            float width = texture.getWidth();
+            float height = texture.getHeight();
+            if (width > height * 2) {
+                textureRegion = new TextureRegion(texture, 0, 0, height, width / 4);
+            }
+            sprites[stagesNumber] = new Sprite(textureRegion);
+        } catch (Exception e) {
+            sprites[stagesNumber] = sprites[stagesNumber - 1];
+        }
+
+        try {
+            sprites[stagesNumber + 1] = new Sprite(get("Content/Trees/" + name + "_Stage_5_Fruit" + ".png", Texture.class));
+        } catch (Exception e) {
+            sprites[stagesNumber + 1] = sprites[stagesNumber];
+        }
+
+        plantsSprites.put(plant.getEntityName(), sprites);
     }
 }
