@@ -26,7 +26,7 @@ public class DialogActor extends Actor {
         this.screen = screen;
 
         setSize(10, 8);
-        Sprite sprite = npc.getComponent(Renderable.class).getSprite();
+        Sprite sprite = GameAssetManager.getInstance().getNormalSprite(npc);
         setX(sprite.getX() + sprite.getWidth() - this.getWidth() / 2);
         setY(sprite.getY() + sprite.getHeight());
 

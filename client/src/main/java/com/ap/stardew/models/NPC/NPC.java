@@ -36,7 +36,7 @@ public class NPC extends Entity implements Serializable {
         addComponent(new PositionComponent());
         addComponent(new Renderable(this.name.toUpperCase().charAt(0), new Color(255, 255 ,255)));
         Renderable renderable = this.getComponent(Renderable.class);
-        renderable.setSprite(new Sprite(new Texture("Content/NPC/" + name + "/parts/image_part_001.png")));
+        renderable.setSpritePath("Content/NPC/" + name + "/parts/image_part_001.png");
         avatar = new Image(new Texture("Content/NPC/" + name + ".png"));
     }
 

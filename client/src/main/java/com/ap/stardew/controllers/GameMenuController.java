@@ -2211,11 +2211,12 @@ public class GameMenuController implements Controller {
     public void handleRightClick(float x, float y, GameScreen screen) {
         Game game = App.getActiveGame();
         Player player = game.getCurrentPlayer();
+        GameAssetManager gameAssetManager = GameAssetManager.getInstance();
         System.out.println("right clicked at" + x + " " + y); //TODO: remove
 
         // check for Animals
         for (Animal animal : player.getAnimals()) {
-            if (animal.getComponent(Renderable.class).getSprite().getBoundingRectangle().contains(x, y)) {
+            if (gameAssetManager.getNormalSprite(animal).getBoundingRectangle().contains(x, y)) {
                 System.out.println("animal clicked");
                 screen.openAnimalMenu(animal);
                 return;
@@ -2224,7 +2225,7 @@ public class GameMenuController implements Controller {
 
         // check for NPCs
         for (NPC npc : game.getGameNPCs()) {
-            if (npc.getComponent(Renderable.class).getSprite().getBoundingRectangle().contains(x, y)) {
+            if (gameAssetManager.getNormalSprite(npc).getBoundingRectangle().contains(x, y)) {
                 System.out.println("npc clicked");
                 screen.openNPCMenu(npc);
             }

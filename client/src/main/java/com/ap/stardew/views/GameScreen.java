@@ -19,7 +19,6 @@ import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
-import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
@@ -307,7 +306,7 @@ public class GameScreen extends AbstractScreen {
             entity.setEntityForComponents();
             //update animals:
             if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
-            Sprite sprite = entity.getComponent(Renderable.class).getRenderingSprite(delta);
+            Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
             if (sprite != null) {
                 sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
                 sprite.draw(batch);
@@ -791,8 +790,8 @@ public class GameScreen extends AbstractScreen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dialog.remove();
                 setGameInput();
+                dialog.remove();
             }
         });
 

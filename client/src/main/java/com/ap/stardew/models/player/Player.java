@@ -585,7 +585,8 @@ public class Player extends Entity implements Serializable {
         }
         sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
         sprite.setPosition(getPosition().x, getPosition().y);
-        getComponent(Renderable.class).setSprite(sprite);
     }
+
+
 
 }
