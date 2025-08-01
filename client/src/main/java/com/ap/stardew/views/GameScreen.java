@@ -903,16 +903,72 @@ public class GameScreen extends AbstractScreen {
 
         TabWidget tabWidget = new TabWidget();
 
-        /**
-         * @Tab: Give gift
-         */
+
+        // Tab: Give gift
+        // --- in your Screen or wherever you assemble the UI ---
         Table giftTable = new Table();
         TextButton chooseGift = new TextButton("Choose Gift", customSkin);
-        // TODO: Icon for gift
+        Image giftImage = new Image(GameAssetManager.getInstance().redCross);
+        Label giftNumberLabel = new Label("0X", skin);
         TextButton sendGift = new TextButton("Send Gift", customSkin);
 
+        // keep a mutable holder so the listener can see updates
+        final Entity[] chosenItemHolder = { null };
+
         giftTable.add(chooseGift).growX().row();
+        giftTable.add(giftImage);
+        giftTable.add(giftNumberLabel).row();
         giftTable.add(sendGift).growX().row();
+
+
+        // prepare the inventory dialog once
+        final Dialog inventoryDialog = new Dialog("Choose an Item", customSkin) {{
+            // container for your inventory slots
+            Table invTable = new Table();
+            invTable.defaults().pad(5);
+
+            // assume you have a List<Entity> inventory = ...
+//            for (final Entity e : player.getComponent(Inventory.class).getEntities()) {
+//                TextureRegion icon = new TextureRegion(GameAssetManager.getInstance().getTexture(e.getComponent(Pickable.class).getIcon()));
+//                ImageButton slot = new ImageButton(
+//                    new TextureRegionDrawable(icon),
+//                    new TextureRegionDrawable()  // optional pressed state
+//                );
+//
+//                slot.addListener(new ClickListener() {
+//                    @Override
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        // record the choice
+//                        chosenItemHolder[0] = e;
+//                        // update your giftImage & label in place
+//                        giftImage.setDrawable(new TextureRegionDrawable(icon));
+//                        giftNumberLabel.setText(
+//                            e.getComponent(Pickable.class).getStackSize() + "X"
+//                        );
+//                        // hide the dialog
+//                        inventoryDialog.hide();
+//                    }
+//                });
+//
+//                invTable.add(slot).size(64).pad(4);
+//                // wrap to next row every N columns if you like:
+//                if ((player.getComponent(Inventory.class).getEntities().indexOf(e, true) + 1) % 5 == 0) invTable.row();
+//            }
+
+            // make it scrollable if too large
+            getContentTable().add(new ScrollPane(invTable, customSkin))
+                .width(400).height(300);
+            button("Cancel", "cancel");  // built-in cancel button
+        }};
+
+        // when “Choose Gift” is clicked, just show the dialog
+        chooseGift.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inventoryDialog.show(uiStage);
+            }
+        });
+
 
 
         /**
@@ -1083,7 +1139,7 @@ public class GameScreen extends AbstractScreen {
         dialog.show();
     }
 
-    public void openGiftMenu(Player player) {
+    public void openGiftMenu(Player friend) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();
@@ -1091,8 +1147,9 @@ public class GameScreen extends AbstractScreen {
         // send gift
         Table sendGiftTable = new Table();
 
-        // gift Histoy
+        // gift History
         Table giftHistory = new Table();
+
 
         // rate gift
         Table rateGift = new Table();
@@ -1110,6 +1167,52 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
+    }
+
+    public void openPlayerMenu(Player friend) {
+        Table actionsTable = new Table();
+        TextButton hugButton = new TextButton("Hug", customSkin);
+        TextButton flowerButton = new TextButton("Give Flower", customSkin);
+        TextButton MarryButton = new TextButton("Marry", customSkin);
+
+        hugButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Result result = controller.hug(friend.getUsername());
+                if (result.isSuccessful()) {
+                    //TODO: GRAPHIC
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                } else {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                }
+            }
+        });
+
+        flowerButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Result result = controller.flower(friend.getUsername());
+                if (result.isSuccessful()) {
+                    //TODO: GRAPHIC
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+
+                } else {
+                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                }
+            }
+        });
+
+        MarryButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO
+            }
+        });
+
+    }
+
+    public Entity chooseFromInventory() {
+        // TODO: open a dialog to select item and number
+        Entity temptity = App.buildingRegistry.makeEntity("Salmon");
+        temptity.getComponent(Pickable.class).setStackSize(1);
+        return temptity;
     }
 
     public GameMenuController getController() {

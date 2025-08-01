@@ -2236,6 +2236,19 @@ public class GameMenuController implements Controller {
 
         }
 
+        // other players
+        ArrayList<Player> players = game.getPlayers();
+        for (Player player1 : players) {
+            if (player1.getSprite().getBoundingRectangle().contains(x, y) && player1 != player
+            && player1.getPosition().getCol() - player.getPosition().getCol() < 20
+            && player1.getPosition().getRow() - player.getPosition().getRow() < 20) {
+
+                screen.openPlayerMenu(player1);
+            }
+        }
+
+
+
         Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
         Entity tileEntity = tile.getContent();
 
