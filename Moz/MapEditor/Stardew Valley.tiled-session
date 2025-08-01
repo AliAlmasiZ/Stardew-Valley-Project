@@ -111,11 +111,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Beach-Jellies2.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 832,
-                "y": 401
+                "x": 686,
+                "y": 446.99999999999994
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Beach-Jellies2.tmx#Paths": {
@@ -160,7 +160,7 @@
             "scale": 0.75,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 830.6666666666666,
+                "x": 821.3333333333333,
                 "y": 400.66666666666663
             }
         },
@@ -552,7 +552,7 @@
             "selectedLayer": 5,
             "viewCenter": {
                 "x": 639.4972505891594,
-                "y": 638.8269180413722
+                "y": 640.1675831369469
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Farm_FourCorners.tmx#Paths": {
@@ -771,8 +771,8 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1318.1818181818182,
-                "y": 1286.3636363636365
+                "x": 1324.2424242424242,
+                "y": 1292.4242424242425
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Forest.tmx#Paths": {
@@ -957,6 +957,10 @@
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Landscape.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Landscape2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/LeahHouse.tmx": {
             "scale": 3.0763671875,
@@ -1519,11 +1523,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx": {
-            "scale": 0.125,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 4504,
-                "y": 4900
+                "x": 3469.69696969697,
+                "y": 4504.545454545454
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx#Landscape": {
@@ -1599,7 +1603,8 @@
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Farm_Ranching.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Farm_FourCorners.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Woods.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx"
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Landscape2.tsx"
     ],
     "project": "",
     "property.type": "int",
