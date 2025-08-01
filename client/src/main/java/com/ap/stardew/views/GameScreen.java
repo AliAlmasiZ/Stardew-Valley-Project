@@ -24,6 +24,7 @@ import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
+import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.models.shop.Shop;
 import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.records.EntityResult;
@@ -48,6 +49,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -256,6 +258,23 @@ public class GameScreen extends AbstractScreen {
         inventoryTable.setBackground(customSkin.getDrawable("smallPanelNinePatch"));
         inventoryTable.add(inventoryGrid).grow();
         inventoryWrapper.add(inventoryTable).pad(1);
+
+        //Buttons at top right
+        int buttonWidth = 20;
+        Table buttonTable = new Table();
+        Button button = new Button(customSkin);
+        button.setWidth(buttonWidth);
+        button.setHeight(buttonWidth);
+        buttonTable.add(button).width(buttonWidth).height(buttonWidth);
+        buttonTable.top().left().pad(15);
+        stack.add(buttonTable);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openDataMenu();
+            }
+        });
 
         //NPC
         initNPCDialogs();
@@ -1023,6 +1042,119 @@ public class GameScreen extends AbstractScreen {
         TabWidget tabWidget = new TabWidget();
 
         tabWidget.addTab(table, customSkin.getDrawable("skillMenuIcon"));
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+    }
+
+    public void openDataMenu() {
+        InGameDialog dialog = new InGameDialog(uiStage);
+
+        TabWidget tabWidget = new TabWidget();
+
+        // Friendship tab
+        Table friendshipTable = new Table();
+        Game game = App.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        ArrayList<PlayerFriendship> playerFriendships = game.getCurrentPlayerFriendships();
+        for (PlayerFriendship playerFriendship : playerFriendships) {
+            Player friend = playerFriendship.getFriends().get(1);
+            if (friend.equals(currentPlayer)) {
+                friend = playerFriendship.getFriends().get(0);
+            }
+
+            Label label = new Label(friend.getUsername(), customSkin);
+            Image friendshipDetail = new Image(customSkin.getDrawable("skillMenuIcon"));
+            Image giftImage = new Image(GameAssetManager.getInstance().giftIcon);
+
+            friendshipDetail.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    Table friendshipDataTable = new Table();
+                    Label friendshipDataLabel = new Label("", customSkin);
+                    friendshipDataLabel.setText(PlayerFriendship.buildFriendshipDetailMessage(currentPlayer, playerFriendship));
+                    friendshipDataTable.add(friendshipDataLabel).growX().row();
+                    showTable(friendshipDataTable);
+                }
+            });
+
+            Player finalFriend = friend;
+            giftImage.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    openGiftMenu(finalFriend);
+                }
+            });
+
+            friendshipTable.add(label);
+            friendshipTable.add(giftImage).pad(5);
+            friendshipTable.add(friendshipDetail).pad(5);
+
+        }
+
+
+        //plant info table
+        Table craftTable = new Table();
+        Label label = new Label("Enter your crop name to get info: ", customSkin);
+        TextField cropNameField = new TextField("", skin);
+        cropNameField.setMessageText("Crop Name...");
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setWrap(true);
+        errorLabel.setVisible(false);
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
+
+        craftTable.add(label).pad(4).growX().row();
+        craftTable.add(cropNameField).growX().row();
+        craftTable.add(errorLabel).pad(4).growX().row();
+        craftTable.add(confirmButton).growX().row();
+
+
+        confirmButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                String cropName = cropNameField.getText();
+                Result result = controller.craftInfoPhase1(cropName);
+                if (result.isSuccessful()) {
+                    dialog.hide();
+                    showTable(controller.craftInfo(cropName));
+                } else {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText(result.toString());
+                }
+            }
+        });
+
+
+        tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(craftTable, customSkin.getDrawable("skillMenuIcon"));
+
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+    }
+
+    public void openGiftMenu(Player player) {
+        InGameDialog dialog = new InGameDialog(uiStage);
+
+        TabWidget tabWidget = new TabWidget();
+
+        // send gift
+        Table sendGiftTable = new Table();
+
+        // gift Histoy
+        Table giftHistory = new Table();
+
+        // rate gift
+        Table rateGift = new Table();
+        Label rateLabel = new Label("Enter the Gift ID and your Rating: ", customSkin);
+        TextField giftId = new TextField("", skin);
+        giftId.setMessageText("Gift ID...");
+        TextField rating = new TextField("", skin);
+        rating.setMessageText("Rating");
+
+
+        tabWidget.addTab(sendGiftTable, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giftHistory, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(rateGift, skin.getDrawable("skillMenuIcon"));
+
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();

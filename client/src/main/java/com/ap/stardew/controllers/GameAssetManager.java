@@ -43,6 +43,7 @@ public class GameAssetManager extends AssetManager {
     public final Texture menuBackground;
     public final Texture closeButton;
     public final Texture textBox = new Texture("Content/NPC/textBox.png");
+    public final Texture giftIcon = new Texture("Content/GiftIcon.png");
 
     //inventory
     public final Texture inventorySlotFrame;

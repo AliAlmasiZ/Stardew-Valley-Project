@@ -4077,6 +4077,7 @@ Content/FishingMiniGame/Legend.png
 Content/FishingMiniGame/Salmon.png
 Content/FishingMiniGame/catchZone.png
 Content/FishingMiniGame/fishing bar.png
+Content/GiftIcon.png
 Content/InventoryIcon.png
 Content/InventorySlotFrame.png
 Content/InventorySlotFrame2.png
