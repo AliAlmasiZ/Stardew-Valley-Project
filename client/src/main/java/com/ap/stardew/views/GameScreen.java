@@ -729,14 +729,12 @@ public class GameScreen extends AbstractScreen {
         TextButton sellAnimalButton = new TextButton("Sell animal", customSkin);
         /*TODO: check if in house*/
         TextButton shepherdAnimalButton = new TextButton("Shephered Animal", customSkin);
-        TextButton exitButton = new TextButton("Exit", customSkin);
 
         buttonTab.add(feedButton).growX().row();
         buttonTab.add(petButton).growX().row();
         buttonTab.add(collectProduceButton).growX().row();
         buttonTab.add(sellAnimalButton).growX().row();
         buttonTab.add(shepherdAnimalButton).growX().row();
-        buttonTab.add(exitButton).growX().row();
 //
         tabWidget.addTab(infoTab, customSkin.getDrawable("skillMenuIcon"));
         tabWidget.addTab(buttonTab, customSkin.getDrawable("skillMenuIcon"));
@@ -754,8 +752,7 @@ public class GameScreen extends AbstractScreen {
                     animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
 
                 }
-                setGameInput();
-                dialog.remove();
+                dialog.hide();
             }
         });
 
@@ -767,8 +764,7 @@ public class GameScreen extends AbstractScreen {
                 } else {
                     animal.getComponent(Renderable.class).setStatue(Renderable.Statue.PET, 2);
                 }
-                setGameInput();
-                dialog.remove();
+                dialog.hide();
             }
         });
 
@@ -780,8 +776,7 @@ public class GameScreen extends AbstractScreen {
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
                 }
-                setGameInput();
-                dialog.remove();
+                dialog.hide();
             }
         });
 
@@ -794,24 +789,15 @@ public class GameScreen extends AbstractScreen {
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
                 }
-                setGameInput();
-                dialog.remove();
+                dialog.hide();
             }
         });
 
         shepherdAnimalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dialog.remove();
+                dialog.hide();
                 openAnimalMovementMenu(animal);
-            }
-        });
-
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                setGameInput();
-                dialog.remove();
             }
         });
 
@@ -856,7 +842,6 @@ public class GameScreen extends AbstractScreen {
         errorLabel.setVisible(false);
         errorLabel.setColor(Color.RED);
         TextButton confirmButton = new TextButton("Confirm", customSkin);
-        TextButton exitButton = new TextButton("Exit", customSkin);
 
         confirmButton.addListener(new ClickListener() {
             @Override
@@ -875,25 +860,16 @@ public class GameScreen extends AbstractScreen {
                 }
 
                 animal.move(x, y);
-                dialog.remove();
-                setGameInput();
+                dialog.hide();
             }
         });
 
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dialog.remove();
-                setGameInput();
-            }
-        });
 
         mainTable.add(infoLabel).growX().row();
         mainTable.add(xField);
         mainTable.add(yField).row();
         mainTable.add(errorLabel).growX().row();
         mainTable.add(confirmButton).growX().row();
-        mainTable.add(exitButton).growX().row();
 
         tabWidget.addTab(mainTable, customSkin.getDrawable("skillMenuIcon"));
 
@@ -903,13 +879,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void openNPCMenu(NPC npc) {
-        InGameDialog dialog = new InGameDialog(uiStage) {
-            @Override
-            public void hide() {
-                super.hide();
-                setGameInput();
-            }
-        };
+        InGameDialog dialog = new InGameDialog(uiStage);
         dialog.setBackground((Drawable) null);
 
         TabWidget tabWidget = new TabWidget();
@@ -921,24 +891,15 @@ public class GameScreen extends AbstractScreen {
         TextButton chooseGift = new TextButton("Choose Gift", customSkin);
         // TODO: Icon for gift
         TextButton sendGift = new TextButton("Send Gift", customSkin);
-        TextButton exit = new TextButton("Exit", customSkin);
 
         giftTable.add(chooseGift).growX().row();
         giftTable.add(sendGift).growX().row();
-        giftTable.add(exit).growX().row();
 
-        exit.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                dialog.remove();
-                setGameInput();
-            }
-        });
 
         /**
          * @Tab: Quests
          */
         Table questTable = new Table();
-
 
         /**
          * @Tab: info
@@ -956,7 +917,6 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
-        Gdx.input.setInputProcessor(uiStage);
     }
 
     public void showNPCDialog(NPC npc) {
@@ -1050,7 +1010,6 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
-        Gdx.input.setInputProcessor(uiStage);
     }
 
     /**
@@ -1058,13 +1017,7 @@ public class GameScreen extends AbstractScreen {
      * @param table the table which will be shown
      */
     public void showTable(Table table) {
-        InGameDialog dialog = new InGameDialog(uiStage) {
-            @Override
-            public void hide() {
-                super.hide();
-                setGameInput();
-            }
-        };
+        InGameDialog dialog = new InGameDialog(uiStage);
         dialog.setBackground((Drawable) null);
 
         TabWidget tabWidget = new TabWidget();
@@ -1073,8 +1026,6 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
-        Gdx.input.setInputProcessor(uiStage);
-
     }
 
     public GameMenuController getController() {
