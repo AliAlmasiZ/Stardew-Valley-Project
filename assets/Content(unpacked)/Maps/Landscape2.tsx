@@ -1567,7 +1567,6 @@
    <wangtile tileid="1246" wangid="2,2,2,2,2,2,2,2"/>
    <wangtile tileid="1253" wangid="2,2,2,1,1,1,1,1"/>
    <wangtile tileid="1254" wangid="2,1,1,1,2,2,2,2"/>
-   <wangtile tileid="1255" wangid="1,1,1,1,1,1,1,1"/>
    <wangtile tileid="1256" wangid="2,2,2,2,2,1,1,1"/>
    <wangtile tileid="1271" wangid="2,2,2,2,2,2,2,2"/>
    <wangtile tileid="1278" wangid="1,1,2,2,2,1,1,1"/>
