@@ -983,54 +983,6 @@ public class GameScreen extends AbstractScreen {
 
     }
 
-    public void showCraftInfoDialog() {
-        InGameDialog dialog = new InGameDialog(uiStage) {
-            @Override
-            public void hide() {
-                super.hide();
-                setGameInput();
-            }
-        };
-        dialog.setBackground((Drawable) null);
-
-        TabWidget tabWidget = new TabWidget();
-
-        Table craftTable = new Table();
-        Label label = new Label("Enter your crop name to get info: ", customSkin);
-        TextField cropNameField = new TextField("", skin);
-        cropNameField.setMessageText("Crop Name...");
-        Label errorLabel = new Label("", customSkin);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setWrap(true);
-        errorLabel.setVisible(false);
-        TextButton confirmButton = new TextButton("Confirm", customSkin);
-
-        craftTable.add(label).pad(4).growX().row();
-        craftTable.add(cropNameField).growX().row();
-        craftTable.add(errorLabel).pad(4).growX().row();
-        craftTable.add(confirmButton).growX().row();
-
-
-        confirmButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                String cropName = cropNameField.getText();
-                Result result = controller.craftInfoPhase1(cropName);
-                if (result.isSuccessful()) {
-                    dialog.hide();
-                    showTable(controller.craftInfo(cropName));
-                } else {
-                    errorLabel.setVisible(true);
-                    errorLabel.setText(result.toString());
-                }
-            }
-        });
-
-        tabWidget.addTab(craftTable, customSkin.getDrawable("skillMenuIcon"));
-        dialog.add(tabWidget).fill().grow();
-
-        dialog.show();
-    }
-
     /**
      * This will show table in InGameDialog
      * @param table the table which will be shown

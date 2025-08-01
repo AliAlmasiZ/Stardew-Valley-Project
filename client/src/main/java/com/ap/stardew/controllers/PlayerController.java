@@ -92,8 +92,7 @@ public class PlayerController implements InputProcessor {
             screen.openJournal();
         if (keycode == Input.Keys.P) //TODO: Temporarily
             screen.startFishing();
-        if (keycode == Input.Keys.F1) // TODO: add this to other menu
-            screen.showCraftInfoDialog();
+
 
         return false;
     }
