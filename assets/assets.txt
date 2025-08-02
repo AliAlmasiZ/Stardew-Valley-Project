@@ -2215,6 +2215,8 @@ Content(unpacked)/Maps/JojaMart.tmx
 Content(unpacked)/Maps/JojaMartExterior.tmx
 Content(unpacked)/Maps/JojaRuins_TileSheet.png
 Content(unpacked)/Maps/JoshHouse.tmx
+Content(unpacked)/Maps/Landscape.tsx
+Content(unpacked)/Maps/Landscape2.tsx
 Content(unpacked)/Maps/LeahHouse.tmx
 Content(unpacked)/Maps/LeoTreeHouse.tmx
 Content(unpacked)/Maps/LeoTreeHouse_Tilesheet.png
@@ -2579,6 +2581,7 @@ Content(unpacked)/Maps/townInterior.ru-RU.png
 Content(unpacked)/Maps/townInterior.tr-TR.png
 Content(unpacked)/Maps/townInterior.zh-CN.png
 Content(unpacked)/Maps/townInterior_2.png
+Content(unpacked)/Maps/untitled tile sheet.tsx
 Content(unpacked)/Maps/untitled.tmx
 Content(unpacked)/Maps/wallpapers_2.png
 Content(unpacked)/Maps/walls_and_floors.png
@@ -4748,6 +4751,7 @@ Content/menuBackground/cloud2.png
 Content/menuBackground/cloud3.png
 Content/menuBackground/mountains1.png
 Content/menuBackground/mountains2.png
+Content/miniMap/map.png
 Content/newGameButton.png
 Content/newGameButtonHovered.png
 Content/pixil-frame-0.png
@@ -4807,6 +4811,7 @@ Moz/MapEditor/buildings/images/marniesRanchExterior.png
 Moz/MapEditor/buildings/images/pierresGeneralStoreExterior.png
 Moz/MapEditor/buildings/images/stardropSaloonExterior.png
 Moz/MapEditor/buildings/images/wreckGreenhouseExterior.png
+Moz/MapEditor/buildings/images/wreckGreenouseExterior.png
 Moz/MapEditor/buildings/jojaMartExterior.tmx
 Moz/MapEditor/buildings/jojaMartInterior.tmx
 Moz/MapEditor/buildings/marniesRanchExterior.tmx
@@ -4815,7 +4820,7 @@ Moz/MapEditor/buildings/pierresGeneralStoreExterior.tmx
 Moz/MapEditor/buildings/pierresGeneralStoreInterior.tmx
 Moz/MapEditor/buildings/stardropSaloonExterior.tmx
 Moz/MapEditor/buildings/stardropSaloonInterior.tmx
-Moz/MapEditor/buildings/wreckGreenhouseExterior.tmx
+Moz/MapEditor/buildings/wreckGreenouseExterior.tmx
 Moz/MapEditor/defaultMap.tmx
 Moz/NPCTEST.txt
 Moz/input.txt
