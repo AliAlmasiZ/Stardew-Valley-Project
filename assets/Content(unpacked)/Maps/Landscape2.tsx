@@ -1482,24 +1482,18 @@
    <wangtile tileid="176" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="177" wangid="4,3,4,4,4,4,4,4"/>
    <wangtile tileid="178" wangid="4,4,4,3,4,4,4,4"/>
-   <wangtile tileid="179" wangid="3,3,3,4,4,4,4,3"/>
-   <wangtile tileid="180" wangid="3,3,3,4,4,4,3,3"/>
    <wangtile tileid="181" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="182" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="200" wangid="3,3,4,4,4,3,3,3"/>
    <wangtile tileid="201" wangid="3,3,4,4,4,4,4,3"/>
    <wangtile tileid="202" wangid="4,4,4,4,4,4,4,3"/>
    <wangtile tileid="203" wangid="3,3,3,3,4,4,4,3"/>
-   <wangtile tileid="204" wangid="4,4,4,3,3,3,3,4"/>
-   <wangtile tileid="205" wangid="3,3,4,4,4,4,3,3"/>
    <wangtile tileid="206" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="207" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="225" wangid="4,4,4,4,4,3,3,3"/>
    <wangtile tileid="226" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="227" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="228" wangid="4,3,3,3,4,4,4,4"/>
-   <wangtile tileid="229" wangid="4,4,3,3,3,3,4,4"/>
-   <wangtile tileid="230" wangid="4,4,3,3,3,3,3,4"/>
    <wangtile tileid="231" wangid="4,4,4,4,4,4,4,4"/>
    <wangtile tileid="250" wangid="4,4,4,3,3,3,3,3"/>
    <wangtile tileid="251" wangid="4,4,4,3,3,3,4,4"/>

@@ -214,7 +214,7 @@ public class GameScreen extends AbstractScreen {
         camera.update();
 
         //Map : TODO: this is just for test player movement and should be replace by PARSA
-        map = new TmxMapLoader().load("./Content(unpacked)/Maps/TestMap.tmx");
+        map = new TmxMapLoader().load("./Content(unpacked)/Maps/untitled.tmx");
         System.out.println(map.getProperties());
 
         renderer = new OrthogonalTiledMapRenderer(map);

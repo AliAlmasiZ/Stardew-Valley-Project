@@ -60,7 +60,7 @@ public class Game implements Serializable {
         setCurrentPlayer(players.get(0));
         players.get(0).setPosition(new Position(10, 10));
 
-        mainMap = new WorldMap("./Content(unpacked)/Maps/TestMap.tmx");
+        mainMap = new WorldMap("./Content(unpacked)/Maps/untitled.tmx");
         setActiveMap(mainMap);
 //        setActiveMap(mainMap);
 //

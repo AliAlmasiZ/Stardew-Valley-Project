@@ -1017,4 +1017,63 @@
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
+ <wangsets>
+  <wangset name="Unnamed Set" type="mixed" tile="-1">
+   <wangcolor name="" color="#ff0000" tile="-1" probability="1"/>
+   <wangcolor name="" color="#00ff00" tile="-1" probability="1"/>
+   <wangcolor name="" color="#0000ff" tile="-1" probability="1"/>
+   <wangcolor name="" color="#ff7700" tile="-1" probability="1"/>
+   <wangcolor name="" color="#00e9ff" tile="-1" probability="1"/>
+   <wangcolor name="" color="#ff00d8" tile="-1" probability="1"/>
+   <wangcolor name="" color="#ffff00" tile="-1" probability="1"/>
+   <wangtile tileid="24" wangid="1,1,1,1,1,1,1,1"/>
+   <wangtile tileid="29" wangid="0,6,6,6,0,0,0,0"/>
+   <wangtile tileid="30" wangid="6,6,6,6,6,6,6,6"/>
+   <wangtile tileid="31" wangid="6,6,6,6,6,6,6,6"/>
+   <wangtile tileid="32" wangid="0,0,0,0,0,6,6,6"/>
+   <wangtile tileid="33" wangid="6,6,0,0,0,6,6,6"/>
+   <wangtile tileid="42" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="46" wangid="0,6,0,0,0,0,0,0"/>
+   <wangtile tileid="47" wangid="6,6,0,0,0,0,0,6"/>
+   <wangtile tileid="48" wangid="6,6,0,0,0,0,0,6"/>
+   <wangtile tileid="49" wangid="0,0,0,0,0,0,0,6"/>
+   <wangtile tileid="51" wangid="1,1,2,2,2,1,1,1"/>
+   <wangtile tileid="52" wangid="1,1,2,2,2,2,2,1"/>
+   <wangtile tileid="53" wangid="1,1,2,2,2,2,2,1"/>
+   <wangtile tileid="54" wangid="1,1,1,1,2,2,2,1"/>
+   <wangtile tileid="68" wangid="2,2,2,2,2,1,1,1"/>
+   <wangtile tileid="69" wangid="2,1,2,2,2,2,2,2"/>
+   <wangtile tileid="70" wangid="2,2,2,2,2,2,2,1"/>
+   <wangtile tileid="71" wangid="2,1,1,1,2,2,2,2"/>
+   <wangtile tileid="85" wangid="2,2,2,1,1,1,1,1"/>
+   <wangtile tileid="86" wangid="2,2,2,1,2,2,2,2"/>
+   <wangtile tileid="87" wangid="2,2,2,2,2,1,2,2"/>
+   <wangtile tileid="88" wangid="2,1,1,1,1,1,2,2"/>
+   <wangtile tileid="90" wangid="4,4,4,5,5,5,4,4"/>
+   <wangtile tileid="91" wangid="4,4,4,5,5,5,5,5"/>
+   <wangtile tileid="98" wangid="7,7,7,1,1,1,7,7"/>
+   <wangtile tileid="107" wangid="4,4,4,4,4,4,4,4"/>
+   <wangtile tileid="108" wangid="4,4,4,4,4,5,5,5"/>
+   <wangtile tileid="109" wangid="5,5,5,5,5,5,5,5"/>
+   <wangtile tileid="115" wangid="7,1,1,1,1,1,7,7"/>
+   <wangtile tileid="116" wangid="7,1,1,1,7,7,7,7"/>
+   <wangtile tileid="124" wangid="4,4,4,5,5,5,4,4"/>
+   <wangtile tileid="125" wangid="4,4,4,4,4,5,5,5"/>
+   <wangtile tileid="132" wangid="7,7,7,7,7,1,1,1"/>
+   <wangtile tileid="133" wangid="7,7,7,1,1,1,1,1"/>
+   <wangtile tileid="134" wangid="7,7,7,7,7,1,7,7"/>
+   <wangtile tileid="135" wangid="7,7,7,1,7,7,7,7"/>
+   <wangtile tileid="141" wangid="1,1,1,3,3,3,1,1"/>
+   <wangtile tileid="158" wangid="1,1,1,3,3,3,1,1"/>
+   <wangtile tileid="175" wangid="1,1,1,1,1,3,1,1"/>
+   <wangtile tileid="192" wangid="1,1,1,3,3,3,3,3"/>
+   <wangtile tileid="203" wangid="4,5,5,5,5,5,4,4"/>
+   <wangtile tileid="208" wangid="3,3,3,3,3,3,3,3"/>
+   <wangtile tileid="209" wangid="1,1,1,1,1,3,3,3"/>
+   <wangtile tileid="226" wangid="1,1,1,3,1,1,1,1"/>
+   <wangtile tileid="243" wangid="1,3,3,3,3,3,1,1"/>
+   <wangtile tileid="260" wangid="1,3,3,3,1,1,1,1"/>
+   <wangtile tileid="339" wangid="4,4,4,4,4,4,4,4"/>
+  </wangset>
+ </wangsets>
 </tileset>
