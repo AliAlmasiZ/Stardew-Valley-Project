@@ -49,7 +49,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -627,6 +626,94 @@ public class GameScreen extends AbstractScreen {
         openMenuWithInventory(panel);
     }
 
+    public void openSendGiftMenu(Entity giftedOne) {
+        Table table = new Table();
+        table.setBackground(customSkin.getDrawable("frameNinePatch2"));
+
+        Inventory giftInventory = new Inventory(1);
+
+        Table giftGrid = new InventoryGrid(giftInventory, 0);
+
+        TextField amountField = new TextField("", customSkin);
+        amountField.setMessageText("Amount...");
+        amountField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+
+        Label errorLabel = new Label("",customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+
+        TextButton sendButton = new TextButton("Send Gift", customSkin);
+
+        table.add(giftGrid).row();
+        table.add(amountField).row();
+        table.add(errorLabel).row();
+        table.add(sendButton);
+
+        sendButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Entity gift = giftInventory.getEntities().get(0);
+
+                if(gift == null){
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Please select a gift first!");
+                    return;
+                }
+
+                if (amountField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Amount cannot be empty!");
+                    return;
+                }
+
+                int amount = Integer.parseInt(amountField.getText());
+                if (amount == 0) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Amount cannot be zero!");
+                    return;
+                }
+
+                App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
+                giftInventory.getItem(gift);
+                amountField.setText("");
+
+                if (giftedOne instanceof NPC) {
+                    Result result = controller.giftNPC(((NPC) giftedOne).getName(), gift.getEntityName(),amount);
+                    if (!result.isSuccessful()) {
+                        errorLabel.setVisible(true);
+                        errorLabel.setText(result.message());
+                        return;
+                    } else {
+                        errorLabel.setVisible(true);
+                        errorLabel.setColor(Color.GREEN);
+                        errorLabel.setText(result.message());
+                        return;
+                    }
+
+                } else if (giftedOne instanceof Player) {
+                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(),amount);
+                    if (!result.isSuccessful()) {
+                        errorLabel.setVisible(true);
+                        errorLabel.setText(result.message());
+                        return;
+                    } else {
+                        errorLabel.setVisible(true);
+                        errorLabel.setColor(Color.GREEN);
+                        errorLabel.setText(result.message());
+                        return;
+                    }
+                }
+            }
+        });
+
+        openMenuWithInventory(table);
+    }
+
     public void openMenuWithInventory(Table menu){
         InGameDialog dialog = new InGameDialog(uiStage);
 
@@ -830,11 +917,11 @@ public class GameScreen extends AbstractScreen {
         //
         Table mainTable = new Table();
 
-        Label infoLabel = new Label("Enter the vector that you want to move your animal:", skin);
-        TextField xField = new TextField("", skin);
+        Label infoLabel = new Label("Enter the vector that you want to move your animal:", customSkin);
+        TextField xField = new TextField("", customSkin);
 
         xField.setMessageText("x");
-        TextField yField = new TextField("", skin);
+        TextField yField = new TextField("", customSkin);
         yField.setMessageText("y");
 
         xField.setTextFieldFilter(new TextField.TextFieldFilter() {
@@ -857,7 +944,7 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
-        Label errorLabel = new Label("x, y must be less than 200!", skin);
+        Label errorLabel = new Label("x, y must be less than 200!", customSkin);
         errorLabel.setVisible(false);
         errorLabel.setColor(Color.RED);
         TextButton confirmButton = new TextButton("Confirm", customSkin);
@@ -907,67 +994,18 @@ public class GameScreen extends AbstractScreen {
         // Tab: Give gift
         // --- in your Screen or wherever you assemble the UI ---
         Table giftTable = new Table();
-        TextButton chooseGift = new TextButton("Choose Gift", customSkin);
-        Image giftImage = new Image(GameAssetManager.getInstance().redCross);
-        Label giftNumberLabel = new Label("0X", skin);
         TextButton sendGift = new TextButton("Send Gift", customSkin);
 
-        // keep a mutable holder so the listener can see updates
-        final Entity[] chosenItemHolder = { null };
-
-        giftTable.add(chooseGift).growX().row();
-        giftTable.add(giftImage);
-        giftTable.add(giftNumberLabel).row();
         giftTable.add(sendGift).growX().row();
 
-
-        // prepare the inventory dialog once
-        final Dialog inventoryDialog = new Dialog("Choose an Item", customSkin) {{
-            // container for your inventory slots
-            Table invTable = new Table();
-            invTable.defaults().pad(5);
-
-            // assume you have a List<Entity> inventory = ...
-//            for (final Entity e : player.getComponent(Inventory.class).getEntities()) {
-//                TextureRegion icon = new TextureRegion(GameAssetManager.getInstance().getTexture(e.getComponent(Pickable.class).getIcon()));
-//                ImageButton slot = new ImageButton(
-//                    new TextureRegionDrawable(icon),
-//                    new TextureRegionDrawable()  // optional pressed state
-//                );
-//
-//                slot.addListener(new ClickListener() {
-//                    @Override
-//                    public void clicked(InputEvent event, float x, float y) {
-//                        // record the choice
-//                        chosenItemHolder[0] = e;
-//                        // update your giftImage & label in place
-//                        giftImage.setDrawable(new TextureRegionDrawable(icon));
-//                        giftNumberLabel.setText(
-//                            e.getComponent(Pickable.class).getStackSize() + "X"
-//                        );
-//                        // hide the dialog
-//                        inventoryDialog.hide();
-//                    }
-//                });
-//
-//                invTable.add(slot).size(64).pad(4);
-//                // wrap to next row every N columns if you like:
-//                if ((player.getComponent(Inventory.class).getEntities().indexOf(e, true) + 1) % 5 == 0) invTable.row();
-//            }
-
-            // make it scrollable if too large
-            getContentTable().add(new ScrollPane(invTable, customSkin))
-                .width(400).height(300);
-            button("Cancel", "cancel");  // built-in cancel button
-        }};
-
-        // when “Choose Gift” is clicked, just show the dialog
-        chooseGift.addListener(new ClickListener() {
+        sendGift.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                inventoryDialog.show(uiStage);
+                dialog.hide();
+                openSendGiftMenu(npc);
             }
         });
+
 
 
 
@@ -1088,7 +1126,7 @@ public class GameScreen extends AbstractScreen {
             Player finalFriend = friend;
             giftImage.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
-                    openGiftMenu(finalFriend);
+                    openPlayerGiftMenu(finalFriend);
                 }
             });
 
@@ -1102,7 +1140,7 @@ public class GameScreen extends AbstractScreen {
         //plant info table
         Table craftTable = new Table();
         Label label = new Label("Enter your crop name to get info: ", customSkin);
-        TextField cropNameField = new TextField("", skin);
+        TextField cropNameField = new TextField("", customSkin);
         cropNameField.setMessageText("Crop Name...");
         Label errorLabel = new Label("", customSkin);
         errorLabel.setColor(Color.RED);
@@ -1139,7 +1177,7 @@ public class GameScreen extends AbstractScreen {
         dialog.show();
     }
 
-    public void openGiftMenu(Player friend) {
+    public void openPlayerGiftMenu(Player friend) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();

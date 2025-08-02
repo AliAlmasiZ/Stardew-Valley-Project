@@ -191,7 +191,7 @@ public class GameMenu implements AppMenu {
             App.getView().log(controller.meetNPC(matcher.group(1).trim()));
 
         } else if ((matcher = GameMenuCommands.GIFT_NPC.getMatcher(input)) != null) {
-            App.getView().log(controller.giftNPC(matcher.group(1).trim(), matcher.group(2).trim()));
+            App.getView().log(controller.giftNPC(matcher.group(1).trim(), matcher.group(2).trim(), 1));
 
         } else if ((matcher = GameMenuCommands.FRIENDSHIP_NPC.getMatcher(input)) != null) {
             App.getView().log(controller.friendshipNPC());

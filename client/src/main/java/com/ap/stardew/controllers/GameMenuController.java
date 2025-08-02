@@ -1726,7 +1726,7 @@ public class GameMenuController implements Controller {
         return new Result(true, message);
     }
 
-    public Result giftNPC(String npcName, String itemName) {
+    public Result giftNPC(String npcName, String itemName, int amount) {
         Game game = App.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
@@ -1741,7 +1741,7 @@ public class GameMenuController implements Controller {
         Entity item = App.entityRegistry.makeEntity(itemName);
 
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
-        if (!inventory.doesHaveItem(itemName)) {
+        if (!inventory.doesHaveItem(itemName, amount)) {
             return new Result(false, "You dont have this item");
         }
 
@@ -1749,7 +1749,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "You can't gift tools to NPC!");
         }
 
-        inventory.takeFromInventory(itemName, 1);
+        inventory.takeFromInventory(itemName, amount);
         currentPlayer.addFriendshipByGift(npc, item);
 
         return new Result(true, "Your gift has been sent successfully!");
