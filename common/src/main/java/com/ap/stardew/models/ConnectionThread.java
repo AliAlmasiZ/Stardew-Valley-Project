@@ -1,23 +1,30 @@
 package com.ap.stardew.models;
 
 import com.ap.stardew.utils.JSONUtils;
+import com.esotericsoftware.kryonet.Connection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
+    public static final int TCP_PORT = 54555;
+    public static final int UDP_PORT = 54777;
     protected final DataInputStream dataInputStream;
     protected final DataOutputStream dataOutputStream;
+    //this is for Socket connection
     protected final BlockingQueue<JSONMessage> receivedMessagesQueue;
+    protected final BlockingQueue<Object> receivedObjectsQueue;
     protected String otherSideIP;
     protected int otherSidePort;
     protected Socket socket;
+    protected Connection connection;
     protected AtomicBoolean end;
     protected boolean initialized = false;
 
@@ -26,7 +33,13 @@ abstract public class ConnectionThread extends Thread {
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
         this.receivedMessagesQueue = new LinkedBlockingQueue<>();
+        this.receivedObjectsQueue = new LinkedBlockingQueue<>();
         this.end = new AtomicBoolean(false);
+    }
+
+    protected ConnectionThread(Connection connection) throws IOException {// kryonet
+        this((Socket) null);
+        this.connection = connection;
     }
 
     public JSONMessage sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
@@ -55,6 +68,14 @@ abstract public class ConnectionThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized void sendTCP(Object object) {
+        connection.sendTCP(object);
+    }
+
+    public synchronized void sendUDP(Object object) {
+        connection.sendUDP(object);
     }
 
     @Override
@@ -105,5 +126,10 @@ abstract public class ConnectionThread extends Thread {
         try {
             socket.close();
         } catch (IOException e) {}
+    }
+
+
+    public Connection getConnection() {
+        return connection;
     }
 }

@@ -1,30 +1,22 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.Account;
-import com.ap.stardew.models.enums.Gender;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.PrettyPrinter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.core.util.JsonParserSequence;
-import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
+import com.ap.stardew.models.JSONMessage;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.google.gson.internal.bind.JsonTreeReader;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ap.stardew.GameServer.PORT;
-import static com.ap.stardew.GameServer.main;
-
 public class ServerApp {
+    private static Server server;
     public static final int TIMEOUT_MILLIS = 500;
     private static final ArrayList<ClientConnectionThread> connections = new ArrayList<>();
     private static boolean exitFlag = false;
@@ -126,4 +118,58 @@ public class ServerApp {
         }
         return null;
     }
+
+    private static void registerClasses() {
+        Kryo kryo = server.getKryo();
+
+        kryo.register(JSONMessage.class);
+    }
+
+    public static void startServer(int tcpPort, int udpPort) throws IOException {
+        if(server != null) server.dispose();
+        server = new Server();
+        server.start();
+        server.bind(tcpPort, udpPort);
+    }
+
+    public static void initializeServerListener() {
+        server.addListener(new Listener(){
+            @Override
+            public void connected(Connection connection) {
+                try { // make a connection thread for handle every player in a different thread
+                    ClientConnectionThread connectionThread = new ClientConnectionThread(connection);
+                    if (!connectionThread.initialHandshake()) {
+                        System.err.println("Inital HandShake failed with remote device.");
+                        connectionThread.end();
+                        return;
+                    }
+                    System.out.println("new client connected : " + connection.getID());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                removeClientConnection(connection);
+                connection.close();
+                System.out.println("client disconnected : " + connection.getID());
+            }
+
+        });
+    }
+
+    public static Server getServer() {
+        return server;
+    }
+
+    private static void removeClientConnection(Connection connection) {
+        for (ClientConnectionThread connectionThread : connections) {
+            if (connectionThread.getConnection().equals(connection)) {
+                removeClientConnection(connectionThread);
+                return;
+            }
+        }
+    }
+
 }

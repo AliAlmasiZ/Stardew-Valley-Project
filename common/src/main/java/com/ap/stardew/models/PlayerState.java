@@ -1,5 +1,7 @@
 package com.ap.stardew.models;
 
+import com.esotericsoftware.kryo.Kryo;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -9,4 +11,6 @@ public class PlayerState implements Serializable {
 
     public String username;
     public float x, y;
+
+    Kryo
 }
