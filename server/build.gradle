@@ -24,3 +24,7 @@ run {
   description = "Runs the Stardew Online Server"
 }
 
+tasks.named('run', JavaExec).configure {
+  // Points working directory to the resources folder
+  workingDir = file("$projectDir/src/main/resources")
+}

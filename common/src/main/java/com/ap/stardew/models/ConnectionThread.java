@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 abstract public class ConnectionThread extends Thread {
     public static final int TCP_PORT = 54555;
     public static final int UDP_PORT = 54777;
+    public static final String HOST = "127.0.0.1";
     protected final DataInputStream dataInputStream;
     protected final DataOutputStream dataOutputStream;
     //this is for Socket connection
@@ -33,13 +34,18 @@ abstract public class ConnectionThread extends Thread {
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
         this.receivedMessagesQueue = new LinkedBlockingQueue<>();
-        this.receivedObjectsQueue = new LinkedBlockingQueue<>();
+        this.receivedObjectsQueue = null;
         this.end = new AtomicBoolean(false);
     }
 
     protected ConnectionThread(Connection connection) throws IOException {// kryonet
-        this((Socket) null);
+        this.dataInputStream = null;
+        this.dataOutputStream = null;
+        this.receivedMessagesQueue = null;
         this.connection = connection;
+        this.receivedObjectsQueue = new LinkedBlockingQueue<>();
+        this.end = new AtomicBoolean(false);
+
     }
 
     public JSONMessage sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
@@ -123,9 +129,10 @@ abstract public class ConnectionThread extends Thread {
 
     public void end() {
         end.set(true);
+        connection.close();
         try {
             socket.close();
-        } catch (IOException e) {}
+        } catch (Exception ignored) {}
     }
 
 

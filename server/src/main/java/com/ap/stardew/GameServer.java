@@ -5,7 +5,9 @@ import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.utils.JSONUtils;
 import com.esotericsoftware.kryonet.Server;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 import static com.ap.stardew.models.ConnectionThread.TCP_PORT;
@@ -16,6 +18,7 @@ public class GameServer {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        System.out.println("Working dir (user.dir): " + System.getProperty("user.dir"));
         try {
             System.out.println("starting server...");
 

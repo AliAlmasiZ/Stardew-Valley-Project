@@ -12,5 +12,4 @@ public class PlayerState implements Serializable {
     public String username;
     public float x, y;
 
-    Kryo
 }

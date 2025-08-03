@@ -4,10 +4,12 @@ import com.ap.stardew.controllers.ServerConnectionController;
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.file.Paths;
 
 public class ClientConnectionThread extends ConnectionThread {
 
@@ -31,7 +33,9 @@ public class ClientConnectionThread extends ConnectionThread {
         JSONMessage response = ServerConnectionController.handleCommand(message);
         if(response == null)
             return false;
-        sendMessage(response);
+        //for Socket
+//        sendMessage(response);
+        sendTCP(response);
         return true;
     }
 
@@ -43,6 +47,7 @@ public class ClientConnectionThread extends ConnectionThread {
         connection.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
+                System.out.println("new message received in class : " + object.getClass());
                 boolean handled = handleReceived(object);
                 if(!handled) try {
                     receivedObjectsQueue.put(object);
@@ -60,6 +65,9 @@ public class ClientConnectionThread extends ConnectionThread {
     private boolean handleReceived(Object received) {
         if(received instanceof JSONMessage) {
             return handleMessage((JSONMessage) received);
+        }
+        if(received instanceof FrameworkMessage.KeepAlive) {
+            return true;
         }
         return false;
     }

@@ -79,7 +79,7 @@ public class LoginMenuController implements Controller{    @Override
         message.put("username", username);
         message.put("password", password);
 
-        JSONMessage response = ClientApp.getServerConnectionThread().sendAndWaitForResponse(message, 1000);
+        JSONMessage response = (JSONMessage) ClientApp.sendAndWaitForResponse(message, 1000);
 
         if(response == null) return new Result(false, "no response");
 

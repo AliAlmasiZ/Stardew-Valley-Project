@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ServerApp {
@@ -123,6 +124,9 @@ public class ServerApp {
         Kryo kryo = server.getKryo();
 
         kryo.register(JSONMessage.class);
+        kryo.register(HashMap.class);
+        kryo.register(JSONMessage.Type.class);
+
     }
 
     public static void startServer(int tcpPort, int udpPort) throws IOException {
@@ -130,6 +134,7 @@ public class ServerApp {
         server = new Server();
         server.start();
         server.bind(tcpPort, udpPort);
+        registerClasses();
     }
 
     public static void initializeServerListener() {
@@ -143,6 +148,7 @@ public class ServerApp {
                         connectionThread.end();
                         return;
                     }
+                    connectionThread.start();
                     System.out.println("new client connected : " + connection.getID());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
