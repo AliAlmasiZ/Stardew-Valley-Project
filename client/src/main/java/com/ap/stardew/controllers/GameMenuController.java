@@ -1318,7 +1318,6 @@ public class GameMenuController implements Controller {
         double poleEffect = fishingPoleEntity.getComponent(FishingPoleComponent.class).getFishingPower();
 
 
-
         int random = (int) (Math.random() * availableFish.size());
         String fishName = availableFish.get(random);
         Entity fish = App.entityRegistry.makeEntity(fishName);
@@ -1336,8 +1335,7 @@ public class GameMenuController implements Controller {
         inventory.addItem(fish);
 
 
-
-        return new EntityResult(fish,null);
+        return new EntityResult(fish, null);
 
     }
 
@@ -1794,7 +1792,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "You dont have enough \"" + item.getEntityName() + "\" items");
         }
 
-        if (currentPlayer.getPosition().dst(quest.getNpc().getComponent(PositionComponent.class).get()) > 2) {
+        if (currentPlayer.getPosition().dst(quest.getNpc().getComponent(PositionComponent.class).get()) > GameScreen.DISTANCE) {
             return new Result(false, "You are too far from this NPC");
         }
 
@@ -1808,6 +1806,8 @@ public class GameMenuController implements Controller {
 
         if (quest.getReward().equalsIgnoreCase("Gold")) {
             currentPlayer.getWallet().changeBalance(rewardNumber);
+            quest.setCompleted(true);
+            quest.setDoneByPlayerName(currentPlayer.getUsername());
             return new Result(true, "Quest finished successfully!\n" +
                 "You got: " + rewardNumber + "Golds");
         }
@@ -1817,6 +1817,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "Item not have set yet");
         }
         quest.setCompleted(true);
+        quest.setDoneByPlayerName(currentPlayer.getUsername());
         Entity reward = App.entityRegistry.makeEntity(quest.getReward());
         reward.getComponent(Pickable.class).setStackSize(rewardNumber);
 
@@ -2240,22 +2241,21 @@ public class GameMenuController implements Controller {
         ArrayList<Player> players = game.getPlayers();
         for (Player player1 : players) {
             if (player1.getSprite().getBoundingRectangle().contains(x, y) && player1 != player
-            && player1.getPosition().getCol() - player.getPosition().getCol() < 20
-            && player1.getPosition().getRow() - player.getPosition().getRow() < 20) {
+                && player1.getPosition().getCol() - player.getPosition().getCol() < 20
+                && player1.getPosition().getRow() - player.getPosition().getRow() < 20) {
 
                 screen.openPlayerMenu(player1);
             }
         }
 
 
-
         Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
         Entity tileEntity = tile.getContent();
 
-        if(tileEntity != null){
-            if(tileEntity.getEntityName().equals("Fridge")){
+        if (tileEntity != null) {
+            if (tileEntity.getEntityName().equals("Fridge")) {
                 screen.showStorage(tileEntity.getComponent(Inventory.class));
-            }else if(tileEntity.getEntityName().equals("shopCounter")){
+            } else if (tileEntity.getEntityName().equals("shopCounter")) {
                 screen.openShopMenu(tile.getMap().getBuilding().getComponent(Shop.class));
             }
         }

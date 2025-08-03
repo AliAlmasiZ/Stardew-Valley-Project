@@ -431,6 +431,7 @@ public class GameScreen extends AbstractScreen {
         label.scaleBy(2);
         label.getColor().a = 0; // start invisible
 
+
         // Sequence of actions: fade in → wait → fade out → remove
         label.addAction(Actions.sequence(
             Actions.fadeIn(0.5f),
@@ -1143,15 +1144,15 @@ public class GameScreen extends AbstractScreen {
             if (currentPlayer.getUsername().equals(quest.getDoneByPlayerName())) {
                 Label messageLabel = new Label("You have already did this Quest!", customSkin);
                 messageLabel.setColor(Color.GREEN);
-                table.add(messageLabel).growX();
+                table.add(messageLabel).pad(3).growX();
             } else {
                 Label messageLabel = new Label("This Quest has been completed already by:", customSkin);
                 messageLabel.setColor(Color.RED);
                 Label playerName = new Label(quest.getDoneByPlayerName(), customSkin);
                 playerName.setColor(Color.BLACK);
 
-                table.add(messageLabel).center();
-                table.add(playerName).center();
+                table.add(messageLabel).pad(3).center();
+                table.add(playerName).pad(3).center();
             }
 
         } else {
@@ -1173,6 +1174,7 @@ public class GameScreen extends AbstractScreen {
                             return;
                         } else {
                             showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                            dialog.hide();
                         }
                     }
                 });
