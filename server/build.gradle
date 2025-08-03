@@ -1,6 +1,7 @@
 
 plugins {
   id "application"
+  id 'java'
 }
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -22,6 +23,19 @@ dependencies {
 run {
   group = "Application"
   description = "Runs the Stardew Online Server"
+}
+
+jar {
+  archiveBaseName = 'server-app'
+  archiveVersion = '1.0'
+
+  manifest {
+    attributes 'Main-Class' : mainClassName
+  }
+
+  doLast {
+    file(archiveFile).setExecutable(true, false)
+  }
 }
 
 tasks.named('run', JavaExec).configure {
