@@ -4378,6 +4378,10 @@ Content/NPC/dialog.png
 Content/NPC/textBox.png
 Content/PC _ Computer - Stardew Valley - Miscellaneous - Title Screen.png
 Content/Quest/Done.png
+Content/Quest/DoneByOther.png
+Content/Quest/Locked-1.png
+Content/Quest/Locked-2.png
+Content/Quest/Locked.png
 Content/Quest/NotDone.png
 Content/TabMenuIcons.png
 Content/Tools/Axe/copper/10.png

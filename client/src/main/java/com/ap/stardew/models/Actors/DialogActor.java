@@ -35,7 +35,7 @@ public class DialogActor extends Actor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (isInRange()) {
-                    screen.showNPCDialog(npc);
+                    screen.showNPCDialog(npc, null);
                     remove();
                 }
             }

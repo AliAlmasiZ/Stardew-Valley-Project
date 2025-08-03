@@ -38,8 +38,8 @@ public class GameAssetManager extends AssetManager {
     // Quests
     public final Texture questDone = new Texture("Content/Quest/Done.png");
     public final Texture questNotDone = new Texture("Content/Quest/NotDone.png");
-    public final Texture questDoneByOther = new Texture("Content/Quest/NotDone.png");
-    public final Texture questLocked = new Texture("Content/Quest/NotDone.png");
+    public final Texture questDoneByOther = new Texture("Content/Quest/DoneByOther.png");
+    public final Texture questLocked = new Texture("Content/Quest/Locked.png");
 
     //Energy bar
     public final Texture energyBar = new Texture("Content/energyBar.png");

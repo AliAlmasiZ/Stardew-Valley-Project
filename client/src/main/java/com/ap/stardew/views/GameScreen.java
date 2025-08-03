@@ -120,6 +120,7 @@ public class GameScreen extends AbstractScreen {
         //**************************************
         controller.cheatGiveItem("Training Rod", 1);
         controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Wood", 500);
         controller.cheatGiveItem("Axe", 1);
         controller.cheatGiveItem("Hoe", 1);
         controller.cheatGiveItem("Hay", 500);
@@ -336,30 +337,30 @@ public class GameScreen extends AbstractScreen {
             }
         }
 
-        switch (playerController.getEquippedItemState()){
+        switch (playerController.getEquippedItemState()) {
             case PLACEABLE -> {
                 batch.setColor(0, 1, 0, 0.3f);
-                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol()*16
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
                     , playerController.getCursorPos().getRow() * 16, 16, 16);
                 batch.draw(GameAssetManager.getInstance()
-                    .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-                    playerController.getCursorPos().getCol()*16
+                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol() * 16
                     , playerController.getCursorPos().getRow() * 16);
                 batch.setColor(1, 1, 1, 1);
             }
             case PLACEABLE_INVALID -> {
                 batch.setColor(1, 0, 0, 0.3f);
-                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol()*16
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
                     , playerController.getCursorPos().getRow() * 16, 16, 16);
                 batch.draw(GameAssetManager.getInstance()
                         .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-                    playerController.getCursorPos().getCol()*16
+                    playerController.getCursorPos().getCol() * 16
                     , playerController.getCursorPos().getRow() * 16);
                 batch.setColor(1, 1, 1, 1);
             }
             case USEABLE -> {
                 batch.setColor(0, 1, 0, 0.3f);
-                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol()*16
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
                     , playerController.getCursorPos().getRow() * 16, 16, 16);
                 batch.setColor(1, 1, 1, 1);
             }
@@ -479,17 +480,18 @@ public class GameScreen extends AbstractScreen {
     }
 
 
-    public void showSkillDetails(SkillType type, Table table){
+    public void showSkillDetails(SkillType type, Table table) {
         table.clearChildren();
         table.setBackground(customSkin.getDrawable("smallPanelNinePatch"));
         table.top().left();
 
-        Label title = new Label(type.name().substring(0,1) + type.name().toLowerCase().substring(1)
+        Label title = new Label(type.name().substring(0, 1) + type.name().toLowerCase().substring(1)
             + ":", customSkin);
         title.setColor(Color.BLACK);
 
         table.add(title);
     }
+
     public void openJournal() {
         InGameDialog dialog = new InGameDialog(uiStage);
 
@@ -517,7 +519,7 @@ public class GameScreen extends AbstractScreen {
             portrait.center();
             portrait.add(new Image(App.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
             topLeft.add(portrait).row();
-            topLeft.add(new Label(player.getAccount().getNickname(), customSkin){
+            topLeft.add(new Label(player.getAccount().getNickname(), customSkin) {
                 {
                     setColor(Color.BLACK);
                 }
@@ -529,7 +531,7 @@ public class GameScreen extends AbstractScreen {
             for (SkillType type : SkillType.values()) {
                 Skill skill = player.getSkill(type);
 
-                Label name = new Label(type.name().substring(0,1) + type.name().toLowerCase().substring(1), customSkin);
+                Label name = new Label(type.name().substring(0, 1) + type.name().toLowerCase().substring(1), customSkin);
                 name.setColor(Color.BLACK);
                 name.setAlignment(Align.left);
 
@@ -539,16 +541,17 @@ public class GameScreen extends AbstractScreen {
                 top.add(name).left().spaceRight(3);
 
                 Image icon = new Image(customSkin.getDrawable(type.icon));
-                icon.addListener(new ClickListener(){
+                icon.addListener(new ClickListener() {
                     @Override
                     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(pointer != -1) return;
+                        if (pointer != -1) return;
 
                         icon.addAction(Actions.alpha(0.5f, 0.15f, Interpolation.smooth));
                     }
+
                     @Override
                     public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(pointer != -1) return;
+                        if (pointer != -1) return;
 
                         icon.addAction(Actions.alpha(1f, 0.15f, Interpolation.smooth));
                     }
@@ -563,25 +566,33 @@ public class GameScreen extends AbstractScreen {
                 top.defaults().spaceRight(3);
 
                 for (int i = 0; i < skill.getLevel(); i++) {
-                    if(i != 3){
+                    if (i != 3) {
                         top.add(new Image(customSkin.getDrawable("sliderButtonUp")));
-                    }else{
+                    } else {
                         top.add(new Image(customSkin.getDrawable("buttonUp")));
                     }
                 }
                 for (int i = 0; i < 4 - skill.getLevel(); i++) {
-                    if(i == 3 - skill.getLevel()){
+                    if (i == 3 - skill.getLevel()) {
                         top.add(new Image(customSkin.getDrawable("buttonDown")));
-                    }else{
+                    } else {
                         top.add(new Image(customSkin.getDrawable("sliderButtonDown")));
                     }
                 }
-                if(skill.getLevel() != 4){
+                if (skill.getLevel() != 4) {
                     top.defaults().spaceLeft(5);
-                    top.add(new Label("xp :", customSkin){{setColor(Color.BLACK);}});
-                    top.add(new Label(Integer.toString(skill.getExperience()), customSkin){{setColor(Color.BLACK);}});
-                    top.add(new Label("/", customSkin){{setColor(Color.BLACK);}});
-                    top.add(new Label(Integer.toString(skill.getMaxXp()), customSkin){{setColor(Color.BLACK);}});
+                    top.add(new Label("xp :", customSkin) {{
+                        setColor(Color.BLACK);
+                    }});
+                    top.add(new Label(Integer.toString(skill.getExperience()), customSkin) {{
+                        setColor(Color.BLACK);
+                    }});
+                    top.add(new Label("/", customSkin) {{
+                        setColor(Color.BLACK);
+                    }});
+                    top.add(new Label(Integer.toString(skill.getMaxXp()), customSkin) {{
+                        setColor(Color.BLACK);
+                    }});
                 }
 
                 top.row();
@@ -612,7 +623,8 @@ public class GameScreen extends AbstractScreen {
 
         dialog.show();
     }
-    public void showStorage(Inventory inventory){
+
+    public void showStorage(Inventory inventory) {
         Table panel = new Table();
         panel.setBackground(customSkin.getDrawable("frameNinePatch2"));
 
@@ -645,23 +657,25 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
-        Label errorLabel = new Label("",customSkin);
+        Label errorLabel = new Label("", customSkin);
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
 
         TextButton sendButton = new TextButton("Send Gift", customSkin);
 
-        table.add(giftGrid).row();
-        table.add(amountField).row();
-        table.add(errorLabel).row();
-        table.add(sendButton);
+        table.add(giftGrid).pad(3).row();
+        table.add(amountField).pad(3).row();
+        table.add(errorLabel).pad(3).row();
+        table.add(sendButton).pad(3);
 
         sendButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Entity gift = giftInventory.getEntities().get(0);
+                Entity gift;
 
-                if(gift == null){
+                try {
+                    gift = giftInventory.getEntities().get(0);
+                } catch (Exception e) {
                     errorLabel.setVisible(true);
                     errorLabel.setText("Please select a gift first!");
                     return;
@@ -685,20 +699,27 @@ public class GameScreen extends AbstractScreen {
                 amountField.setText("");
 
                 if (giftedOne instanceof NPC) {
-                    Result result = controller.giftNPC(((NPC) giftedOne).getName(), gift.getEntityName(),amount);
+                    Result result = controller.giftNPC(((NPC) giftedOne).getName(), gift.getEntityName(), amount);
                     if (!result.isSuccessful()) {
                         errorLabel.setVisible(true);
                         errorLabel.setText(result.message());
                         return;
                     } else {
-                        errorLabel.setVisible(true);
-                        errorLabel.setColor(Color.GREEN);
-                        errorLabel.setText(result.message());
+                        errorLabel.setVisible(false);
+                        Actor current = table;
+                        while (current != null && !(current instanceof InGameDialog)) {
+                            current = current.getParent();
+                        }
+                        if (current instanceof InGameDialog) {
+                            ((InGameDialog) current).hide();
+                        }
+
+                        showNPCDialog(((NPC) giftedOne), "Thanks for the gift!");
                         return;
                     }
 
                 } else if (giftedOne instanceof Player) {
-                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(),amount);
+                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
                     if (!result.isSuccessful()) {
                         errorLabel.setVisible(true);
                         errorLabel.setText(result.message());
@@ -716,7 +737,7 @@ public class GameScreen extends AbstractScreen {
         openMenuWithInventory(table);
     }
 
-    public void openMenuWithInventory(Table menu){
+    public void openMenuWithInventory(Table menu) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
         Table inventoryPanel = new Table();
@@ -751,7 +772,7 @@ public class GameScreen extends AbstractScreen {
 
     }
 
-    public void openShopMenu(Shop shop){
+    public void openShopMenu(Shop shop) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
         TabWidget tabWidget = new TabWidget();
@@ -997,7 +1018,6 @@ public class GameScreen extends AbstractScreen {
         GameAssetManager GAM = GameAssetManager.getInstance();
 
 
-
         // Tab: Give gift
         // --- in your Screen or wherever you assemble the UI ---
         Table giftTable = new Table();
@@ -1012,8 +1032,6 @@ public class GameScreen extends AbstractScreen {
                 openSendGiftMenu(npc);
             }
         });
-
-
 
 
         /**
@@ -1047,9 +1065,10 @@ public class GameScreen extends AbstractScreen {
 
             Label idLabel = new Label(String.valueOf(quest.getId()), customSkin);
             idLabel.setColor(Color.CYAN);
-            Label request = new Label(quest.getRequest(), customSkin);
+            Label request = new Label(quest.getRequest() + " " + quest.getRequestNumber() + "X", customSkin);
             request.setColor(Color.RED);
-            Label reward = new Label(quest.getReward(), customSkin);
+            Label reward = new Label(quest.getReward() + " " + quest.getRewardNumber() + "X", customSkin);
+            reward.setColor(Color.GREEN);
             Image statueImage;
 
             if (quest.isCompleted()) {
@@ -1060,7 +1079,7 @@ public class GameScreen extends AbstractScreen {
             } else {
                 statueImage = new Image(
                     quest.doesHaveAccess(currentPlayer).isSuccessful()
-                        ? GAM.questDone : GAM.questNotDone
+                        ? GAM.questNotDone : GAM.questLocked
                 );
             }
 
@@ -1072,10 +1091,12 @@ public class GameScreen extends AbstractScreen {
                     openQuestMenu(quest);
                     return true;
                 }
+
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     statueImage.addAction(Actions.scaleTo(1.2f, 1.2f, 0.1f));
                 }
+
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     statueImage.addAction(Actions.scaleTo(1f, 1f, 0.1f));
@@ -1147,7 +1168,7 @@ public class GameScreen extends AbstractScreen {
                     public void clicked(InputEvent event, float x, float y) {
                         Result result = controller.questFinish(quest.getId());
                         if (result.isSuccessful()) {
-                            // TODO: graphic message
+                            showNPCDialog(quest.getNpc(), "Congratulations! You have completed this Quest!");
                             dialog.hide();
                             return;
                         } else {
@@ -1169,7 +1190,7 @@ public class GameScreen extends AbstractScreen {
         dialog.show();
     }
 
-    public void showNPCDialog(NPC npc) {
+    public void showNPCDialog(NPC npc, String message) {
         // Root table aligned to bottom
         Table dialogTable = new Table();
         dialogTable.setFillParent(true);
@@ -1185,7 +1206,10 @@ public class GameScreen extends AbstractScreen {
         dialogBox.pad(10); // inner padding inside background
 
         // Dialog text
-        Label dialogLabel = new Label(controller.meetNPC(npc.getName()).message(), customSkin);
+        Label dialogLabel;
+        if (message == null) dialogLabel = new Label(controller.meetNPC(npc.getName()).message(), customSkin);
+        else dialogLabel = new Label(message, customSkin);
+
         dialogLabel.setWrap(true); // allow wrapping if needed
         dialogBox.add(dialogLabel).width(360).left().padLeft(24); // fix width as needed
 
@@ -1216,6 +1240,7 @@ public class GameScreen extends AbstractScreen {
 
     /**
      * This will show table in InGameDialog
+     *
      * @param table the table which will be shown
      */
     public void showTable(Table table) {
