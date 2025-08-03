@@ -16,6 +16,7 @@ if (JavaVersion.current().isJava9Compatible()) {
 
 dependencies {
   implementation project(':common')
+  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 }
 
 run {
@@ -23,3 +24,7 @@ run {
   description = "Runs the Stardew Online Server"
 }
 
+tasks.named('run', JavaExec).configure {
+  // Points working directory to the resources folder
+  workingDir = file("$projectDir/src/main/resources")
+}

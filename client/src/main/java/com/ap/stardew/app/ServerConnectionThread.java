@@ -2,6 +2,7 @@ package com.ap.stardew.app;
 
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
+import com.esotericsoftware.kryonet.Connection;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,7 +14,8 @@ public class ServerConnectionThread extends ConnectionThread {
         super(socket);
     }
 
-    @Override
+
+        @Override
     public boolean initialHandshake() {
         try {
             socket.setSoTimeout(TIMEOUT_MILLIS);

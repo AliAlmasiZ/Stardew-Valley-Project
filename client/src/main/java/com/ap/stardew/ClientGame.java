@@ -24,6 +24,7 @@ public class ClientGame extends Game {
 
     @Override
     public void create() {
+        ClientApp.startClient();
         loadDatas();
         App.loadState();
         instance = this;

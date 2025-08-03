@@ -2,9 +2,14 @@
 eclipse.project.name = appName + '-common'
 
 dependencies {
+
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+
   api 'com.google.code.gson:gson:2.11.0' // Use the latest stable version
 
   api("com.fasterxml.jackson.core:jackson-databind:2.15.2")
   api("com.fasterxml.jackson.core:jackson-core:2.15.2")
   api("com.fasterxml.jackson.core:jackson-annotations:2.15.2")
+
+  api "com.esotericsoftware:kryonet:2.22.0-RC1"
 }
