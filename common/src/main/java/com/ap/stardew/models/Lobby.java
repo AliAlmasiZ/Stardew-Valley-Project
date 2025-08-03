@@ -4,10 +4,14 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Represents a Lobby and its users
+ * */
 public class Lobby implements Serializable {
     @Serial
     private final static long serialVersionUID = 1L;
+    private static int lobbiesCount = 0;
+    private static ArrayList<Lobby> allLobbies = new ArrayList<>();
 
     private int lobbyId;
     private String lobbyName;
@@ -20,16 +24,43 @@ public class Lobby implements Serializable {
     */
     public Lobby() {}
 
-    public Lobby(int lobbyId, String lobbyName, String hostUsername, int maxPlayers) {
-        this.lobbyId = lobbyId;
+    public Lobby(String lobbyName, String hostUsername, int maxPlayers) {
+        lobbiesCount++;
+        this.lobbyId = lobbiesCount;
         this.lobbyName = lobbyName;
         this.hostUsername = hostUsername;
         this.maxPlayers = maxPlayers;
         this.players = new ArrayList<>();
-
+        allLobbies.add(this);
     }
 
-    public class PlayerInfo implements Serializable {
+
+    public String getLobbyName() {
+        return lobbyName;
+    }
+
+    public String getHostUsername() {
+        return hostUsername;
+    }
+
+    public List<PlayerInfo> getPlayers() {
+        return players;
+    }
+
+    public int getCurrentPlayers() {
+        return players.size();
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public int getID() {
+        return lobbyId;
+    }
+
+    public static class PlayerInfo implements Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private String username;

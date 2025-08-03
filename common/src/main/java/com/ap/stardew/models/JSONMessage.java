@@ -42,6 +42,7 @@ public class JSONMessage {
 
     public enum Type {
         command,
+        lobby_command,
         response,
         player_input_command,
     }

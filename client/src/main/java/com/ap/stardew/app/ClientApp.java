@@ -116,8 +116,11 @@ public class ClientApp {
         }
     }
 
+    public static Client getClient() {
+        return client;
+    }
 
-//    public static void connectServer() {
+    //    public static void connectServer() {
 //        if(serverConnectionThread != null && !serverConnectionThread.isAlive())
 //            serverConnectionThread.start();
 //        else
