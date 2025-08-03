@@ -35,6 +35,12 @@ public class GameAssetManager extends AssetManager {
     //NPC Images
     public final Sprite dialog = new Sprite(new Texture("Content/NPC/dialog.png"));
 
+    // Quests
+    public final Texture questDone = new Texture("Content/Quest/Done.png");
+    public final Texture questNotDone = new Texture("Content/Quest/NotDone.png");
+    public final Texture questDoneByOther = new Texture("Content/Quest/NotDone.png");
+    public final Texture questLocked = new Texture("Content/Quest/NotDone.png");
+
     //Energy bar
     public final Texture energyBar = new Texture("Content/energyBar.png");
     public final Texture energyBarFill = new Texture("Content/energyBarFill.png");

@@ -10,6 +10,7 @@ import com.ap.stardew.models.ClockActor;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.NPC.NPC;
 
+import com.ap.stardew.models.NPC.Quest;
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
@@ -47,6 +48,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -990,6 +992,11 @@ public class GameScreen extends AbstractScreen {
 
         TabWidget tabWidget = new TabWidget();
 
+        Game game = App.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        GameAssetManager GAM = GameAssetManager.getInstance();
+
+
 
         // Tab: Give gift
         // --- in your Screen or wherever you assemble the UI ---
@@ -1012,7 +1019,75 @@ public class GameScreen extends AbstractScreen {
         /**
          * @Tab: Quests
          */
+        int questTablePad = 10;
         Table questTable = new Table();
+        // define column defaults for consistent padding and alignment
+        questTable.defaults().pad(questTablePad).center();
+
+        // Header row
+        Label questIdLabel = new Label("Quest ID", customSkin);
+        Label requestLabel = new Label("Request", customSkin);
+        Label rewardLabel = new Label("Reward", customSkin);
+        Label statueLabel = new Label("Statue", customSkin);
+
+        questIdLabel.setColor(Color.BLACK);
+        requestLabel.setColor(Color.BLACK);
+        rewardLabel.setColor(Color.BLACK);
+        statueLabel.setColor(Color.BLACK);
+
+        questTable.add(questIdLabel);
+        questTable.add(requestLabel);
+        questTable.add(rewardLabel);
+        questTable.add(statueLabel);
+        questTable.row();
+
+        // Body rows
+        for (Quest quest : game.getQuests()) {
+            if (quest.getNpc() != npc) continue;
+
+            Label idLabel = new Label(String.valueOf(quest.getId()), customSkin);
+            idLabel.setColor(Color.CYAN);
+            Label request = new Label(quest.getRequest(), customSkin);
+            request.setColor(Color.RED);
+            Label reward = new Label(quest.getReward(), customSkin);
+            Image statueImage;
+
+            if (quest.isCompleted()) {
+                statueImage = new Image(
+                    currentPlayer.getUsername().equals(quest.getDoneByPlayerName())
+                        ? GAM.questDone : GAM.questDoneByOther
+                );
+            } else {
+                statueImage = new Image(
+                    quest.doesHaveAccess(currentPlayer).isSuccessful()
+                        ? GAM.questDone : GAM.questNotDone
+                );
+            }
+
+            // Make statue icon feel clickable with hover-scale effect
+            statueImage.setOrigin(Align.center);
+            statueImage.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    openQuestMenu(quest);
+                    return true;
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    statueImage.addAction(Actions.scaleTo(1.2f, 1.2f, 0.1f));
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    statueImage.addAction(Actions.scaleTo(1f, 1f, 0.1f));
+                }
+            });
+
+            questTable.add(idLabel).padTop(questTablePad * 1.2f);
+            questTable.add(request).padTop(questTablePad * 1.2f);
+            questTable.add(reward).padTop(questTablePad * 1.2f);
+            questTable.add(statueImage).padTop(questTablePad * 1.2f).width(20).height(20);
+            questTable.row();
+        }
 
         /**
          * @Tab: info
@@ -1027,6 +1102,68 @@ public class GameScreen extends AbstractScreen {
         tabWidget.addTab(infoTable, customSkin.getDrawable("skillMenuIcon"));
 
 
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+    }
+
+    public void openQuestMenu(Quest quest) {
+        InGameDialog dialog = new InGameDialog(uiStage);
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget();
+
+
+        Table table = new Table();
+        Game game = App.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+
+        if (quest.isCompleted()) {
+            if (currentPlayer.getUsername().equals(quest.getDoneByPlayerName())) {
+                Label messageLabel = new Label("You have already did this Quest!", customSkin);
+                messageLabel.setColor(Color.GREEN);
+                table.add(messageLabel).growX();
+            } else {
+                Label messageLabel = new Label("This Quest has been completed already by:", customSkin);
+                messageLabel.setColor(Color.RED);
+                Label playerName = new Label(quest.getDoneByPlayerName(), customSkin);
+                playerName.setColor(Color.BLACK);
+
+                table.add(messageLabel).center();
+                table.add(playerName).center();
+            }
+
+        } else {
+            if (quest.doesHaveAccess(currentPlayer).isSuccessful()) {
+                Label messageLabel = new Label("Do you want to complete this Quest?", customSkin);
+                TextButton yesButton = new TextButton("Yes", customSkin);
+                yesButton.setColor(Color.GREEN);
+
+                table.add(messageLabel).pad(3).center().row();
+                table.add(yesButton).pad(3).growX();
+
+                yesButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Result result = controller.questFinish(quest.getId());
+                        if (result.isSuccessful()) {
+                            // TODO: graphic message
+                            dialog.hide();
+                            return;
+                        } else {
+                            showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                        }
+                    }
+                });
+            } else {
+                Label messageLabel = new Label(quest.doesHaveAccess(currentPlayer).message(), customSkin);
+                messageLabel.setColor(Color.RED);
+
+                table.add(messageLabel).pad(5).growX();
+            }
+        }
+
+        tabWidget.addTab(table, customSkin.getDrawable("skillMenuIcon"));
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();

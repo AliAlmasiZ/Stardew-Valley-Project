@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -4086,6 +4085,7 @@ Content/InventoryIcon.png
 Content/InventorySlotFrame.png
 Content/InventorySlotFrame2.png
 Content/MapIcon.png
+Content/MobileAtlas_manually_made.it-IT.png
 Content/NPC/Abigael.png
 Content/NPC/Abigael/all.png
 Content/NPC/Abigael/parts/image_part_001.png
@@ -4377,6 +4377,8 @@ Content/NPC/dialog box.png
 Content/NPC/dialog.png
 Content/NPC/textBox.png
 Content/PC _ Computer - Stardew Valley - Miscellaneous - Title Screen.png
+Content/Quest/Done.png
+Content/Quest/NotDone.png
 Content/TabMenuIcons.png
 Content/Tools/Axe/copper/10.png
 Content/Tools/Axe/copper/6.png
@@ -4756,6 +4758,7 @@ Content/menuBackground/cloud2.png
 Content/menuBackground/cloud3.png
 Content/menuBackground/mountains1.png
 Content/menuBackground/mountains2.png
+Content/menuButton.png
 Content/miniMap/map.png
 Content/newGameButton.png
 Content/newGameButtonHovered.png
