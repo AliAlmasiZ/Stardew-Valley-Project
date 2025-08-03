@@ -59,6 +59,10 @@ public class Lobby implements Serializable {
         return lobbyId;
     }
 
+    public static ArrayList<Lobby> getAllLobbies() {
+        return new ArrayList<>(allLobbies);
+    }
+
     public static class PlayerInfo implements Serializable {
         @Serial
         private static final long serialVersionUID = 1L;

@@ -63,8 +63,14 @@ public class ClientApp {
         });
     }
 
-    public static void connectServer() throws IOException {
-        connectServer(HOST, TCP_PORT, UDP_PORT);
+    public static void connectServer() {
+
+        try {
+            connectServer(HOST, TCP_PORT, UDP_PORT);
+        } catch (IOException e) {
+            System.err.println("Error : can not connect to server :");
+            System.err.println(e.getMessage());
+        }
     }
 
     public static void startClient() {

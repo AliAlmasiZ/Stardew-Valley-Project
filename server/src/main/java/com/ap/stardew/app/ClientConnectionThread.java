@@ -30,7 +30,7 @@ public class ClientConnectionThread extends ConnectionThread {
 
     @Override
     protected boolean handleMessage(JSONMessage message) {
-        JSONMessage response = ServerConnectionController.handleCommand(message);
+        Object response = ServerConnectionController.handleCommand(message);
         if(response == null)
             return false;
         //for Socket

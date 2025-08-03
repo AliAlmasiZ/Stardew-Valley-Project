@@ -91,7 +91,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
                 if(selectedIndex != -1) {
                     Lobby selectedLobby = availableLobbies.get(selectedIndex);
                     JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
-                    message.put("type", "join");
+                    message.put("command", "join");
                     message.put("username" , App.getLoggedInAccount().getUsername());
                     message.put("lobby_id", selectedLobby.getID());
                     JSONMessage response = (JSONMessage) ClientApp.sendAndWaitForResponse(message, 5000);
@@ -125,7 +125,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
-                message.put("type", "host");
+                message.put("command", "host");
                 message.put("lobby_name", lobbyNameTextField.getText());
                 message.put("host_username", App.getLoggedInAccount().getUsername());
                 message.put("max_players", maxPlayersSelectBox.getSelected());
@@ -149,8 +149,9 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         availableLobbies.clear();
 
         JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
-        message.put("type", "fetch");
+        message.put("command", "fetch");
         ArrayList<Lobby> arrayList = (ArrayList<Lobby>) ClientApp.sendAndWaitForResponse(message, 5000);
+
 
         availableLobbies.addAll(arrayList);
 

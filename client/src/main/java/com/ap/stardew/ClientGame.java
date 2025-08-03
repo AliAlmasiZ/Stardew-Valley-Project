@@ -9,6 +9,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.io.IOException;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class ClientGame extends Game {
     private static ClientGame instance;
@@ -25,6 +27,8 @@ public class ClientGame extends Game {
     @Override
     public void create() {
         ClientApp.startClient();
+        ClientApp.connectServer();
+
         loadDatas();
         App.loadState();
         instance = this;
