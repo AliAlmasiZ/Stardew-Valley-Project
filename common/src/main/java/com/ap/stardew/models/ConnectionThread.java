@@ -1,12 +1,16 @@
 package com.ap.stardew.models;
 
 import com.ap.stardew.utils.JSONUtils;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -138,5 +142,21 @@ abstract public class ConnectionThread extends Thread {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public static void registerClasses(Kryo kryo) {
+        /*
+        * Every class here should have empty constructor
+        */
+
+        /* java objects */
+        kryo.register(HashMap.class);
+        kryo.register(ArrayList.class);
+
+        /* DTOs */
+        kryo.register(JSONMessage.class);
+        kryo.register(JSONMessage.Type.class);
+        kryo.register(Lobby.class);
+        kryo.register(Lobby.PlayerInfo.class);
     }
 }

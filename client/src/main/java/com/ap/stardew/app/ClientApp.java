@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.utils.JSONUtils;
 import com.esotericsoftware.kryo.Kryo;
@@ -77,13 +78,7 @@ public class ClientApp {
     }
 
     private static void registerClasses() {
-        Kryo kryo = client.getKryo();
-
-        kryo.register(JSONMessage.class);
-        kryo.register(HashMap.class);
-        kryo.register(JSONMessage.Type.class);
-
-
+        ConnectionThread.registerClasses(client.getKryo());
     }
 
     public static void sendTCP(Object o) {
