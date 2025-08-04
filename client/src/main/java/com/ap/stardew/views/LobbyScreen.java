@@ -1,7 +1,8 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.models.Lobby;
+import com.ap.stardew.models.LobbyInfo;
+import com.ap.stardew.models.dto.AccountInfo;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 public class LobbyScreen extends AbstractMenuScreen{
 
-    private Lobby currentLobby;
+    private LobbyInfo currentLobby;
     private boolean isHost;
 
     private Label lobbyNameLabel;
@@ -23,7 +24,7 @@ public class LobbyScreen extends AbstractMenuScreen{
     private ScrollPane scrollPane;
     private TextButton startGameBtn, readyBtn, leaveBtn;
 
-    public LobbyScreen(Lobby lobby, boolean isHost) {
+    public LobbyScreen(LobbyInfo lobby, boolean isHost) {
         super();
         this.currentLobby = lobby;
         this.isHost = isHost;
@@ -77,18 +78,18 @@ public class LobbyScreen extends AbstractMenuScreen{
         });
     }
 
-s    /** This method would be called whenever the client receives an update about the lobby state
+    /** This method would be called whenever the client receives an update about the lobby state
      *
      * @param updatedLobby
      */
-    private void updateLobbyState(Lobby updatedLobby) {
+    public void updateLobbyState(LobbyInfo updatedLobby) {
         this.currentLobby = updatedLobby;
         updatePlayerList();
     }
 
     private void updatePlayerList() {
         Array<String> players = new Array<>();
-        for (Lobby.PlayerInfo player : currentLobby.getPlayers()) {
+        for (AccountInfo player : currentLobby.getAccounts()) {
             String status = player.getUsername().equals(currentLobby.getHostUsername()) ? "[Host]" :
                             player.isReady() ? "[Ready]" : "[Not Ready]";
             players.add(String.format("%s %s", player.getUsername(), status));

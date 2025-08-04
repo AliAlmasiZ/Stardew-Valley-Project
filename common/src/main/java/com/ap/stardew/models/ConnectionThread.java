@@ -1,5 +1,6 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.utils.JSONUtils;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -16,6 +17,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import com.ap.stardew.models.LobbyInfo;
 
 abstract public class ConnectionThread extends Thread {
     public static final int TCP_PORT = 54555;
@@ -144,10 +146,12 @@ abstract public class ConnectionThread extends Thread {
         return connection;
     }
 
+    /**
+     * Every class here should have empty constructor
+     * @param kryo kryo object of connection
+     */
     public static void registerClasses(Kryo kryo) {
-        /*
-        * Every class here should have empty constructor
-        */
+
 
         /* java objects */
         kryo.register(HashMap.class);
@@ -156,7 +160,7 @@ abstract public class ConnectionThread extends Thread {
         /* DTOs */
         kryo.register(JSONMessage.class);
         kryo.register(JSONMessage.Type.class);
-        kryo.register(Lobby.class);
-        kryo.register(Lobby.PlayerInfo.class);
+        kryo.register(LobbyInfo.class);
+        kryo.register(AccountInfo.class);
     }
 }

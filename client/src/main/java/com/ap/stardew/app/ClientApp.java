@@ -2,17 +2,12 @@ package com.ap.stardew.app;
 
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
-import com.ap.stardew.utils.JSONUtils;
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +16,7 @@ import static com.ap.stardew.models.ConnectionThread.*;
 
 public class ClientApp {
     private static Client client;
-    private static BlockingQueue<Object> receivedObjectsQueue = new LinkedBlockingQueue<>();
+    private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
 
     private static ServerConnectionThread serverConnectionThread;
@@ -54,7 +49,7 @@ public class ClientApp {
             public void received(Connection connection, Object object) {
                 boolean handled = handleReceived(object);
                 if(!handled) try {
-                    receivedObjectsQueue.put(object);
+                    receivedMessageQueue.put((JSONMessage) object); // other objects must be handled
                 } catch (InterruptedException e) {
                     System.err.println("Error occurred in add object message to queue :");
                     System.err.println(e.getMessage());
@@ -112,10 +107,10 @@ public class ClientApp {
         }
         return false;
     }
-    public static Object sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
+    public static JSONMessage sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
         sendTCP(message);
         try {
-            return receivedObjectsQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
+            return receivedMessageQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             System.err.println("Request Timed out.");
             return null;

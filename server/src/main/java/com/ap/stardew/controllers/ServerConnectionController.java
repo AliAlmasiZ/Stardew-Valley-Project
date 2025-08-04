@@ -16,7 +16,12 @@ public class ServerConnectionController {
                 case "fetch" -> {
                     return LobbyController.fetch();
                 }
-                //TODO
+                case "host" -> {
+                    return LobbyController.createLobby(message);
+                }
+                case "join" -> {
+                    return LobbyController.joinLobby(message);
+                }
                 default -> {
                     return null;
                 }

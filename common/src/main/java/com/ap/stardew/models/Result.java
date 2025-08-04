@@ -1,6 +1,8 @@
 package com.ap.stardew.models;
 
-public record Result(boolean isSuccessful, String message) {
+import java.io.Serializable;
+
+public record Result(boolean isSuccessful, String message) implements Serializable {
     @Override
     public String toString() {
         return this.message;
