@@ -25,7 +25,6 @@ public class ClientConnectionThread extends ConnectionThread {
 
     @Override
     public boolean initialHandshake() {
-        ServerApp.addClientConnection(this);
         return true;
     }
 

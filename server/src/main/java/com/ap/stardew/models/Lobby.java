@@ -56,7 +56,7 @@ public class Lobby implements Serializable {
 
         this.lobbyName = lobbyName;
         this.hostUsername = hostUsername;
-        
+
         this.maxPlayers = maxPlayers;
         this.password = password;
         this.isVisible = isVisible;

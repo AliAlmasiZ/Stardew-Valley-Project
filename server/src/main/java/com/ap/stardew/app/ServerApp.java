@@ -192,12 +192,24 @@ public class ServerApp {
         return server;
     }
 
-    private static void removeClientConnection(Connection connection) {
+    private static ClientConnectionThread getConnectionThread(int connectionId) {
         for (ClientConnectionThread connectionThread : connections) {
-            if (connectionThread.getConnection().equals(connection)) {
-                removeClientConnection(connectionThread);
-                return;
+            if (connectionThread.getConnection().getID() == connectionId) {
+                return connectionThread;
             }
+        }
+        return null;
+    }
+
+    private static ClientConnectionThread getConnectionThread(Connection connection) {
+        return getConnectionThread(connection.getID());
+    }
+
+    private static void removeClientConnection(Connection connection) {
+        ClientConnectionThread connectionThread = getConnectionThread(connection);
+        if(connections.contains(connectionThread)) {
+            connections.remove(connectionThread);
+            connectionThread.end();
         }
     }
 

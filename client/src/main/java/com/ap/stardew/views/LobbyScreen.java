@@ -1,6 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.badlogic.gdx.Gdx;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 
 public class LobbyScreen extends AbstractMenuScreen{
+
     private LobbyInfo currentLobby;
     private boolean isHost;
 
@@ -96,6 +98,9 @@ public class LobbyScreen extends AbstractMenuScreen{
         leaveBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                JSONMessage req = new JSONMessage(JSONMessage.Type.lobby_command);
+                req.put("command", "leave_lobby");
+                req.put("lobby_id", currentLobby.getLobbyId());
                 // TODO : Send Leave lobby request to server
                 ClientGame.getInstance().setScreen(new MultiplayerScreen());
                 dispose();

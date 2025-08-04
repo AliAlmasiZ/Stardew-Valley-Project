@@ -32,6 +32,9 @@ public class ServerConnectionController {
                 case "join" -> {
                     return LobbyController.joinLobby(message);
                 }
+                case "leave_lobby" -> {
+
+                }
                 default -> {
                     return null;
                 }
