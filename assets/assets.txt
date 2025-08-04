@@ -4759,7 +4759,10 @@ Content/menuBackground/cloud3.png
 Content/menuBackground/mountains1.png
 Content/menuBackground/mountains2.png
 Content/menuButton.png
+Content/miniMap/background.png
+Content/miniMap/backgroundNinePatch.9.png
 Content/miniMap/map.png
+Content/miniMap/miniMapBackground.9.png
 Content/newGameButton.png
 Content/newGameButtonHovered.png
 Content/pixil-frame-0.png

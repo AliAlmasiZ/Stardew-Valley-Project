@@ -57,6 +57,8 @@ public class GameAssetManager extends AssetManager {
     public final Texture testSlot;
     public final Texture redCross;
     public final Texture emptyTexture;
+    public final Texture miniMap;
+
 
     public final Texture tileSelectionBox;
 
@@ -106,6 +108,8 @@ public class GameAssetManager extends AssetManager {
         closeButton = new Texture("Content/closeButton.png");
 
         redCross = new Texture("Content/redCross.png");
+
+        miniMap = new Texture("Content/miniMap/map.png");
 
         this.load("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class);
         this.load("Content(unpacked)/Characters/Farmer/hairstyles.png", Texture.class);

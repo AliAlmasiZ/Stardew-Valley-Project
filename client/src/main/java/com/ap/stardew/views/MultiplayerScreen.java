@@ -45,15 +45,12 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         refreshBtn = new TextButton("Refresh", customSkin);
         backBtn = new Button(customSkin, "back");
 
-
         rootTable.add(scrollPane).colspan(5).grow().pad(10).row();
         rootTable.add(hostBtn).pad(10);
         rootTable.add(joinBtn).pad(10);
         rootTable.add(joinByIdBtn).pad(10);
         rootTable.add(refreshBtn).pad(10);
         rootTable.add(backBtn).pad(10);
-
-
 
         /* --- Listeners --- */
         hostBtn.addListener(new ClickListener() {
@@ -158,7 +155,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
                     JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
                     message.put("command", "host");
                     message.put("lobby_name", name);
-                    message.put("host_username", App.getLoggedInAccount().getUsername());
+                    message.put("host_username", ClientApp.getUsername());
                     message.put("max_players", maxPlayersSelectBox.getSelected().intValue());
                     message.put("password", password);
                     message.put("is_visible", isVisible);
@@ -285,9 +282,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         message.put("command", "join");
         message.put("lobby_id", lobbyId);
         message.put("password", password);
-        message.put("username", App.getLoggedInAccount().getUsername());
-
-
+        message.put("username", ClientApp.getUsername());
 
         return ClientApp.sendAndWaitForResponse(message, 5000);
     }

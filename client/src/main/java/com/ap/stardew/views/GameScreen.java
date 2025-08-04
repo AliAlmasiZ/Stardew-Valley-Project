@@ -23,6 +23,8 @@ import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
+import com.ap.stardew.models.enums.TileType;
+import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
@@ -33,10 +35,7 @@ import com.ap.stardew.views.widgets.*;
 import com.ap.stardew.models.Result;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL32;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -58,6 +57,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -512,6 +512,7 @@ public class GameScreen extends AbstractScreen {
         Table skillTable = new Table();
         Table bottom = new Table();
 
+        //skill menu
         {
             Table skillTableDivider = new Table();
             Table topLeft = new Table();
@@ -605,9 +606,45 @@ public class GameScreen extends AbstractScreen {
         }
 
 
-        Table table2 = new Table();
-        table2.add(new Label("test3", skin)).row();
-        table2.add(new Label("test4", skin));
+        Table mapTable = new Table();
+        {
+            Tile[][] tiles = App.getActiveGame().getMainMap().getTiles();
+            Pixmap pixmap = new Pixmap(tiles.length, tiles.length, Pixmap.Format.RGBA8888);
+
+            int height = tiles.length;
+            int width = tiles[0].length;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    Tile tile = tiles[y][x];
+                    if(tile == null) {
+                        pixmap.setColor(0, 0, 0, 0);
+                        pixmap.drawPixel(x, height - y);
+                        continue;
+                    }
+
+                    TileType type = tile.getType();
+                    pixmap.setColor(type.color.getFg()[0] / 255f,
+                        type.color.getFg()[1] / 255f,
+                        type.color.getFg()[2] / 255f, 1); // black
+
+                    pixmap.drawPixel(x, height - y);
+                }
+            }
+            Texture texture = new Texture(pixmap);
+
+            Image map = new Image(GameAssetManager.getInstance().miniMap);
+            map.setScaling(Scaling.fit);
+            Table background = new Table();
+            background.setBackground(customSkin.getDrawable("miniMapBackground"));
+
+            ScrollPane scrollPane = new ScrollPane(map);
+
+            background.add(scrollPane).expand(false, false);
+
+            background.pack();
+
+            mapTable.add(background);
+        }
 
         Table table3 = new Table();
         table3.add(new Label("test3", skin)).row();
@@ -616,7 +653,7 @@ public class GameScreen extends AbstractScreen {
 
         tabWidget.addTab(inventoryTable, customSkin.getDrawable("InventoryIcon"));
         tabWidget.addTab(skillTable, customSkin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(table2, customSkin.getDrawable("MapIcon"));
+        tabWidget.addTab(mapTable, customSkin.getDrawable("MapIcon"));
         tabWidget.addTab(table3, customSkin.getDrawable("shit"));
 
 //        dialog.getContentTable().add(tabWidget).fill().size(200, 130);

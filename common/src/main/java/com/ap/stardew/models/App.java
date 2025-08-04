@@ -20,6 +20,7 @@ public class App implements Serializable {
     private static final AppView view = new AppView();
     public transient static boolean shouldTerminate = false;
     private static Menu currentMenu = Menu.LOGIN_MENU;
+
     public static EntityRegistry entityRegistry = new EntityRegistry();
     public static EntityRegistry buildingRegistry = new EntityRegistry();
     public static RecipeRegistry recipeRegistry = new RecipeRegistry();
@@ -65,10 +66,12 @@ public class App implements Serializable {
         return getUserByUsername(username) != null;
     }
 
+    @Deprecated
     public static Account getLoggedInAccount() {
         return getInstance().loggedInAccount;
     }
 
+    @Deprecated
     public static void setLoggedInAccount(Account loggedInAccount) {
         getInstance().loggedInAccount = loggedInAccount;
     }

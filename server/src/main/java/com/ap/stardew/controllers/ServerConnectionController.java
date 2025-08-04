@@ -8,10 +8,7 @@ import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.Result;
 import com.badlogic.gdx.utils.Json;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 
 import java.util.Date;
 
@@ -47,6 +44,9 @@ public class ServerConnectionController {
                 case "login" -> {
                     return login(message.getFromBody("username"), message.getFromBody("password"), connectionThread);
                 }
+                case "getUsername" -> {
+                    return getUsername(message.getFromBody("token"));
+                }
             }
 
             return response;
@@ -70,9 +70,32 @@ public class ServerConnectionController {
             return response;
         }
 
+        String token = Jwts.builder().subject(username).signWith(ServerApp.key).compact();
+
         response.put("success", true);
+        response.put("token", token);
 
         connectionThread.setCurrentAccount(account);
+
+        return response;
+    }
+
+    public static JSONMessage getUsername(String token){
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+        Claims payload;
+        try {
+            payload = ServerApp.jwtParser.parseSignedClaims(token).getPayload();
+        } catch (JwtException e) {
+            System.out.println(e);
+            response.put("success", false);
+            return response;
+        }
+
+        response.put("success", true);
+        response.put("username", payload.getSubject());
+
+        System.out.println(payload.getSubject());
+
         return response;
     }
 }
