@@ -17,5 +17,6 @@ public enum EntityTag {
     BUILDING,
     FERTILIZER,
     RING,
-    MUSHROOM
+    MUSHROOM,
+
 }

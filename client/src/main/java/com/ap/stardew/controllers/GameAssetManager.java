@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class GameAssetManager extends AssetManager {
     private Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
     private Skin customSkin = new Skin(Gdx.files.internal("skin/Stardew Valley Skin/skin.json"));
     private BitmapFont font;
+
+    public final Texture shadow;
 
     // Clock Images
     public TextureRegion clock;
@@ -51,6 +54,7 @@ public class GameAssetManager extends AssetManager {
     public final Texture testSlot;
     public final Texture redCross;
     public final Texture emptyTexture;
+    public final Texture smallPlus;
 
     public final Texture tileSelectionBox;
 
@@ -64,8 +68,19 @@ public class GameAssetManager extends AssetManager {
 
     private HashMap<String, Sprite> normalSprite = new HashMap<>();
 
+    public final ShaderProgram outlineShader;
+
+    public final float ppiX, ppiY;
 
     private GameAssetManager() {
+        ppiX = Gdx.graphics.getPpiX();
+        ppiY = Gdx.graphics.getPpiY();
+
+        outlineShader = new ShaderProgram(
+            Gdx.files.internal("shaders/outline.vert"),
+            Gdx.files.internal("shaders/outline.frag")
+        );
+
         for (Texture texture : customSkin.getAtlas().getTextures()) {
             texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         }
@@ -100,6 +115,8 @@ public class GameAssetManager extends AssetManager {
         closeButton = new Texture("Content/closeButton.png");
 
         redCross = new Texture("Content/redCross.png");
+        shadow = new Texture("Content/shadow.png");
+        smallPlus = new Texture("Content/smallPlus.png");
 
         this.load("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class);
         this.load("Content(unpacked)/Characters/Farmer/hairstyles.png", Texture.class);
@@ -151,7 +168,6 @@ public class GameAssetManager extends AssetManager {
             return redCross;
         }
     }
-
     public Sprite getEntitySpriteToRender(Entity entity, float deltaTime) {
         if (entity.hasTag(EntityTag.TREE) || entity.hasTag(EntityTag.CROP)) return getPlantSprite(entity);
 
@@ -287,7 +303,12 @@ public class GameAssetManager extends AssetManager {
     }
 
     private void setTreeSprites(Entity plant) {
-        int stagesNumber = plant.getComponent(Growable.class).getStages().size();
+        int stagesNumber = 0;
+        try {
+            stagesNumber = plant.getComponent(Growable.class).getStages().size();
+        }catch (Exception e){
+            System.out.println(e);
+        }
         String name = plant.getEntityName();
         Sprite[] treeSprites = new Sprite[stagesNumber + 3];
 

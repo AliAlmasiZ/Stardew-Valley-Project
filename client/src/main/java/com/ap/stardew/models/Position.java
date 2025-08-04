@@ -2,6 +2,7 @@ package com.ap.stardew.models;
 
 import com.ap.stardew.models.gameMap.GameMap;
 import com.badlogic.gdx.math.Vector2;
+import org.checkerframework.checker.index.qual.PolyUpperBound;
 
 import java.io.Serializable;
 
@@ -26,6 +27,12 @@ public class Position extends Vec2 implements Serializable {
     }
     public Position cpy(){
         return new Position(super.cpy(), map);
+    }
+
+    @Override
+    public Position add(float x, float y) {
+        super.add(x, y);
+        return this;
     }
 
     public GameMap getMap() {

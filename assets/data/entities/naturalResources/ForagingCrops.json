@@ -1,12 +1,8 @@
 {
   "common components": [
     {
-      "type": "Pickable",
-      "maxStack" : 8000000
-    },{
       "type": "Renderable",
-      "char": "c",
-      "color": [160, 160, 40]
+      "renderFunction" : "SIMPLE"
     }
   ],
   "required components": [
@@ -25,6 +21,10 @@
         {
           "type": "Edible",
           "energy": 38
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Common Mushroom.png"
         }
       ]
     },
@@ -38,6 +38,10 @@
         {
           "type": "Edible",
           "energy": 0
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Daffodil.png"
         }
       ]
     },
@@ -51,6 +55,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Dandelion.png"
         }
       ]
     },
@@ -64,6 +72,10 @@
         {
           "type": "Edible",
           "energy": 40
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Leek.png"
         }
       ]
     },
@@ -77,6 +89,10 @@
         {
           "type": "Edible",
           "energy": 20
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Morel.png"
         }
       ]
     },
@@ -90,6 +106,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Salmonberry.png"
         }
       ]
     },
@@ -103,6 +123,10 @@
         {
           "type": "Edible",
           "energy": 13
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Spring Onion.png"
         }
       ]
     },
@@ -116,6 +140,10 @@
         {
           "type": "Edible",
           "energy": 13
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Wild Horseradish.png"
         }
       ]
     },
@@ -129,6 +157,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Fiddlehead Fern.png"
         }
       ]
     },
@@ -142,6 +174,10 @@
         {
           "type": "Edible",
           "energy": 38
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Grape.png"
         }
       ]
     },
@@ -155,6 +191,10 @@
         {
           "type": "Edible",
           "energy": -50
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Red Mushroom.png"
         }
       ]
     },
@@ -168,6 +208,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Spice Berry.png"
         }
       ]
     },
@@ -181,6 +225,10 @@
         {
           "type": "Edible",
           "energy": 0
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Sweet Pea.png"
         }
       ]
     },
@@ -194,6 +242,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Blackberry.png"
         }
       ]
     },
@@ -207,6 +259,10 @@
         {
           "type": "Edible",
           "energy": 75
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Chanterelle.png"
         }
       ]
     },
@@ -220,6 +276,10 @@
         {
           "type": "Edible",
           "energy": 38
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Hazelnut.png"
         }
       ]
     },
@@ -233,6 +293,10 @@
         {
           "type": "Edible",
           "energy": 30
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Purple Mushroom.png"
         }
       ]
     },
@@ -246,6 +310,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Wild Plum.png"
         }
       ]
     },
@@ -259,6 +327,10 @@
         {
           "type": "Edible",
           "energy": 0
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Crocus.png"
         }
       ]
     },
@@ -272,6 +344,10 @@
         {
           "type": "Edible",
           "energy": 63
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Crystal Fruit.png"
         }
       ]
     },
@@ -285,6 +361,10 @@
         {
           "type": "Edible",
           "energy": -37
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Holly.png"
         }
       ]
     },
@@ -298,6 +378,10 @@
         {
           "type": "Edible",
           "energy": 30
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Snow Yam.png"
         }
       ]
     },
@@ -311,6 +395,10 @@
         {
           "type": "Edible",
           "energy": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : 8000000,
+          "icon" : "Content/ForagingCrops/Winter Root.png"
         }
       ]
     }

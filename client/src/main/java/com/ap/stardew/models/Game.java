@@ -58,7 +58,7 @@ public class Game implements Serializable {
             addPlayer(new Player(account));
         }
         setCurrentPlayer(players.get(0));
-        players.get(0).setPosition(new Position(10, 10));
+        players.get(0).setPosition(new Position(55, 86));
 
         mainMap = new WorldMap("./Content(unpacked)/Maps/untitled.tmx");
         setActiveMap(mainMap);
@@ -101,6 +101,8 @@ public class Game implements Serializable {
         //mainMap.initRandomElements();
         initNPCs();
         //currentPlayer.getOwnedTiles();
+
+//        currentPlayer.setPosition(new Position(55, 86, currentPlayer.getCurrentMap()));
 
 
     }
@@ -517,9 +519,9 @@ public class Game implements Serializable {
             quest.reduceDaysToUnlocked();
         }
 
-        dailyThor();
+        //dailyThor();
 
-        crowAttack();
+        //crowAttack();
     }
 
     public ArrayList<NPC> getGameNPCs() {

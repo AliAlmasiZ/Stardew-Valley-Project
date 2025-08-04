@@ -5,13 +5,7 @@
       "isWalkable": true
     },
     {
-      "type": "Renderable",
-      "char": "C",
-      "color": [
-        30,
-        220,
-        40
-      ]
+      "type": "Renderable"
     },{
       "type" : "Pickable",
       "maxStack" : 800000

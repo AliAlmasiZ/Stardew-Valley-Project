@@ -283,11 +283,9 @@ public class EntityPlacementSystem {
     public static boolean canPlace(int x, int y, GameMap map) {
         return canPlace(x, y, null, map);
     }
-    public static boolean canPlace(int x, int y) {
-        return canPlace(x, y, null, App.getActiveGame().getActiveMap());
-    }
     public static boolean canPlace(Tile tile){
-        return canPlace(tile.getCol(), tile.getRow());
+        if(tile == null) return false;
+        return canPlace(tile.getCol(), tile.getRow(), tile.getMap());
     }
     public static void clearArea(int x, int y, Placeable placeable) {
         GameMap map = App.getActiveGame().getMainMap();

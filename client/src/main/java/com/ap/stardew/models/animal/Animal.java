@@ -31,7 +31,7 @@ public class Animal extends Entity implements Serializable {
 
     public Animal(AnimalType animalType, String name) {
         super(animalType.name().toLowerCase());
-        this.addComponent(new Renderable('A', new Color(255, 255, 255)));
+        this.addComponent(new Renderable());
         Renderable renderable = this.getComponent(Renderable.class);
         /*TODO: Check this later*/
         this.addComponent(new Placeable(true));

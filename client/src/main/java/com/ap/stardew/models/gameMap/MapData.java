@@ -224,7 +224,7 @@ public class MapData {
                 case "region" -> {
                     regionsLayer = new MapLayerData<>(MapRegion.class, layers.get("region"), tileSets.get("region"));
                     for (TileData t : regionsLayer.tileSet.tiles) {
-                        MapRegion region = new MapRegion(t.type, new Color(Math.random(), Math.random(), Math.random()), t.getProperty("isFarm") != null);
+                        MapRegion region = new MapRegion(t.type, t.getProperty("isFarm") != null);
                         regions.add(region);
                         regionsLayer.dataMap.putIfAbsent(t.globalId, region);
                     }

@@ -7,7 +7,9 @@ import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.UseFunction;
+import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.components.Placeable;
+import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.entities.components.Useable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
@@ -15,10 +17,13 @@ import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
+import com.ap.stardew.views.RenderFunction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -39,6 +44,8 @@ public class PlayerController implements InputProcessor {
     private Vector2 direction = new Vector2();
 
     private Position cursorPos = new Position(0, 0);
+
+    private Entity hoveredEntity = null;
 
     public enum EquippedItemState{
         USEABLE,
@@ -115,6 +122,13 @@ public class PlayerController implements InputProcessor {
             return true; // input was handled
         }
         if(button == Input.Buttons.LEFT){
+            Entity hoveredEntity1 = getHoveredEntity(cursorPos);
+            if(hoveredEntity1 != null){
+                if(hoveredEntity1.getComponent(Pickable.class) != null){
+                    gameMenuController.pickupItem(hoveredEntity1);
+                }
+            }
+
             InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
             if(activeSlot == null) return false;
             Entity entity = activeSlot.getEntity();
@@ -162,35 +176,20 @@ public class PlayerController implements InputProcessor {
         cursorPos.x = mouseScreenPos.x;
         cursorPos.y = mouseScreenPos.y;
 
-        equippedItemState = EquippedItemState.NONE;
+        Entity hoveredEntity1 = getHoveredEntity(cursorPos);
 
-
-
-        InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
-        if(activeSlot == null) return false;
-        Entity entity = activeSlot.getEntity();
-        if(entity == null) return false;
-        Useable useable = entity.getComponent(Useable.class);
-
-        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
-
-        if(tile == null) return false;
-
-        if(useable != null){
-            if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f){
-                equippedItemState = EquippedItemState.USEABLE;
+        if(hoveredEntity != null){
+            Renderable renderable1 = hoveredEntity.getComponent(Renderable.class);
+            if(renderable1 != null) renderable1.getState().remove("hovered");
+        }
+        if(hoveredEntity1 != null){
+            Renderable renderable = hoveredEntity1.getComponent(Renderable.class);
+            if(renderable != null){
+                renderable.getState().put("hovered", true);
+                renderable.getState().put("cursorPos", cursorPos);
             }
         }
-        Placeable placeable = entity.getComponent(Placeable.class);
-        if(placeable != null){
-            System.out.println(tile.isWalkable());
-            if(!EntityPlacementSystem.canPlace(tile)){
-                equippedItemState = EquippedItemState.PLACEABLE_INVALID;
-            }else{
-                equippedItemState = EquippedItemState.PLACEABLE;
-            }
-        }
-
+        hoveredEntity = hoveredEntity1;
         return false;
     }
 
@@ -209,6 +208,38 @@ public class PlayerController implements InputProcessor {
     public void update(float delta) {
         processInput(delta);
         player.update(delta);
+
+        equippedItemState = EquippedItemState.NONE;
+
+//        if(hoveredEntity != null){
+//            Renderable renderable1 = hoveredEntity.getComponent(Renderable.class);
+//            if(renderable1 != null) renderable1.getState().remove("hovered");
+//        }
+
+        InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
+        if(activeSlot == null) return;
+        Entity activeItem = activeSlot.getEntity();
+        if(activeItem == null) return;
+        Useable useable = activeItem.getComponent(Useable.class);
+
+        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
+
+        if(tile == null) return;
+
+        if(useable != null){
+            if(player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f){
+                equippedItemState = EquippedItemState.USEABLE;
+            }
+        }
+        Placeable placeable = activeItem.getComponent(Placeable.class);
+        if(placeable != null){
+            System.out.println(tile.isWalkable());
+            if(!EntityPlacementSystem.canPlace(tile)){
+                equippedItemState = EquippedItemState.PLACEABLE_INVALID;
+            }else{
+                equippedItemState = EquippedItemState.PLACEABLE;
+            }
+        }
     }
 
     private void processInput(float delta) {
@@ -256,6 +287,26 @@ public class PlayerController implements InputProcessor {
                 player.setState(Player.State.IDLE);
             }
         }
+    }
+
+    private Entity getHoveredEntity(Vector2 cursor){
+        for (Entity entity : App.getActiveGame().getActiveMap().getEntities()){
+            Renderable renderable = entity.getComponent(Renderable.class);
+            Position position = entity.getComponent(PositionComponent.class).get();
+
+            if(renderable != null){
+                RenderFunction renderFunction = renderable.getRenderFunction();
+                if(renderFunction != null){
+                    Texture texture = renderFunction.getCurrentTexture(entity);
+
+                    if(new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight())
+                        .contains(cursor.x, cursor.y)){
+                        return entity;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public Position getCursorPos() {
