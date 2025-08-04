@@ -1,10 +1,8 @@
 package com.ap.stardew.views.widgets;
 
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;

@@ -28,9 +28,9 @@ public class AppView extends Game {
     }
 
     public void run() {
-        while (!App.shouldTerminate) {
-            App.getCurrentMenu().checker(scanner);
-        }
+//        while (!App.shouldTerminate) {
+//            App.getCurrentMenu().checker(scanner);
+//        }
     }
 
     public String inputWithPrompt(String prompt) {

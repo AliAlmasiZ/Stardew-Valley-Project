@@ -15,8 +15,6 @@ public class ProfileMenu implements AppMenu {    private final ProfileMenuContro
         Matcher matcher;
         if ((matcher = ProfileMenuCommands.MENU_ENTER.getMatcher(input)) != null) {
             System.out.println(controller.changeMenu(matcher.group("menuName")));
-        } else if ((matcher = ProfileMenuCommands.SHOW_CURRENT_MENU.getMatcher(input)) != null) {
-            System.out.println(controller.showCurrentMenu());
         } else if ((matcher = ProfileMenuCommands.CHANGE_USERNAME.getMatcher(input)) != null) {
             System.out.println(controller.changeUsername(matcher.group("username")));
         } else if ((matcher = ProfileMenuCommands.CHANGE_NICKNAME.getMatcher(input)) != null) {

@@ -1,16 +1,13 @@
 package com.ap.stardew.views.widgets;
 
-import com.ap.stardew.controllers.GameAssetManager;
-import com.ap.stardew.views.GameScreen;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 

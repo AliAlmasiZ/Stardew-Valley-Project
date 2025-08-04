@@ -3,7 +3,6 @@ package com.ap.stardew.models.NPC;
 import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.components.PositionComponent;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ap.stardew.models.entities.Entity;
@@ -11,7 +10,6 @@ import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.enums.Season;
 import com.ap.stardew.models.enums.Weather;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.views.old.inGame.Color;
 
 import java.io.Serializable;
 import java.util.ArrayList;

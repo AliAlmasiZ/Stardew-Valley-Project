@@ -1,6 +1,5 @@
 package com.ap.stardew.models.player;
 
-import com.ap.stardew.controllers.CharacterSpriteManager;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
@@ -22,7 +21,6 @@ import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
-import com.ap.stardew.views.old.inGame.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -63,7 +61,7 @@ public class Player extends Entity implements Serializable {
     private Rectangle bounds;
     private float speed = 200f;
     private State state = State.IDLE;
-    private CharacterSpriteManager spriteManager;
+//    private CharacterSpriteManager spriteManager;
     private Vector2 lastDir = new Vector2(0, -1);
 
 
@@ -91,10 +89,10 @@ public class Player extends Entity implements Serializable {
 
         this.accountUsername = account.getUsername();
 
-        this.spriteManager = new CharacterSpriteManager();
+//Todo        this.spriteManager = new CharacterSpriteManager();
 
 //        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
-        sprite = new Sprite(spriteManager.getFrame(0, lastDir, state));
+//Todo        sprite = new Sprite(spriteManager.getFrame(0, lastDir, state));
     }
 
     public GameMap getCurrentMap() {
@@ -178,9 +176,9 @@ public class Player extends Entity implements Serializable {
 
     }
 
-    public CharacterSpriteManager getSpriteManager() {
-        return spriteManager;
-    }
+//Todo    public CharacterSpriteManager getSpriteManager() {
+//        return spriteManager;
+//    }
 
     public Energy getEnergy() {
         return energy;
@@ -583,10 +581,7 @@ public class Player extends Entity implements Serializable {
         if(state.equals(State.IDLE)) {
             stateTime = 0;
         }
-        sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
+        //Todo : sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
         sprite.setPosition(getPosition().x, getPosition().y);
     }
-
-
-
 }

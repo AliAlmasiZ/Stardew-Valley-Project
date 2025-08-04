@@ -1,24 +1,19 @@
 package com.ap.stardew.views.widgets;
 
-import com.ap.stardew.controllers.GameAssetManager;
-import com.ap.stardew.models.App;
+import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Edible;
 import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.views.ColorPalette;
-import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;

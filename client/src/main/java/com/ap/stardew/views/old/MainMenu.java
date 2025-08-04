@@ -2,7 +2,7 @@ package com.ap.stardew.views.old;
 
 import com.ap.stardew.controllers.MainMenuController;
 import com.ap.stardew.models.Commands.MainMenuCommands;
-import com.ap.stardew.records.GameStartingDetails;
+import com.ap.stardew.models.records.GameStartingDetails;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -14,9 +14,7 @@ public class MainMenu implements AppMenu {    private final MainMenuController c
         if (!scanner.hasNextLine()) return;
         String input = scanner.nextLine().trim();
         Matcher matcher;
-        if ((matcher = MainMenuCommands.SHOW_CURRENT_MENU.getMatcher(input)) != null) {
-            System.out.println(controller.showCurrentMenu());
-        } else if ((matcher = MainMenuCommands.MENU_ENTER.getMatcher(input)) != null) {
+        if ((matcher = MainMenuCommands.MENU_ENTER.getMatcher(input)) != null) {
             System.out.println(controller.changeMenu(matcher.group("menuName")));
         } else if ((matcher = MainMenuCommands.USER_LOGOUT.getMatcher(input)) != null) {
             System.out.println(controller.logout());

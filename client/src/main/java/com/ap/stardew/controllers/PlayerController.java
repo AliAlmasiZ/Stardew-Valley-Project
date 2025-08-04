@@ -17,7 +17,7 @@ import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
-import com.ap.stardew.views.RenderFunction;
+import com.ap.stardew.models.entities.RenderFunction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;

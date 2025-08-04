@@ -13,7 +13,7 @@ public class ProfileMenuController implements Controller{    @Override
             return new Result(false, "this menu doesn't exist");
         if (!menu.equals(Menu.MAIN_MENU))
             return new Result(false, "you can only go to main menu when you are in profile menu");
-        App.setCurrentMenu(menu);
+//        App.setCurrentMenu(menu);
         return new Result(false, "you are in " + menu + " now");
     }
 

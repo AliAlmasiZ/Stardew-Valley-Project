@@ -1,4 +1,4 @@
-package com.ap.stardew.records;
+package com.ap.stardew.models.records;
 
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.gameMap.MapRegion;

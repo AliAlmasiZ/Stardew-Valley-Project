@@ -1,7 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

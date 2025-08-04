@@ -5,8 +5,6 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityObserver;
 import com.ap.stardew.models.enums.TileType;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.views.old.inGame.Color;
-
 import java.io.Serializable;
 
 public class Tile implements Serializable, EntityObserver {    private TileType type;
@@ -53,10 +51,6 @@ public class Tile implements Serializable, EntityObserver {    private TileType 
 
     public int getCol() {
         return position.getCol();
-    }
-
-    public Color getColor() {
-        return this.type.color;
     }
 
     public char getCharacter() {

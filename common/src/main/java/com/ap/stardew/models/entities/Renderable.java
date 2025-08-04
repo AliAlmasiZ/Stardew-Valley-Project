@@ -1,15 +1,12 @@
 package com.ap.stardew.models.entities;
 
 import com.ap.stardew.models.entities.components.EntityComponent;
-import com.ap.stardew.views.RenderFunction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ap.stardew.views.old.inGame.Color;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class Renderable extends EntityComponent implements Serializable {
     @JsonProperty("renderFunction")

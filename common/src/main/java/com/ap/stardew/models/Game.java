@@ -1,7 +1,6 @@
 package com.ap.stardew.models;
 
-import com.ap.stardew.ClientGame;
-import com.ap.stardew.views.GameScreen;
+import com.ap.stardew.models.records.GameStartingDetails;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ap.stardew.models.NPC.Dialogue;
@@ -23,7 +22,6 @@ import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.models.player.Wallet;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
-import com.ap.stardew.records.GameStartingDetails;
 
 import java.io.File;
 import java.io.IOException;
@@ -490,8 +488,7 @@ public class Game implements Serializable {
             player.updatePerHour();
         }
 
-        ((GameScreen) ClientGame.getInstance().getScreen()).initNPCDialogs();
-
+//Todo        ((GameScreen) ClientGame.getInstance().getScreen()).initNPCDialogs();
     }
 
     public void updateGamePerDay() {

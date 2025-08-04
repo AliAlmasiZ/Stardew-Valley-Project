@@ -2,6 +2,7 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.enums.Direction;
 import com.ap.stardew.models.player.Player;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;

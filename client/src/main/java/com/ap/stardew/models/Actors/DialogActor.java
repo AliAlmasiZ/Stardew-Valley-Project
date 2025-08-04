@@ -1,10 +1,9 @@
 package com.ap.stardew.models.Actors;
 
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.entities.components.PositionComponent;
-import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Batch;

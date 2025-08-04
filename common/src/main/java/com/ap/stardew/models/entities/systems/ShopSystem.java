@@ -45,7 +45,7 @@ public class ShopSystem {
             return new Result(true, null);
         }*/
 
-        App.getView().err("error: product " + productEntity.getEntityName() + " doesn't belong to any states");
+//        App.getView().err("error: product " + productEntity.getEntityName() + " doesn't belong to any states");
         return new Result(false, "invalid Product!");
     }
 

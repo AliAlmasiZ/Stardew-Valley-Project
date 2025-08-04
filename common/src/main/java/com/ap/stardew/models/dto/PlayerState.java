@@ -14,6 +14,6 @@ public class PlayerState implements Serializable {
     public Vector2 position;
     public float energy;
 
-    public Map<Integer, Integer> inventory
+//    public Map<Integer, Integer> inventory
 
 }

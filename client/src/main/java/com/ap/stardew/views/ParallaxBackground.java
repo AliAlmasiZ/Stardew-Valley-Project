@@ -1,6 +1,6 @@
 package com.ap.stardew.views;
 
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;

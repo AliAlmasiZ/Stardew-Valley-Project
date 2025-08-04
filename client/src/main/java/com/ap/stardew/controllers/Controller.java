@@ -9,8 +9,4 @@ public interface Controller {
         App.shouldTerminate = true;
         App.saveState();
     }
-
-    default Result showCurrentMenu() {
-        return new Result(true, App.getCurrentMenu().toString());
-    }
 }

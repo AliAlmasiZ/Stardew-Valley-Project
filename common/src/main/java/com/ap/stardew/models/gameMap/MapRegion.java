@@ -2,15 +2,12 @@ package com.ap.stardew.models.gameMap;
 
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.views.old.inGame.Color;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MapRegion implements Serializable {
     private String name;
     private Player owner;
-    private Color color;
     private Position center = new Position(0, 0);
     private boolean isFarm = false;
     private int tilesNum = 0;
@@ -22,12 +19,7 @@ public class MapRegion implements Serializable {
 
     public MapRegion(String name, boolean isFarm) {
         this.name = name;
-        this.color = color;
         this.isFarm = isFarm;
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     public Position getCenter() {

@@ -1,15 +1,13 @@
 package com.ap.stardew;
 
 import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.io.IOException;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class ClientGame extends Game {
@@ -46,7 +44,6 @@ public class ClientGame extends Game {
     }
 
     private static void loadDatas() {
-        App.getView().log("Loading Game...");
         App.shopRegistry.load("data/shops");
         /* should load recipes first (because artisan has recipes) */
         App.recipeRegistry.loadRecipes("./data/recipes");
@@ -69,8 +66,6 @@ public class ClientGame extends Game {
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/ForagingCrops"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Workstations"));
         GameAssetManager.getInstance().finishLoading();
-
-        App.getView().log("Done.");
     }
 
     @Override

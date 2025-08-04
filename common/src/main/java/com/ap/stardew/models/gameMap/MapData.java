@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.ap.stardew.models.enums.TileType;
-import com.ap.stardew.views.old.inGame.Color;
 
 import java.io.File;
 import java.io.IOException;

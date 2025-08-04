@@ -28,9 +28,10 @@ import com.ap.stardew.models.shop.OtherShopProduct;
 import com.ap.stardew.models.shop.Shop;
 import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.utils.StringUtils;
-import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.models.records.EntityResult;
 import com.ap.stardew.models.Result;
-import com.ap.stardew.records.WalkProposal;
+import com.ap.stardew.models.records.WalkProposal;
+import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -578,7 +579,7 @@ public class GameMenuController implements Controller {
             seasonLabel.setColor(Color.BLACK);
             table.add(seasonLabel);
             for (Season season : growable.getGrowingSeasons()) {
-                Image image = new Image(season.getTextureRegion());
+                Image image = new Image(GameAssetManager.getInstance().icons[season.getImageNumber()]);
                 table.add(image);
             }
             table.pad(pad).row();
@@ -1633,7 +1634,7 @@ public class GameMenuController implements Controller {
     public Result startTrade() {
         Game game = App.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
-        App.setCurrentMenu(Menu.TRADE_MENU);
+//        App.setCurrentMenu(Menu.TRADE_MENU);
         StringBuilder message = new StringBuilder("Welcome to TradeMenu!\nYour new offers: \n");
 
         for (TradeOffer tradeOffer : currentPlayer.getTrades()) {

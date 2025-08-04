@@ -1,6 +1,6 @@
 package com.ap.stardew.models.enums;
 
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public enum Weather {

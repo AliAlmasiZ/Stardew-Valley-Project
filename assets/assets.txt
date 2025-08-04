@@ -4552,6 +4552,7 @@ Content/Minerals/Ruby/nodeBroken.png
 Content/Minerals/Topaz/icon.png
 Content/Minerals/Topaz/node.png
 Content/Minerals/Topaz/nodeBroken.png
+Content/MobileAtlas_manually_made.it-IT.png
 Content/NPC/Abigael.png
 Content/NPC/Abigael/all.png
 Content/NPC/Abigael/parts/image_part_001.png
@@ -4840,6 +4841,12 @@ Content/NPC/dialog.png
 Content/NPC/textBox.png
 Content/PC _ Computer - Stardew Valley - Miscellaneous - Harvested Crops, Seed Packets, Minerals, Food, Equipment & Misc. Objects.png
 Content/PC _ Computer - Stardew Valley - Miscellaneous - Title Screen.png
+Content/Quest/Done.png
+Content/Quest/DoneByOther.png
+Content/Quest/Locked-1.png
+Content/Quest/Locked-2.png
+Content/Quest/Locked.png
+Content/Quest/NotDone.png
 Content/TabMenuIcons.png
 Content/Tools/Axe/copper/10.png
 Content/Tools/Axe/copper/6.png
@@ -5218,7 +5225,11 @@ Content/menuBackground/cloud2.png
 Content/menuBackground/cloud3.png
 Content/menuBackground/mountains1.png
 Content/menuBackground/mountains2.png
+Content/menuButton.png
+Content/miniMap/background.png
+Content/miniMap/backgroundNinePatch.9.png
 Content/miniMap/map.png
+Content/miniMap/miniMapBackground.9.png
 Content/newGameButton.png
 Content/newGameButtonHovered.png
 Content/pixil-frame-0.png

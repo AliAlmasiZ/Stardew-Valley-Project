@@ -2,7 +2,6 @@ package com.ap.stardew.models;
 
 import com.ap.stardew.models.gameMap.GameMap;
 import com.badlogic.gdx.math.Vector2;
-import org.checkerframework.checker.index.qual.PolyUpperBound;
 
 import java.io.Serializable;
 

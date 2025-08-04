@@ -7,7 +7,6 @@ import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.views.old.inGame.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 

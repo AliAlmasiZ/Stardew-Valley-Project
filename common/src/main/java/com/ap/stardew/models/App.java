@@ -3,10 +3,8 @@ package com.ap.stardew.models;
 import com.ap.stardew.models.crafting.RecipeRegistry;
 import com.ap.stardew.models.entities.EntityRegistry;
 import com.ap.stardew.models.enums.Gender;
-import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.gameMap.MapRegistry;
 import com.ap.stardew.models.shop.ShopRegistry;
-import com.ap.stardew.views.old.AppView;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,9 +15,7 @@ public class App implements Serializable {
     private Account registeredAccount = null;
     private boolean stayLoggedIn   = false;
     public static Game activeGame = null;
-    private static final AppView view = new AppView();
     public transient static boolean shouldTerminate = false;
-    private static Menu currentMenu = Menu.LOGIN_MENU;
 
     public static EntityRegistry entityRegistry = new EntityRegistry();
     public static EntityRegistry buildingRegistry = new EntityRegistry();
@@ -52,14 +48,6 @@ public class App implements Serializable {
 
     public static void setStayLoggedIn(boolean stayLoggedIn) {
         getInstance().stayLoggedIn = stayLoggedIn;
-    }
-
-    public static Menu getCurrentMenu() {
-        return getInstance().currentMenu;
-    }
-
-    public static void setCurrentMenu(Menu currentMenu) {
-        getInstance().currentMenu = currentMenu;
     }
 
     public static boolean doesUsernameExist(String username){
@@ -113,10 +101,6 @@ public class App implements Serializable {
         }
     }
 
-    public static AppView getView(){
-        return getInstance().view;
-    }
-
     public static Account getRegisteredAccount() {
         return getInstance().registeredAccount;
     }
@@ -142,5 +126,4 @@ public class App implements Serializable {
         addAccount(new Account(Gender.MALE, "asd", "ali", "a", "ali"));
         addAccount(new Account(Gender.MALE, "asd", "ilia", "a", "ilia"));
     }
-
 }

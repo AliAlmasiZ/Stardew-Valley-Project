@@ -1,7 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.controllers.GameAssetManager;
+import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.*;
@@ -21,7 +21,6 @@ import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
-import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.enums.TileType;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
@@ -29,7 +28,7 @@ import com.ap.stardew.models.player.Skill;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.models.shop.Shop;
 import com.ap.stardew.models.shop.ShopProduct;
-import com.ap.stardew.records.EntityResult;
+import com.ap.stardew.models.records.EntityResult;
 import com.ap.stardew.views.widgets.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -533,7 +532,7 @@ public class GameScreen extends AbstractScreen {
             Table portrait = new Table();
             portrait.setBackground(customSkin.getDrawable("daybg"));
             portrait.center();
-            portrait.add(new Image(App.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
+//            portrait.add(new Image(App.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
             topLeft.add(portrait).row();
             topLeft.add(new Label(player.getAccount().getNickname(), customSkin) {
                 {
@@ -637,9 +636,6 @@ public class GameScreen extends AbstractScreen {
                     }
 
                     TileType type = tile.getType();
-                    pixmap.setColor(type.color.getFg()[0] / 255f,
-                        type.color.getFg()[1] / 255f,
-                        type.color.getFg()[2] / 255f, 1); // black
 
                     pixmap.drawPixel(x, height - y);
                 }

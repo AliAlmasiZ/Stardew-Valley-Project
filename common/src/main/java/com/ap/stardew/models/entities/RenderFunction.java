@@ -1,24 +1,14 @@
-package com.ap.stardew.views;
+package com.ap.stardew.models.entities;
 
-import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.models.Position;
-import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.components.PositionComponent;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 
 public enum RenderFunction {

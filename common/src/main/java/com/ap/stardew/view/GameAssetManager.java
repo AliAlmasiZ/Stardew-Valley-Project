@@ -1,4 +1,4 @@
-package com.ap.stardew.controllers;
+package com.ap.stardew.view;
 
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.animal.Animal;

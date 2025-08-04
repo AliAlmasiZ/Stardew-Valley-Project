@@ -7,7 +7,7 @@ import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMapType;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.records.GameStartingDetails;
+import com.ap.stardew.models.records.GameStartingDetails;
 import com.ap.stardew.models.Result;
 
 import java.io.FileInputStream;
@@ -24,14 +24,14 @@ public class MainMenuController implements Controller{    @Override
             return new Result(false, "you are already in com.ap.stardew.Main Menu");
         if (menu.equals(Menu.GAME_MENU))
             return new Result(false, "Use \"game new -u <username1> [username2] [username3]\"\n to enter this menu");
-        App.setCurrentMenu(menu);
+//        App.setCurrentMenu(menu);
         return new Result(true, "You are in " + menu + " now");
     }
 
     public Result logout() {
         if(changeMenu("Login Menu").isSuccessful()) {
             App.setLoggedInAccount(null);
-            App.setCurrentMenu(Menu.LOGIN_MENU);
+//            App.setCurrentMenu(Menu.LOGIN_MENU);
             return new Result(true, "user logged out successfully. you are in Login Menu now");
         }
         return new Result(false, "Something went wrong : couldn't logout");
@@ -105,7 +105,7 @@ public class MainMenuController implements Controller{    @Override
         Game game = new Game();
         App.setActiveGame(game);
         game.initGame(details);
-        App.setCurrentMenu(Menu.GAME_MENU);
+//        App.setCurrentMenu(Menu.GAME_MENU);
     }
 
     public Result loadGame() {
@@ -123,7 +123,7 @@ public class MainMenuController implements Controller{    @Override
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        App.setCurrentMenu(Menu.GAME_MENU);
+//        App.setCurrentMenu(Menu.GAME_MENU);
         return new Result(true, "loaded!");
     }
 }

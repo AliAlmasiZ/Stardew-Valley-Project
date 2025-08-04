@@ -1,13 +1,11 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.app.ClientConnectionController;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.enums.Gender;
-import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.enums.SecurityQuestions;
 
 import java.security.SecureRandom;
@@ -88,7 +86,7 @@ public class LoginMenuController implements Controller{    @Override
         }
 
         ClientApp.setToken(response.getFromBody("token", String.class));
-        
+
         return new Result(response.getFromBody("success"), response.getFromBody("message"));
     }
 
@@ -114,58 +112,6 @@ public class LoginMenuController implements Controller{    @Override
         return new Result(true, "You answered question number " + number + " successfully!");
     }
 
-    public Result forgetPassword(String username) {
-        Account account = App.getUserByUsername(username);
-
-        if(account == null){
-            return new Result(false, "username doesn't exist!");
-        }
-
-        App.getView().log("answer the questions one by one");
-
-        Map<SecurityQuestions, String> questions = account.getSecurityAnswers();
-
-        for (Map.Entry<SecurityQuestions, String> q : questions.entrySet()){
-            String answer = App.getView().inputWithPrompt(q.getKey().getQuestion());
-            if(!answer.equals(q.getValue())){
-                return new Result(false, "wrong answer");
-            }
-        }
-
-        App.getView().log("the answers were correct");
-
-        String newPassword;
-        for(int i = 0;; i++){
-            if(i==0){
-                newPassword = App.getView().inputWithPrompt("enter a new password (enter \"random\" for a random password):");
-            }else{
-                newPassword = App.getView().inputWithPrompt("please retry:");
-            }
-
-            if(newPassword.equalsIgnoreCase("random")){
-                newPassword = generatePassword();
-                String confirm = App.getView().inputWithPrompt("Do you confirm your new password to be \"" + newPassword + "\"? (y/n)");
-
-                if(confirm.equalsIgnoreCase("y")){
-                    break;
-                }else{
-                    continue;
-                }
-            }
-
-            Result validationResult;
-            if(!(validationResult = Account.isPasswordValid(newPassword)).isSuccessful()){
-                App.getView().log(validationResult.message());
-            }
-
-            String reEnteredPassword = App.getView().inputWithPrompt("re-enter the password:");
-            if(reEnteredPassword.equals(newPassword)){
-                break;
-            }
-            App.getView().log("passwords don't match.");
-        }
-        return new Result(true, "your new password is \"" + newPassword + "\"");
-    }
 
     public static String generatePassword() {
         String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

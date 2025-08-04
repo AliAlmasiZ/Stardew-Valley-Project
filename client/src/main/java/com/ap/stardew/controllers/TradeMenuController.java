@@ -124,7 +124,6 @@ public class TradeMenuController implements Controller {
     }
 
     public Result back() {
-        App.setCurrentMenu(Menu.GAME_MENU);
         return new Result(true, "You are now in GameMenu");
     }
 
