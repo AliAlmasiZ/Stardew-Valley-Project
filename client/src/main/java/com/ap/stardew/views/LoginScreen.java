@@ -87,8 +87,6 @@ public class LoginScreen extends AbstractMenuScreen{
                 if(result.isSuccessful()){
                     //TEMP:
                     ClientGame.getInstance().setScreen(new MultiplayerScreen());
-                    App.setLoggedInAccount(App.getUserByUsername(usernameTextfield.getText()));//badddd
-
 
 //                    MainMenuScreen mainMenuScreen = new MainMenuScreen();
 //                    mainMenuScreen.enterAnim();

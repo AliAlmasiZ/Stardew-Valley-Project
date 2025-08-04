@@ -30,7 +30,6 @@ public class GameMap implements Serializable {
     protected Entity building = null;
     protected String mapDataName;
 
-
     public Entity getBuilding() {
         return building;
     }

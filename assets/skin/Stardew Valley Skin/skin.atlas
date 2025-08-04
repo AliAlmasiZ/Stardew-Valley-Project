@@ -13,14 +13,14 @@ white-pixel
   index: -1
 InventoryIcon
   rotate: false
-  xy: 759, 518
+  xy: 421, 52
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 MapIcon
   rotate: false
-  xy: 421, 52
+  xy: 710, 765
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -99,7 +99,7 @@ buttonDown
   index: -1
 buttonUp
   rotate: false
-  xy: 1000, 1014
+  xy: 639, 396
   size: 13, 9
   split: 3, 3, 3, 3
   orig: 13, 9
@@ -131,7 +131,7 @@ energyBarFillNinePatch
   index: -1
 energyBarNinePatch
   rotate: false
-  xy: 639, 343
+  xy: 666, 417
   size: 12, 56
   split: 4, 4, 15, 3
   pad: 3, 3, 14, 2
@@ -168,14 +168,14 @@ khodayaBaseDige
   index: -1
 frame
   rotate: false
-  xy: 639, 401
+  xy: 759, 510
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 639, 401
+  xy: 759, 510
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
@@ -192,7 +192,7 @@ frameNinePatch2
   index: -1
 inventoryIconRotated
   rotate: false
-  xy: 970, 970
+  xy: 1000, 1002
   size: 16, 21
   orig: 16, 21
   offset: 0, 0
@@ -281,6 +281,15 @@ mountains2
   orig: 639, 148
   offset: 0, 0
   index: -1
+miniMapBackground
+  rotate: false
+  xy: 639, 407
+  size: 25, 18
+  split: 6, 7, 4, 7
+  pad: 7, 6, 4, 4
+  orig: 25, 18
+  offset: 0, 0
+  index: -1
 newGameButton
   rotate: false
   xy: 885, 905
@@ -297,28 +306,28 @@ newGameButtonHovered
   index: -1
 shit
   rotate: false
-  xy: 710, 765
+  xy: 885, 850
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 skillMenuIcon
   rotate: false
-  xy: 885, 850
+  xy: 767, 810
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 farmingSkillIcon
   rotate: false
-  xy: 1015, 1013
+  xy: 951, 893
   size: 8, 10
   orig: 8, 10
   offset: 0, 0
   index: -1
 fishingSkillIcon
   rotate: false
-  xy: 666, 463
+  xy: 785, 524
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
@@ -339,7 +348,7 @@ miningSkillIcon
   index: -1
 sliderButton
   rotate: false
-  xy: 951, 894
+  xy: 711, 496
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
@@ -386,7 +395,7 @@ smallPanelNinePatch
   index: -1
 storageIcon
   rotate: false
-  xy: 767, 805
+  xy: 970, 970
   size: 16, 21
   orig: 16, 21
   offset: 0, 0

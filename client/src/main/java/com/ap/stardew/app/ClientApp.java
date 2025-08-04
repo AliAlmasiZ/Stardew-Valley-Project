@@ -23,6 +23,8 @@ public class ClientApp {
 
     private static boolean exitFlag = false;
 
+    private static String token;
+
     public static boolean isEnded() {
         return exitFlag;
     }
@@ -153,5 +155,28 @@ public class ClientApp {
         return client.isConnected() ;
     }
 
+    public static String getToken() {
+        return token;
+    }
 
+    public static void setToken(String token) {
+        ClientApp.token = token;
+    }
+
+    public static String getUsername(){
+        if(token == null) return null;
+
+        JSONMessage request = new JSONMessage(JSONMessage.Type.command);
+
+        request.put("command", "getUsername");
+        request.put("token", token);
+
+        JSONMessage response = sendAndWaitForResponse(request, 500);
+
+        if(!response.getFromBody("success", boolean.class)) return null;
+
+        System.out.println(response.getFromBody("username", String.class));
+
+        return response.getFromBody("username");
+    }
 }

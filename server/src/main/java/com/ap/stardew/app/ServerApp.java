@@ -35,9 +35,9 @@ public class ServerApp {
     private static ListenerThread listenerThread;
 
     // shitty doc:
-//    private static final String SECRET = "yOZpBdp+vYUn6p+m4rU5hAeQb4YFw7WjQbHbZ3P4fhw=";
-//    public static final SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
-//    public static final JwtParser jwtParser = Jwts.parser().verifyWith(ServerApp.key).build();
+    private static final String SECRET = "yOZpBdp+vYUn6p+m4rU5hAeQb4YFw7WjQbHbZ3P4fhw=";
+    public static final SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
+    public static final JwtParser jwtParser = Jwts.parser().verifyWith(ServerApp.key).build();
 
     static {
 //        JsonWriter mapper = new JsonWriter(new FileWriter(new File("./data/test.json")));
