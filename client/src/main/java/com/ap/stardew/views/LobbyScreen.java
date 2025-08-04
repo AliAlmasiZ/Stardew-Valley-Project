@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 
 public class LobbyScreen extends AbstractMenuScreen{
-
     private LobbyInfo currentLobby;
     private boolean isHost;
 

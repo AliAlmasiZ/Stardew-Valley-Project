@@ -32,7 +32,6 @@ public class LoginScreen extends AbstractMenuScreen{
     public LoginScreen(){
         super();
 
-
         //Todo this is ashghal
         if(!ClientApp.isConnected()){
             ClientApp.connectServer();

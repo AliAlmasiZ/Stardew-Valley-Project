@@ -1,6 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.controllers.ServerConnectionController;
+import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
 import com.esotericsoftware.kryonet.Connection;
@@ -12,7 +13,7 @@ import java.net.Socket;
 import java.nio.file.Paths;
 
 public class ClientConnectionThread extends ConnectionThread {
-
+    private Account currentAccount = null;
 
     protected ClientConnectionThread(Socket socket) throws IOException {
         super(socket);
@@ -30,7 +31,7 @@ public class ClientConnectionThread extends ConnectionThread {
 
     @Override
     protected boolean handleMessage(JSONMessage message) {
-        Object response = ServerConnectionController.handleCommand(message);
+        Object response = ServerConnectionController.handleCommand(message, this);
         if(response == null)
             return false;
         //for Socket
@@ -70,5 +71,13 @@ public class ClientConnectionThread extends ConnectionThread {
             return true;
         }
         return false;
+    }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
     }
 }

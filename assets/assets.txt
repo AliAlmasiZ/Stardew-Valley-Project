@@ -2566,6 +2566,7 @@ Content(unpacked)/Maps/summer_town.pt-BR.png
 Content(unpacked)/Maps/summer_town.ru-RU.png
 Content(unpacked)/Maps/summer_town.tr-TR.png
 Content(unpacked)/Maps/summer_town.zh-CN.png
+Content(unpacked)/Maps/test.png
 Content(unpacked)/Maps/tilledSoil.tsx
 Content(unpacked)/Maps/townInterior.de-DE.png
 Content(unpacked)/Maps/townInterior.es-ES.png

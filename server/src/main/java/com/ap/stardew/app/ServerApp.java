@@ -3,15 +3,25 @@ package com.ap.stardew.app;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.enums.Gender;
+import com.badlogic.gdx.Input;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.google.gson.stream.JsonWriter;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
-import java.io.File;
-import java.io.IOException;
+import javax.crypto.SecretKey;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,15 +34,22 @@ public class ServerApp {
     private static boolean exitFlag = false;
     private static ListenerThread listenerThread;
 
+    // shitty doc:
+//    private static final String SECRET = "yOZpBdp+vYUn6p+m4rU5hAeQb4YFw7WjQbHbZ3P4fhw=";
+//    public static final SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
+//    public static final JwtParser jwtParser = Jwts.parser().verifyWith(ServerApp.key).build();
+
     static {
 //        JsonWriter mapper = new JsonWriter(new FileWriter(new File("./data/test.json")));
 //        JsonMapper mapper1 = new JsonMapper();
-//        accounts.add(new Account(Gender.MALE, "parsa", "Parsa@1145", "Parsa@1145", "parsa"));
-//        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
-//        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
-//        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
-//
-//        saveAccounts(accounts);
+
+        ArrayList<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(Gender.MALE, "parsa", "Parsa@1145", "Parsa@1145", "parsa"));
+        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
+        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
+        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
+
+        saveAccounts(accounts);
 
 
 //        FileWriter fileWriter = null;
@@ -98,7 +115,15 @@ public class ServerApp {
     public static ArrayList<Account> loadAccounts(){
         JsonMapper mapper = new JsonMapper();
         try {
-            JsonNode jsonNode = mapper.readTree(new File("./accounts.json"));
+            FileInputStream file;
+            try {
+                file = new FileInputStream("./accounts.json");
+            }catch (FileNotFoundException e){
+                saveAccounts(new ArrayList<>());
+                return new ArrayList<>();
+            }
+            JsonNode jsonNode = mapper.readTree(file);
+            file.close();
             return new ArrayList<>(Arrays.asList(mapper.treeToValue(jsonNode, Account[].class)));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -107,7 +132,9 @@ public class ServerApp {
     public static void saveAccounts(ArrayList<Account> accounts){
         JsonMapper mapper = new JsonMapper();
         try {
-            mapper.writeValue(new File("./accounts.json"), accounts);
+            FileOutputStream file = new FileOutputStream("./accounts.json");
+            mapper.writeValue(file, accounts);
+            file.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

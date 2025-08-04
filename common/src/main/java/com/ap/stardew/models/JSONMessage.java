@@ -31,6 +31,10 @@ public class JSONMessage {
         return (T) body.get(fieldName);
     }
 
+    public <T> T getFromBody(String fieldName, Class<T> tClass) {
+        return (T) body.get(fieldName);
+    }
+
     public Object put(String key, Object object) {
         return body.put(key, object);
     }

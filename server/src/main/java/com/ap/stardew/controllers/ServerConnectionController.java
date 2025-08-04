@@ -1,12 +1,22 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.GameServer;
+import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
+import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.Result;
+import com.badlogic.gdx.utils.Json;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import java.util.Date;
 
 public class ServerConnectionController {
-    public static Object handleCommand(JSONMessage message) {
+    public static Object handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
         if(message.getType() == JSONMessage.Type.player_input_command) {
             //TODO
         }
@@ -32,9 +42,7 @@ public class ServerConnectionController {
 
             switch ((String) message.getFromBody("command")){
                 case "login" -> {
-                    Result login = login(message.getFromBody("username"), message.getFromBody("password"));
-                    response.put("success", login.isSuccessful());
-                    response.put("message", login.message());
+                    return login(message.getFromBody("username"), message.getFromBody("password"), connectionThread);
                 }
             }
 
@@ -43,21 +51,25 @@ public class ServerConnectionController {
         return null;
     }
 
-    public static Result login(String username, String password){
+    public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread){
         Account account = ServerApp.getAccountByUsername(username);
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
         if (account == null) {
-            return new Result(false, "username doesn't exist");
+            response.put("success", false);
+            response.put("message", "username doesn't exist");
+            return response;
         }
-
-        System.out.println(Account.hashPassword(password));
-        System.out.println(account.getPassword());
 
         if (!account.isPasswordCorrect(password)) {
-            return new Result(false, "incorrect password");
+            response.put("success", false);
+            response.put("message", "incorrect password");
+            return response;
         }
 
-        return new Result(true, "logged in successfully");
-    }
+        response.put("success", true);
 
+        connectionThread.setCurrentAccount(account);
+        return response;
+    }
 }
