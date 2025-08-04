@@ -110,15 +110,23 @@ public class GameMap implements Serializable {
                             tile.setType(TileType.WATER);
                         }
                         tiles[i][j] = tile;
+
                     }
                     if(buildingsLayer!=null){
                         TiledMapTileLayer.Cell buildingCell = buildingsLayer.getCell(j, i);
                         if(buildingCell != null){
-                            tiles[i][j] = new Tile(new Position(j, i), TileType.GRASS, this);
-                            tiles[i][j].setWalkable(false);
+                            boolean isPassable = buildingCell.getTile().getProperties().get("Passable") != null;
+
+                            if(tiles[i][j] == null){
+                                tiles[i][j] = new Tile(new Position(j, i), TileType.GRASS, this);
+                            }
+                            if(isPassable){
+                                tiles[i][j].setWalkable(true);
+                            }else {
+                                tiles[i][j].setWalkable(false);
+                            }
                         }
                     }
-
                 }
             }
         }

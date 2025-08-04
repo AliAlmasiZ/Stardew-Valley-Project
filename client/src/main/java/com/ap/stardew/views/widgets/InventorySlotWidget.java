@@ -50,9 +50,19 @@ public class InventorySlotWidget extends FramedImage{
     private InventorySlot slot;
     private Label quantityLabel;
     private Table labelTable;
+    private Image shadow;
 
     public InventorySlotWidget(InventorySlot slot) {
         super(GameAssetManager.getInstance().inventorySlotFrame, GameAssetManager.getInstance().emptyTexture, 1);
+
+        Table shadowTable = new Table();
+        shadowTable.setFillParent(true);
+        shadow = new Image(GameAssetManager.getInstance().shadow) {{
+            setColor(1, 1, 1, 0.7f);
+        }};
+        shadowTable.add(shadow);
+        shadowTable.bottom().pad(2).padBottom(1);
+        stack.addActorAt(1, shadowTable);
 
         labelTable = new Table();
         labelTable.setFillParent(true);
@@ -253,9 +263,11 @@ public class InventorySlotWidget extends FramedImage{
             }else{
                 quantityLabel.setVisible(false);
             }
+            shadow.setVisible(true);
         }else{
             image.setDrawable(new TextureRegionDrawable(GameAssetManager.getInstance().emptyTexture));
             quantityLabel.setVisible(false);
+            shadow.setVisible(false);
         }
     }
 

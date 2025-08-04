@@ -1131,10 +1131,25 @@
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
+ <tile id="860">
+  <properties>
+   <property name="Passable" type="int" value="0"/>
+  </properties>
+ </tile>
  <tile id="884">
   <properties>
    <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
+  </properties>
+ </tile>
+ <tile id="885">
+  <properties>
+   <property name="Passable" type="int" value="0"/>
+  </properties>
+ </tile>
+ <tile id="910">
+  <properties>
+   <property name="Passable" type="int" value="0"/>
   </properties>
  </tile>
  <tile id="947">

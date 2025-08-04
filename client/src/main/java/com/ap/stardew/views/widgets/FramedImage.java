@@ -16,6 +16,8 @@ import org.w3c.dom.Text;
 public class FramedImage extends Table {
     protected Image frame;
     protected Image image;
+    protected Stack stack;
+    protected Table frameTable;
 
     public FramedImage(TextureRegion frameTexture, TextureRegion imageTexture, float padPercent) {
         frame = new Image(frameTexture);
@@ -25,9 +27,9 @@ public class FramedImage extends Table {
         }else {
             image = new Image(imageTexture);
         }
-        Stack stack = new Stack();
+        stack = new Stack();
         Table imageTable = new Table();
-        Table frameTable = new Table();
+        frameTable = new Table();
 
         stack.add(frameTable);
         stack.add(imageTable);
@@ -36,8 +38,8 @@ public class FramedImage extends Table {
         frameTable.add(frame).grow();
 
         image.setScaling(Scaling.fit);
-        imageTable.center().pad(padPercent);
-        imageTable.add(image).grow().center();
+        imageTable.center();
+        imageTable.add(image).center().pad(0, 1, 1, 0);
 
         add(stack).grow();
     }

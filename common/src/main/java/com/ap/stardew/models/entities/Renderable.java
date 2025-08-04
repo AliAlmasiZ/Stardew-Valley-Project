@@ -1,17 +1,21 @@
 package com.ap.stardew.models.entities;
 
 import com.ap.stardew.models.entities.components.EntityComponent;
+import com.ap.stardew.views.RenderFunction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.views.old.inGame.Color;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Renderable extends EntityComponent implements Serializable {
-    @JsonProperty("char")
-    protected char character;
-    @JsonProperty("color")
-    protected Color color;
+    @JsonProperty("renderFunction")
+    private RenderFunction renderFunction;
+    @JsonProperty("state")
+    private Map<String, Object> state;
     @JsonIgnore
     protected String spritePath;
     protected float timeLeftForStatue = 0.0f;
@@ -27,35 +31,24 @@ public class Renderable extends EntityComponent implements Serializable {
 
     protected Statue currentStatue = Statue.NORMAL;
 
-
-    public Renderable(char character, Color color) {
-        this.character = character;
-        this.color = color;
+    public Renderable() {
     }
 
     private Renderable(Renderable other) {
-        this.character = other.character;
-        this.color = other.color;
+        this.state = new HashMap<>();
+        if(other.state != null){
+            this.state.putAll(other.state);
+        }
+
+        this.renderFunction = other.renderFunction;
     }
 
     public Statue getCurrentStatue() {
         return currentStatue;
     }
 
-    public Renderable() {
-        this(' ', null);
-    }
-
-    public char getCharacter() {
-        return character;
-    }
-
     public void reduceTimeLeftForStatue(float time) {
         this.timeLeftForStatue -= time;
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     @Override
@@ -71,7 +64,6 @@ public class Renderable extends EntityComponent implements Serializable {
         this.spritePath = spritePath;
     }
 
-
     public void setStatue(Statue statue, float duration) {
         currentStatue = statue;
         timeLeftForStatue = duration;
@@ -85,4 +77,19 @@ public class Renderable extends EntityComponent implements Serializable {
         return timeLeftForStatue;
     }
 
+    public RenderFunction getRenderFunction() {
+        return renderFunction;
+    }
+
+    public Map<String, Object> getState() {
+        return state;
+    }
+
+    public void setState(Map<String, Object> state) {
+        this.state = state;
+    }
+
+    public void setRenderFunction(RenderFunction renderFunction) {
+        this.renderFunction = renderFunction;
+    }
 }

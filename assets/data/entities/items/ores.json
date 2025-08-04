@@ -1,8 +1,8 @@
 {
   "common components": [
     {
-      "type": "Pickable",
-      "maxStack" : "64"
+      "type" : "Renderable",
+      "renderFunction" : "SIMPLE"
     }
   ],
   "required components": [
@@ -15,6 +15,10 @@
         {
           "type": "Sellable",
           "price": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Quarts/node.png"
         }
       ]
     },
@@ -24,6 +28,10 @@
         {
           "type": "Sellable",
           "price": 50
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Earth Crystal/icon.png"
         }
       ]
     },
@@ -33,6 +41,10 @@
         {
           "type": "Sellable",
           "price": 75
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Frozen Tear/icon.png"
         }
       ]
     },
@@ -42,6 +54,10 @@
         {
           "type": "Sellable",
           "price": 100
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Fire Quartz/icon.png"
         }
       ]
     },
@@ -51,6 +67,10 @@
         {
           "type": "Sellable",
           "price": 250
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Emerald/icon.png"
         }
       ]
     },
@@ -60,6 +80,10 @@
         {
           "type": "Sellable",
           "price": 180
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Aquamarine/icon.png"
         }
       ]
     },
@@ -69,6 +93,10 @@
         {
           "type": "Sellable",
           "price": 250
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Ruby/icon.png"
         }
       ]
     },
@@ -78,6 +106,10 @@
         {
           "type": "Sellable",
           "price": 100
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Amethyst/icon.png"
         }
       ]
     },
@@ -87,6 +119,10 @@
         {
           "type": "Sellable",
           "price": 80
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Topaz/icon.png"
         }
       ]
     },
@@ -96,6 +132,10 @@
         {
           "type": "Sellable",
           "price": 200
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Jade/icon.png"
         }
       ]
     },
@@ -105,6 +145,10 @@
         {
           "type": "Sellable",
           "price": 750
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Diamond/icon.png"
         }
       ]
     },
@@ -114,6 +158,10 @@
         {
           "type": "Sellable",
           "price": 2000
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Prismatic Shard/icon.png"
         }
       ]
     },
@@ -123,6 +171,10 @@
         {
           "type": "Sellable",
           "price": 5
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Copper/icon.png"
         }
       ]
     },
@@ -132,6 +184,10 @@
         {
           "type": "Sellable",
           "price": 10
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Iron/icon.png"
         }
       ]
     },
@@ -141,6 +197,10 @@
         {
           "type": "Sellable",
           "price": 25
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Gold/icon.png"
         }
       ]
     },
@@ -150,6 +210,10 @@
         {
           "type": "Sellable",
           "price": 100
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Iriduim/icon.png"
         }
       ]
     },
@@ -159,6 +223,10 @@
         {
           "type": "Sellable",
           "price": 15
+        },{
+          "type": "Pickable",
+          "maxStack" : "64",
+          "icon" : "Content/Minerals/Coal/icon.png"
         }
       ]
     }

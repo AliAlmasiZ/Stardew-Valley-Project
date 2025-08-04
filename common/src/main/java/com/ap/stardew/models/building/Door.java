@@ -17,7 +17,7 @@ public class Door extends Entity implements Serializable {
     private Position destination;
     public Door() {
         super("DOOR");
-        this.addComponent(new Renderable('D', new Color(78, 52, 46)));
+        this.addComponent(new Renderable());
         this.addComponent( new Placeable(true, new CollisionEvent() {
             @Override
             public Result onCollision(Player player) {

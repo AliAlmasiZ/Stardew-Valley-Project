@@ -34,6 +34,8 @@ public class ClientGame extends Game {
         instance = this;
         batch = new SpriteBatch();
         setScreen(new MainScreen());
+
+
     }
 
     @Override
@@ -63,6 +65,8 @@ public class ClientGame extends Game {
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Trees"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Animal"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/NPC"));
+        GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Minerals"));
+        GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/ForagingCrops"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Workstations"));
         GameAssetManager.getInstance().finishLoading();
 

@@ -45,7 +45,7 @@ public class ForageSpawnSystem {
         }
         for(int i = 0 ; i < tiles.length; i++){
             for(int j = 0 ; j < tiles[0].length; j++) {
-                if(!EntityPlacementSystem.canPlace(tiles[i][j])){
+                if((tiles[i][j] == null) || (!EntityPlacementSystem.canPlace(tiles[i][j]))){
                     weightMap[i][j] = 0;
                 }
             }

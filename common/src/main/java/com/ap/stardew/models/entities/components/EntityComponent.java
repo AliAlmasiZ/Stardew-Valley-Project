@@ -40,8 +40,6 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = FishingPoleComponent.class, name = "FishingPoleComponent"),
         @JsonSubTypes.Type(value = InteriorComponent.class, name = "InteriorComponent"),
         @JsonSubTypes.Type(value = Shop.class, name = "Shop")
-
-
 })
 abstract public class EntityComponent implements Cloneable, Serializable {
     @JsonIgnore()

@@ -155,6 +155,11 @@ public class InGameDialog extends Table {
     @Override
     public void layout() {
         super.layout();
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
         closeButton.setPosition(getX() + getWidth() + closeButtonOffsetX,getY() + getHeight() + closeButtonOffsetY);
     }
 

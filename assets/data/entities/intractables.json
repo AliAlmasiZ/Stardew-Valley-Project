@@ -15,9 +15,7 @@
           "type" : "Placeable",
           "isWalkable" : false
         },{
-          "type" : "Renderable",
-          "char" : "F",
-          "color" : [20, 170, 40]
+          "type" : "Renderable"
         }
       ]
     }

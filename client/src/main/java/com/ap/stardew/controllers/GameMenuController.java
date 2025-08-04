@@ -1021,7 +1021,7 @@ public class GameMenuController implements Controller {
             return new Result(true, animalName + " was put in it's building");
         }
 
-        if (!EntityPlacementSystem.canPlace(x, y)) {
+        if (!EntityPlacementSystem.canPlace(x, y, currentPlayer.getCurrentMap())) {
             return new Result(false, "can't place the animal there");
         }
 
@@ -2066,6 +2066,24 @@ public class GameMenuController implements Controller {
         ;
 
         return EntityPlacementSystem.placeEntity(entity, player.getPosition().cpy().add(dir.dx, dir.dy));
+    }
+
+    public Result pickupItem(Entity entity){
+        Player player = App.getActiveGame().getCurrentPlayer();
+        Position playerPos = player.getPosition();
+        Inventory inventory = player.getComponent(Inventory.class);
+
+        if (!inventory.canAddItem(entity)) return null;
+
+        if (entity.getComponent(Forageable.class) != null) {
+            Forageable forageable = entity.getComponent(Forageable.class);
+            if (!forageable.isForaged()) {
+                player.getSkill(SkillType.FORAGING).addExperience(10);
+            }
+            forageable.setForaged(true);
+        }
+        Entity leftOver = inventory.addItem(entity);
+        return null;
     }
 
     public Result pickupNearItems() {

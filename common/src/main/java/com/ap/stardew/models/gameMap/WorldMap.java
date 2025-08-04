@@ -1,19 +1,22 @@
 package com.ap.stardew.models.gameMap;
 
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.Position;
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.entities.systems.ForageSpawnSystem;
+import com.ap.stardew.models.enums.TileType;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class WorldMap extends GameMap implements Serializable {
-    private final ArrayList<MapRegion> regions = new ArrayList<>();
+    private final Map<String, MapRegion> regions = new HashMap<>();
     private MapRegion[][] regionMap;
     private BiomeType[][] biomeMap;
     private transient final Map<MapRegion, FarmDetails> farmsDetail = new HashMap<>();
@@ -22,17 +25,17 @@ public class WorldMap extends GameMap implements Serializable {
         super(data, Environment.OUTDOOR);
 
         regionMap = data.getRegionMap();
-        if (data.getRegions() != null) {
-            this.regions.addAll(data.getRegions());
-        }
+//        if (data.getRegions() != null) {
+//            this.regions.addAll(data.getRegions());
+//        }
         biomeMap = data.getBiomeMap();
 
         App.getActiveGame().setMainMap(this);
         App.getActiveGame().setActiveMap(this);
 
-        for(MapRegion r : regions){
-            farmsDetail.put(r, new FarmDetails());
-        }
+//        for(MapRegion r : regions){
+//            farmsDetail.put(r, new FarmDetails());
+//        }
 
         for (MapData.MapLayerData<String>.ObjectData d : data.getBuildings()) {
             if(d.getProperty("type") != null && d.getProperty("type").asString.equals("playerHouse")){
@@ -48,6 +51,55 @@ public class WorldMap extends GameMap implements Serializable {
     }
     public WorldMap(String path){
         super(path);
+
+        TiledMapTileLayer regionLayer = (TiledMapTileLayer) mapData.getLayers().get("Regions");
+        TiledMapTileLayer biomesLayer = (TiledMapTileLayer) mapData.getLayers().get("Biomes");
+
+        TiledMapTileSet regions = mapData.getTileSets().getTileSet("Regions");
+
+        for (TiledMapTile region : regions) {
+            if(region.getProperties().get("type", String.class) == null) continue;
+            this.regions.put(region.getProperties().get("type", String.class),
+                new MapRegion(region.getProperties().get("type", String.class),
+                region.getProperties().get("playerFarm") != null));
+        }
+
+
+        if(regionLayer != null) {
+            height = regionLayer.getHeight();
+            width = regionLayer.getWidth();
+
+            regionMap = new MapRegion[height][width];
+
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    TiledMapTileLayer.Cell cell = regionLayer.getCell(j, i);
+
+                    if(cell != null){
+                        MapRegion region = this.regions.get(cell.getTile().getProperties().get("type", String.class));
+                        region.addTile(tiles[i][j]);
+
+                        regionMap[i][j] = region;
+                    }
+                }
+            }
+        }
+        if(biomesLayer != null){
+            height = biomesLayer.getHeight();
+            width = biomesLayer.getWidth();
+
+            biomeMap = new BiomeType[height][width];
+
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    TiledMapTileLayer.Cell cell = biomesLayer.getCell(j, i);
+
+                    if(cell != null){
+                        biomeMap[i][j] = BiomeType.valueOf(cell.getTile().getProperties().get("type", String.class));
+                    }
+                }
+            }
+        }
     }
 
     public MapRegion getRegion(int x, int y) {
@@ -61,8 +113,8 @@ public class WorldMap extends GameMap implements Serializable {
         return getRegion(tile.getPosition().getCol(), tile.getPosition().getRow());
     }
 
-    public ArrayList<MapRegion> getRegions() {
-        return regions;
+    public Collection<MapRegion> getRegions() {
+        return regions.values();
     }
 
     public void initRandomElements() {

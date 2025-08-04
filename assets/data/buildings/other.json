@@ -14,9 +14,7 @@
           "type": "Placeable",
           "isWalkable" : false
         },{
-          "type" : "Renderable",
-          "char" : "S",
-          "color" : [250, 250, 250]
+          "type" : "Renderable"
         },{
           "type" : "Inventory",
           "unlimited" : true

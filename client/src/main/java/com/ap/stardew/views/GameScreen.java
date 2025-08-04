@@ -4,10 +4,8 @@ import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
+import com.ap.stardew.models.*;
 import com.ap.stardew.models.Actors.DialogActor;
-import com.ap.stardew.models.App;
-import com.ap.stardew.models.ClockActor;
-import com.ap.stardew.models.Game;
 import com.ap.stardew.models.NPC.NPC;
 
 import com.ap.stardew.models.NPC.Quest;
@@ -23,6 +21,7 @@ import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.FishMovement;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.enums.SkillType;
+import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.enums.TileType;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
@@ -32,7 +31,6 @@ import com.ap.stardew.models.shop.Shop;
 import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.records.EntityResult;
 import com.ap.stardew.views.widgets.*;
-import com.ap.stardew.models.Result;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
@@ -122,13 +120,15 @@ public class GameScreen extends AbstractScreen {
         controller.cheatGiveItem("Hay", 500);
         controller.cheatGiveItem("Wood", 500);
         controller.cheatGiveItem("Axe", 1);
+        controller.cheatGiveItem("Pickaxe", 1);
         controller.cheatGiveItem("Hoe", 1);
         controller.cheatGiveItem("Hay", 500);
         controller.cheatGiveItem("Apple", 10);
         controller.cheatGiveItem("Bee House", 1);
+        controller.cheatGiveItem("Frozen Tear", 10);
         controller.cheatGiveItem("Cheese Press", 1);
         controller.cheatGiveItem("Keg", 1);
-        controller.cheatGiveItem("    Dehydrator", 1);
+        controller.cheatGiveItem("Dehydrator", 1);
         controller.cheatGiveItem("Charcoal Klin", 1);
         controller.cheatGiveItem("Loom", 1);
         controller.cheatGiveItem("Mayonnaise Machine", 1);
@@ -143,7 +143,6 @@ public class GameScreen extends AbstractScreen {
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
         controller.cheatAddSkill("fishing", 200);
-
 
         Player player = App.getActiveGame().getCurrentPlayer();
         Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
@@ -280,6 +279,8 @@ public class GameScreen extends AbstractScreen {
 
         //NPC
         initNPCDialogs();
+
+        EntityPlacementSystem.placeOnMap(App.entityRegistry.makeEntity("Frozen Tear"), player.getPosition().cpy().add(70, 70), player.getCurrentMap());
     }
 
     @Override
@@ -325,15 +326,29 @@ public class GameScreen extends AbstractScreen {
         renderer.render(backLayerIndices);
 
         batch.setProjectionMatrix(camera.combined);
+        ArrayList<Entity> renderableEntities = App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class);
+        renderableEntities.sort((e1, e2) -> {
+            float y1 = e1.getComponent(PositionComponent.class).getY();
+            float y2 = e2.getComponent(PositionComponent.class).getY();
+            return Float.compare(y2, y1); // descending order: bigger Y first
+        });
+
         batch.begin();
-        for (Entity entity : App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class)) {
+        for (Entity entity : renderableEntities) {
             entity.setEntityForComponents();
+
+            Renderable renderable = entity.getComponent(Renderable.class);
             //update animals:
             if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
-            Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
-            if (sprite != null) {
-                sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
-                sprite.draw(batch);
+
+            if(renderable.getRenderFunction() != null){
+                renderable.getRenderFunction().render(entity, batch);
+            }else{
+                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
+                if (sprite != null) {
+                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
+                    sprite.draw(batch);
+                }
             }
         }
 
@@ -365,7 +380,6 @@ public class GameScreen extends AbstractScreen {
                 batch.setColor(1, 1, 1, 1);
             }
         }
-
         batch.end();
 
 
@@ -563,7 +577,7 @@ public class GameScreen extends AbstractScreen {
                         showSkillDetails(type, bottom);
                     }
                 });
-                top.add(icon);
+                top.add(icon).growX();
 
                 top.defaults().spaceRight(3);
 

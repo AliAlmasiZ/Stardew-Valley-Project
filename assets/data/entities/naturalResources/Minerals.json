@@ -25,94 +25,6 @@
               "max": 4
             }
           ]
-        },{
-          "type" : "Renderable",
-          "char" : "M",
-          "color" : [ 105, 105, 105]
-        }
-      ]
-    },
-    {
-      "name": "Quartz Vein",
-      "components": [
-        {
-          "type": "Harvestable",
-          "material": "STONE",
-          "resources": [
-            {
-              "entity": "Quartz",
-              "min": 1,
-              "max": 3
-            }
-          ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [255, 255, 255]
-        }
-      ]
-    },
-    {
-      "name": "Earth Crystal Node",
-      "components": [
-        {
-          "type": "Harvestable",
-          "material": "STONE",
-          "resources": [
-            {
-              "entity": "Earth Crystal",
-              "min": 1,
-              "max": 2
-            }
-          ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [205, 133, 63]
-        }
-      ]
-    },
-    {
-      "name": "Frozen Tear Cluster",
-      "components": [
-        {
-          "type": "Harvestable",
-          "material": "STONE",
-          "resources": [
-            {
-              "entity": "Frozen Tear",
-              "min": 1,
-              "max": 2
-            }
-          ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [135, 206, 250]
-        }
-      ]
-    },
-    {
-      "name": "Fire Quartz Node",
-      "components": [
-        {
-          "type": "Harvestable",
-          "material": "STONE",
-          "resources": [
-            {
-              "entity": "Fire Quartz",
-              "min": 1,
-              "max": 2
-            }
-          ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [255, 69, 0]
         }
       ]
     },
@@ -129,11 +41,12 @@
               "max": 1
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [0, 255, 127]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Emerald/node.png"
+          }
         }
       ]
     },
@@ -150,11 +63,13 @@
               "max": 2
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [102, 205, 170]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Aquamarine/node.png",
+            "brokenSprite" : "Content/Minerals/Aquamarine/brokenNode.png"
+          }
         }
       ]
     },
@@ -171,11 +86,13 @@
               "max": 1
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [220, 20, 60]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Ruby/node.png",
+            "brokenSprite" : "Content/Minerals/Ruby/brokenNode.png"
+          }
         }
       ]
     },
@@ -192,11 +109,13 @@
               "max": 2
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [186, 85, 211]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Amethyst/node.png",
+            "brokenSprite" : "Content/Minerals/Amethyst/brokenNode.png"
+          }
         }
       ]
     },
@@ -213,11 +132,13 @@
               "max": 3
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [255, 215, 0]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Topaz/node.png",
+            "brokenSprite" : "Content/Minerals/Topaz/brokenNode.png"
+          }
         }
       ]
     },
@@ -234,11 +155,13 @@
               "max": 1
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [144, 238, 144]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Jade/node.png",
+            "brokenSprite" : "Content/Minerals/Jade/brokenNode.png"
+          }
         }
       ]
     },
@@ -255,11 +178,13 @@
               "max": 1
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [173, 216, 230]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Diamond/node.png",
+            "brokenSprite" : "Content/Minerals/Diamond/brokenNode.png"
+          }
         }
       ]
     },
@@ -276,11 +201,12 @@
               "max": 1
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [255, 105, 180]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Prismatic Shard/node.png"
+          }
         }
       ]
     },
@@ -297,11 +223,12 @@
               "max": 5
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [184, 115, 51]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Copper/node.png"
+          }
         }
       ]
     },
@@ -318,11 +245,12 @@
               "max": 5
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [192, 192, 192]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Iron/node.png"
+          }
         }
       ]
     },
@@ -339,11 +267,12 @@
               "max": 4
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [255, 223, 0]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Gold/node.png"
+          }
         }
       ]
     },
@@ -360,11 +289,12 @@
               "max": 3
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [138, 43, 226]
+        },{
+          "type" : "Renderable",
+          "renderFunction" :  "MINERAL_NODE",
+          "state" : {
+            "node": "Content/Minerals/Iridium/node.png"
+          }
         }
       ]
     },
@@ -381,11 +311,6 @@
               "max": 6
             }
           ]
-        },
-        {
-          "type": "Renderable",
-          "char": "M",
-          "color": [47, 79, 79]
         }
       ]
     }

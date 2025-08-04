@@ -10,25 +10,17 @@ import java.util.ArrayList;
 public class MapRegion implements Serializable {
     private String name;
     private Player owner;
-    private ArrayList<Tile> tiles = new ArrayList<>();
     private Color color;
     private Position center = new Position(0, 0);
     private boolean isFarm = false;
+    private int tilesNum = 0;
 
     public void addTile(Tile tile) {
-        this.center.scl(this.tiles.size()).add(tile.getPosition()).scl(1f / (this.tiles.size() + 1));
-        tiles.add(tile);
+        this.center.scl(tilesNum).add(tile.getPosition()).scl(1f / (tilesNum + 1));
+        tilesNum++;
     }
 
-    public boolean hasTile(Tile tile) {
-        return this.tiles.contains(tile);
-    }
-
-    public ArrayList<Tile> getTiles() {
-        return tiles;
-    }
-
-    public MapRegion(String name, Color color, boolean isFarm) {
+    public MapRegion(String name, boolean isFarm) {
         this.name = name;
         this.color = color;
         this.isFarm = isFarm;

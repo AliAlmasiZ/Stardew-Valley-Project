@@ -4,9 +4,7 @@
       "type": "Pickable",
       "maxStack": 16000
     },{
-      "type" : "Renderable",
-      "char" : "s",
-      "color" : [240, 200, 30]
+      "type" : "Renderable"
     }
   ],
   "required components": [
