@@ -276,7 +276,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
                 dialog.hide();
             }
         });
-        
+
         dialog.show(uiStage);
     }
 

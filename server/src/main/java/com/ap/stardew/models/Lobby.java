@@ -4,10 +4,8 @@ import com.ap.stardew.models.dto.AccountInfo;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.security.SecureRandom;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.ap.stardew.models.LobbyInfo;
@@ -29,6 +27,22 @@ public class Lobby implements Serializable {
     private boolean isVisible;
 
 
+
+    /**
+     * Generates a random alphanumeric string of a given length.
+     * @param length The length of the ID to generate.
+     * @return A random, short ID.
+     */
+    private static String generateShortId(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder();
+        Random random = new SecureRandom();
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
     /*
     * Empty constructor for Deserialization
     */
@@ -37,11 +51,12 @@ public class Lobby implements Serializable {
     public Lobby(String lobbyName, String hostUsername, int maxPlayers, String password, boolean isVisible) {
 
 
-        do this.lobbyId = UUID.randomUUID().toString();
+        do this.lobbyId = generateShortId(6);
         while (getLobbyById(lobbyId) != null);
 
         this.lobbyName = lobbyName;
         this.hostUsername = hostUsername;
+        
         this.maxPlayers = maxPlayers;
         this.password = password;
         this.isVisible = isVisible;
