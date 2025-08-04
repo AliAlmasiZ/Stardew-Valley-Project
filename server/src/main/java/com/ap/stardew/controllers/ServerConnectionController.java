@@ -6,9 +6,26 @@ import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.Result;
 
 public class ServerConnectionController {
-    public static JSONMessage handleCommand(JSONMessage message) {
+    public static Object handleCommand(JSONMessage message) {
         if(message.getType() == JSONMessage.Type.player_input_command) {
             //TODO
+        }
+        if(message.getType() == JSONMessage.Type.lobby_command) {
+            String command =  message.getFromBody("command");
+            switch (command) {
+                case "fetch" -> {
+                    return LobbyController.fetch();
+                }
+                case "host" -> {
+                    return LobbyController.createLobby(message);
+                }
+                case "join" -> {
+                    return LobbyController.joinLobby(message);
+                }
+                default -> {
+                    return null;
+                }
+            }
         }
         if(message.getType() == JSONMessage.Type.command){
             JSONMessage response = new JSONMessage(JSONMessage.Type.response);
@@ -42,4 +59,5 @@ public class ServerConnectionController {
 
         return new Result(true, "logged in successfully");
     }
+
 }

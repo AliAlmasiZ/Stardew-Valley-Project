@@ -1,6 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.Account;
+import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -120,13 +121,8 @@ public class ServerApp {
         return null;
     }
 
-    private static void registerClasses() {
-        Kryo kryo = server.getKryo();
-
-        kryo.register(JSONMessage.class);
-        kryo.register(HashMap.class);
-        kryo.register(JSONMessage.Type.class);
-
+    private static void registerClasses() { //to register any classes register it in ConnectionThread registerClasses function
+        ConnectionThread.registerClasses(server.getKryo());
     }
 
     public static void startServer(int tcpPort, int udpPort) throws IOException {

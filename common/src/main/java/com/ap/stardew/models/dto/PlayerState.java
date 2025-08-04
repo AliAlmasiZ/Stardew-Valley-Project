@@ -1,6 +1,4 @@
-package com.ap.stardew.models;
-
-import com.esotericsoftware.kryo.Kryo;
+package com.ap.stardew.models.dto;
 
 import java.io.Serial;
 import java.io.Serializable;

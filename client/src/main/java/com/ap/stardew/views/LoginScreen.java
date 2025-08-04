@@ -35,16 +35,14 @@ public class LoginScreen extends AbstractMenuScreen{
 
         //Todo this is ashghal
         if(!ClientApp.isConnected()){
-            try {
-                ClientApp.connectServer();
-            } catch (IOException e) {
-                System.err.println("Error : can not connect to server :");
-                System.err.println(e.getMessage());
-                return;
-            }
+            ClientApp.connectServer();
         }
 
-        if(!ClientApp.isConnected()) throw new RuntimeException("asd");
+        if(!ClientApp.isConnected()) {
+            ClientGame.getInstance().setScreen(new MainScreen());
+            dispose();
+            return;
+        }
 
         mainBox = new Table();
         mainBox.center();
@@ -88,9 +86,15 @@ public class LoginScreen extends AbstractMenuScreen{
                 }
                 Result result = controller.login(usernameTextfield.getText(), passwordTextfield.getText(), true);
                 if(result.isSuccessful()){
-                    MainMenuScreen mainMenuScreen = new MainMenuScreen();
-                    mainMenuScreen.enterAnim();
-                    ClientGame.getInstance().setScreen(mainMenuScreen);
+                    //TEMP:
+                    ClientGame.getInstance().setScreen(new MultiplayerScreen());
+                    App.setLoggedInAccount(App.getUserByUsername(usernameTextfield.getText()));//badddd
+
+
+//                    MainMenuScreen mainMenuScreen = new MainMenuScreen();
+//                    mainMenuScreen.enterAnim();
+//                    ClientGame.getInstance().setScreen(mainMenuScreen);
+
                     return;
                 }
                 if(result.message().equals("username doesn't exist")){
