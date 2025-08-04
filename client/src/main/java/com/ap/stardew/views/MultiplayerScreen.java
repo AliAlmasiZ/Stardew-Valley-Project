@@ -70,14 +70,19 @@ public class MultiplayerScreen extends AbstractMenuScreen {
                     LobbyInfo selectedLobby = availableLobbies.get(selectedIndex);
                     if(selectedLobby.isPrivate()) {
                         showJoinPrivateLobbyDialog(selectedLobby);
+                        return;
                     }
 
-                    JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
-                    message.put("command", "join");
-                    message.put("username" , App.getLoggedInAccount().getUsername());
-                    message.put("lobby_id", selectedLobby.getLobbyId());
-                    JSONMessage response = ClientApp.sendAndWaitForResponse(message, 5000);
-                    //TODO
+                    JSONMessage response = joinLobby(selectedLobby.getLobbyId(), null);
+                    Result result = response.getFromBody("result");
+                    if(result.isSuccessful()) {
+                        ClientGame.getInstance().setScreen(new LobbyScreen(selectedLobby, false));
+                        dispose();
+                    }
+                    else {
+                        //TODO : show error
+                    }
+
                 }
             }
         });
@@ -209,9 +214,10 @@ public class MultiplayerScreen extends AbstractMenuScreen {
 
                 Result result = response.getFromBody("result");
                 if(result.isSuccessful()) {
-
+                    ClientGame.getInstance().setScreen(new LobbyScreen(lobby, false));
+                    dispose();
                 } else {
-                    //TODO
+                    //TODO : show error
                 }
                 dialog.hide();
             }
@@ -234,11 +240,15 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         TextField idField = new TextField("", customSkin);
         idField.setMessageText("Enter Lobby ID");
 
+        TextField passField = new TextField("", customSkin);
+        passField.setMessageText("Password (if its public, leave this blank)");
+
         TextButton confirmButton = new TextButton("Join", customSkin);
         TextButton cancelButton = new TextButton("Cancel", customSkin);
 
         contentTable.pad(20);
         contentTable.add(idField).growX().padBottom(20).row();
+        contentTable.add(passField).growX().padBottom(20).row();
 
         dialog.getButtonTable().add(confirmButton).pad(10);
         dialog.getButtonTable().add(cancelButton).pad(10);
@@ -248,13 +258,26 @@ public class MultiplayerScreen extends AbstractMenuScreen {
             public void clicked(InputEvent event, float x, float y) {
                 String lobbyId = idField.getText();
                 if (!lobbyId.trim().isEmpty()) {
-                    // TODO: Send "Join Lobby" request to the server with this ID.
-                    // The server will have to check if this lobby requires a password
-                    // and could respond by asking the client to show the password dialog.
+                    JSONMessage response = joinLobby(lobbyId, passField.getText());
+                    Result result = response.getFromBody("result");
+                    if(result.isSuccessful()) {
+                        ClientGame.getInstance().setScreen(new LobbyScreen(response.getFromBody("lobby_info"), false));
+                        dispose();
+                    } else {
+                        //TODO : show Error ressult.message
+                    }
                     dialog.hide();
                 }
             }
         });
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+        
+        dialog.show(uiStage);
     }
 
     private JSONMessage joinLobby (String lobbyId, String password) {

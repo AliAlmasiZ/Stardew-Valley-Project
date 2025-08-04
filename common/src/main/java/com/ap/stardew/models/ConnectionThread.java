@@ -162,5 +162,6 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(JSONMessage.Type.class);
         kryo.register(LobbyInfo.class);
         kryo.register(AccountInfo.class);
+        kryo.register(Result.class);
     }
 }

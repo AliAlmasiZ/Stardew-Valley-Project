@@ -46,6 +46,8 @@ public class Lobby implements Serializable {
         this.password = password;
         this.isVisible = isVisible;
         this.players = new ArrayList<>();
+
+        players.add(new AccountInfo(hostUsername));
         allLobbies.add(this);
     }
 
@@ -92,11 +94,15 @@ public class Lobby implements Serializable {
     }
 
     public boolean isPrivate() {
-        return password == null || password.isEmpty();
+        return password != null && !password.isEmpty() ;
     }
 
     public boolean isVisible() {
         return isVisible;
+    }
+
+    public void addAccountInfo(AccountInfo accountInfo) {
+        players.add(accountInfo);
     }
 
     public LobbyInfo getLobbyInfo(){
