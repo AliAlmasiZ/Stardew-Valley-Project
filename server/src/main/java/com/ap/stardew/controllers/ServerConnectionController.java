@@ -1,10 +1,13 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.GameServer;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
 import io.jsonwebtoken.*;
+
+import java.util.Date;
 
 public class ServerConnectionController {
     public static Object handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {

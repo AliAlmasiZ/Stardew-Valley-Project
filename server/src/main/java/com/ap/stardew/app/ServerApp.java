@@ -2,7 +2,6 @@ package com.ap.stardew.app;
 
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.enums.Gender;
 import com.badlogic.gdx.Input;
 import com.esotericsoftware.kryo.Kryo;
@@ -29,8 +28,8 @@ public class ServerApp {
     private static Server server;
     public static final int TIMEOUT_MILLIS = 500;
     private static final ArrayList<ClientConnectionThread> connections = new ArrayList<>();
+    private static final ArrayList<GameThread> games = new ArrayList<>();
     private static boolean exitFlag = false;
-    private static ListenerThread listenerThread;
 
     // shitty doc:
     private static final String SECRET = "yOZpBdp+vYUn6p+m4rU5hAeQb4YFw7WjQbHbZ3P4fhw=";
@@ -73,21 +72,9 @@ public class ServerApp {
         return exitFlag;
     }
 
-    public static void setListenerThread(ListenerThread listenerThread) {
-        ServerApp.listenerThread = listenerThread;
-    }
 
     public static List<ClientConnectionThread> getConnections() {
         return List.copyOf(ServerApp.connections);
-    }
-
-    public static void startListening() {
-        if (listenerThread != null && !listenerThread.isAlive()) {
-            listenerThread.start();
-
-        } else {
-            throw new IllegalStateException("Listener thread is already running or not set.");
-        }
     }
 
     public static void endAll() {
@@ -107,6 +94,12 @@ public class ServerApp {
     public static void addClientConnection(ClientConnectionThread clientConnectionThread) {
         if (clientConnectionThread != null && !connections.contains(clientConnectionThread)) {
             connections.add(clientConnectionThread);
+        }
+    }
+
+    public static void addGameThread(GameThread gameThread) {
+        if(gameThread != null && !games.contains(gameThread)) {
+            games.add(gameThread);
         }
     }
 
@@ -182,6 +175,7 @@ public class ServerApp {
                 connection.close();
                 System.out.println("client disconnected : " + connection.getID());
             }
+
         });
     }
 

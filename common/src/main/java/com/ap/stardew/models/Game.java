@@ -524,4 +524,12 @@ public class Game implements Serializable {
     public ArrayList<NPC> getGameNPCs() {
         return gameNPCs;
     }
+
+    public Player getPlayerByUsername(String username) {
+        for (Player player : players) {
+            if(player.getUsername().equals(username))
+                return player;
+        }
+        return null;
+    }
 }

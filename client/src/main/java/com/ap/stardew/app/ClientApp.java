@@ -1,7 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -19,7 +19,7 @@ public class ClientApp {
     private static Client client;
     private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
-
+    
     private static boolean exitFlag = false;
 
     private static String token;
@@ -30,6 +30,7 @@ public class ClientApp {
 
     public static void endAll() {
         exitFlag = true;
+//        serverConnectionThread.end();
     }
 
     public static void connectServer(String host, int tcpPort, int udpPort) throws IOException {
@@ -91,14 +92,14 @@ public class ClientApp {
     }
 
     private static boolean handleMessage(JSONMessage message) {
-        JSONMessage response = ClientConnectionController.handleCommand(message);
-
-        if(message.getType() == JSONMessage.Type.update) return true;
-
-        if(response == null)
+        try {
+            JSONMessage response = ClientConnectionController.handleCommand(message);
+            if(response != null)
+                sendTCP(response);
+            return true;
+        } catch (UnsupportedOperationException e) {
             return false;
-        sendTCP(response);
-        return true;
+        }
     }
 
     public static boolean handleReceived(Object received) {

@@ -1,7 +1,7 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.models.Game;
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.gameMap.WorldMap;
 
 public class GameControler {

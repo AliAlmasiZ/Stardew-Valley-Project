@@ -3,7 +3,7 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SecurityQuestions;

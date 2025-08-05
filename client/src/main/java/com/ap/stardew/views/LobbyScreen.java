@@ -1,8 +1,8 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.badlogic.gdx.Gdx;
@@ -11,9 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-
-import javax.swing.text.LabelView;
-import java.util.ArrayList;
 
 
 public class LobbyScreen extends AbstractMenuScreen{
@@ -131,6 +128,4 @@ public class LobbyScreen extends AbstractMenuScreen{
         }
         playerList.setItems(players);
     }
-
-
 }

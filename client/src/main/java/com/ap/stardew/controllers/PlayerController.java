@@ -1,8 +1,10 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.App;
 
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
@@ -80,6 +82,12 @@ public class PlayerController implements InputProcessor {
         if((Input.Keys.NUM_1 <= keycode)  && (keycode <= Input.Keys.NUM_9)){
            player.setActiveSlot(player.getComponent(Inventory.class).getSlots().get(keycode - 8));
         }
+
+
+        JSONMessage req = new JSONMessage(JSONMessage.Type.player_input_command);
+        req.put("command", "key_down");
+        req.put("keycode", keycode);
+        ClientApp.sendTCP(req);
         return true;
     }
 
@@ -100,6 +108,11 @@ public class PlayerController implements InputProcessor {
         if (keycode == Input.Keys.P) //TODO: Temporarily
             screen.startFishing();
 
+        JSONMessage req = new JSONMessage(JSONMessage.Type.player_input_command);
+        req.put("command", "key_up");
+        req.put("keycode", keycode);
+        ClientApp.sendTCP(req);
+
 
         return false;
     }
@@ -111,6 +124,8 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        //TODO : make these request to server to handle logic on map
         Vector3 mouseScreenPos = new Vector3(screenX, screenY, 0);
         screen.getCamera().unproject(mouseScreenPos); // convert to world coordinates
 
@@ -150,6 +165,9 @@ public class PlayerController implements InputProcessor {
                 equippedItemState = EquippedItemState.NONE;
             }
         }
+
+
+
         return false;
     }
 

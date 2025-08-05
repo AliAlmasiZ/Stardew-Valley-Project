@@ -2,19 +2,15 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.controllers.validators.NonEmptyValidator;
-import com.ap.stardew.models.App;
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
-import com.ap.stardew.views.widgets.ValidatedTextField;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.jsonbeans.Json;
 
 import java.util.ArrayList;
 

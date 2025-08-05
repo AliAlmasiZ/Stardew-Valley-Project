@@ -1,6 +1,6 @@
 package com.ap.stardew.utils;
 
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

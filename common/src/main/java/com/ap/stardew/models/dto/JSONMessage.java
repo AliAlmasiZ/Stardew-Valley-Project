@@ -1,4 +1,4 @@
-package com.ap.stardew.models;
+package com.ap.stardew.models.dto;
 
 import java.util.HashMap;
 import java.util.Map;
