@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.controllers.DatabaseManager;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.enums.Gender;
@@ -43,8 +44,8 @@ public class ServerApp {
         ArrayList<Account> accounts = new ArrayList<>();
         accounts.add(new Account(Gender.MALE, "parsa", "a", "a", "a"));
         accounts.add(new Account(Gender.MALE, "asd", "a", "a", "s"));
-        accounts.add(new Account(Gender.MALE, "asd", "a", "a", "d"));
-        accounts.add(new Account(Gender.MALE, "asd", "a", "a", "f"));
+        accounts.add(new Account(Gender.MALE, "asd2", "a", "a", "d"));
+        accounts.add(new Account(Gender.MALE, "asd3", "a", "a", "f"));
 
         saveAccounts(accounts);
 
@@ -104,7 +105,7 @@ public class ServerApp {
     }
 
     public static ArrayList<Account> loadAccounts(){
-        JsonMapper mapper = new JsonMapper();
+        /*JsonMapper mapper = new JsonMapper();
         try {
             FileInputStream file;
             try {
@@ -118,16 +119,23 @@ public class ServerApp {
             return new ArrayList<>(Arrays.asList(mapper.treeToValue(jsonNode, Account[].class)));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+
+        return new ArrayList<>(DatabaseManager.findAllAccounts());
     }
     public static void saveAccounts(ArrayList<Account> accounts){
-        JsonMapper mapper = new JsonMapper();
+        /*JsonMapper mapper = new JsonMapper();
         try {
             FileOutputStream file = new FileOutputStream("./accounts.json");
             mapper.writeValue(file, accounts);
             file.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }*/
+
+        //bad! should insert on account creation or update
+        for (Account account : accounts) {
+            DatabaseManager.saveAccount(account);
         }
     }
     public static Account getAccountByUsername(String username){

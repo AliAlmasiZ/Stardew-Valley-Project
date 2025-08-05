@@ -19,7 +19,7 @@ public class ClientApp {
     private static Client client;
     private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
-    
+
     private static boolean exitFlag = false;
 
     private static String token;

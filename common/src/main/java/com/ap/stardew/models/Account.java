@@ -40,6 +40,7 @@ public class Account implements Serializable {
         this.nickname = nickname;
         this.password = hashPassword(password);
         this.username = username;
+
     }
 
     public static Result isUsernameValid(String username) {
@@ -154,6 +155,9 @@ public class Account implements Serializable {
     public void setPasswordNotHashed(String password) {
         this.password = hashPassword(password);
     }
+    public void setPasswordHashed(String passwordHashed) {
+        this.password = passwordHashed;
+    }
 
     public String getNickname() {
         return nickname;
@@ -173,6 +177,10 @@ public class Account implements Serializable {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public Map<SecurityQuestions, String> getSecurityAnswers() {

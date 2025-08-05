@@ -17,7 +17,12 @@ if (JavaVersion.current().isJava9Compatible()) {
 
 dependencies {
   implementation project(':common')
-  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+
+  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion" //Gdx headless backend for server
+
+  implementation("org.xerial:sqlite-jdbc:3.50.3.0") // JDBC for SQLite
+  implementation("org.redisson:redisson:3.50.0") // Redisson for Redis
+
 }
 
 run {

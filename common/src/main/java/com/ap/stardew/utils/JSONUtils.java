@@ -13,11 +13,14 @@ public class JSONUtils {
         gson = gsonBuilder.create();
     }
 
-    public synchronized static String toJson(JSONMessage message) {
+    public synchronized static String toJson(Object message) {
         return gson.toJson(message);
     }
 
     public synchronized static JSONMessage fromJson(String json) {
         return gson.fromJson(json, JSONMessage.class);
+    }
+    public synchronized static <T> T fromJson(String json, Class<T> tClass) {
+        return gson.fromJson(json,tClass);
     }
 }
