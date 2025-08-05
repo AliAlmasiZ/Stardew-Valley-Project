@@ -7,12 +7,14 @@ import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.crafting.Recipe;
+import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
+import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.enums.Weather;
 import com.ap.stardew.models.gameMap.GameMap;
@@ -61,7 +63,6 @@ public class Player extends Entity implements Serializable {
     private Rectangle bounds;
     private float speed = 200f;
     private State state = State.IDLE;
-//    private CharacterSpriteManager spriteManager;
     private Vector2 lastDir = new Vector2(0, -1);
 
 
@@ -73,6 +74,10 @@ public class Player extends Entity implements Serializable {
     private boolean haveNewGift = false;
     private boolean haveNewTrade = false;
     private boolean haveNewSuitor = false;
+
+    public Player(String username) { //I hate this
+        this(new Account(Gender.MALE, "", "", "", username));
+    }
 
     public Player(Account account){
         super("Player", new Inventory(30), new Renderable(), new PositionComponent(0, 0));
@@ -554,6 +559,7 @@ public class Player extends Entity implements Serializable {
     }
 
     public void move(Vector2 direction, float delta) {
+        if(direction.isZero()) return;
         lastDir = direction;
         getComponent(PositionComponent.class).move(direction, delta * speed);
     }
@@ -583,5 +589,22 @@ public class Player extends Entity implements Serializable {
         }
         //Todo : sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
         sprite.setPosition(getPosition().x, getPosition().y);
+    }
+
+    public PlayerState getPlayerState() {
+        PlayerState state = new PlayerState();
+        state.energy = getEnergy().getAmount();
+        state.position = getPosition();
+        state.state = this.state; //WTF this piece of shit
+        //TODO
+
+        return state;
+    }
+
+    public void loadFromState(PlayerState state) {
+        this.getEnergy().setAmount(state.energy);
+        this.setPosition(new Position(state.position));
+        this.state = state.state; //WTF
+
     }
 }

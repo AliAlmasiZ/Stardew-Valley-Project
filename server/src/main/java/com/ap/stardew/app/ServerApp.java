@@ -2,35 +2,28 @@ package com.ap.stardew.app;
 
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.enums.Gender;
-import com.badlogic.gdx.Input;
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.google.gson.stream.JsonWriter;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class ServerApp {
     private static Server server;
     public static final int TIMEOUT_MILLIS = 500;
     private static final ArrayList<ClientConnectionThread> connections = new ArrayList<>();
+    private static final ArrayList<GameThread> games = new ArrayList<>();
     private static boolean exitFlag = false;
 
     // shitty doc:
@@ -78,7 +71,7 @@ public class ServerApp {
     public static List<ClientConnectionThread> getConnections() {
         return List.copyOf(ServerApp.connections);
     }
-    
+
     public static void endAll() {
         exitFlag = true;
         for (ClientConnectionThread connection : connections)
@@ -96,6 +89,12 @@ public class ServerApp {
     public static void addClientConnection(ClientConnectionThread clientConnectionThread) {
         if (clientConnectionThread != null && !connections.contains(clientConnectionThread)) {
             connections.add(clientConnectionThread);
+        }
+    }
+
+    public static void addGameThread(GameThread gameThread) {
+        if(gameThread != null && !games.contains(gameThread)) {
+            games.add(gameThread);
         }
     }
 

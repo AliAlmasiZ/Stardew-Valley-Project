@@ -1,12 +1,18 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.GameThread;
+import com.ap.stardew.app.ServerApp;
+import com.ap.stardew.models.Account;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.Lobby;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.AccountInfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LobbyController {
     static public JSONMessage fetch() {
@@ -65,5 +71,27 @@ public class LobbyController {
         response.put("lobby_info", lobby.getLobbyInfo());
 
         return response;
+    }
+
+    static public JSONMessage startGame(JSONMessage req) {
+        JSONMessage res = new JSONMessage(JSONMessage.Type.response);
+        String lobbyId =  req.getFromBody("lobby_id");//TODO
+        Lobby lobby = Lobby.getLobbyById(lobbyId);
+        List<AccountInfo> accounts = lobby.getPlayers();
+        //...
+
+
+        List<ClientConnectionThread> clients = new ArrayList<>();
+        for (AccountInfo account : accounts) {
+            // TODO
+            // add this account thread to List
+        }
+        GameThread gameThread = new GameThread(clients);
+        gameThread.start();
+        ServerApp.addGameThread(gameThread);
+
+
+        // TODO: set game for all players
+        return res;
     }
 }

@@ -1,4 +1,4 @@
-package com.ap.stardew.models;
+package com.ap.stardew.models.dto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +47,9 @@ public class JSONMessage {
     public enum Type {
         command,
         lobby_command,
-        response,
         player_input_command,
+        response,
+        update,
     }
 
     public Map<String, Object> getBody() {

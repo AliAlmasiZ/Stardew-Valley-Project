@@ -1,8 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.JSONMessage;
-import com.esotericsoftware.kryonet.Connection;
+import com.ap.stardew.models.dto.JSONMessage;
 
 import java.io.IOException;
 import java.net.Socket;

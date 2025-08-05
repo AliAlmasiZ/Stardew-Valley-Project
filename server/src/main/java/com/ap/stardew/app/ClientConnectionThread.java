@@ -1,19 +1,24 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.controllers.ServerConnectionController;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.JSONMessage;
+import com.ap.stardew.models.dto.JSONMessage;
+import com.ap.stardew.models.player.Player;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.file.Paths;
 
 public class ClientConnectionThread extends ConnectionThread {
     private Account currentAccount = null;
+    public Player player;
+    public GameThread gameThread;
+    public PlayerController playerController = new PlayerController(this);
+
 
     protected ClientConnectionThread(Socket socket) throws IOException {
         super(socket);
@@ -58,7 +63,9 @@ public class ClientConnectionThread extends ConnectionThread {
             }
         });
 
-        while (!end.get()) {} // to keep thread alive
+        while (!end.get()) { // to keep thread alive
+
+        }
         ServerApp.removeClientConnection(this);
     }
 
@@ -72,6 +79,10 @@ public class ClientConnectionThread extends ConnectionThread {
         return false;
     }
 
+    public void update(float delta) {
+        playerController.update(delta);
+    }
+
     public Account getCurrentAccount() {
         return currentAccount;
     }
@@ -79,4 +90,6 @@ public class ClientConnectionThread extends ConnectionThread {
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
     }
+
+
 }

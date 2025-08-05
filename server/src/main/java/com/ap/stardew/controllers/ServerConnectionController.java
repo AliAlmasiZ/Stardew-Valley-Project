@@ -1,21 +1,15 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.GameServer;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
-import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.JSONMessage;
-import com.ap.stardew.models.Result;
-import com.badlogic.gdx.utils.Json;
+import com.ap.stardew.models.dto.JSONMessage;
 import io.jsonwebtoken.*;
-
-import java.util.Date;
 
 public class ServerConnectionController {
     public static Object handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
         if(message.getType() == JSONMessage.Type.player_input_command) {
-            //TODO
+            connectionThread.playerController.handleInput(message);
         }
         if(message.getType() == JSONMessage.Type.lobby_command) {
             String command =  message.getFromBody("command");
