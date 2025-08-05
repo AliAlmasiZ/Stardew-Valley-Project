@@ -16,7 +16,7 @@ import java.util.*;
 
 
 public class WorldMap extends GameMap implements Serializable {
-    private final Map<String, MapRegion> regions = new HashMap<>();
+    private transient final Map<String, MapRegion> regions = new HashMap<>();
     private MapRegion[][] regionMap;
     private BiomeType[][] biomeMap;
     private transient final Map<MapRegion, FarmDetails> farmsDetail = new HashMap<>();

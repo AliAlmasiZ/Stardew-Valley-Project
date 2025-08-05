@@ -72,7 +72,7 @@ public class TIlePlower {
         int[] coords = indexMap[index];
         return tileset[coords[0]][coords[1]];
     }
-    public static void updateTile(Tile tile){
+    private static void updateTile(Tile tile){
         GameMap activeMap = tile.getMap();
         int index = 0;
 

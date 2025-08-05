@@ -24,11 +24,11 @@ public class GameMap implements Serializable {
     private static final TmxMapLoader mapLoader = new TmxMapLoader();
     protected Tile[][] tiles;
     protected TiledMap mapData;
+    protected String mapDataPath;
     protected int width, height;
     protected Environment environment;
     protected final EntityList entities = new EntityList();
     protected Entity building = null;
-    protected String mapDataName;
 
     public Entity getBuilding() {
         return building;
@@ -64,23 +64,9 @@ public class GameMap implements Serializable {
         return out;
     }
 
-    public GameMap(MapData data, Environment environment) {
-        TileType[][] typeMap = data.getTypeMap();
-        this.environment = environment;
-        this.height = typeMap.length;
-        this.width = typeMap[0].length;
-        this.tiles = new Tile[height][width];
-        this.mapDataName = data.name;
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                tiles[i][j] = new Tile(new Position(j, i), typeMap[i][j], this);
-            }
-        }
-    }
-
     public GameMap(String path){
         mapData = mapLoader.load(path);
+        mapDataPath = path;
 
         TiledMapTileLayer backLayer = (TiledMapTileLayer) mapData.getLayers().get("Back");
         TiledMapTileLayer buildingsLayer = (TiledMapTileLayer) mapData.getLayers().get("Buildings");
@@ -187,5 +173,17 @@ public class GameMap implements Serializable {
 
     public TiledMap getMapData() {
         return mapData;
+    }
+
+    public String getMapDataPath() {
+        return mapDataPath;
+    }
+
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 }
