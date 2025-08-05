@@ -42,10 +42,10 @@ public class ServerApp {
 //        JsonMapper mapper1 = new JsonMapper();
 
         ArrayList<Account> accounts = new ArrayList<>();
-        accounts.add(new Account(Gender.MALE, "parsa", "Parsa@1145", "Parsa@1145", "parsa"));
-        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
-        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
-        accounts.add(new Account(Gender.MALE, "asd", "asd2", "asd d", "asdsad"));
+        accounts.add(new Account(Gender.MALE, "parsa", "a", "a", "a"));
+        accounts.add(new Account(Gender.MALE, "asd", "a", "a", "s"));
+        accounts.add(new Account(Gender.MALE, "asd", "a", "a", "d"));
+        accounts.add(new Account(Gender.MALE, "asd", "a", "a", "f"));
 
         saveAccounts(accounts);
 
