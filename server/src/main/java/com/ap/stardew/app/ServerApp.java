@@ -32,7 +32,6 @@ public class ServerApp {
     public static final int TIMEOUT_MILLIS = 500;
     private static final ArrayList<ClientConnectionThread> connections = new ArrayList<>();
     private static boolean exitFlag = false;
-    private static ListenerThread listenerThread;
 
     // shitty doc:
     private static final String SECRET = "yOZpBdp+vYUn6p+m4rU5hAeQb4YFw7WjQbHbZ3P4fhw=";
@@ -75,23 +74,11 @@ public class ServerApp {
         return exitFlag;
     }
 
-    public static void setListenerThread(ListenerThread listenerThread) {
-        ServerApp.listenerThread = listenerThread;
-    }
 
     public static List<ClientConnectionThread> getConnections() {
         return List.copyOf(ServerApp.connections);
     }
-
-    public static void startListening() {
-        if (listenerThread != null && !listenerThread.isAlive()) {
-            listenerThread.start();
-
-        } else {
-            throw new IllegalStateException("Listener thread is already running or not set.");
-        }
-    }
-
+    
     public static void endAll() {
         exitFlag = true;
         for (ClientConnectionThread connection : connections)

@@ -1,6 +1,5 @@
 package com.ap.stardew;
 
-import com.ap.stardew.app.ListenerThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.utils.JSONUtils;
 import com.esotericsoftware.kryonet.Server;
