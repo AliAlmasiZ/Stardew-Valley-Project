@@ -1,16 +1,10 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.GameServer;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
-import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.JSONMessage;
-import com.ap.stardew.models.Result;
-import com.badlogic.gdx.utils.Json;
 import io.jsonwebtoken.*;
-
-import java.util.Date;
 
 public class ServerConnectionController {
     public static Object handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
@@ -30,7 +24,7 @@ public class ServerConnectionController {
                     return LobbyController.joinLobby(message);
                 }
                 case "leave_lobby" -> {
-
+                    return LobbyController.leaveLobby(message);
                 }
                 default -> {
                     return null;
@@ -45,7 +39,7 @@ public class ServerConnectionController {
                     return login(message.getFromBody("username"), message.getFromBody("password"), connectionThread);
                 }
                 case "getUsername" -> {
-                    return getUsername(message.getFromBody("token"));
+                    return getUsernameCommand(message.getFromBody("token"));
                 }
             }
 
@@ -80,7 +74,7 @@ public class ServerConnectionController {
         return response;
     }
 
-    public static JSONMessage getUsername(String token){
+    private static JSONMessage getUsernameCommand(String token){
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
         Claims payload;
         try {
@@ -93,8 +87,6 @@ public class ServerConnectionController {
 
         response.put("success", true);
         response.put("username", payload.getSubject());
-
-        System.out.println(payload.getSubject());
 
         return response;
     }

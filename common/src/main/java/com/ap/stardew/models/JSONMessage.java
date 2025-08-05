@@ -49,6 +49,7 @@ public class JSONMessage {
         lobby_command,
         response,
         player_input_command,
+        update
     }
 
     public Map<String, Object> getBody() {

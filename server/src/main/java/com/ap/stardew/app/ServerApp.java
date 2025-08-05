@@ -12,9 +12,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.gson.stream.JsonWriter;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -184,7 +182,6 @@ public class ServerApp {
                 connection.close();
                 System.out.println("client disconnected : " + connection.getID());
             }
-
         });
     }
 
@@ -213,4 +210,23 @@ public class ServerApp {
         }
     }
 
+    public static ClientConnectionThread getConnectionByUsername(String username){
+        for (ClientConnectionThread connection : connections) {
+            if(connection.getCurrentAccount() != null && connection.getCurrentAccount().getUsername().equals(username)){
+                return connection;
+            }
+        }
+        return null;
+    }
+
+    public static String getUsername(String token){
+        Claims payload;
+        try {
+            payload = jwtParser.parseSignedClaims(token).getPayload();
+        } catch (JwtException e) {
+            System.out.println(e);
+            return null;
+        }
+        return payload.getSubject();
+    }
 }

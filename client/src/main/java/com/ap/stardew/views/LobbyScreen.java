@@ -1,6 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.dto.AccountInfo;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 
 
 public class LobbyScreen extends AbstractMenuScreen{
-
     private LobbyInfo currentLobby;
     private boolean isHost;
 
@@ -101,6 +101,9 @@ public class LobbyScreen extends AbstractMenuScreen{
                 JSONMessage req = new JSONMessage(JSONMessage.Type.lobby_command);
                 req.put("command", "leave_lobby");
                 req.put("lobby_id", currentLobby.getLobbyId());
+                req.put("token", ClientApp.getToken());
+
+                System.out.println(ClientApp.sendAndWaitForResponse(req, 500));
                 // TODO : Send Leave lobby request to server
                 ClientGame.getInstance().setScreen(new MultiplayerScreen());
                 dispose();
@@ -128,4 +131,6 @@ public class LobbyScreen extends AbstractMenuScreen{
         }
         playerList.setItems(players);
     }
+
+
 }

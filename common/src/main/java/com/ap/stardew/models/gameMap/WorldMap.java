@@ -21,34 +21,34 @@ public class WorldMap extends GameMap implements Serializable {
     private BiomeType[][] biomeMap;
     private transient final Map<MapRegion, FarmDetails> farmsDetail = new HashMap<>();
 
-    public WorldMap(MapData data) {
-        super(data, Environment.OUTDOOR);
-
-        regionMap = data.getRegionMap();
-//        if (data.getRegions() != null) {
-//            this.regions.addAll(data.getRegions());
+//    public WorldMap(MapData data) {
+//        super(data, Environment.OUTDOOR);
+//
+//        regionMap = data.getRegionMap();
+////        if (data.getRegions() != null) {
+////            this.regions.addAll(data.getRegions());
+////        }
+//        biomeMap = data.getBiomeMap();
+//
+//        App.getActiveGame().setMainMap(this);
+//        App.getActiveGame().setActiveMap(this);
+//
+////        for(MapRegion r : regions){
+////            farmsDetail.put(r, new FarmDetails());
+////        }
+//
+//        for (MapData.MapLayerData<String>.ObjectData d : data.getBuildings()) {
+//            if(d.getProperty("type") != null && d.getProperty("type").asString.equals("playerHouse")){
+//                farmsDetail.get(regionMap[d.y][d.x]).cottage = d;
+//
+//            }else if(d.value != null && d.value.equals("Abandoned Greenhouse")){
+//                farmsDetail.get(regionMap[d.y][d.x]).abandonedGreenhouse = d;
+//            }else{
+//                Entity building = App.entityRegistry.makeEntity(d.value);
+//                EntityPlacementSystem.placeEntity(building, new Vec2(d.x, d.y));
+//            }
 //        }
-        biomeMap = data.getBiomeMap();
-
-        App.getActiveGame().setMainMap(this);
-        App.getActiveGame().setActiveMap(this);
-
-//        for(MapRegion r : regions){
-//            farmsDetail.put(r, new FarmDetails());
-//        }
-
-        for (MapData.MapLayerData<String>.ObjectData d : data.getBuildings()) {
-            if(d.getProperty("type") != null && d.getProperty("type").asString.equals("playerHouse")){
-                farmsDetail.get(regionMap[d.y][d.x]).cottage = d;
-
-            }else if(d.value != null && d.value.equals("Abandoned Greenhouse")){
-                farmsDetail.get(regionMap[d.y][d.x]).abandonedGreenhouse = d;
-            }else{
-                Entity building = App.entityRegistry.makeEntity(d.value);
-                EntityPlacementSystem.placeEntity(building, new Vec2(d.x, d.y));
-            }
-        }
-    }
+//    }
     public WorldMap(String path){
         super(path);
 

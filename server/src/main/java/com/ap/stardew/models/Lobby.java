@@ -26,8 +26,6 @@ public class Lobby implements Serializable {
     private String password;
     private boolean isVisible;
 
-
-
     /**
      * Generates a random alphanumeric string of a given length.
      * @param length The length of the ID to generate.
@@ -132,5 +130,11 @@ public class Lobby implements Serializable {
         return lobbyInfo;
     }
 
+    public void close(){
+        allLobbies.remove(this);
+    }
 
+    public void setHostUsername(String hostUsername) {
+        this.hostUsername = hostUsername;
+    }
 }

@@ -55,7 +55,7 @@ abstract public class ConnectionThread extends Thread {
     }
 
     public JSONMessage sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
-        sendMessage(message);
+        sendTCP(message);
         try {
             if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
             socket.setSoTimeout(timeoutMilli);
@@ -71,16 +71,6 @@ abstract public class ConnectionThread extends Thread {
     abstract public boolean initialHandshake();
 
     abstract protected boolean handleMessage(JSONMessage message);
-
-    public synchronized void sendMessage(JSONMessage message) {
-        String JSONString = JSONUtils.toJson(message);
-
-        try {
-            dataOutputStream.writeUTF(JSONString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public synchronized void sendTCP(Object object) {
         connection.sendTCP(object);
