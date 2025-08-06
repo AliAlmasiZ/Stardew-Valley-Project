@@ -24,7 +24,7 @@ public class GameController {
 
         int i = 0;
         for (AccountInfo accountInfo : accountInfos) {
-            Player player = new Player();
+            Player player = new Player(accountInfo.getUsername());
             game.addPlayer(player);
 
             gameSession.addUserToSession(accountInfo.getUsername(), player);

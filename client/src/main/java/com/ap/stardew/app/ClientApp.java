@@ -107,6 +107,9 @@ public class ClientApp {
     }
 
     public static boolean handleReceived(Object received) {
+        if(received == null) {
+
+        }
         if(received instanceof JSONMessage) {
             return handleMessage((JSONMessage) received);
         }
@@ -177,7 +180,11 @@ public class ClientApp {
         request.put("command", "getUsername");
         request.put("token", token);
 
-        JSONMessage response = sendAndWaitForResponse(request, 500);
+        JSONMessage response = sendAndWaitForResponse(request, 5000);
+
+
+        System.out.println(response.toString());
+
 
         if(!response.getFromBody("success", boolean.class)) return null;
 

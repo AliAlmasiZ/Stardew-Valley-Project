@@ -54,7 +54,7 @@ public class ServerConnectionController {
 
             return response;
         }
-        throw new UnsupportedOperationException("didnt handle");
+        throw new UnsupportedOperationException("didn't handle");
     }
 
     public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread){

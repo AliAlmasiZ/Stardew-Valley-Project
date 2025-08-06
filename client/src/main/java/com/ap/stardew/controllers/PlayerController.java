@@ -274,6 +274,8 @@ public class PlayerController implements InputProcessor {
         message.put("right", right);
         message.put("up", up);
         message.put("down", down);
+        message.put("delta", delta);
+        ClientApp.sendTCP(message);
         //Todo: that walkable check i wrote is ass
         Tile destTile = ClientApp.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));

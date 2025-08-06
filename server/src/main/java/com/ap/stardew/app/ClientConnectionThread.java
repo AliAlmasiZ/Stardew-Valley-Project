@@ -94,6 +94,7 @@ public class ClientConnectionThread extends ConnectionThread {
 
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
-        player = new Player();//???
+        player = new Player(currentAccount.getUsername());//???
+        playerController.updatePlayer();
     }
 }

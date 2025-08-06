@@ -29,6 +29,13 @@ public class GameThread extends Thread{
         }
     }
 
+    @Override
+    public void start() {
+        for (ClientConnectionThread client : clients) {
+            client.gameThread = this;
+        }
+        super.start();
+    }
 
     @Override
     public void run() {
@@ -62,7 +69,6 @@ public class GameThread extends Thread{
             return;
         lastUpdateSent = stateTime;
 
-        System.out.println("update sent");
 
         JSONMessage message = new JSONMessage(JSONMessage.Type.update);
         message.put("command", "update_players");
