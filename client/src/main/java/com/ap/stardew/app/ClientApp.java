@@ -173,6 +173,10 @@ public class ClientApp {
     }
 
     public static String getUsername(){
+        if (activeGame != null) {
+            return activeGame.getCurrentPlayer().getUsername();
+        }
+
         if(token == null) return null;
 
         JSONMessage request = new JSONMessage(JSONMessage.Type.command);

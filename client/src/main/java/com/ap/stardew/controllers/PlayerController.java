@@ -268,14 +268,6 @@ public class PlayerController implements InputProcessor {
             direction.y -= 1;
         }
 
-        JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
-        message.put("command", "player_move");
-        message.put("left", left);
-        message.put("right", right);
-        message.put("up", up);
-        message.put("down", down);
-        message.put("delta", delta);
-        ClientApp.sendTCP(message);
         //Todo: that walkable check i wrote is ass
         Tile destTile = ClientApp.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
@@ -299,6 +291,11 @@ public class PlayerController implements InputProcessor {
                 }
             }
             if(canWalk){
+                JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
+                message.put("command", "player_move");
+                message.put("direction", direction);
+                message.put("delta", delta);
+                ClientApp.sendTCP(message);
                 player.move(direction, delta);
                 player.setState(Player.State.WALKING);
             }else{

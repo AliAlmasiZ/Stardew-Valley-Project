@@ -28,7 +28,7 @@ public class ClientConnectionController {
                     GameController.startGame(message);
                     return null;
                 }
-                case "player_move" -> { //players movement update
+                case "players_update" -> { //players movement update
                     String username = message.getFromBody("username");
                     float delta = message.getFromBody("delta_time");
                     Vector2 direction = message.getFromBody("direction");

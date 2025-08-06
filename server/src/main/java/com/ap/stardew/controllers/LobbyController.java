@@ -9,10 +9,13 @@ import com.ap.stardew.models.Lobby;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.AccountInfo;
+import com.ap.stardew.models.dto.PlayerState;
+import com.ap.stardew.models.player.Player;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LobbyController {
@@ -200,6 +203,7 @@ public class LobbyController {
 
         GameSession session = GameController.createGame(accounts);
         GameThread gameThread = new GameThread(session);
+
 
         for (ClientConnectionThread client : gameThread.getClients()) {
             JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);

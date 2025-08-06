@@ -114,7 +114,6 @@ public class LobbyScreen extends AbstractMenuScreen{
                 req.put("token", ClientApp.getToken());
 
                 System.out.println(ClientApp.sendAndWaitForResponse(req, 500));
-                // TODO : Send Leave lobby request to server
                 ClientGame.getInstance().setScreen(new MultiplayerScreen());
                 dispose();
             }

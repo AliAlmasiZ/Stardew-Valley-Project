@@ -23,6 +23,10 @@ public class GameController {
 
         game.setCurrentPlayer(details.getFromBody("player"));
 
+
+
+
+
         ClientApp.setActiveGame(game);
 
         Gdx.app.postRunnable(() -> {
