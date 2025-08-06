@@ -5366,6 +5366,8 @@ data/shops/ShopDatas.json
 debug_fbo0.png
 debug_fbo1.png
 debug_fbo2.png
+game.db
+schema.sql
 shaders/outline.frag
 shaders/outline.vert
 skin/Stardew Valley Skin/Brawl.fnt

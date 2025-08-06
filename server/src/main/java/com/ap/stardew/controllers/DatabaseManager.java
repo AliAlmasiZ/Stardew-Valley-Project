@@ -17,6 +17,9 @@ public class DatabaseManager {
     private static final String URL = "jdbc:sqlite:game.db";
 
     public static void saveAccount(Account account) {
+        //TODO put this in a better place
+        createTableIfNotExists();
+
         String sql = "INSERT INTO users ( " +
             "    username, " +
             "    nickname, " +
@@ -133,5 +136,25 @@ public class DatabaseManager {
 
         return a;
     }
+    public static void createTableIfNotExists() {
+        String sql = """
+    CREATE TABLE IF NOT EXISTS users (
+        username TEXT PRIMARY KEY,
+        nickname TEXT,
+        email TEXT,
+        gender TEXT,
+        securityAnswers TEXT,
+        maximumMoneyEarned INTEGER,
+        password TEXT
+    );
+    """;
 
+        try (var conn = DriverManager.getConnection(URL);
+             var stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.err.println("Failed to create 'users' table");
+            e.printStackTrace();
+        }
+    }
 }
