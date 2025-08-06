@@ -29,6 +29,9 @@ public class ServerConnectionController {
                 case "leave_lobby" -> {
                     return LobbyController.leaveLobby(message);
                 }
+                case "startGame" -> {
+                    return LobbyController.startGame(message);
+                }
                 default -> {
                     return null;
                 }
@@ -44,6 +47,7 @@ public class ServerConnectionController {
                 case "getUsername" -> {
                     return getUsernameCommand(message.getFromBody("token"));
                 }
+
             }
 
             return response;

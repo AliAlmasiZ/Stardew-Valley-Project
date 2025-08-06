@@ -19,7 +19,7 @@ public class ClientApp {
     private static Client client;
     private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
-    
+
     private static boolean exitFlag = false;
 
     private static String token;
@@ -74,7 +74,7 @@ public class ClientApp {
             System.err.println("client already connected");
             return;
         }
-        client = new Client();
+        client = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
         client.start();
         registerClasses();
     }
@@ -94,6 +94,9 @@ public class ClientApp {
     private static boolean handleMessage(JSONMessage message) {
         try {
             JSONMessage response = ClientConnectionController.handleCommand(message);
+            if(message.getType() == JSONMessage.Type.update){
+                return true;
+            }
             if(response != null)
                 sendTCP(response);
             return true;

@@ -1,6 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
@@ -72,8 +73,6 @@ public class GameScreen extends AbstractScreen {
     private PlayerController playerController;
     private Player player;
     private Sprite currentPlayerSprite;
-    private Skin skin;
-    private Skin customSkin;
 
     //Renderers
     private Batch batch;
@@ -82,12 +81,11 @@ public class GameScreen extends AbstractScreen {
     private ShapeRenderer shapeRenderer;
     public OrthographicCamera camera;
     private Viewport gameView;
+    private final MapRenderManager mapRenderManager = new MapRenderManager();
 
     //Map //TODO: this is just for test player movement and should be replace by PARSA
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private int mapWidth, mapHeight;
-    private int tileWidth, tileHeight;
 
     // ui
     private final Stack stack;
@@ -96,149 +94,48 @@ public class GameScreen extends AbstractScreen {
     // Clock
     private ClockActor clockActor;
 
+    private final Game game;
+
     // NPC
     ArrayList<DialogActor> dialogActors = new ArrayList<>();
 
 
-    public GameScreen() {
+    public GameScreen(Game game) {
         super();
+
+        this.game = game;
+        player = game.getCurrentPlayer();
+        controller = new GameMenuController();
+//        currentPlayerSprite = player.getSprite();
+        playerController = new PlayerController(this, player, controller);
+
         stack = new Stack();
         rootTable.add(stack).grow();
 
-        controller = new GameMenuController();
-        player = App.getActiveGame().getCurrentPlayer();
-        currentPlayerSprite = player.getSprite();
-        playerController = new PlayerController(this, player, controller);
-
-        skin = GameAssetManager.getInstance().getSkin();
-        customSkin = GameAssetManager.getInstance().getCustomSkin();
-
-        //TODO: remove this later
-        //**************************************
-        controller.cheatGiveItem("Training Rod", 1);
-        controller.cheatGiveItem("Hay", 500);
-        controller.cheatGiveItem("Wood", 500);
-        controller.cheatGiveItem("Axe", 1);
-        controller.cheatGiveItem("Pickaxe", 1);
-        controller.cheatGiveItem("Hoe", 1);
-        controller.cheatGiveItem("Hay", 500);
-        controller.cheatGiveItem("Apple", 10);
-        controller.cheatGiveItem("Bee House", 1);
-        controller.cheatGiveItem("Frozen Tear", 10);
-        controller.cheatGiveItem("Cheese Press", 1);
-        controller.cheatGiveItem("Keg", 1);
-        controller.cheatGiveItem("Dehydrator", 1);
-        controller.cheatGiveItem("Charcoal Klin", 1);
-        controller.cheatGiveItem("Loom", 1);
-        controller.cheatGiveItem("Mayonnaise Machine", 1);
-        controller.cheatGiveItem("Oil Maker", 1);
-        controller.cheatGiveItem("Preserves Jar", 1);
-        controller.cheatGiveItem("Fish Smoker", 1);
-        controller.cheatGiveItem("Furnace", 1);
-
-        controller.cheatGiveItem("Hay", 500);
-        controller.cheatAddSkill("fishing", 200);
-        controller.cheatAddSkill("fishing", 200);
-        controller.cheatAddSkill("fishing", 200);
-        controller.cheatAddSkill("fishing", 200);
-        controller.cheatAddSkill("fishing", 200);
-
-        Player player = App.getActiveGame().getCurrentPlayer();
-        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
-        System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
-        player.getAnimals().add(animal1);
-
-
-        NPC npc = App.getActiveGame().findNPC("Robin");
-        npc.getComponent(PositionComponent.class).setPosition(player.getPosition().x + 20, player.getPosition().y + 200);
-        System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
-
-        // put some trees and crops to test
-        Entity tree1 = App.entityRegistry.makeEntity("Apple Tree");
-        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
-        Vec2 vec2 = new Vec2(player.getPosition().x + 50, player.getPosition().y + 200);
-        System.out.println("Apple tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
-
-        Entity tree2 = App.entityRegistry.makeEntity("Apple Tree");
-        tree2.getComponent(Growable.class).setDaysPastFromPlant(15);
-        vec2 = new Vec2(player.getPosition().x + 80, player.getPosition().y + 200);
-        System.out.println("Apple tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
-
-        Entity tree3 = App.entityRegistry.makeEntity("Apple Tree");
-        tree3.getComponent(Growable.class).setDaysPastFromPlant(27);
-        vec2 = new Vec2(player.getPosition().x + 110, player.getPosition().y + 200);
-        System.out.println("Apple tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
-
-
-        for (int i = 0; i < 7; i++) {
-            Entity crop1 = App.entityRegistry.makeEntity("Kale");
-            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
-            vec2 = new Vec2(player.getPosition().x + 110 + 40 * i, player.getPosition().y + 100);
-            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
-        }
-        //**************************************
-
-
-        //TODO
-    }
-
-    public void initNPCDialogs() {
-        Game game = App.getActiveGame();
-        Player currentPlayer = App.getActiveGame().getCurrentPlayer();
-
-        for (DialogActor dialogActor : dialogActors) {
-            dialogActor.remove();
-        }
-        dialogActors.clear();
-
-        for (NPC npc : game.getGameNPCs()) {
-            if (npc.getComponent(PositionComponent.class).getX() < 10) continue;
-            DialogActor dialogShow = new DialogActor(npc, this);
-            gameStage.addActor(dialogShow);
-            dialogActors.add(dialogShow);
-        }
-    }
-
-    @Override
-    public void show() {
-        super.show();
         batch = ClientGame.getInstance().getBatch();
         camera = new OrthographicCamera();
         gameView = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         camera.setToOrtho(false, gameView.getWorldWidth(), gameView.getWorldHeight());
 
-        gameStage = new Stage(gameView, batch);
-        minigameStage = new Stage(new ScreenViewport());
-//        uiStage = new Stage(new ScreenViewport());
-//        uiStage.getCamera().viewportWidth = uiStage.getCamera().viewportWidth / Gdx.graphics.getPpiX() * 50 / UI_SCALING;
-//        uiStage.getCamera().viewportHeight = uiStage.getCamera().viewportHeight / Gdx.graphics.getPpiY() * 50 / UI_SCALING;
         camera.update();
-
-        //Map : TODO: this is just for test player movement and should be replace by PARSA
-        map = new TmxMapLoader().load("./Content(unpacked)/Maps/untitled.tmx");
-        System.out.println(map.getProperties());
 
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
         renderer.getBatch().enableBlending();
 
-        tileHeight = map.getProperties().get("tileheight", Integer.class);
-        tileWidth = map.getProperties().get("tilewidth", Integer.class);
-        mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
-        mapHeight = map.getProperties().get("height", Integer.class) * tileHeight;
-
-        setGameInput();
+        gameStage = new Stage(gameView, batch);
+        minigameStage = new Stage(new ScreenViewport());
 
         // Create clock
-        clockActor = new ClockActor();
+        clockActor = new ClockActor(game);
         Table clockTable = new Table();
         clockTable.top().right();
         clockTable.add(clockActor).pad(10);
         stack.add(clockTable);
 
         // Energy bar
-        energyBar = new EnergyBar();
+        energyBar = new EnergyBar(player);
         Table energyBarTable = new Table();
         energyBarTable.right().bottom();
         energyBarTable.pad(5);
@@ -279,7 +176,99 @@ public class GameScreen extends AbstractScreen {
         //NPC
         initNPCDialogs();
 
-        EntityPlacementSystem.placeOnMap(App.entityRegistry.makeEntity("Frozen Tear"), player.getPosition().cpy().add(70, 70), player.getCurrentMap());
+
+
+
+        //TODO: remove this later
+        //**************************************
+//        controller.cheatGiveItem("Training Rod", 1);
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatGiveItem("Wood", 500);
+//        controller.cheatGiveItem("Axe", 1);
+//        controller.cheatGiveItem("Pickaxe", 1);
+//        controller.cheatGiveItem("Hoe", 1);
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatGiveItem("Apple", 10);
+//        controller.cheatGiveItem("Bee House", 1);
+//        controller.cheatGiveItem("Frozen Tear", 10);
+//        controller.cheatGiveItem("Cheese Press", 1);
+//        controller.cheatGiveItem("Keg", 1);
+//        controller.cheatGiveItem("Dehydrator", 1);
+//        controller.cheatGiveItem("Charcoal Klin", 1);
+//        controller.cheatGiveItem("Loom", 1);
+//        controller.cheatGiveItem("Mayonnaise Machine", 1);
+//        controller.cheatGiveItem("Oil Maker", 1);
+//        controller.cheatGiveItem("Preserves Jar", 1);
+//        controller.cheatGiveItem("Fish Smoker", 1);
+//        controller.cheatGiveItem("Furnace", 1);
+//
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+
+//        Player player = App.getActiveGame().getCurrentPlayer();
+//        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
+//        System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
+//        player.getAnimals().add(animal1);
+//
+//
+//        NPC npc = App.getActiveGame().findNPC("Robin");
+//        npc.getComponent(PositionComponent.class).setPosition(player.getPosition().x + 20, player.getPosition().y + 200);
+//        System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
+//
+//        // put some trees and crops to test
+//        Entity tree1 = App.entityRegistry.makeEntity("Apple Tree");
+//        tree1.getComponent(Growable.class).setDaysPastFromPlant(4);
+//        Vec2 vec2 = new Vec2(player.getPosition().x + 50, player.getPosition().y + 200);
+//        System.out.println("Apple tree1:" + EntityPlacementSystem.placeEntity(tree1, vec2));
+//
+//        Entity tree2 = App.entityRegistry.makeEntity("Apple Tree");
+//        tree2.getComponent(Growable.class).setDaysPastFromPlant(15);
+//        vec2 = new Vec2(player.getPosition().x + 80, player.getPosition().y + 200);
+//        System.out.println("Apple tree2:" + EntityPlacementSystem.placeEntity(tree2, vec2));
+//
+//        Entity tree3 = App.entityRegistry.makeEntity("Apple Tree");
+//        tree3.getComponent(Growable.class).setDaysPastFromPlant(27);
+//        vec2 = new Vec2(player.getPosition().x + 110, player.getPosition().y + 200);
+//        System.out.println("Apple tree3:" + EntityPlacementSystem.placeEntity(tree3, vec2));
+
+
+//        for (int i = 0; i < 7; i++) {
+//            Entity crop1 = App.entityRegistry.makeEntity("Kale");
+//            crop1.getComponent(Growable.class).setDaysPastFromPlant(i);
+//            vec2 = new Vec2(player.getPosition().x + 110 + 40 * i, player.getPosition().y + 100);
+//            System.out.println("crop" + i + ":" + EntityPlacementSystem.placeEntity(crop1, vec2));
+//        }
+        //**************************************
+
+
+        //TODO
+    }
+
+    public void initNPCDialogs() {
+        Game game = App.getActiveGame();
+        Player currentPlayer = App.getActiveGame().getCurrentPlayer();
+
+        for (DialogActor dialogActor : dialogActors) {
+            dialogActor.remove();
+        }
+        dialogActors.clear();
+
+        for (NPC npc : game.getGameNPCs()) {
+            if (npc.getComponent(PositionComponent.class).getX() < 10) continue;
+            DialogActor dialogShow = new DialogActor(npc, this);
+            gameStage.addActor(dialogShow);
+            dialogActors.add(dialogShow);
+        }
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        setGameInput();
     }
 
     @Override
@@ -287,45 +276,25 @@ public class GameScreen extends AbstractScreen {
         controller.update(delta);
         playerController.update(delta);
 
-        //TODO: make Vec2 to Vector2
+        GameMap activeMap = App.getActiveGame().getActiveMap();
+
         //center Camera:
-        camera.position.x = currentPlayerSprite.getX() + currentPlayerSprite.getWidth() / 2f;
-        camera.position.y = currentPlayerSprite.getY() + currentPlayerSprite.getHeight() / 2f;
-        float cameraHalfWidth = camera.viewportWidth * camera.zoom / 2;
-        float cameraHalfHeight = camera.viewportHeight * camera.zoom / 2;
-        camera.position.x = Math.max(cameraHalfWidth, camera.position.x);
-        camera.position.x = Math.min(mapWidth - cameraHalfWidth, camera.position.x);
-        camera.position.y = Math.max(cameraHalfHeight, camera.position.y);
-        camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
+        camera.position.set(player.getPosition().cpy(), camera.position.z);
+//        float cameraHalfWidth = camera.viewportWidth * camera.zoom / 2;
+//        float cameraHalfHeight = camera.viewportHeight * camera.zoom / 2;
+//        camera.position.x = Math.max(cameraHalfWidth, camera.position.x);
+//        camera.position.x = Math.min(activeMap.getWidth() - cameraHalfWidth, camera.position.x);
+//        camera.position.y = Math.max(cameraHalfHeight, camera.position.y);
+//        camera.position.y = Math.min(activeMap.getHeight() - cameraHalfHeight, camera.position.y);
+
 
         camera.update();
 
-        ArrayList<Integer> backLayers = new ArrayList<>();
-        ArrayList<Integer> frontLayers = new ArrayList<>();
-        for (int i = 0; i < App.getActiveGame().getActiveMap().getMapData().getLayers().size(); i++) {
-            MapLayer mapLayer = App.getActiveGame().getActiveMap().getMapData().getLayers().get(i);
-            if (mapLayer.getName().contains("Back") || mapLayer.getName().contains("Buildings")) {
-                backLayers.add(i);
-            } else {
-                frontLayers.add(i);
-            }
-        }
-        int[] backLayerIndices = new int[backLayers.size()];
-        for (int i = 0; i < backLayers.size(); i++) {
-            backLayerIndices[i] = backLayers.get(i);
-        }
-
-        int[] frontLayerIndices = new int[frontLayers.size()];
-        for (int i = 0; i < frontLayers.size(); i++) {
-            frontLayerIndices[i] = frontLayers.get(i);
-        }
-
-        renderer.setMap(App.getActiveGame().getActiveMap().getMapData());
         renderer.setView(camera);
-        renderer.render(backLayerIndices);
+        mapRenderManager.renderBackLayers(renderer, activeMap);
 
         batch.setProjectionMatrix(camera.combined);
-        ArrayList<Entity> renderableEntities = App.getActiveGame().getActiveMap().getEntitiesWithComponent(Renderable.class);
+        ArrayList<Entity> renderableEntities = activeMap.getEntitiesWithComponent(Renderable.class);
         renderableEntities.sort((e1, e2) -> {
             float y1 = e1.getComponent(PositionComponent.class).getY();
             float y2 = e2.getComponent(PositionComponent.class).getY();
@@ -333,56 +302,60 @@ public class GameScreen extends AbstractScreen {
         });
 
         batch.begin();
-        for (Entity entity : renderableEntities) {
-            entity.setEntityForComponents();
+//        for (Entity entity : renderableEntities) {
+//            entity.setEntityForComponents();
+//
+//            Renderable renderable = entity.getComponent(Renderable.class);
+//            //update animals:
+//            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
+//
+//            if(renderable.getRenderFunction() != null){
+//                renderable.getRenderFunction().render(entity, batch);
+//            }else{
+//                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
+//                if (sprite != null) {
+//                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
+//                    sprite.draw(batch);
+//                }
+//            }
+//        }
+//
+//        switch (playerController.getEquippedItemState()) {
+//            case PLACEABLE -> {
+//                batch.setColor(0, 1, 0, 0.3f);
+//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+//                batch.draw(GameAssetManager.getInstance()
+//                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+//                    playerController.getCursorPos().getCol() * 16
+//                    , playerController.getCursorPos().getRow() * 16);
+//                batch.setColor(1, 1, 1, 1);
+//            }
+//            case PLACEABLE_INVALID -> {
+//                batch.setColor(1, 0, 0, 0.3f);
+//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+//                batch.draw(GameAssetManager.getInstance()
+//                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+//                    playerController.getCursorPos().getCol() * 16
+//                    , playerController.getCursorPos().getRow() * 16);
+//                batch.setColor(1, 1, 1, 1);
+//            }
+//            case USEABLE -> {
+//                batch.setColor(0, 1, 0, 0.3f);
+//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+//                batch.setColor(1, 1, 1, 1);
+//            }
+//        }
 
-            Renderable renderable = entity.getComponent(Renderable.class);
-            //update animals:
-            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
-
-            if(renderable.getRenderFunction() != null){
-                renderable.getRenderFunction().render(entity, batch);
-            }else{
-                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
-                if (sprite != null) {
-                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
-                    sprite.draw(batch);
-                }
-            }
-        }
-
-        switch (playerController.getEquippedItemState()) {
-            case PLACEABLE -> {
-                batch.setColor(0, 1, 0, 0.3f);
-                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-                batch.draw(GameAssetManager.getInstance()
-                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-                    playerController.getCursorPos().getCol() * 16
-                    , playerController.getCursorPos().getRow() * 16);
-                batch.setColor(1, 1, 1, 1);
-            }
-            case PLACEABLE_INVALID -> {
-                batch.setColor(1, 0, 0, 0.3f);
-                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-                batch.draw(GameAssetManager.getInstance()
-                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-                    playerController.getCursorPos().getCol() * 16
-                    , playerController.getCursorPos().getRow() * 16);
-                batch.setColor(1, 1, 1, 1);
-            }
-            case USEABLE -> {
-                batch.setColor(0, 1, 0, 0.3f);
-                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-                batch.setColor(1, 1, 1, 1);
-            }
+        for (Player p : game.getPlayers()) {
+            batch.draw(GameAssetManager.getInstance().energyBar, p.getPosition().x, p.getPosition().y);
         }
         batch.end();
 
+        mapRenderManager.renderFrontLayers(renderer, activeMap);
 
-        renderer.render(frontLayerIndices);
         gameStage.act(delta);
         gameStage.draw();
 
@@ -534,7 +507,7 @@ public class GameScreen extends AbstractScreen {
             portrait.center();
 //            portrait.add(new Image(App.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
             topLeft.add(portrait).row();
-            topLeft.add(new Label(player.getAccount().getNickname(), customSkin) {
+            topLeft.add(new Label(player.getNickname(), customSkin) {
                 {
                     setColor(Color.BLACK);
                 }

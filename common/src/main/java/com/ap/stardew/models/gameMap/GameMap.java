@@ -1,29 +1,19 @@
 package com.ap.stardew.models.gameMap;
 
-import com.ap.stardew.models.App;
-import com.ap.stardew.models.Position;
-
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.components.EntityComponent;
-import com.ap.stardew.models.entities.components.Placeable;
-import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
-import com.ap.stardew.models.enums.TileType;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
+import org.tiledreader.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameMap implements Serializable {
-    private static final TmxMapLoader mapLoader = new TmxMapLoader();
     protected Tile[][] tiles;
     protected TiledMap mapData;
+    protected org.tiledreader.TiledMap rawMapData;
     protected String mapDataPath;
     protected int width, height;
     protected Environment environment;
@@ -64,82 +54,8 @@ public class GameMap implements Serializable {
         return out;
     }
 
-    public GameMap(String path){
-        mapData = mapLoader.load(path);
-        mapDataPath = path;
+    public GameMap(){
 
-        TiledMapTileLayer backLayer = (TiledMapTileLayer) mapData.getLayers().get("Back");
-        TiledMapTileLayer buildingsLayer = (TiledMapTileLayer) mapData.getLayers().get("Buildings");
-
-
-        if(backLayer != null){
-            height = backLayer.getHeight();
-            width = backLayer.getWidth();
-
-            tiles = new Tile[height][width];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    TiledMapTileLayer.Cell cell = backLayer.getCell(j, i);
-
-                    tiles[i][j] = null;
-                    if(cell != null){
-                        TiledMapTile tileData = cell.getTile();
-
-                        boolean diggable = tileData.getProperties().get("Diggable") != null;
-                        boolean isWater = tileData.getProperties().get("Water")  != null;
-
-                        Tile tile = new Tile(new Position(j, i), TileType.GRASS, this);
-
-                        if(diggable){
-                            tile.setType(TileType.DIRT);
-                        }else if(isWater){
-                            tile.setType(TileType.WATER);
-                        }
-                        tiles[i][j] = tile;
-
-                    }
-                    if(buildingsLayer!=null){
-                        TiledMapTileLayer.Cell buildingCell = buildingsLayer.getCell(j, i);
-                        if(buildingCell != null){
-                            boolean isPassable = buildingCell.getTile().getProperties().get("Passable") != null;
-
-                            if(tiles[i][j] == null){
-                                tiles[i][j] = new Tile(new Position(j, i), TileType.GRASS, this);
-                            }
-                            if(isPassable){
-                                tiles[i][j].setWalkable(true);
-                            }else {
-                                tiles[i][j].setWalkable(false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        MapLayer objectsLayer = mapData.getLayers().get("Objects");
-        if(objectsLayer != null){
-            for (MapObject object : objectsLayer.getObjects()) {
-                if(object.getName().equals("Building")){
-                    Entity building = App.entityRegistry.makeEntity(object.getProperties().get("building", String.class));
-                    EntityPlacementSystem.placeEntity(building, new Vec2(object.getProperties().get("x", Float.class),
-                        object.getProperties().get("y", Float.class)), this);
-                }else if(object.getName().equals("Fridge")){
-                    Entity fridge = App.entityRegistry.makeEntity("fridge");
-                    EntityPlacementSystem.placeEntity(fridge, new Vec2(object.getProperties().get("x", Float.class),
-                        object.getProperties().get("y", Float.class)), this);
-                }else if(object.getName().equals("Shop")){
-                    Entity shopCounter = new Entity("shopCounter");
-                    shopCounter.addComponent(new Placeable(false));
-                    EntityPlacementSystem.placeEntity(shopCounter, new Vec2(object.getProperties().get("x", Float.class),
-                        object.getProperties().get("y", Float.class)), this);
-                }
-            }
-        }
-    }
-
-    private void generateRandomElements(int min, int max) { //inclusive
-        //TODO
     }
 
     public Tile[][] getTiles() {
@@ -185,5 +101,25 @@ public class GameMap implements Serializable {
 
     public void setEnvironment(Environment environment) {
         this.environment = environment;
+    }
+
+    public void setTiles(Tile[][] tiles) {
+        this.tiles = tiles;
+    }
+
+    public void setMapData(TiledMap mapData) {
+        this.mapData = mapData;
+    }
+
+    public void setMapDataPath(String mapDataPath) {
+        this.mapDataPath = mapDataPath;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

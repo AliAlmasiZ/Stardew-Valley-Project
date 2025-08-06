@@ -56,7 +56,7 @@ public class GameMenuController implements Controller {
         game.nextTurn();
 
         StringBuilder message = new StringBuilder();
-        message.append("You are playing as ").append(game.getCurrentPlayer().getAccount().getNickname());
+        message.append("You are playing as ").append(game.getCurrentPlayer().getNickname());
         message.append("\n").append(game.getCurrentPlayer().newMessages());
 
         return new Result(true, message.toString());
@@ -176,7 +176,7 @@ public class GameMenuController implements Controller {
         if (distance <= 0)
             return new WalkProposal(false, "you can't reach " + goal.getPosition(), 0, x, y);
         if (!player.doesOwnTile(goal))
-            return new WalkProposal(false, "you can't go in " + goal.getOwner().getAccount().getNickname() + "'s farm", 0, x, y);
+            return new WalkProposal(false, "you can't go in " + goal.getOwner().getNickname() + "'s farm", 0, x, y);
         return new WalkProposal(true, "OK", energyCost, x, y);
     }
 
@@ -1541,7 +1541,7 @@ public class GameMenuController implements Controller {
         Player marriagePlayer = game.findPlayer(username);
 
 
-        if (currentPlayer.getAccount().getGender().equals(Gender.FEMALE)) {
+        if (currentPlayer.getGender().equals(Gender.FEMALE)) {
             // equal to "sangin bash dokhtar"
             return new Result(false, "Be heavy girl!");
         }
@@ -1550,7 +1550,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "Player not found! You can't marry with ghosts!");
         }
 
-        if (marriagePlayer.getAccount().getGender().equals(Gender.MALE)) {
+        if (marriagePlayer.getGender().equals(Gender.MALE)) {
             return new Result(false, "Astaghforrellah...");
         }
 
@@ -1902,7 +1902,7 @@ public class GameMenuController implements Controller {
         entity.getComponent(Pickable.class).changeStackSize(quantity);
         currentPlayer.getComponent(Inventory.class).addItem(entity);
         return new Result(true, quantity + " " + name + (quantity > 1 ? "s" : "") +
-            " were given to " + currentPlayer.getAccount().getNickname());
+            " were given to " + currentPlayer.getNickname());
     }
 
     public Result cheatBuildBuilding(int x, int y, String name, boolean force) {

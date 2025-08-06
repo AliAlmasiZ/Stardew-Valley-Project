@@ -1,27 +1,30 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.models.GameSession;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
+import com.ap.stardew.models.player.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameThread extends Thread{
     static public final int UPDATE_FREQUENCY = 30;
     private float lastUpdateSent = 0;
     private float stateTime = 0;
-    private ArrayList<ClientConnectionThread> clients;
+    private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
     private AtomicBoolean end = new AtomicBoolean(false);
+    private final GameSession gameSession;
 
+    public GameThread(GameSession gameSession) {
+        this.gameSession = gameSession;
 
-    public GameThread(ClientConnectionThread... clients) {
-        this.clients = new ArrayList<>(Arrays.asList(clients));
-    }
-
-    public GameThread(List<ClientConnectionThread> clients) {
-        this.clients = new ArrayList<>(clients);
+        for (Map.Entry<String, Player> entry : gameSession.getUserPlayerMap().entrySet()) {
+            clients.add(ServerApp.getConnectionByUsername(entry.getKey()));
+        }
     }
 
 
@@ -80,5 +83,9 @@ public class GameThread extends Thread{
         for (ClientConnectionThread client : clients) {
             client.sendUDP(object);
         }
+    }
+
+    public ArrayList<ClientConnectionThread> getClients() {
+        return clients;
     }
 }

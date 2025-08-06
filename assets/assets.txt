@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -2569,6 +2568,7 @@ Content(unpacked)/Maps/summer_town.pt-BR.png
 Content(unpacked)/Maps/summer_town.ru-RU.png
 Content(unpacked)/Maps/summer_town.tr-TR.png
 Content(unpacked)/Maps/summer_town.zh-CN.png
+Content(unpacked)/Maps/test.png
 Content(unpacked)/Maps/tilledSoil.tsx
 Content(unpacked)/Maps/townInterior.de-DE.png
 Content(unpacked)/Maps/townInterior.es-ES.png
@@ -5303,6 +5303,7 @@ Moz/NPCTEST.txt
 Moz/input.txt
 Moz/input1.txt
 Moz/phase1.txt
+accounts.json
 data/NPC/Favorites/Abigael.json
 data/NPC/Favorites/Harvey.json
 data/NPC/Favorites/Lia.json

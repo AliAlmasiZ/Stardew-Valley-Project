@@ -1,6 +1,7 @@
 package com.ap.stardew.models;
 
 import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,12 +27,16 @@ public class ClockActor extends Actor {
     private String goldText = "";
     private float angle = 0f;
 
-    public ClockActor() {
+    private final Game game;
+
+    public ClockActor(Game game) {
+        this.game = game;
+
         GameAssetManager manager = GameAssetManager.getInstance();
         this.background = manager.clock;
         this.hand = manager.clockHand;
-        this.weatherIcon = App.getActiveGame().getTodayWeather().getTextureRegion();
-        this.seasonIcon = App.getActiveGame().getDate().getSeason().getTextureRegion();
+        this.weatherIcon = game.getTodayWeather().getTextureRegion();
+        this.seasonIcon = game.getDate().getSeason().getTextureRegion();
         this.font = manager.getFont();
 
         // Set size to background size
@@ -150,7 +155,6 @@ public class ClockActor extends Actor {
         }
     }
     public void update(float delta) {
-        Game game = App.getActiveGame();
         Date date = game.getDate();
         timeText = String.valueOf(date.getHour());
         dateText = date.getWeekDay().getShortName() + ". " + date.getDay();

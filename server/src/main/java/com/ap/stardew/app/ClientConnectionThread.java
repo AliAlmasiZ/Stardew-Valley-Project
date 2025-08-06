@@ -91,6 +91,4 @@ public class ClientConnectionThread extends ConnectionThread {
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
     }
-
-
 }

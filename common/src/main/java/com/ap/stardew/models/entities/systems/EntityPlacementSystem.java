@@ -14,20 +14,22 @@ import com.ap.stardew.models.enums.TileType;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.Result;
+import com.ap.stardew.utils.TiledMapUtils;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import org.tiledreader.FileSystemTiledReader;
+import org.tiledreader.TiledMap;
+import org.tiledreader.TiledObject;
+import org.tiledreader.TiledObjectLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EntityPlacementSystem {
-    private static final TmxMapLoader mapLoader = new TmxMapLoader();
+    private static final FileSystemTiledReader mapLoader = new FileSystemTiledReader();
 
     public static Result placeOnTile(Entity entity, Tile tile){
         Entity tileEntity = tile.getContent();
@@ -103,33 +105,18 @@ public class EntityPlacementSystem {
         Placeable placeable = building.getComponent(Placeable.class);
 
         TiledMap exteriorData =
-            mapLoader.load("./Content(unpacked)/Maps/" + building.getComponent(Placeable.class).getExteriorName() + ".tmx");
+            mapLoader.getMap("./Content(unpacked)/Maps/" + building.getComponent(Placeable.class).getExteriorName() + ".tmx");
         TiledMap interiorData =
-            mapLoader.load("./Content(unpacked)/Maps/" + building.getComponent(InteriorComponent.class).getInteriorName() + ".tmx");
+            mapLoader.getMap("./Content(unpacked)/Maps/" + building.getComponent(InteriorComponent.class).getInteriorName() + ".tmx");
 
-        interiorComponent.
-            setInteriorMap(
-                new GameMap(
-                    "./Content(unpacked)/Maps/" + building.getComponent(InteriorComponent.class).getInteriorName() + ".tmx"
-                )
+        GameMap gameMap = TiledMapUtils.loadMapFromFile(
+            "./Content(unpacked)/Maps/" + building.getComponent(InteriorComponent.class).getInteriorName() + ".tmx"
             );
 
-//        if(entities != null){
-//            for (MapObject entity : entities) {
-//                String entityName = entity.getProperties().get().asString;
-//                if(!App.entityRegistry.doesEntityExist(entityName)){
-//                    throw new RuntimeException("no entity with tha name " + entityName + " exists. (in game map "
-//                                                + interiorComponent.getInteriorName());
-//                }
-//
-//                Entity entity = App.entityRegistry.makeEntity(entityName);
-//                placeOnTile(entity, interiorComponent.getMap().getTileByPosition(e.y, e.x));
-//            }
-//        }
+        interiorComponent.setInteriorMap(gameMap);
 
-        MapObjects interiorObjects = interiorData.getLayers().get("Objects").getObjects();
-        MapObjects exteriorObjects = exteriorData.getLayers().get("Objects").getObjects();
-
+        List<TiledObject> interiorObjects = ((TiledObjectLayer) TiledMapUtils.getLayer(interiorData, "Objects")).getObjects();
+        List<TiledObject> exteriorObjects = ((TiledObjectLayer) TiledMapUtils.getLayer(exteriorData, "Objects")).getObjects();
 
         GameMap interiorMap = interiorComponent.getMap();
 
@@ -138,27 +125,26 @@ public class EntityPlacementSystem {
         Map<Integer, Integer> inOutRefs = new HashMap<>();
         Map<Integer, Integer> outInRefs = new HashMap<>();
 
-        for (MapObject object : exteriorObjects) {
+        for (TiledObject object : exteriorObjects) {
             if(object.getName().equals("Door")){
-                int id = object.getProperties().get("id", Integer.class);
-                int dest = object.getProperties().get("destId", Integer.class);
+                int id = TiledMapUtils.getProperty(object, "id", Integer.class);
+                int dest = TiledMapUtils.getProperty(object, "destId", Integer.class);
 
-                int x = Math.round(object.getProperties().get("x", Float.class) / 16);
-                int y = Math.round(object.getProperties().get("y", Float.class) / 16);
-
+                int x = Math.round(TiledMapUtils.getProperty(object, "x", Float.class) / 16);
+                int y = Math.round((exteriorData.getHeight() - TiledMapUtils.getProperty(object, "y", Float.class)) / 16);
                 Door door = new Door();
                 exteriorDoors.putIfAbsent(id, door);
                 EntityPlacementSystem.placeOnTile(door, map.getTileByPosition(position.getRow() + y, position.getCol() + x));
                 outInRefs.putIfAbsent(id, dest);
             }
         }
-        for (MapObject object : interiorObjects) {
+        for (TiledObject object : interiorObjects) {
             if(object.getName().equals("Door")){
-                int id = object.getProperties().get("id", Integer.class);
-                int dest = object.getProperties().get("destId", Integer.class);
+                int id = TiledMapUtils.getProperty(object, "id", Integer.class);
+                int dest = TiledMapUtils.getProperty(object, "destId", Integer.class);
 
-                int x = Math.round(object.getProperties().get("x", Float.class) / 16);
-                int y = Math.round(object.getProperties().get("y", Float.class) / 16);
+                int x = Math.round(TiledMapUtils.getProperty(object, "x", Float.class) / 16);
+                int y = Math.round((interiorData.getHeight() - TiledMapUtils.getProperty(object, "y", Float.class)) / 16);
 
                 Door door = new Door();
                 interiorDoors.putIfAbsent(id, door);
@@ -186,43 +172,42 @@ public class EntityPlacementSystem {
             return placeOnTile(entity, map.getTileByPosition(position.getRow(), position.getCol()));
         }
 
-        GameMap exteriorMap =
-            new GameMap("./Content(unpacked)/Maps/" + entity.getComponent(Placeable.class).getExteriorName() + ".tmx");
-        TiledMap data = exteriorMap.getMapData();
+        GameMap exteriorMap = TiledMapUtils.loadMapFromFile(
+            "./Content(unpacked)/Maps/" + entity.getComponent(Placeable.class).getExteriorName() + ".tmx"
+        );
 
-        TiledMap mainMapData = map.getMapData();
+        int width = exteriorMap.getWidth();
+        int height = exteriorMap.getHeight();
 
-        int width = 0;
-        int height = 0;
+//        for (MapLayer layer : data.getLayers()) {
+//            if(layer instanceof TiledMapTileLayer tiledLayer){
+//                TiledMapTileLayer mainMapLayer = (TiledMapTileLayer) mainMapData.getLayers().get(layer.getName());
+//                if(mainMapLayer == null){
+//                    throw new RuntimeException("layer " + layer.getName() + "does not exist on world map. (placing " +
+//                        entity.getComponent(Placeable.class).getExteriorName() + " on ground)");
+//                }
+//
+//                width = tiledLayer.getWidth();
+//                height = tiledLayer.getHeight();
+//
+//                for(int i = 0 ; i < height  ; i++){
+//                    for(int j = 0 ; j < width; j++){
+//                        Cell exteriorCell = tiledLayer.getCell(j, i);
+//                        if(exteriorCell != null){
+//                            mainMapLayer.setCell(j + position.getCol(), i + position.getRow(), exteriorCell);
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
-        for (MapLayer layer : data.getLayers()) {
-            if(layer instanceof TiledMapTileLayer tiledLayer){
-                TiledMapTileLayer mainMapLayer = (TiledMapTileLayer) mainMapData.getLayers().get(layer.getName());
-                if(mainMapLayer == null){
-                    throw new RuntimeException("layer " + layer.getName() + "does not exist on world map. (placing " +
-                        entity.getComponent(Placeable.class).getExteriorName() + " on ground)");
-                }
-
-                width = tiledLayer.getWidth();
-                height = tiledLayer.getHeight();
-
-                for(int i = 0 ; i < height  ; i++){
-                    for(int j = 0 ; j < width; j++){
-                        Cell exteriorCell = tiledLayer.getCell(j, i);
-                        if(exteriorCell != null){
-                            mainMapLayer.setCell(j + position.getCol(), i + position.getRow(), exteriorCell);
-                        }
-                    }
-                }
-            }
-            for(int i = 0 ; i < height  ; i++){
-                for(int j = 0 ; j < width; j++){
-                    Tile exteriorTile = exteriorMap.getTileByPosition(i, j);
-                    Tile activeTile = map.getTileByPosition(i + position.getRow(), j + position.getCol());
-                    if (exteriorTile != null) {
-                        activeTile.setType(exteriorTile.getType());
-                        activeTile.setWalkable(exteriorTile.isWalkable());
-                    }
+        for(int i = 0 ; i < height  ; i++){
+            for(int j = 0 ; j < width; j++){
+                Tile exteriorTile = exteriorMap.getTileByPosition(i, j);
+                Tile activeTile = map.getTileByPosition(i + position.getRow(), j + position.getCol());
+                if (exteriorTile != null) {
+                    activeTile.setType(exteriorTile.getType());
+                    activeTile.setWalkable(exteriorTile.isWalkable());
                 }
             }
         }

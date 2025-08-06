@@ -28,6 +28,10 @@ public class Position extends Vec2 implements Serializable {
         return new Position(super.cpy(), map);
     }
 
+    private Position(){
+
+    }
+
     @Override
     public Position add(float x, float y) {
         super.add(x, y);

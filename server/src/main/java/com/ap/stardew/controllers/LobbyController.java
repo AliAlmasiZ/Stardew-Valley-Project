@@ -3,7 +3,7 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
-import com.ap.stardew.models.Account;
+import com.ap.stardew.models.GameSession;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.Lobby;
 import com.ap.stardew.models.LobbyInfo;
@@ -13,7 +13,6 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class LobbyController {
@@ -168,23 +167,53 @@ public class LobbyController {
 
     static public JSONMessage startGame(JSONMessage req) {
         JSONMessage res = new JSONMessage(JSONMessage.Type.response);
-        String lobbyId =  req.getFromBody("lobby_id");//TODO
-        Lobby lobby = Lobby.getLobbyById(lobbyId);
-        List<AccountInfo> accounts = lobby.getPlayers();
-        //...
+        System.out.println("starting the game");
 
-
-        List<ClientConnectionThread> clients = new ArrayList<>();
-        for (AccountInfo account : accounts) {
-            // TODO
-            // add this account thread to List
+        String username = ServerApp.getUsername(req.getFromBody("token"));
+        if(username == null){
+            Result result = new Result(false, "invalid token");
+            res.put("result", result);
+            return res;
         }
-        GameThread gameThread = new GameThread(clients);
-        gameThread.start();
+
+        Lobby lobby = Lobby.getLobbyById(req.getFromBody("lobby_id"));
+        if(lobby == null){
+            Result result = new Result(false, "lobby doesn't exist");
+            res.put("result", result);
+            return res;
+        }
+
+        if(!lobby.getHostUsername().equals(username)){
+            Result result = new Result(false, "only the host can start the game");
+            res.put("result", result);
+            return res;
+        }
+
+        List<AccountInfo> accounts = lobby.getPlayers();
+//        for (AccountInfo account : accounts) {
+//            if(!account.getUsername().equals(lobby.getHostUsername()) && !account.isReady()){
+//                Result result = new Result(false, "all players should be ready!");
+//                res.put("result", result);
+//                return res;
+//            }
+//        }
+
+        GameSession session = GameController.createGame(accounts);
+        GameThread gameThread = new GameThread(session);
+
+        for (ClientConnectionThread client : gameThread.getClients()) {
+            JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);
+            gameStartDetails.put("command", "startGame");
+            gameStartDetails.put("lobby_id", lobby.getLobbyId());
+            gameStartDetails.put("gameData", session.getGame());
+            gameStartDetails.put("player", session.getUserPlayerMap().get(client.getCurrentAccount().getUsername()));
+            client.sendTCP(gameStartDetails);
+        }
+
         ServerApp.addGameThread(gameThread);
+        gameThread.start();
 
-
-        // TODO: set game for all players
+        res.put("result", new Result(true, "game started"));
         return res;
     }
 }

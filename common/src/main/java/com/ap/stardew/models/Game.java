@@ -52,16 +52,6 @@ public class Game implements Serializable {
     }
 
     public void initGame(GameStartingDetails details) {
-        for (Account account : details.accounts()) {
-            addPlayer(new Player(account));
-        }
-        setCurrentPlayer(players.get(0));
-        players.get(0).setPosition(new Position(55, 86));
-
-//        mainMap = new WorldMap("./Content(unpacked)/Maps/untitled.tmx");
-        setActiveMap(mainMap);
-//        setActiveMap(mainMap);
-//
         this.todayWeather = Weather.SUNNY;
         this.tomorrowWeather = Weather.SUNNY;
 //
@@ -97,7 +87,7 @@ public class Game implements Serializable {
 //        }
 
         //mainMap.initRandomElements();
-        initNPCs();
+//        initNPCs();
         //currentPlayer.getOwnedTiles();
 
 //        currentPlayer.setPosition(new Position(55, 86, currentPlayer.getCurrentMap()));
@@ -377,7 +367,7 @@ public class Game implements Serializable {
 
     public Player findPlayer(String playerName) {
         for (Player player : players) {
-            if (player.getAccount().getUsername().equals(playerName)) {
+            if (player.getUsername().equals(playerName)) {
                 return player;
             }
         }

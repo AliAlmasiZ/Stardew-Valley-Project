@@ -1,10 +1,15 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.controllers.GameController;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
+import com.ap.stardew.models.Game;
+import com.ap.stardew.models.GameSession;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.enums.Gender;
-import com.badlogic.gdx.Input;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -37,9 +42,6 @@ public class ServerApp {
     public static final JwtParser jwtParser = Jwts.parser().verifyWith(ServerApp.key).build();
 
     static {
-//        JsonWriter mapper = new JsonWriter(new FileWriter(new File("./data/test.json")));
-//        JsonMapper mapper1 = new JsonMapper();
-
         ArrayList<Account> accounts = new ArrayList<>();
         accounts.add(new Account(Gender.MALE, "parsa", "a", "a", "a"));
         accounts.add(new Account(Gender.MALE, "asd", "a", "a", "s"));
@@ -49,14 +51,7 @@ public class ServerApp {
         saveAccounts(accounts);
 
 
-//        FileWriter fileWriter = null;
-//        try {
-//            fileWriter = new FileWriter("./accounts.json");
-//            fileWriter.write(mapper1.valueToTree(accounts).toString());
-//            fileWriter.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+
     }
 
     public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {
@@ -145,7 +140,7 @@ public class ServerApp {
 
     public static void startServer(int tcpPort, int udpPort) throws IOException {
         if(server != null) server.dispose();
-        server = new Server();
+        server = new Server(1024 * 1024 * 10, 1024 * 1024 * 10);
         server.start();
         server.bind(tcpPort, udpPort);
         registerClasses();

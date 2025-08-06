@@ -109,21 +109,21 @@ public class MainMenuController implements Controller{    @Override
     }
 
     public Result loadGame() {
-        try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("testSave.ser"));
-            Game game = (Game) in.readObject();
-            ArrayList<Player> players = game.getPlayers();
-            for(Player player : players){
-                player.setAccount(App.getUserByUsername(player.getUsername()));
-            }
-            App.setActiveGame(game);
-            in.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-//        App.setCurrentMenu(Menu.GAME_MENU);
+//        try {
+//            ObjectInputStream in = new ObjectInputStream(new FileInputStream("testSave.ser"));
+//            Game game = (Game) in.readObject();
+//            ArrayList<Player> players = game.getPlayers();
+//            for(Player player : players){
+//                player.setAccount(App.getUserByUsername(player.getUsername()));
+//            }
+//            App.setActiveGame(game);
+//            in.close();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+////        App.setCurrentMenu(Menu.GAME_MENU);
         return new Result(true, "loaded!");
     }
 }

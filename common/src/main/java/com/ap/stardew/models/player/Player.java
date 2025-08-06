@@ -46,8 +46,9 @@ public class Player extends Entity implements Serializable {
     private ArrayList<Message> messageLog = new ArrayList<>();
     private final ArrayList<Recipe> unlockedRecipes;
     private ArrayList<TradeOffer> trades = new ArrayList<>();
-    private transient Account account;
-    private final String accountUsername;
+    private String accountUsername;
+    private String nickname;
+    private Gender gender;
     private InventorySlot activeSlot;
     private final ArrayList<MapRegion> ownedRegions = new ArrayList<>();
     private ArrayList<Animal> animals = new ArrayList<>();
@@ -65,9 +66,7 @@ public class Player extends Entity implements Serializable {
     private State state = State.IDLE;
     private Vector2 lastDir = new Vector2(0, -1);
 
-
     private transient ArrayList<Tile> ownedTiles = null;
-
 
     // boolean for messages
     private boolean haveNewMessage = false;
@@ -75,11 +74,7 @@ public class Player extends Entity implements Serializable {
     private boolean haveNewTrade = false;
     private boolean haveNewSuitor = false;
 
-    public Player(String username) { //I hate this
-        this(new Account(Gender.MALE, "", "", "", username));
-    }
-
-    public Player(Account account){
+    public Player(){
         super("Player", new Inventory(30), new Renderable(), new PositionComponent(0, 0));
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
         for (SkillType s : SkillType.values()) {
@@ -87,12 +82,6 @@ public class Player extends Entity implements Serializable {
         }
 
         setActiveSlot(getComponent(Inventory.class).getSlots().get(0));
-
-        this.trashcan = App.entityRegistry.makeEntity("Trashcan");
-
-        this.account = account;
-
-        this.accountUsername = account.getUsername();
 
 //Todo        this.spriteManager = new CharacterSpriteManager();
 
@@ -106,10 +95,6 @@ public class Player extends Entity implements Serializable {
 
     public void setRefrigerator(Entity refrigerator) {
         this.refrigerator = refrigerator;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public void setCurrentMap(GameMap currentMap) {
@@ -131,6 +116,14 @@ public class Player extends Entity implements Serializable {
 
     public void addTrashcanLevel(int trashcanLevel) {
         //TODO
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public ArrayList<Animal> getAnimals() {
@@ -264,11 +257,9 @@ public class Player extends Entity implements Serializable {
     public void setPosition(Position position) {
         this.getPosition().set(position);
     }
-
-    public Account getAccount() {
-        return account;
+    public void setPosition(float x, float y) {
+        this.getPosition().set(x, y);
     }
-
 
     public InventorySlot getActiveSlot() {
         return activeSlot;
@@ -588,7 +579,7 @@ public class Player extends Entity implements Serializable {
             stateTime = 0;
         }
         //Todo : sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
-        sprite.setPosition(getPosition().x, getPosition().y);
+//        sprite.setPosition(getPosition().x, getPosition().y);
     }
 
     public PlayerState getPlayerState() {
@@ -606,5 +597,13 @@ public class Player extends Entity implements Serializable {
         this.setPosition(new Position(state.position));
         this.state = state.state; //WTF
 
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

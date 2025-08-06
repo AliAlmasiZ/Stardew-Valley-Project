@@ -114,11 +114,11 @@ public class App implements Serializable {
     }
 
     public static Game getActiveGame() {
-        return getInstance().activeGame;
+        return activeGame;
     }
 
     public static void setActiveGame(Game activeGame) {
-        getInstance().activeGame = activeGame;
+        App.activeGame = activeGame;
     }
 
     public static void addDummyAccounts(){

@@ -77,7 +77,7 @@ public class PlayerController {
 
 
     public void update(float delta) {
-        processInput(delta);
+//        processInput(delta);
 
     }
 

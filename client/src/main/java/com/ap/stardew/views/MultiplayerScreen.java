@@ -67,6 +67,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
                     }
 
                     JSONMessage response = joinLobby(selectedLobby.getLobbyId(), null);
+                    System.out.println("dhdhd" + response.getBody());
                     Result result = response.getFromBody("result");
                     if(result.isSuccessful()) {
                         ClientGame.getInstance().setScreen(new LobbyScreen(response.getFromBody("lobby_info"), false));

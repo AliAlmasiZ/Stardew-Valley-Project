@@ -83,7 +83,7 @@ public class MainScreen extends AbstractMenuScreen {
                 Account[] accounts = {App.getUserByUsername("parsa"), App.getUserByUsername("ali"), App.getUserByUsername("ilia")};
 
                 game.initGame(new GameStartingDetails(true, "asd", accounts, null, null, null));
-                ClientGame.getInstance().setScreen(new GameScreen());
+//                ClientGame.getInstance().setScreen(new GameScreen());
             }
         });
     }
