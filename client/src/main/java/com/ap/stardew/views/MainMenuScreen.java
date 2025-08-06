@@ -75,13 +75,6 @@ public class MainMenuScreen extends AbstractMenuScreen {
         newGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Game game = new Game();
-                App.setActiveGame(game);
-
-                Account[] accounts = {App.getUserByUsername("parsa"), App.getUserByUsername("ali"), App.getUserByUsername("ilia")};
-
-                game.initGame(new GameStartingDetails(true, "asd", accounts, null, null, null));
-                ClientGame.getInstance().setScreen(new GameScreen());
             }
         });
         logoutBtn.addListener(new ClickListener() {

@@ -1,6 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.LobbyInfo;
@@ -80,9 +81,21 @@ public class LobbyScreen extends AbstractMenuScreen{
         startGameBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: Send Start game request to server
-                // then server should add all players to game
+                JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
+                message.put("command", "startGame");
+                message.put("lobby_id", currentLobby.getLobbyId());
+                message.put("token", ClientApp.getToken());
 
+                JSONMessage message1 = ClientApp.sendAndWaitForResponse(message, 500);
+
+                if(message1 == null) return;
+
+                System.out.println(message1.getBody());
+
+                Result result = message1.getFromBody("result");
+                if(!result.isSuccessful()){
+                    System.out.println(result.message());
+                }
             }
         });
         readyBtn.addListener(new ClickListener() {
@@ -127,5 +140,9 @@ public class LobbyScreen extends AbstractMenuScreen{
             players.add(String.format("%s %s", player.getUsername(), status));
         }
         playerList.setItems(players);
+    }
+
+    public LobbyInfo getCurrentLobby() {
+        return currentLobby;
     }
 }

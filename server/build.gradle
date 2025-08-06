@@ -4,6 +4,7 @@ plugins {
   id 'java'
 }
 
+sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 mainClassName = 'com.ap.stardew.GameServer'
 application.setMainClass(mainClassName)
@@ -26,6 +27,7 @@ dependencies {
 }
 
 run {
+  workingDir = rootProject.file('assets').path
   group = "Application"
   description = "Runs the Stardew Online Server"
 }
@@ -43,7 +45,7 @@ jar {
   }
 }
 
-tasks.named('run', JavaExec).configure {
-  // Points working directory to the resources folder
-  workingDir = file("$projectDir/src/main/resources")
-}
+//tasks.named('run', JavaExec).configure {
+//  // Points working directory to the resources folder
+//  workingDir = file("$projectDir/src/main/resources")
+//}

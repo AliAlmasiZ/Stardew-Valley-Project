@@ -18,14 +18,14 @@ public class ProfileMenuController implements Controller{    @Override
     }
 
     public Result changeUsername(String username) {
-        Account user = App.getLoggedInAccount();
-//        if(user.getUsername().equals(username))
-//            return new Result(false, "your username must be different with old one");
-        if(App.getUserByUsername(username) != null)
-            return new Result(false, "this username is already taken");
-        if(!Account.isUsernameValid(username).isSuccessful())
-            return Account.isUsernameValid(username);
-        user.setUsername(username);
+//        Account user = App.getLoggedInAccount();
+////        if(user.getUsername().equals(username))
+////            return new Result(false, "your username must be different with old one");
+//        if(App.getUserByUsername(username) != null)
+//            return new Result(false, "this username is already taken");
+//        if(!Account.isUsernameValid(username).isSuccessful())
+//            return Account.isUsernameValid(username);
+//        user.setUsername(username);
         return new Result(true, "your user name changed to " + username + " successfully");
     }
 

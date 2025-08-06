@@ -1,5 +1,6 @@
 package com.ap.stardew.models.Actors;
 
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
@@ -63,7 +64,7 @@ public class DialogActor extends Actor {
     }
 
     private boolean isInRange() {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         return player.getPosition().dst(npc.getComponent(PositionComponent.class).get()) < GameScreen.DISTANCE;
     }
 

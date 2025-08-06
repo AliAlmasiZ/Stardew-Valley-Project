@@ -1,15 +1,15 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.entities.components.Pickable;
-import com.ap.stardew.models.enums.Menu;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeOffer;
 public class TradeMenuController implements Controller {
     public Result trade(String username, String type, String itemName, int amount, boolean isBuyByMoney, double price, String targetItemName, int targetItemAmount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player targetPlayer = game.findPlayer(username);
 
@@ -62,7 +62,7 @@ public class TradeMenuController implements Controller {
     }
 
     public Result tradeRespond(String response, int id) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         TradeOffer tradeOffer = currentPlayer.findTradeOffer(id);
@@ -94,7 +94,7 @@ public class TradeMenuController implements Controller {
     }
 
     public Result tradeList() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         StringBuilder message = new StringBuilder("Your not decided trade requests:\n\n");
@@ -109,7 +109,7 @@ public class TradeMenuController implements Controller {
     }
 
     public Result tradeHistory() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         StringBuilder message = new StringBuilder("Your trade history:\n\n");

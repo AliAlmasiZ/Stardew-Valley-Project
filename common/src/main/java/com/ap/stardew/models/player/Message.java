@@ -63,7 +63,7 @@ public class Message implements Serializable {
 
         StringBuilder result = new StringBuilder();
         result.append("Sender: ").append(message.getSender().getUsername()).append("\n");
-        result.append("Receiver: ").append(message.getReceiver().getAccount().getUsername()).append("\n");
+        result.append("Receiver: ").append(message.getReceiver().getUsername()).append("\n");
         result.append("Message: ").append(message.getMessage()).append("\n");
         result.append(message.getDate().toString()).append("\n");
         if (game.getCurrentPlayer() == message.getSender()) {

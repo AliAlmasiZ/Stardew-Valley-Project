@@ -28,12 +28,9 @@ public class ClientGame extends Game {
         ClientApp.connectServer();
 
         loadDatas();
-        App.loadState();
         instance = this;
         batch = new SpriteBatch();
         setScreen(new MainScreen());
-
-
     }
 
     @Override
@@ -44,18 +41,7 @@ public class ClientGame extends Game {
     }
 
     private static void loadDatas() {
-        App.shopRegistry.load("data/shops");
-        /* should load recipes first (because artisan has recipes) */
-        App.recipeRegistry.loadRecipes("./data/recipes");
-        App.entityRegistry.load("./data/entities");
-        App.mapRegistry.load("data/maps");
-        /* to check is Json entities ok or not */
-        App.recipeRegistry.checkIngredients();
-        App.buildingRegistry.load("data/buildings");
 
-        App.entityRegistry.addChild(App.buildingRegistry);
-
-//        App.entityRegistry.listEntities();
 
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Tools"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Crops"));
@@ -70,7 +56,6 @@ public class ClientGame extends Game {
 
     @Override
     public void dispose() {
-        App.saveState();
         batch.dispose();
     }
 }

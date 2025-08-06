@@ -13,13 +13,17 @@ import com.ap.stardew.views.MultiplayerScreen;
 public class ClientConnectionController {
     public static JSONMessage handleCommand(JSONMessage message) {
         if(message.getType() == JSONMessage.Type.update) {
-            System.out.println(message.getBody());
             String command = message.getFromBody("command");
             switch (command) {
                 case "updateLobby" -> {
                     if (ClientGame.getInstance().getScreen() instanceof LobbyScreen lobbyScreen){
                         lobbyScreen.updateLobbyState(message.getFromBody("lobby_info"));
                     }
+                    return null;
+                }
+                case "startGame" ->{
+                    GameController.startGame(message);
+                    return null;
                 }
                 case "player_move" -> { //players movement update
                     String username = message.getFromBody("username");

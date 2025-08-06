@@ -1,6 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.ConnectionThread;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.esotericsoftware.kryonet.Client;
@@ -22,6 +23,7 @@ public class ClientApp {
 
     private static boolean exitFlag = false;
 
+    private static Game activeGame;
     private static String token;
 
     public static boolean isEnded() {
@@ -74,7 +76,7 @@ public class ClientApp {
             System.err.println("client already connected");
             return;
         }
-        client = new Client();
+        client = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
         client.start();
         registerClasses();
     }
@@ -94,6 +96,9 @@ public class ClientApp {
     private static boolean handleMessage(JSONMessage message) {
         try {
             JSONMessage response = ClientConnectionController.handleCommand(message);
+            if(message.getType() == JSONMessage.Type.update){
+                return true;
+            }
             if(response != null)
                 sendTCP(response);
             return true;
@@ -181,4 +186,14 @@ public class ClientApp {
 
         return response.getFromBody("username");
     }
+
+    public static Game getActiveGame() {
+        return activeGame;
+    }
+
+    public static void setActiveGame(Game activeGame) {
+        ClientApp.activeGame = activeGame;
+    }
+
+
 }

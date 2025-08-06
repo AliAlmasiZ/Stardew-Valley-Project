@@ -1,6 +1,5 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-common'
-
 dependencies {
 
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -16,4 +15,7 @@ dependencies {
   api 'io.jsonwebtoken:jjwt-api:0.12.6'
   runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
   runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+  api 'org.tiledreader:TiledReader:1.1.0'
+
 }

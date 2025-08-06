@@ -49,58 +49,6 @@ public class WorldMap extends GameMap implements Serializable {
 //            }
 //        }
 //    }
-    public WorldMap(String path){
-        super(path);
-
-        TiledMapTileLayer regionLayer = (TiledMapTileLayer) mapData.getLayers().get("Regions");
-        TiledMapTileLayer biomesLayer = (TiledMapTileLayer) mapData.getLayers().get("Biomes");
-
-        TiledMapTileSet regions = mapData.getTileSets().getTileSet("Regions");
-
-        for (TiledMapTile region : regions) {
-            if(region.getProperties().get("type", String.class) == null) continue;
-            this.regions.put(region.getProperties().get("type", String.class),
-                new MapRegion(region.getProperties().get("type", String.class),
-                region.getProperties().get("playerFarm") != null));
-        }
-
-
-        if(regionLayer != null) {
-            height = regionLayer.getHeight();
-            width = regionLayer.getWidth();
-
-            regionMap = new MapRegion[height][width];
-
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    TiledMapTileLayer.Cell cell = regionLayer.getCell(j, i);
-
-                    if(cell != null){
-                        MapRegion region = this.regions.get(cell.getTile().getProperties().get("type", String.class));
-                        region.addTile(tiles[i][j]);
-
-                        regionMap[i][j] = region;
-                    }
-                }
-            }
-        }
-        if(biomesLayer != null){
-            height = biomesLayer.getHeight();
-            width = biomesLayer.getWidth();
-
-            biomeMap = new BiomeType[height][width];
-
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    TiledMapTileLayer.Cell cell = biomesLayer.getCell(j, i);
-
-                    if(cell != null){
-                        biomeMap[i][j] = BiomeType.valueOf(cell.getTile().getProperties().get("type", String.class));
-                    }
-                }
-            }
-        }
-    }
 
     public MapRegion getRegion(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y > height) {
@@ -158,5 +106,22 @@ public class WorldMap extends GameMap implements Serializable {
 
     public Map<MapRegion, FarmDetails> getFarmsDetail() {
         return farmsDetail;
+    }
+
+    public void setRegionMap(MapRegion[][] regionMap) {
+        this.regionMap = regionMap;
+    }
+
+    public void setBiomeMap(BiomeType[][] biomeMap) {
+        this.biomeMap = biomeMap;
+    }
+
+    public void addRegion(MapRegion region){
+        if(!regions.containsKey(region.getName())){
+            regions.put(region.getName(), region);
+        }
+    }
+    public MapRegion getRegion(String name){
+        return regions.get(name);
     }
 }

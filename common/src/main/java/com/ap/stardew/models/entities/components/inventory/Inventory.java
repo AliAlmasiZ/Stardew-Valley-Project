@@ -1,6 +1,5 @@
 package com.ap.stardew.models.entities.components.inventory;
 
-import com.ap.stardew.models.crafting.Ingredient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.Entity;

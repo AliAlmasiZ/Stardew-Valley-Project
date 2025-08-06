@@ -19,6 +19,11 @@ public class Tile implements Serializable, EntityObserver {    private TileType 
         this.map = map;
     }
 
+    private Tile(){
+        map = null;
+        position = null;
+    }
+
     public TileType getType() {
         return type;
     }

@@ -22,6 +22,10 @@ public class MapRegion implements Serializable {
         this.isFarm = isFarm;
     }
 
+    private MapRegion(){
+
+    }
+
     public Position getCenter() {
         return center;
     }
