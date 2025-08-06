@@ -1,6 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
@@ -203,13 +204,13 @@ public class GameScreen extends AbstractScreen {
 //        controller.cheatAddSkill("fishing", 200);
 //        controller.cheatAddSkill("fishing", 200);
 
-//        Player player = App.getActiveGame().getCurrentPlayer();
+//        Player player = ClientApp.getActiveGame().getCurrentPlayer();
 //        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
 //        System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
 //        player.getAnimals().add(animal1);
 //
 //
-//        NPC npc = App.getActiveGame().findNPC("Robin");
+//        NPC npc = ClientApp.getActiveGame().findNPC("Robin");
 //        npc.getComponent(PositionComponent.class).setPosition(player.getPosition().x + 20, player.getPosition().y + 200);
 //        System.out.println("NPC: " + EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get()));
 //
@@ -243,8 +244,8 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void initNPCDialogs() {
-        Game game = App.getActiveGame();
-        Player currentPlayer = App.getActiveGame().getCurrentPlayer();
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
 
         for (DialogActor dialogActor : dialogActors) {
             dialogActor.remove();
@@ -270,7 +271,7 @@ public class GameScreen extends AbstractScreen {
         controller.update(delta);
         playerController.update(delta);
 
-        GameMap activeMap = App.getActiveGame().getActiveMap();
+        GameMap activeMap = ClientApp.getActiveGame().getActiveMap();
 
         //center Camera:
         camera.position.set(player.getPosition().cpy(), camera.position.z);
@@ -355,7 +356,7 @@ public class GameScreen extends AbstractScreen {
 
         Gdx.gl.glEnable(GL32.GL_BLEND);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 0.2f, (App.getActiveGame().getDate().getHour() - 9) / 22f);
+        shapeRenderer.setColor(0, 0, 0.2f, (ClientApp.getActiveGame().getDate().getHour() - 9) / 22f);
         shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shapeRenderer.end();
         Gdx.gl.glDisable(GL32.GL_BLEND);
@@ -499,7 +500,7 @@ public class GameScreen extends AbstractScreen {
             Table portrait = new Table();
             portrait.setBackground(customSkin.getDrawable("daybg"));
             portrait.center();
-//            portrait.add(new Image(App.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
+//            portrait.add(new Image(ClientApp.getActiveGame().getCurrentPlayer().getSpriteManager().getFrame(0, new Vec2(0, -1), Player.State.IDLE)));
             topLeft.add(portrait).row();
             topLeft.add(new Label(player.getNickname(), customSkin) {
                 {
@@ -588,7 +589,7 @@ public class GameScreen extends AbstractScreen {
 
         Table mapTable = new Table();
         {
-            Tile[][] tiles = App.getActiveGame().getMainMap().getTiles();
+            Tile[][] tiles = ClientApp.getActiveGame().getMainMap().getTiles();
             Pixmap pixmap = new Pixmap(tiles.length, tiles.length, Pixmap.Format.RGBA8888);
 
             int height = tiles.length;
@@ -709,7 +710,7 @@ public class GameScreen extends AbstractScreen {
                     return;
                 }
 
-                App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
+                ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
                 giftInventory.getItem(gift);
                 amountField.setText("");
 
@@ -813,7 +814,7 @@ public class GameScreen extends AbstractScreen {
             return;
         }
 
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Skill skill = player.getSkill(SkillType.FISHING);
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
@@ -1028,7 +1029,7 @@ public class GameScreen extends AbstractScreen {
 
         TabWidget tabWidget = new TabWidget();
 
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         GameAssetManager GAM = GameAssetManager.getInstance();
 
@@ -1151,7 +1152,7 @@ public class GameScreen extends AbstractScreen {
 
 
         Table table = new Table();
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         if (quest.isCompleted()) {
@@ -1278,7 +1279,7 @@ public class GameScreen extends AbstractScreen {
 
         // Friendship tab
         Table friendshipTable = new Table();
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         ArrayList<PlayerFriendship> playerFriendships = game.getCurrentPlayerFriendships();
         for (PlayerFriendship playerFriendship : playerFriendships) {

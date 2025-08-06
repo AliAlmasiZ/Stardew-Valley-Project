@@ -23,8 +23,8 @@ public class MapRenderManager {
 
             ArrayList<Integer> backLayers = new ArrayList<>();
             ArrayList<Integer> frontLayers = new ArrayList<>();
-            for (int i = 0; i < App.getActiveGame().getActiveMap().getMapData().getLayers().size(); i++) {
-                MapLayer mapLayer = App.getActiveGame().getActiveMap().getMapData().getLayers().get(i);
+            for (int i = 0; i < mapData.getLayers().size(); i++) {
+                MapLayer mapLayer = mapData.getLayers().get(i);
                 if (mapLayer.getName().contains("Back") || mapLayer.getName().contains("Buildings")) {
                     backLayers.add(i);
                 } else {

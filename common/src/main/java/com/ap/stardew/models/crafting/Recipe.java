@@ -37,6 +37,17 @@ public class Recipe implements Serializable {
         this.price = builder.price;
     }
 
+    private Recipe(){
+        this.name = null;
+        this.ingredients = null;
+        this.isUnlocked = false;
+        this.day = 1;
+        this.hour = 1;
+        this.type = null;
+        this.energy =null;
+        this.price = null;
+    }
+
     public String getName() {
     return name;
     }

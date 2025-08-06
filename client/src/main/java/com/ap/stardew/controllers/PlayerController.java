@@ -144,11 +144,11 @@ public class PlayerController implements InputProcessor {
                 }
             }
 
-            InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
+            InventorySlot activeSlot = ClientApp.getActiveGame().getCurrentPlayer().getActiveSlot();
             if(activeSlot == null) return false;
             Entity entity = activeSlot.getEntity();
             if(entity == null) return false;
-            Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
+            Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
 
             Useable useable = entity.getComponent(Useable.class);
             if(useable != null && (player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f)){
@@ -234,13 +234,13 @@ public class PlayerController implements InputProcessor {
 //            if(renderable1 != null) renderable1.getState().remove("hovered");
 //        }
 
-        InventorySlot activeSlot = App.getActiveGame().getCurrentPlayer().getActiveSlot();
+        InventorySlot activeSlot = ClientApp.getActiveGame().getCurrentPlayer().getActiveSlot();
         if(activeSlot == null) return;
         Entity activeItem = activeSlot.getEntity();
         if(activeItem == null) return;
         Useable useable = activeItem.getComponent(Useable.class);
 
-        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
+        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
 
         if(tile == null) return;
 
@@ -277,7 +277,7 @@ public class PlayerController implements InputProcessor {
         }
 
         //Todo: that walkable check i wrote is ass
-        Tile destTile = App.getActiveGame().getActiveMap().
+        Tile destTile = ClientApp.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
 
         if((!up && !down && !right && !left) || destTile == null) {
@@ -308,7 +308,7 @@ public class PlayerController implements InputProcessor {
     }
 
     private Entity getHoveredEntity(Vector2 cursor){
-        for (Entity entity : App.getActiveGame().getActiveMap().getEntities()){
+        for (Entity entity : ClientApp.getActiveGame().getActiveMap().getEntities()){
             Renderable renderable = entity.getComponent(Renderable.class);
             Position position = entity.getComponent(PositionComponent.class).get();
 

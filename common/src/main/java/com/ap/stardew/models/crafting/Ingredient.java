@@ -27,6 +27,9 @@ public class Ingredient implements Serializable {
 
 
     }
+    private Ingredient(){
+
+    }
 
     public static Ingredient fromEntities(List<String> entities, int amount) {
         return new Ingredient(entities, new ArrayList<>(), amount);

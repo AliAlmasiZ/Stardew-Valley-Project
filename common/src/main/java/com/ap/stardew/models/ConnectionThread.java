@@ -3,6 +3,9 @@ package com.ap.stardew.models;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.building.Door;
+import com.ap.stardew.models.crafting.Ingredient;
+import com.ap.stardew.models.crafting.Recipe;
+import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.GameMapInfo;
 import com.ap.stardew.models.dto.JSONMessage;
@@ -224,6 +227,11 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Placeable.class);
         kryo.register(Door.class);
         kryo.register(CollisionEvent.class);
+        kryo.register(Recipe.class);
+        kryo.register(Ingredient.class);
+        kryo.register(RecipeType.class);
+
+
 
 
         kryo.register(Game.class);

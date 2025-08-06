@@ -1,5 +1,6 @@
 package com.ap.stardew.views.widgets;
 
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
@@ -67,8 +68,8 @@ public class InventoryGrid extends Table {
         }
 
         if(type == Type.TOOLBAR){
-            selected = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class)
-                .getSlots().indexOf(App.getActiveGame().getCurrentPlayer().getActiveSlot());
+            selected = ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class)
+                .getSlots().indexOf(ClientApp.getActiveGame().getCurrentPlayer().getActiveSlot());
             slotWidgets.get(selected).getActor()
                 .frame.setDrawable(new TextureRegionDrawable(GameAssetManager.getInstance().inventorySlotFrameSelected));
 
@@ -80,7 +81,7 @@ public class InventoryGrid extends Table {
                 slotWidget.addListener(new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        App.getActiveGame().getCurrentPlayer().setActiveSlot(slotWidget.getSlot());
+                        ClientApp.getActiveGame().getCurrentPlayer().setActiveSlot(slotWidget.getSlot());
                     }
                 });
                 addListener(new InputListener(){
@@ -104,8 +105,8 @@ public class InventoryGrid extends Table {
     @Override
     public void act(float delta) {
         if(type == Type.TOOLBAR){
-            int newSelected = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class)
-                .getSlots().indexOf(App.getActiveGame().getCurrentPlayer().getActiveSlot());
+            int newSelected = ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class)
+                .getSlots().indexOf(ClientApp.getActiveGame().getCurrentPlayer().getActiveSlot());
 
             if(newSelected != selected){
                 slotWidgets.get(selected).getActor()
