@@ -15,9 +15,6 @@ import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.utils.TiledMapUtils;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import org.tiledreader.FileSystemTiledReader;
 import org.tiledreader.TiledMap;
 import org.tiledreader.TiledObject;
@@ -130,8 +127,8 @@ public class EntityPlacementSystem {
                 int id = TiledMapUtils.getProperty(object, "id", Integer.class);
                 int dest = TiledMapUtils.getProperty(object, "destId", Integer.class);
 
-                int x = Math.round(TiledMapUtils.getProperty(object, "x", Float.class) / 16);
-                int y = Math.round((exteriorData.getHeight() - TiledMapUtils.getProperty(object, "y", Float.class)) / 16);
+                int x = Math.round(object.getX() / 16);
+                int y = exteriorData.getHeight() - Math.round(object.getY() / 16);
                 Door door = new Door();
                 exteriorDoors.putIfAbsent(id, door);
                 EntityPlacementSystem.placeOnTile(door, map.getTileByPosition(position.getRow() + y, position.getCol() + x));
@@ -143,8 +140,8 @@ public class EntityPlacementSystem {
                 int id = TiledMapUtils.getProperty(object, "id", Integer.class);
                 int dest = TiledMapUtils.getProperty(object, "destId", Integer.class);
 
-                int x = Math.round(TiledMapUtils.getProperty(object, "x", Float.class) / 16);
-                int y = Math.round((interiorData.getHeight() - TiledMapUtils.getProperty(object, "y", Float.class)) / 16);
+                int x = Math.round(object.getX() / 16);
+                int y = interiorData.getHeight() - Math.round(object.getY() / 16);
 
                 Door door = new Door();
                 interiorDoors.putIfAbsent(id, door);

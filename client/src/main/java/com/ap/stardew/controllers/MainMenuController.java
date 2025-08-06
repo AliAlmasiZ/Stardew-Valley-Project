@@ -102,9 +102,9 @@ public class MainMenuController implements Controller{    @Override
     }
 
     public void startGame(GameStartingDetails details){
-        Game game = new Game();
-        App.setActiveGame(game);
-        game.initGame(details);
+//        Game game = new Game();
+//        App.setActiveGame(game);
+//        game.initGame(details);
 //        App.setCurrentMenu(Menu.GAME_MENU);
     }
 

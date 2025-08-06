@@ -1,10 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.controllers.GameController;
-import com.ap.stardew.models.Account;
-import com.ap.stardew.models.ConnectionThread;
-import com.ap.stardew.models.Game;
-import com.ap.stardew.models.GameSession;
+import com.ap.stardew.models.*;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.enums.Gender;
 import com.esotericsoftware.kryo.Kryo;
@@ -49,9 +46,6 @@ public class ServerApp {
         accounts.add(new Account(Gender.MALE, "asd", "a", "a", "f"));
 
         saveAccounts(accounts);
-
-
-
     }
 
     public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {

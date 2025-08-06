@@ -1,5 +1,6 @@
 package com.ap.stardew.controllers;
 
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.*;
 import com.ap.stardew.models.Date;
 import com.ap.stardew.models.NPC.NPC;
@@ -52,7 +53,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result nextTurn() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         game.nextTurn();
 
         StringBuilder message = new StringBuilder();
@@ -63,32 +64,32 @@ public class GameMenuController implements Controller {
     }
 
     public Result getTime() {
-        Date currentDate = App.getActiveGame().getDate();
+        Date currentDate = ClientApp.getActiveGame().getDate();
 
         return new Result(true, String.valueOf(currentDate.getHour()));
     }
 
     public Result getDate() {
-        Date currentDate = App.getActiveGame().getDate();
+        Date currentDate = ClientApp.getActiveGame().getDate();
 
         return new Result(true, String.valueOf(currentDate.getDay()));
     }
 
     public Result getDateTime() {
-        Date currentDate = App.getActiveGame().getDate();
+        Date currentDate = ClientApp.getActiveGame().getDate();
         return new Result(true, "Date: " + currentDate.getDay() +
             "\tHour: " + currentDate.getHour());
     }
 
     public Result getDayOfTheWeek() {
-        Date currentDate = App.getActiveGame().getDate();
+        Date currentDate = ClientApp.getActiveGame().getDate();
 
         return new Result(true, currentDate.getWeekDay().toString().toLowerCase());
     }
 
     // dont add large number to this
     public Result advanceTime(int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Date date = game.getDate();
 
         // this function will update data about game.Date
@@ -98,7 +99,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result advanceDate(int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Date date = game.getDate();
 
         // this function will update data about game.Date
@@ -108,7 +109,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result showSeason() {
-        Date currentDate = App.getActiveGame().getDate();
+        Date currentDate = ClientApp.getActiveGame().getDate();
         return new Result(true, currentDate.getSeason().name().toLowerCase());
     }
 
@@ -119,7 +120,7 @@ public class GameMenuController implements Controller {
 
     public Result thor(int x, int y) {
         Position position = new Position(x, y);
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Tile tile = game.getActiveMap().getTileByPosition(position);
 
         game.thorTile(tile);
@@ -128,12 +129,12 @@ public class GameMenuController implements Controller {
     }
 
     public Result showWeather() {
-        Weather weather = App.getActiveGame().getTodayWeather();
+        Weather weather = ClientApp.getActiveGame().getTodayWeather();
         return new Result(true, weather.toString().toLowerCase());
     }
 
     public Result weatherForecast() {
-        Weather weather = App.getActiveGame().getTomorrowWeather();
+        Weather weather = ClientApp.getActiveGame().getTomorrowWeather();
 
         return new Result(true, weather.toString().toLowerCase());
     }
@@ -144,13 +145,13 @@ public class GameMenuController implements Controller {
             return new Result(false, "Weather not found");
         }
 
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         game.setTomorrowWeather(weather);
         return new Result(true, "Tomorrow's weather changed to " + weather.name().toLowerCase());
     }
 
     public WalkProposal proposeWalk(int x, int y) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         GameMap map = game.getActiveMap();
         Tile start = map.getTileByPosition(
@@ -196,14 +197,14 @@ public class GameMenuController implements Controller {
     }
 
     public Result executeWalk(WalkProposal p) {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         if (!p.isAllowed()) {
             return new Result(false, p.message());
         }
         player.setPosition(new Position(p.x(), p.y()));
         player.reduceEnergy(p.energyCost());
         Entity entity = null;
-        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(p.y(), p.x());
+        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(p.y(), p.x());
         if (tile != null && (entity = tile.getContent()) != null) {
             Placeable placeable = entity.getComponent(Placeable.class);
             for (CollisionEvent c : placeable.getCollisionEvents()) {
@@ -282,7 +283,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result energyShow() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         Energy energy = player.getEnergy();
 
@@ -291,7 +292,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result energySet(int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         Energy energy = player.getEnergy();
 
@@ -300,7 +301,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result energyUnlimited() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         Energy energy = player.getEnergy();
 
@@ -316,7 +317,7 @@ public class GameMenuController implements Controller {
 
     /* ---------------------------------- Tools ---------------------------------- */
     public Result toolsEquip(String toolName) {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         InventorySlot slot = player.getComponent(Inventory.class).getSlot(toolName);
         if (slot == null)
             return new Result(false, "This tool doesn't exist in inventory");
@@ -325,7 +326,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result toolsShowCurrent() {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Entity active = player.getActiveSlot().getEntity();
         if (active == null || !active.hasTag(EntityTag.TOOL))
             return new Result(false, "This is not a tool");
@@ -334,7 +335,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result toolsShowAvailable() {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         ArrayList<Entity> tools = player.getComponent(Inventory.class).getItemsByTag(EntityTag.TOOL);
         if (tools.isEmpty())
             return new Result(false, "There is no tool in Backpack");
@@ -347,7 +348,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result toolsUpgrade(String toolName) {
-        Entity building = App.getActiveGame().getCurrentPlayer().getCurrentMap().getBuilding();
+        Entity building = ClientApp.getActiveGame().getCurrentPlayer().getCurrentMap().getBuilding();
         if (building == null)
             return new Result(false, "You are not in a building");
         Shop shop = building.getComponent(Shop.class);
@@ -365,12 +366,12 @@ public class GameMenuController implements Controller {
 
 
     public Result toolsUse(Direction dir) {
-        Vec2 playerPosition = App.getActiveGame().getCurrentPlayer().getPosition();
-        GameMap map = App.getActiveGame().getActiveMap();
-        if (App.getActiveGame().getCurrentPlayer().getActiveSlot() == null) {
+        Vec2 playerPosition = ClientApp.getActiveGame().getCurrentPlayer().getPosition();
+        GameMap map = ClientApp.getActiveGame().getActiveMap();
+        if (ClientApp.getActiveGame().getCurrentPlayer().getActiveSlot() == null) {
             return new Result(false, "nothing equipped");
         }
-        Entity tool = App.getActiveGame().getCurrentPlayer().getActiveSlot().getEntity();
+        Entity tool = ClientApp.getActiveGame().getCurrentPlayer().getActiveSlot().getEntity();
 
         if (
             dir == null
@@ -385,7 +386,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result useArtisan(String artisanName, String itemName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         int x = player.getPosition().getCol();
         int y = player.getPosition().getRow();
@@ -407,7 +408,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result getArtisan(String artisanName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         int x = player.getPosition().getCol();
         int y = player.getPosition().getRow();
@@ -420,7 +421,7 @@ public class GameMenuController implements Controller {
                 ArtisanComponent artisan = tile.getContent().getComponent(ArtisanComponent.class);
                 if (!artisan.isInProcess())
                     return new Result(false, "This artisan is empty!");
-                Inventory inventory = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class);
+                Inventory inventory = ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class);
                 if (!artisan.isProcessFinished())
                     return artisan.remainingTime();
                 Entity product = artisan.getProduct();
@@ -594,7 +595,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result plant(String seedString, String direction) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         if (!App.entityRegistry.doesEntityExist(seedString)) {
             return new Result(false, "There is no seed with name" + seedString);
@@ -656,7 +657,7 @@ public class GameMenuController implements Controller {
 
     public Result showPlant(int col, int row) {
         Position position = new Position(col, row);
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         GameMap gameMap = game.getActiveMap();
         Tile tile = gameMap.getTileByPosition(position);
 
@@ -678,7 +679,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result fertilize(String fertilizerString, String direction) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         // get the fertilizer
@@ -731,7 +732,7 @@ public class GameMenuController implements Controller {
     public Result showRecipes(String recipeType) {
         //TODO: should be in house
         RecipeType type = RecipeType.fromName(recipeType);
-        Player activePlayer = App.getActiveGame().getCurrentPlayer();
+        Player activePlayer = ClientApp.getActiveGame().getCurrentPlayer();
 
         ArrayList<Recipe> recipes = activePlayer.getUnlockedRecipes();
         StringBuilder sb = new StringBuilder();
@@ -744,7 +745,7 @@ public class GameMenuController implements Controller {
 
     /*
     private Result craftRecipe(String recipeName){
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Recipe recipe = App.recipeRegistry.getRecipe(recipeName);
         if(recipe == null)
             return new Result(false, "Invalid recipe name");
@@ -765,7 +766,7 @@ public class GameMenuController implements Controller {
      */
     public Result craftingCraft(String recipeName) {
         //TODO: should be in house
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Recipe recipe = App.recipeRegistry.getRecipe(recipeName);
         if (recipe == null)
             return new Result(false, "Invalid recipe name");
@@ -781,7 +782,7 @@ public class GameMenuController implements Controller {
         if (entity != null)
             return new Result(false, "something wrong happened!");
 
-        App.getActiveGame().getCurrentPlayer().reduceEnergy(2);
+        ClientApp.getActiveGame().getCurrentPlayer().reduceEnergy(2);
         return new Result(true, recipeName + " crafted and added to your inventory successfully");
     }
 
@@ -801,7 +802,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result cheatTakeItem(String itemName, int amount) {
-        Entity entity = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).takeFromInventory(itemName, amount);
+        Entity entity = ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).takeFromInventory(itemName, amount);
         if (entity == null) {
             return new Result(true, itemName + " not in inventory");
         }
@@ -812,7 +813,7 @@ public class GameMenuController implements Controller {
 
     public Result cookingPrepare(String recipeName) {
 
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Recipe recipe = App.recipeRegistry.getRecipe(recipeName);
         if (recipe == null)
             return new Result(false, "Invalid recipe name");
@@ -828,14 +829,14 @@ public class GameMenuController implements Controller {
         if (entity != null)
             return new Result(false, "something wrong happened!");
 
-        App.getActiveGame().getCurrentPlayer().reduceEnergy(3);
+        ClientApp.getActiveGame().getCurrentPlayer().reduceEnergy(3);
         return new Result(true, recipeName + " cooked and added to your inventory successfully");
 
     }
 
     public Result eat(String foodName) {
 
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Inventory inventory = player.getComponent(Inventory.class);
         Entity food = inventory.getItem(foodName);
         if (food == null)
@@ -858,7 +859,7 @@ public class GameMenuController implements Controller {
 
     public Result buyAnimal(String animalTypeString, String animalName, String animalHouseName) {
         //TODO: move some of these to buySystem later(alan khastam)
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Wallet wallet = currentPlayer.getWallet();
 
@@ -907,7 +908,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result showMyAnimalHouses() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         StringBuilder message = new StringBuilder("Your available animal houses:");
@@ -925,7 +926,7 @@ public class GameMenuController implements Controller {
 
     //:/
     public Result chooseHouseForAnimal(String animalHouseName) {
-//        Game game = App.getActiveGame();
+//        Game game = ClientApp.getActiveGame();
 //        Player currentPlayer = game.getCurrentPlayer();
 //        Wallet wallet = currentPlayer.getWallet();
 //        AnimalType animalType = details.animalType();
@@ -952,7 +953,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result pet(String animalName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
         if (animal == null) {
@@ -972,7 +973,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result setAnimalFriendship(String animalName, int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
         if (animal == null) {
@@ -989,7 +990,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result animals() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         StringBuilder message = new StringBuilder("Your Animals:\n");
@@ -1002,7 +1003,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result shepherdAnimal(String animalName, int x, int y, boolean putInBuilding) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
 
@@ -1026,7 +1027,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "can't place the animal there");
         }
 
-        EntityPlacementSystem.placeOnMap(animal, new Position(x, y), App.getActiveGame().getMainMap());
+        EntityPlacementSystem.placeOnMap(animal, new Position(x, y), ClientApp.getActiveGame().getMainMap());
 
         if (true /*TODO: check its out of home*/) {
             if (!animal.isFedToday()) {
@@ -1038,7 +1039,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result feedHay(String animalName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
         if (animal == null) {
@@ -1058,7 +1059,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result showProduces() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder message = new StringBuilder("Your available Produces:\n");
 
@@ -1076,7 +1077,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result collectProduces(String animalName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
@@ -1103,7 +1104,7 @@ public class GameMenuController implements Controller {
 
     /* ------------------------------------------- Shop Commands ------------------------------------------- */
     public Result showAllProducts() {
-        Entity activeBuilding = App.getActiveGame().getActiveMap().getBuilding();
+        Entity activeBuilding = ClientApp.getActiveGame().getActiveMap().getBuilding();
         if (activeBuilding == null)
             return new Result(false, "You are not in a building.");
         Shop shop = activeBuilding.getComponent(Shop.class);
@@ -1128,7 +1129,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result showAvailableProducts() {
-        Entity activeBuilding = App.getActiveGame().getActiveMap().getBuilding();
+        Entity activeBuilding = ClientApp.getActiveGame().getActiveMap().getBuilding();
         if (activeBuilding == null)
             return new Result(false, "You are not in a building.");
         Shop shop = activeBuilding.getComponent(Shop.class);
@@ -1141,7 +1142,7 @@ public class GameMenuController implements Controller {
 
     public Result purchase(String productName, String count) {
         int amount = (count == null) ? 1 : Integer.parseInt(count);
-        Entity activeBuilding = App.getActiveGame().getActiveMap().getBuilding();
+        Entity activeBuilding = ClientApp.getActiveGame().getActiveMap().getBuilding();
         if (activeBuilding == null)
             return new Result(false, "You are not in a building.");
         Shop shop = activeBuilding.getComponent(Shop.class);
@@ -1152,13 +1153,13 @@ public class GameMenuController implements Controller {
         OtherShopProduct product = shop.getOtherShopProduct(productName);
         if (product == null)
             return new Result(false, "This shop doesn't have this product");
-        if (!product.isInSeason(App.getActiveGame().getDate().getSeason()))
+        if (!product.isInSeason(ClientApp.getActiveGame().getDate().getSeason()))
             return new Result(false, "This product isn't available in this season");
         return ShopSystem.buyProduct(product, amount);
     }
 
     public Result buildBuilding(int x, int y, String productName) {
-        Entity activeBuilding = App.getActiveGame().getActiveMap().getBuilding();
+        Entity activeBuilding = ClientApp.getActiveGame().getActiveMap().getBuilding();
         if (activeBuilding == null)
             return new Result(false, "You are not in a building.");
         Shop shop = activeBuilding.getComponent(Shop.class);
@@ -1176,7 +1177,7 @@ public class GameMenuController implements Controller {
     }
 
     private Result sellProduct(String productName, int count) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         Inventory inventory = player.getComponent(Inventory.class);
         Entity product = inventory.getItem(productName);
@@ -1205,7 +1206,7 @@ public class GameMenuController implements Controller {
 
     /* -------------------------------------------------- -------------------------------------------------- */
     public Result sellAnimal(String animalName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
         if (animal == null) {
@@ -1223,7 +1224,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result fishingPhase1(String fishingPole) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
 
@@ -1287,7 +1288,7 @@ public class GameMenuController implements Controller {
     }
 
     public EntityResult fishing(String fishingPole) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
 
@@ -1344,7 +1345,7 @@ public class GameMenuController implements Controller {
 
 
     public Result friendship() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         ArrayList<PlayerFriendship> playerFriendships = game.getCurrentPlayerFriendships();
         String message = PlayerFriendship.buildFriendshipMessage(game.getCurrentPlayer(), playerFriendships);
 
@@ -1352,7 +1353,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result giveGift(String playerName, String itemName, int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player giftedPlayer = game.findPlayer(playerName);
 
@@ -1390,7 +1391,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result giftList() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder message = new StringBuilder("Your gift list:\n");
 
@@ -1402,7 +1403,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result giftRate(int giftNumber, int rating) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Gift gift = currentPlayer.findGift(giftNumber);
 
@@ -1431,7 +1432,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result giftHistory(String username) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player giftedPlayer = game.findPlayer(username);
         if (giftedPlayer == null) {
@@ -1467,7 +1468,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result hug(String username) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player huggedPlayer = game.findPlayer(username);
         if (huggedPlayer == null) {
@@ -1500,7 +1501,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result flower(String username) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player floweredPlayer = game.findPlayer(username);
 
@@ -1536,7 +1537,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result askMarriage(String username, String ringName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player marriagePlayer = game.findPlayer(username);
 
@@ -1597,7 +1598,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result respond(String respond, String username) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player respondPlayer = game.findPlayer(username);
         if (respondPlayer == null) {
@@ -1632,7 +1633,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result startTrade() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 //        App.setCurrentMenu(Menu.TRADE_MENU);
         StringBuilder message = new StringBuilder("Welcome to TradeMenu!\nYour new offers: \n");
@@ -1648,7 +1649,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result talk(String receiverPlayerName, String messageString) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player receiverPlayer = game.findPlayer(receiverPlayerName);
         Player currentPlayer = game.getCurrentPlayer();
 
@@ -1678,7 +1679,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result talkHistory(String playerName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         currentPlayer.makeMessagesSeen();
         Player talkedPlayer = game.findPlayer(playerName);
@@ -1698,7 +1699,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result meetNPC(String npcName) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         NPC npc = game.findNPC(npcName);
         NpcFriendship npcFriendship = currentPlayer.getNpcFriendships().get(npc);
@@ -1726,7 +1727,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result giftNPC(String npcName, String itemName, int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         NPC npc = game.findNPC(npcName);
@@ -1755,7 +1756,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result questList() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder message = new StringBuilder("Available quests:\n");
 
@@ -1769,7 +1770,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result questFinish(int questId) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Quest quest = game.findQuest(questId);
         if (quest == null) {
@@ -1831,7 +1832,7 @@ public class GameMenuController implements Controller {
 
 
     public Result friendshipNPC() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder message = new StringBuilder("NPC Friendship: \n");
 
@@ -1841,7 +1842,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result handleRawInput(char c) {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         WalkProposal p;
         switch (c) {
             case 'a':
@@ -1880,13 +1881,13 @@ public class GameMenuController implements Controller {
     }
 
     public Result toggleMap() {
-        App.getActiveGame().toggleMapVisibility();
+        ClientApp.getActiveGame().toggleMapVisibility();
         return null;
     }
 
     /*------------------------------------------cheat-------------------------------------------*/
     public Result cheatGiveItem(String name, int quantity) {
-        Player currentPlayer = App.getActiveGame().getCurrentPlayer();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
         if (quantity <= 0) {
             return new Result(false, "You should enter positive number!");
         }
@@ -1912,9 +1913,9 @@ public class GameMenuController implements Controller {
         if (!force && EntityPlacementSystem.canPlace(x, y, building.getComponent(Placeable.class)))
             return new Result(true, "Can't place that there ma lord");
         if (force) EntityPlacementSystem.clearArea(x, y, building.getComponent(Placeable.class));
-        EntityPlacementSystem.placeEntity(building, new Position(x, y), App.getActiveGame().getMainMap());
+        EntityPlacementSystem.placeEntity(building, new Position(x, y), ClientApp.getActiveGame().getMainMap());
 
-        App.getActiveGame().getCurrentPlayer().addOwnedBuilding(building);
+        ClientApp.getActiveGame().getCurrentPlayer().addOwnedBuilding(building);
         if (building.getComponent(AnimalHouse.class) != null) {
             building.getComponent(AnimalHouse.class).setName("House" + (int) (Math.random() * 1000));
         }
@@ -1927,7 +1928,7 @@ public class GameMenuController implements Controller {
      * else it will add to it experience
      */
     public Result cheatAddSkill(String name, int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         SkillType skillType = SkillType.getSkillType(name);
         if (skillType == null) {
@@ -1946,7 +1947,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result skillStatue() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         StringBuilder message = new StringBuilder("Your Skills:\n");
@@ -1960,7 +1961,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result addMoney(int amount) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         currentPlayer.getWallet().addBalance(amount);
 
@@ -1968,14 +1969,14 @@ public class GameMenuController implements Controller {
     }
 
     public Result toggleUnlimitedInventory() {
-        Inventory inventory = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class);
+        Inventory inventory = ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class);
         inventory.setUnlimited(!inventory.getUnlimited());
 
         return new Result(true, "your inventory is" + (inventory.getUnlimited() ? "" : " not") + " unlimited now.");
     }
 
     public Result cheatSetFriendship(int level, int xp, String name) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player player = game.findPlayer(name);
         if (player == null) {
@@ -1993,7 +1994,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result waterAll() {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         GrowthSystem.waterAll(game.getMainMap());
 
         return new Result(true, "watered!");
@@ -2012,7 +2013,7 @@ public class GameMenuController implements Controller {
             return new Result(false, entityName + " isn't a food");
         }
 
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Inventory fridge = player.getRefrigerator().getComponent(Inventory.class);
         Inventory playerInventory = player.getComponent(Inventory.class);
         Inventory source, destination;
@@ -2044,7 +2045,7 @@ public class GameMenuController implements Controller {
             return new Result(false, "entity doesn't exist");
         }
 
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
 
         Entity entity = player.getComponent(Inventory.class).takeFromInventory(name, 1);
 
@@ -2070,7 +2071,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result pickupItem(Entity entity){
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Position playerPos = player.getPosition();
         Inventory inventory = player.getComponent(Inventory.class);
 
@@ -2088,9 +2089,9 @@ public class GameMenuController implements Controller {
     }
 
     public Result pickupNearItems() {
-        ArrayList<Pickable> pickables = new ArrayList<>(App.getActiveGame().getActiveMap().getComponentsOfType(Pickable.class));
+        ArrayList<Pickable> pickables = new ArrayList<>(ClientApp.getActiveGame().getActiveMap().getComponentsOfType(Pickable.class));
         if (pickables == null) return new Result(false, "You picked up nothing dumbass");
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Position playerPos = player.getPosition();
         GameMap map = playerPos.getMap();
         Inventory inventory = player.getComponent(Inventory.class);
@@ -2131,7 +2132,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result cheatSpawnItem(String name, int quantity) {
-        Player currentPlayer = App.getActiveGame().getCurrentPlayer();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
         if (quantity <= 0) {
             return new Result(false, "You should enter positive number!");
         }
@@ -2149,7 +2150,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result buildGreenhouse() {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
 
         int wood = player.getComponent(Inventory.class).getItemCount("Wood");
         double money = player.getWallet().getBalance();
@@ -2175,8 +2176,8 @@ public class GameMenuController implements Controller {
     }
 
     public Result showShippingBin() {
-        Player player = App.getActiveGame().getCurrentPlayer();
-        Game game = App.getActiveGame();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
+        Game game = ClientApp.getActiveGame();
         Inventory inventory = player.getComponent(Inventory.class);
 
         int[][] directions = {{1, 0}, {1, -1}, {1, 1}, {0, 1}, {0, -1}, {-1, 1}, {-1, 0}, {-1, -1}};
@@ -2195,7 +2196,7 @@ public class GameMenuController implements Controller {
     }
 
     public Result trashItem(String name, int amount) {
-        Player player = App.getActiveGame().getCurrentPlayer();
+        Player player = ClientApp.getActiveGame().getCurrentPlayer();
         Entity entity = player.getComponent(Inventory.class).takeFromInventory(name, player.getComponent(Inventory.class).getItemCount(name));
         if (entity == null) return new Result(false, "");
         entity.delete();
@@ -2206,7 +2207,7 @@ public class GameMenuController implements Controller {
     public Result saveGame() {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("testSave.ser"));
-            out.writeObject(App.getActiveGame());
+            out.writeObject(ClientApp.getActiveGame());
             out.close();
 
 
@@ -2228,7 +2229,7 @@ public class GameMenuController implements Controller {
     }
 
     public void handleRightClick(float x, float y, GameScreen screen) {
-        Game game = App.getActiveGame();
+        Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
         GameAssetManager gameAssetManager = GameAssetManager.getInstance();
         System.out.println("right clicked at" + x + " " + y); //TODO: remove
@@ -2251,7 +2252,7 @@ public class GameMenuController implements Controller {
         }
 
         // check for plants
-        ArrayList<Entity> plants = App.getActiveGame().getActiveMap().getEntitiesWithComponent(Growable.class);
+        ArrayList<Entity> plants = ClientApp.getActiveGame().getActiveMap().getEntitiesWithComponent(Growable.class);
         for (Entity entity : plants) {
 
         }
@@ -2268,7 +2269,7 @@ public class GameMenuController implements Controller {
         }
 
 
-        Tile tile = App.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
+        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
         Entity tileEntity = tile.getContent();
 
         if (tileEntity != null) {

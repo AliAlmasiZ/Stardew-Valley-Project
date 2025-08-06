@@ -2,15 +2,19 @@ package com.ap.stardew.models;
 
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;
+import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.GameMapInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.dto.serilizers.GameMapSerializer;
+import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.EntityComponent;
+import com.ap.stardew.models.entities.components.InteriorComponent;
+import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
@@ -216,6 +220,10 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Renderable.Statue.class);
         kryo.register(Gender.class);
         kryo.register(EntityTag.class);
+        kryo.register(InteriorComponent.class);
+        kryo.register(Placeable.class);
+        kryo.register(Door.class);
+        kryo.register(CollisionEvent.class);
 
 
         kryo.register(Game.class);

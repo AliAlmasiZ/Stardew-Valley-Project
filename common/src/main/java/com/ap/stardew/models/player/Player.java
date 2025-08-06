@@ -1,6 +1,5 @@
 package com.ap.stardew.models.player;
 
-import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;

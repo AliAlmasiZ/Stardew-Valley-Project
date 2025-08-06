@@ -44,7 +44,7 @@ public class LoginMenuController implements Controller{    @Override
 
         Account account = new Account(genderEnum, email,name, password, username);
         App.setRegisteredAccount(account);
-        App.addAccount(account);
+//        App.addAccount(account);
         //TODO: add account to jason file
 
         StringBuilder message = new StringBuilder("Account registered successfully! now you can choose a security question:");

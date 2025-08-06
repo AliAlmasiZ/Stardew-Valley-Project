@@ -33,7 +33,7 @@ public class GameMenu implements AppMenu {
 
     @Override
     public void checker(Scanner scanner) {
-        renderGame();
+//        renderGame();
 
         previousResult = null;
 
@@ -344,77 +344,77 @@ public class GameMenu implements AppMenu {
 //            App.getView().log("Invalid Command!");
 //        }
     }
-
-    public void renderGame() {
-        Game activeGame = App.getActiveGame();
-        if (activeGame.isMapVisible()) {
-            printMap(activeGame.getActiveMap());
-
-            Player player = activeGame.getCurrentPlayer();
-            System.out.println(player.getComponent(Inventory.class));
-            System.out.println("day : " + App.getActiveGame().getDate().getDay() +
-                    ", hour : " + App.getActiveGame().getDate().getHour() +
-                    ", season : " + App.getActiveGame().getDate().getSeason());
-            System.out.println("energy: " + player.getEnergy().getAmount());
-
-            Position position = player.getPosition();
-            System.out.println("position: " + position + " " + position.getMap());
-            System.out.println("money: " + player.getWallet().getBalance());
-            System.out.println("skills:");
-            for(Map.Entry<SkillType, Skill> entry : player.getSkills().entrySet()){
-                System.out.printf("  %n%s: %d %d", entry.getKey().toString(), entry.getValue().getLevel(), entry.getValue().getExperience());
-            }
-
-//            System.out.println("\n" + App.getView().getPreviusMessage());
-        }
-    }
-
-    public void printMap(GameMap map) {
-        Tile[][] tiles = map.getTiles();
-        Position position = App.getActiveGame().getCurrentPlayer().getPosition();
-//        switch (mapRenderType) {
-//            case DEFAULT -> {
-//                for (Tile[] value : tiles) {
-//                    for (Tile tile : value) {
-//                        if (tile.getType() == null) continue;
-//                        renderer.mvAddchColored(tile.getCol(), tile.getRow(), tile.getCharacter(), tile.getColor(), position);
-//                    }
-//                }
-//                for (Entity e : map.getEntities()) {
-//                    PositionComponent positionComponent = e.getComponent(PositionComponent.class);
 //
-//                    if (e.getComponent(Renderable.class) != null) {
-//                        renderer.mvAddchColored(positionComponent.getCol(), positionComponent.getRow(),
-//                                e.getComponent(Renderable.class).getCharacter(),
-//                                e.getComponent(Renderable.class).getColor(),
-//                                position);
-//                    }
-//                }
-//            }
-//            case REGIONS -> {
-//                if (!(map instanceof WorldMap)) {
-//                    break;
-//                }
+//    public void renderGame() {
+//        Game activeGame = App.getActiveGame();
+//        if (activeGame.isMapVisible()) {
+//            printMap(activeGame.getActiveMap());
 //
-//                WorldMap map1 = (WorldMap) map;
-//                for (Tile[] value : tiles) {
-//                    for (Tile tile : value) {
-//                        if (tile.getRegion() != null) {
-//                            renderer.mvAddchColored(tile.getCol(), tile.getRow(), '0', tile.getRegion().getColor(), position);
-//                        }
-//                    }
-//                }
-//                for (MapRegion r : map1.getRegions()) {
-//                    renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow(), r.getName(), Color.WHITE, position);
-//                    if (r.getOwner() != null) {
-//                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, r.getOwner().getAccount().getNickname(), Color.WHITE, position);
-//                    } else {
-//                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, "no owner", Color.WHITE, position);
-//                    }
-//                }
+//            Player player = activeGame.getCurrentPlayer();
+//            System.out.println(player.getComponent(Inventory.class));
+//            System.out.println("day : " + App.getActiveGame().getDate().getDay() +
+//                    ", hour : " + App.getActiveGame().getDate().getHour() +
+//                    ", season : " + App.getActiveGame().getDate().getSeason());
+//            System.out.println("energy: " + player.getEnergy().getAmount());
+//
+//            Position position = player.getPosition();
+//            System.out.println("position: " + position + " " + position.getMap());
+//            System.out.println("money: " + player.getWallet().getBalance());
+//            System.out.println("skills:");
+//            for(Map.Entry<SkillType, Skill> entry : player.getSkills().entrySet()){
+//                System.out.printf("  %n%s: %d %d", entry.getKey().toString(), entry.getValue().getLevel(), entry.getValue().getExperience());
 //            }
+//
+////            System.out.println("\n" + App.getView().getPreviusMessage());
+//        }
 //    }
-}
+//
+//    public void printMap(GameMap map) {
+//        Tile[][] tiles = map.getTiles();
+//        Position position = App.getActiveGame().getCurrentPlayer().getPosition();
+////        switch (mapRenderType) {
+////            case DEFAULT -> {
+////                for (Tile[] value : tiles) {
+////                    for (Tile tile : value) {
+////                        if (tile.getType() == null) continue;
+////                        renderer.mvAddchColored(tile.getCol(), tile.getRow(), tile.getCharacter(), tile.getColor(), position);
+////                    }
+////                }
+////                for (Entity e : map.getEntities()) {
+////                    PositionComponent positionComponent = e.getComponent(PositionComponent.class);
+////
+////                    if (e.getComponent(Renderable.class) != null) {
+////                        renderer.mvAddchColored(positionComponent.getCol(), positionComponent.getRow(),
+////                                e.getComponent(Renderable.class).getCharacter(),
+////                                e.getComponent(Renderable.class).getColor(),
+////                                position);
+////                    }
+////                }
+////            }
+////            case REGIONS -> {
+////                if (!(map instanceof WorldMap)) {
+////                    break;
+////                }
+////
+////                WorldMap map1 = (WorldMap) map;
+////                for (Tile[] value : tiles) {
+////                    for (Tile tile : value) {
+////                        if (tile.getRegion() != null) {
+////                            renderer.mvAddchColored(tile.getCol(), tile.getRow(), '0', tile.getRegion().getColor(), position);
+////                        }
+////                    }
+////                }
+////                for (MapRegion r : map1.getRegions()) {
+////                    renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow(), r.getName(), Color.WHITE, position);
+////                    if (r.getOwner() != null) {
+////                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, r.getOwner().getAccount().getNickname(), Color.WHITE, position);
+////                    } else {
+////                        renderer.mvPrint(r.getCenter().getCol(), r.getCenter().getRow() + 1, "no owner", Color.WHITE, position);
+////                    }
+////                }
+////            }
+////    }
+//}
 
 private void handlePurchase(String productName, String count, Scanner scanner) {
     Pattern pattern = Pattern.compile(".+?(-?\\d+)[,\\s]+(-?\\d+).+");

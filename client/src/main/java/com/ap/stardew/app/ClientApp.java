@@ -1,6 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.ConnectionThread;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.esotericsoftware.kryonet.Client;
@@ -19,9 +20,9 @@ public class ClientApp {
     private static Client client;
     private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
-
     private static boolean exitFlag = false;
 
+    private static Game activeGame;
     private static String token;
 
     public static boolean isEnded() {
@@ -184,4 +185,14 @@ public class ClientApp {
 
         return response.getFromBody("username");
     }
+
+    public static Game getActiveGame() {
+        return activeGame;
+    }
+
+    public static void setActiveGame(Game activeGame) {
+        ClientApp.activeGame = activeGame;
+    }
+
+
 }

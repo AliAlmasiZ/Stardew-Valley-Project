@@ -7,6 +7,5 @@ public interface Controller {
     public Result changeMenu(String menuName);
     default void    exit() {
         App.shouldTerminate = true;
-        App.saveState();
     }
 }

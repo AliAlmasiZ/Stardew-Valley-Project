@@ -1,6 +1,5 @@
 package com.ap.stardew.views.old;
 
-import com.ap.stardew.controllers.ForgotPasswordFlow;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.Commands.LoginMenuCommands;
 import com.ap.stardew.models.Result;
@@ -72,13 +71,13 @@ public class LoginMenu implements AppMenu {    private final LoginMenuController
             System.out.println(this.controller.login(username, password, stayLogged));
 
         } else if ((matcher = LoginMenuCommands.FORGOT_PASSWORD.getMatcher(input)) != null) {
-            ForgotPasswordFlow forgotPasswordFlow = new ForgotPasswordFlow();
-            Result result = forgotPasswordFlow.handle(matcher.group("username"));
-            while (result.isSuccessful()) {
-                System.out.println(result.message());
-                result = forgotPasswordFlow.handle(scanner.nextLine());
-            }
-            System.out.println(result);
+//            ForgotPasswordFlow forgotPasswordFlow = new ForgotPasswordFlow();
+//            Result result = forgotPasswordFlow.handle(matcher.group("username"));
+//            while (result.isSuccessful()) {
+//                System.out.println(result.message());
+//                result = forgotPasswordFlow.handle(scanner.nextLine());
+//            }
+//            System.out.println(result);
         } else if ((matcher = LoginMenuCommands.EXIT.getMatcher(input)) != null) {
             this.controller.exit();
         }

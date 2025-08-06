@@ -88,6 +88,7 @@ public class TiledMapUtils {
                 }
             }
         }
+        gameMap.setTiles(tiles);
 
         TiledObjectLayer objectsLayer = (TiledObjectLayer) TiledMapUtils.getLayer(map, "Objects");
 
@@ -95,22 +96,21 @@ public class TiledMapUtils {
             for (TiledObject object : objectsLayer.getObjects()) {
                 if(object.getName().equals("Building")){
                     Entity building = App.entityRegistry.makeEntity(TiledMapUtils.getProperty(object, "building", String.class));
-                    EntityPlacementSystem.placeEntity(building, new Vec2(TiledMapUtils.getProperty(object, "x", Float.class),
-                        TiledMapUtils.getProperty(object, "y", Float.class)), gameMap);
+                    EntityPlacementSystem.placeEntity(building, new Vec2(object.getX(),
+                        height * 16 - object.getY()), gameMap);
                 }else if(object.getName().equals("Fridge")){
                     Entity fridge = App.entityRegistry.makeEntity("fridge");
-                    EntityPlacementSystem.placeEntity(fridge, new Vec2(TiledMapUtils.getProperty(object, "x", Float.class),
-                        TiledMapUtils.getProperty(object, "y", Float.class)), gameMap);
+                    EntityPlacementSystem.placeEntity(fridge, new Vec2(object.getX(),
+                        height * 16 - object.getY()), gameMap);
                 }else if(object.getName().equals("Shop")){
                     Entity shopCounter = new Entity("shopCounter");
                     shopCounter.addComponent(new Placeable(false));
-                    EntityPlacementSystem.placeEntity(shopCounter, new Vec2(TiledMapUtils.getProperty(object, "x", Float.class),
-                        TiledMapUtils.getProperty(object, "y", Float.class)), gameMap);
+                    EntityPlacementSystem.placeEntity(shopCounter, new Vec2(object.getX(),
+                        height * 16 - object.getY()), gameMap);
                 }
             }
         }
 
-        gameMap.setTiles(tiles);
 
         return map;
     }
@@ -147,6 +147,7 @@ public class TiledMapUtils {
 
         if(regionLayer != null) {
             MapRegion[][] regionMap = new MapRegion[height][width];
+            worldMap.setRegionMap(regionMap);
 
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
@@ -160,10 +161,10 @@ public class TiledMapUtils {
                     }
                 }
             }
-            worldMap.setRegionMap(regionMap);
         }
         if(biomesLayer != null){
             BiomeType[][] biomeMap = new BiomeType[height][width];
+            worldMap.setBiomeMap(biomeMap);
 
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
@@ -174,7 +175,6 @@ public class TiledMapUtils {
                     }
                 }
             }
-            worldMap.setBiomeMap(biomeMap);
         }
 
         return worldMap;
