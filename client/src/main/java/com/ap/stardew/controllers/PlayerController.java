@@ -270,7 +270,10 @@ public class PlayerController implements InputProcessor {
 
         JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
         message.put("command", "player_move");
-        message.
+        message.put("left", left);
+        message.put("right", right);
+        message.put("up", up);
+        message.put("down", down);
         //Todo: that walkable check i wrote is ass
         Tile destTile = ClientApp.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));

@@ -7,4 +7,3 @@ CREATE TABLE IF NOT EXISTS users (
     maximumMoneyEarned  INTEGER NOT NULL DEFAULT 0,
     password            TEXT NOT NULL
 );
-

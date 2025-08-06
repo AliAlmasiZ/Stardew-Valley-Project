@@ -11,6 +11,7 @@ import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -18,85 +19,28 @@ public class PlayerController {
     private ClientConnectionThread clientConnectionThread;
     private Vector2 direction = new Vector2();
     private Player player;
-    private AtomicBoolean left;
-    private AtomicBoolean right;
-    private AtomicBoolean up;
-    private AtomicBoolean down;
 
     public PlayerController(ClientConnectionThread clientThread) {
         this.clientConnectionThread = clientThread;
         this.player = clientThread.player;
-        left = new AtomicBoolean();
-        right = new AtomicBoolean();
-        up = new AtomicBoolean();
-        down = new AtomicBoolean();
-    }
-
-    public void handleInput(JSONMessage req) {
-        String command = req.getFromBody("command");
-        switch (command) {
-            case "key_down" -> {
-                int keycode = req.getFromBody("keycode");
-                keyDown(keycode);
-            }
-            case "key_up" -> {
-                int keycode = req.getFromBody("keycode");
-                keyUp(keycode);
-            }
-        }
-    }
-
-    private boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.LEFT || keycode == Input.Keys.A)
-            this.left.set(true);
-        if(keycode == Input.Keys.UP || keycode == Input.Keys.W)
-            this.up.set(true);
-        if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S)
-            this.down.set(true);
-        if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D)
-            this.right.set(true);
-        if((Input.Keys.NUM_1 <= keycode)  && (keycode <= Input.Keys.NUM_9)){
-            player.setActiveSlot(player.getComponent(Inventory.class).getSlots().get(keycode - 8));
-        }
-
-        return true;
-    }
-
-    private boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.LEFT || keycode == Input.Keys.A)
-            this.left.set(false);
-        if(keycode == Input.Keys.UP || keycode == Input.Keys.W)
-            this.up.set(false);
-        if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S)
-            this.down.set(false);
-        if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D)
-            this.right.set(false);
-
-        return true;
-    }
-
-
-    public void update(float delta) {
-//        processInput(delta);
 
     }
 
-    private void processInput(float delta) {
-        direction.setZero();
 
-        if (left.get()) {
+
+    public JSONMessage handleWalk(JSONMessage request) {
+
+        if(request.getFromBody("left"))
             direction.x -= 1;
-        }
-        if (right.get()) {
+        if(request.getFromBody("right"))
             direction.x += 1;
-        }
-        if (up.get()) {
+        if(request.getFromBody("up"))
             direction.y += 1;
-        }
-        if (down.get()) {
+        if(request.getFromBody("down"))
             direction.y -= 1;
-        }
 
+
+        float delta = clientConnectionThread.gameThread.getDeltaTime();
         //Todo: that walkable check i wrote is ass
         Tile destTile = App.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
@@ -124,9 +68,24 @@ public class PlayerController {
             updateMessage.put("command", "player_move");
             updateMessage.put("delta_time", delta);
             updateMessage.put("direction", direction);
-            clientConnectionThread.gameThread.sendAllUDP(updateMessage);
+            clientConnectionThread.gameThread.sendAllTCP(updateMessage);
         } else {
             player.setState(Player.State.IDLE);
         }
+
+        return null;
+
     }
+
+
+
+
+
+
+
+
+    public void update(float delta) {
+
+    }
+
 }

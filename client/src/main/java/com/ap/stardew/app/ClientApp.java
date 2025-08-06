@@ -50,6 +50,7 @@ public class ClientApp {
 
             @Override
             public void received(Connection connection, Object object) {
+                System.out.println("new message received in class : " + object.getClass());
                 boolean handled = handleReceived(object);
                 if(!handled) try {
                     receivedMessageQueue.put((JSONMessage) object); // other objects must be handled
@@ -73,7 +74,7 @@ public class ClientApp {
 
     public static void startClient() {
         if(client != null) {
-            System.err.println("client already connected");
+            System.err.println("client already started");
             return;
         }
         client = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
@@ -96,13 +97,11 @@ public class ClientApp {
     private static boolean handleMessage(JSONMessage message) {
         try {
             JSONMessage response = ClientConnectionController.handleCommand(message);
-            if(message.getType() == JSONMessage.Type.update){
-                return true;
-            }
+
             if(response != null)
                 sendTCP(response);
             return true;
-        } catch (UnsupportedOperationException e) {
+        } catch (UnsupportedOperationException notHandled) {
             return false;
         }
     }

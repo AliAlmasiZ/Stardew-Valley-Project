@@ -1,18 +1,20 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.GameServer;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.dto.JSONMessage;
 import io.jsonwebtoken.*;
 
-import java.util.Date;
-
 public class ServerConnectionController {
-    public static Object handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
+    public static JSONMessage handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
         if(message.getType() == JSONMessage.Type.player_input_command) {
-            //TODO
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "player_move" -> {
+                    return connectionThread.playerController.handleWalk(message);
+                }
+            }
         }
         if(message.getType() == JSONMessage.Type.lobby_command) {
             String command =  message.getFromBody("command");
@@ -52,7 +54,7 @@ public class ServerConnectionController {
 
             return response;
         }
-        return null;
+        throw new UnsupportedOperationException("didnt handle");
     }
 
     public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread){

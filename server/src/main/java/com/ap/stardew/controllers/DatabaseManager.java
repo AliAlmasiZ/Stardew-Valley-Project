@@ -5,6 +5,11 @@ import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.utils.JSONUtils;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +23,12 @@ public class DatabaseManager {
 
     public static void saveAccount(Account account) {
         //TODO put this in a better place
-        createTableIfNotExists();
+        try {
+            createTableIfNotExists();
+        } catch (IOException e) {
+            System.err.println("Error in reading schema");
+            e.printStackTrace();
+        }
 
         String sql = "INSERT INTO users ( " +
             "    username, " +
@@ -136,21 +146,21 @@ public class DatabaseManager {
 
         return a;
     }
-    public static void createTableIfNotExists() {
-        String sql = """
-    CREATE TABLE IF NOT EXISTS users (
-        username TEXT PRIMARY KEY,
-        nickname TEXT,
-        email TEXT,
-        gender TEXT,
-        securityAnswers TEXT,
-        maximumMoneyEarned INTEGER,
-        password TEXT
-    );
-    """;
+    public static void createTableIfNotExists() throws IOException {
+        var classLoader = DatabaseManager.class.getClassLoader();
+
+
 
         try (var conn = DriverManager.getConnection(URL);
-             var stmt = conn.createStatement()) {
+             var stmt = conn.createStatement();
+             var inputStream = classLoader.getResourceAsStream("schema.sql")) {
+
+            if (inputStream == null) {
+            throw new IOException("Cannot find resource file 'schema.sql'");
+            }
+
+            String sql = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
             stmt.execute(sql);
         } catch (SQLException e) {
             System.err.println("Failed to create 'users' table");
