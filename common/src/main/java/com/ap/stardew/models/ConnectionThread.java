@@ -165,6 +165,7 @@ abstract public class ConnectionThread extends Thread {
      * @param kryo kryo object of connection
      */
     public static void registerClasses(Kryo kryo) {
+        kryo.setRegistrationRequired(true);
         kryo.setReferences(true);
 
         /* java objects */

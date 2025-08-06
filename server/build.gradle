@@ -22,8 +22,12 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion" //Gdx headless backend for server
 
   implementation("org.xerial:sqlite-jdbc:3.50.3.0") // JDBC for SQLite
-  implementation("org.redisson:redisson:3.50.0") // Redisson for Redis
+//  implementation("org.redisson:redisson:3.50.0") // Redisson for Redis
 
+  implementation('org.redisson:redisson:3.50.0') {
+    exclude group: 'com.esotericsoftware', module: 'kryo'
+    exclude group: 'de.javakaffee', module: 'bridge'
+  }
 }
 
 run {
