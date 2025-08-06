@@ -84,10 +84,6 @@ public class PlayerController implements InputProcessor {
         }
 
 
-        JSONMessage req = new JSONMessage(JSONMessage.Type.player_input_command);
-        req.put("command", "key_down");
-        req.put("keycode", keycode);
-        ClientApp.sendTCP(req);
         return true;
     }
 
@@ -108,10 +104,6 @@ public class PlayerController implements InputProcessor {
         if (keycode == Input.Keys.P) //TODO: Temporarily
             screen.startFishing();
 
-        JSONMessage req = new JSONMessage(JSONMessage.Type.player_input_command);
-        req.put("command", "key_up");
-        req.put("keycode", keycode);
-        ClientApp.sendTCP(req);
 
 
         return false;
@@ -276,6 +268,9 @@ public class PlayerController implements InputProcessor {
             direction.y -= 1;
         }
 
+        JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
+        message.put("command", "player_move");
+        message.
         //Todo: that walkable check i wrote is ass
         Tile destTile = ClientApp.getActiveGame().getActiveMap().
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
