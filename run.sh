@@ -20,6 +20,7 @@ num_clients=$1
 for (( i=1; i<=num_clients; i++ )); do
   echo -e "${CYAN}Starting client #${i}${RESET}"
   ./gradlew lwjgl3:run > "client${i}.log" 2>&1 &
+  sleep 5
 done
 
 wait

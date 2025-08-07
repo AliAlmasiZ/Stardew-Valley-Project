@@ -176,6 +176,8 @@ public class GameScreen extends AbstractScreen {
 
         //TODO: remove this later
         //**************************************
+
+
 //        controller.cheatGiveItem("Training Rod", 1);
 //        controller.cheatGiveItem("Hay", 500);
 //        controller.cheatGiveItem("Wood", 500);
@@ -1424,6 +1426,20 @@ public class GameScreen extends AbstractScreen {
         });
 
     }
+
+
+    /* --- Crafting ---*/
+    /**
+     * shows the crafting dialog
+     * */
+
+
+
+
+
+
+
+
 
     public Entity chooseFromInventory() {
         // TODO: open a dialog to select item and number
