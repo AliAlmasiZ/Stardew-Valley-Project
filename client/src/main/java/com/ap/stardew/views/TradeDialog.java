@@ -32,7 +32,7 @@ public class TradeDialog {
     private Inventory senderInventory;
     private InventoryGrid receiverInventoryGrid;
     private Inventory receiverInventory;
-    private Label errorLabel;
+    public Label errorLabel;
 
     public TradeDialog(Stage stage, Player playerToTrade) {
         this.stage = stage;
@@ -206,12 +206,12 @@ public class TradeDialog {
         table.add(confirmButton).growX().colspan(2).row();
     }
 
-    public void openMainTradeAsReceiver(String text) {
+    public void openMainTradeAsReceiver() {
         table.clear();
         Label senderLabel = new Label("You receive: ", customSkin);
         Label receiverLabel = new Label("You give: ", customSkin);
 
-        Label waitLabel = new Label(text, customSkin);
+        Label waitLabel = new Label("Wait for sender to complete offer...", customSkin);
         waitLabel.setColor(Color.RED);
 
         table.add(senderLabel).center().pad(5);
@@ -281,4 +281,12 @@ public class TradeDialog {
         dialog.hide(true);
     }
 
+
+    public Inventory getReceiverInventory() {
+        return receiverInventory;
+    }
+
+    public Inventory getSenderInventory() {
+        return senderInventory;
+    }
 }

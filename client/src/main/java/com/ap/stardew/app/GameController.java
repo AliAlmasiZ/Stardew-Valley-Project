@@ -4,6 +4,7 @@ import com.ap.stardew.ClientGame;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.LobbyScreen;
@@ -122,7 +123,7 @@ public class GameController {
      */
     public static void acceptTradeStart(Player player) {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
-        gameScreen.tradeDialog.openMainTradeAsReceiver("Wait for sender to complete offer...");
+        gameScreen.tradeDialog.openMainTradeAsReceiver();
 
         JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
         message.put("command", "accept_trade");
@@ -188,9 +189,64 @@ public class GameController {
         gameScreen.tradeDialog.openFinalTradeAsReceiver();
     }
 
-    public static void doTrade(Player player) {}
+    /**
+     * SEND
+     * jic jic jic
+     * @param player have trade with
+     */
+    public static void doTrade(Player player) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        finishTrade(false);
 
+
+
+        JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
+        message.put("command", "do_trade");
+        message.put("receiver", player.getUsername());
+
+        ClientApp.sendTCP(message);
+    }
+
+    public static void finishTrade(boolean isSender) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+
+
+        Inventory inventoryToAdd = gameScreen.tradeDialog.getSenderInventory();
+        if (isSender) {
+            inventoryToAdd = gameScreen.tradeDialog.getSenderInventory();
+        } else {
+            inventoryToAdd = gameScreen.tradeDialog.getReceiverInventory();
+        }
+
+        ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItems(inventoryToAdd);
+        gameScreen.showTemporaryMessage("Trade done successfully!", 5, Color.GREEN);
+
+        gameScreen.tradeDialog.hide();
+        gameScreen.tradeDialog = null;
+    }
+
+    /**
+     * SEND
+     * @param player to send
+     */
     public static void rejectTradeOffer(Player player) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.openMainTradeAsReceiver();
 
+        JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
+        message.put("command", "reject_trade_offer");
+        message.put("receiver", player.getUsername());
+
+        ClientApp.sendTCP(message);
+    }
+
+    /**
+     * HANDLE
+     */
+    public static void rejectTradeOffer() {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.openMainTradeAsSender();
+        gameScreen.tradeDialog.errorLabel.setVisible(true);
+        gameScreen.tradeDialog.errorLabel.setText("Your offer has been rejected...");
     }
 }

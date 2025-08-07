@@ -65,6 +65,12 @@ public class ClientConnectionController {
                 case "confirm" -> {
                     GameController.confirmTrade();
                 }
+                case "reject_trade_offer" -> {
+                    GameController.rejectTradeOffer();
+                }
+                case "do_trade" -> {
+                    GameController.finishTrade(true);
+                }
             }
         }
         throw new UnsupportedOperationException(); // for messages cant handle

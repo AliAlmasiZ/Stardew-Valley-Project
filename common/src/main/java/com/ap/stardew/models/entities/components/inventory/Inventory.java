@@ -180,6 +180,11 @@ public class Inventory extends EntityComponent implements Serializable {
         entity.getComponent(Pickable.class).setStackSize(quantity);
         return addItem(entity);
     }
+    public void addItems(Inventory inventory) {
+        for (Entity entity : inventory.getEntities()) {
+            addItem(entity);
+        }
+    }
     public int getEmptySpace(){
         int emptySlots = 0;
         for(InventorySlot s : slots){
