@@ -27,7 +27,7 @@ public class GameController {
 
         int i = 0;
         for (AccountInfo accountInfo : accountInfos) {
-            Player player = new Player();
+            Player player = new Player(accountInfo.getUsername());
             game.addPlayer(player);
 
             gameSession.addUserToSession(accountInfo.getUsername(), player);
@@ -42,6 +42,8 @@ public class GameController {
             player.setCurrentMap(player.getHouse().getComponent(InteriorComponent.class).getMap());
             i++;
         }
+
+        game.initGame(null);
 
         return gameSession;
     }

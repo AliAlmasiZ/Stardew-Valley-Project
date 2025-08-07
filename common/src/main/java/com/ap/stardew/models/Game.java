@@ -54,13 +54,13 @@ public class Game implements Serializable {
     public void initGame(GameStartingDetails details) {
         this.todayWeather = Weather.SUNNY;
         this.tomorrowWeather = Weather.SUNNY;
-//
-//        // init player's friendships
-//        for (int i = 0; i < players.size(); i++) {
-//            for (int j = i + 1; j < players.size(); j++) {
-//                this.playerFriendships.add(new PlayerFriendship(players.get(i), players.get(j)));
-//            }
-//        }
+
+        // init player's friendships
+        for (int i = 0; i < players.size(); i++) {
+            for (int j = i + 1; j < players.size(); j++) {
+                this.playerFriendships.add(new PlayerFriendship(players.get(i), players.get(j)));
+            }
+        }
 
         //player farms
 //        Map<MapRegion, FarmDetails> farmsDetails = mainMap.getFarmsDetail();

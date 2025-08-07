@@ -36,13 +36,17 @@ public class ClientConnectionThread extends ConnectionThread {
 
     @Override
     protected boolean handleMessage(JSONMessage message) {
-        Object response = ServerConnectionController.handleCommand(message, this);
-        if(response == null)
+        try {
+
+            Object response = ServerConnectionController.handleCommand(message, this);
+            //for Socket
+    //        sendMessage(response);
+            if(response != null)
+                sendTCP(response);
+            return true;
+        } catch (UnsupportedOperationException notHandled) {
             return false;
-        //for Socket
-//        sendMessage(response);
-        sendTCP(response);
-        return true;
+        }
     }
 
     @Override
@@ -90,5 +94,7 @@ public class ClientConnectionThread extends ConnectionThread {
 
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
+        player = new Player(currentAccount.getUsername());//???
+        playerController.updatePlayer();
     }
 }

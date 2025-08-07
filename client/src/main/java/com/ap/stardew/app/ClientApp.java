@@ -50,6 +50,7 @@ public class ClientApp {
 
             @Override
             public void received(Connection connection, Object object) {
+                System.out.println("new message received in class : " + object.getClass());
                 boolean handled = handleReceived(object);
                 if(!handled) try {
                     receivedMessageQueue.put((JSONMessage) object); // other objects must be handled
@@ -73,7 +74,7 @@ public class ClientApp {
 
     public static void startClient() {
         if(client != null) {
-            System.err.println("client already connected");
+            System.err.println("client already started");
             return;
         }
         client = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
@@ -96,18 +97,19 @@ public class ClientApp {
     private static boolean handleMessage(JSONMessage message) {
         try {
             JSONMessage response = ClientConnectionController.handleCommand(message);
-            if(message.getType() == JSONMessage.Type.update){
-                return true;
-            }
+
             if(response != null)
                 sendTCP(response);
             return true;
-        } catch (UnsupportedOperationException e) {
+        } catch (UnsupportedOperationException notHandled) {
             return false;
         }
     }
 
     public static boolean handleReceived(Object received) {
+        if(received == null) {
+
+        }
         if(received instanceof JSONMessage) {
             return handleMessage((JSONMessage) received);
         }
@@ -171,6 +173,10 @@ public class ClientApp {
     }
 
     public static String getUsername(){
+        if (activeGame != null) {
+            return activeGame.getCurrentPlayer().getUsername();
+        }
+
         if(token == null) return null;
 
         JSONMessage request = new JSONMessage(JSONMessage.Type.command);
@@ -178,7 +184,11 @@ public class ClientApp {
         request.put("command", "getUsername");
         request.put("token", token);
 
-        JSONMessage response = sendAndWaitForResponse(request, 500);
+        JSONMessage response = sendAndWaitForResponse(request, 5000);
+
+
+        System.out.println(response.toString());
+
 
         if(!response.getFromBody("success", boolean.class)) return null;
 

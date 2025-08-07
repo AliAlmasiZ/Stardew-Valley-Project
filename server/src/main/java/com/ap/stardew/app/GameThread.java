@@ -15,6 +15,7 @@ public class GameThread extends Thread{
     static public final int UPDATE_FREQUENCY = 30;
     private float lastUpdateSent = 0;
     private float stateTime = 0;
+    private float deltaTime;
     private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
     private AtomicBoolean end = new AtomicBoolean(false);
     private final GameSession gameSession;
@@ -24,16 +25,24 @@ public class GameThread extends Thread{
 
         for (Map.Entry<String, Player> entry : gameSession.getUserPlayerMap().entrySet()) {
             clients.add(ServerApp.getConnectionByUsername(entry.getKey()));
+            System.out.println("client " + entry.getKey() + " added to game");
         }
     }
 
+    @Override
+    public void start() {
+        for (ClientConnectionThread client : clients) {
+            client.gameThread = this;
+        }
+        super.start();
+    }
 
     @Override
     public void run() {
-        long lastTime = System.nanoTime();
+        long lastTime = System.currentTimeMillis();
         while (!end.get()) {
-            long currentTime = System.nanoTime();
-            float deltaTime = (currentTime - lastTime) / 1_000_000_000f; // Convert to seconds
+            long currentTime = System.currentTimeMillis();
+            deltaTime = (currentTime - lastTime) / 1000f; // Convert to seconds
             lastTime = currentTime;
             stateTime += deltaTime;
 
@@ -41,8 +50,8 @@ public class GameThread extends Thread{
 
             update(deltaTime);
 
-
         }
+
     }
 
 
@@ -51,18 +60,21 @@ public class GameThread extends Thread{
         for (ClientConnectionThread client : clients) {
             client.update(delta);
         }
-        sendUpdates(delta);
+        sendUpdates();
     }
 
-    private void sendUpdates(float delta) {
-        if(lastUpdateSent + delta < (float) 60 / UPDATE_FREQUENCY)
+    private void sendUpdates() {
+
+        if(stateTime - lastUpdateSent < 2)
             return;
         lastUpdateSent = stateTime;
+
 
         JSONMessage message = new JSONMessage(JSONMessage.Type.update);
         message.put("command", "update_players");
         message.put("player_states", getPlayerStates());
         sendAllUDP(message);
+        //update sent to all
     }
 
     private ArrayList<PlayerState> getPlayerStates() {
@@ -83,6 +95,10 @@ public class GameThread extends Thread{
         for (ClientConnectionThread client : clients) {
             client.sendUDP(object);
         }
+    }
+
+    public float getDeltaTime() {
+        return deltaTime;
     }
 
     public ArrayList<ClientConnectionThread> getClients() {

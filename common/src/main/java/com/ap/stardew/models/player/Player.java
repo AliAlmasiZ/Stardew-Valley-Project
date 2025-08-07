@@ -73,6 +73,11 @@ public class Player extends Entity implements Serializable {
     private boolean haveNewTrade = false;
     private boolean haveNewSuitor = false;
 
+    public Player(String username) {
+        this();
+        this.accountUsername = username;
+    }
+
     public Player(){
         super("Player", new Inventory(30), new Renderable(), new PositionComponent(0, 0));
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
@@ -123,6 +128,10 @@ public class Player extends Entity implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void setAccountUsername(String accountUsername) {
+        this.accountUsername = accountUsername;
     }
 
     public ArrayList<Animal> getAnimals() {
@@ -589,6 +598,7 @@ public class Player extends Entity implements Serializable {
         state.energy = getEnergy().getAmount();
         state.position = getPosition();
         state.state = this.state; //WTF this piece of shit
+        state.username = this.getUsername();
         //TODO
 
         return state;
@@ -596,7 +606,7 @@ public class Player extends Entity implements Serializable {
 
     public void loadFromState(PlayerState state) {
         this.getEnergy().setAmount(state.energy);
-        this.setPosition(new Position(state.position));
+        this.setPosition(state.position.x, state.position.y);
         this.state = state.state; //WTF
 
     }

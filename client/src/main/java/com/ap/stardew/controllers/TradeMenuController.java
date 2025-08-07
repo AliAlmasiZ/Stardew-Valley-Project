@@ -108,7 +108,7 @@ public class TradeMenuController implements Controller {
         return new Result(true, message.toString());
     }
 
-    public Result tradeHistory() {
+    public static Result tradeHistory() {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 

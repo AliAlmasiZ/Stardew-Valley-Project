@@ -1,5 +1,7 @@
 package com.ap.stardew.models.dto;
 
+import com.ap.stardew.utils.JSONUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +52,11 @@ public class JSONMessage {
         response,
         player_input_command,
         update
+    }
+
+    @Override
+    public String toString() {
+        return JSONUtils.toJson(this);
     }
 
     public Map<String, Object> getBody() {

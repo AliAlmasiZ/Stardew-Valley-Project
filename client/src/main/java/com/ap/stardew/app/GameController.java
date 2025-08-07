@@ -23,10 +23,18 @@ public class GameController {
 
         game.setCurrentPlayer(details.getFromBody("player"));
 
+
+
+
+
         ClientApp.setActiveGame(game);
 
         Gdx.app.postRunnable(() -> {
             ClientGame.getInstance().setScreen(new GameScreen(game));
         });
+    }
+
+    public static void startTradeWithPlayer(Player player) {
+
     }
 }

@@ -205,6 +205,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(TileType[][].class);
         kryo.register(TileType[][].class);
         kryo.register(Player.class);
+        kryo.register(PlayerFriendship.class);
         kryo.register(Entity.class);
         kryo.register(EntityComponent.class);
         kryo.register(Inventory.class);
@@ -247,6 +248,6 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Tile[].class);
         kryo.register(Tile.class);
 
-//        kryo.register(GameMap.class, new GameMapSerializer());
+        kryo.register(GameMap.class, new GameMapSerializer());
     }
 }
