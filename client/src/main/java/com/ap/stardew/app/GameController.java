@@ -33,4 +33,8 @@ public class GameController {
             ClientGame.getInstance().setScreen(new GameScreen(game));
         });
     }
+
+    public static void startTradeWithPlayer(Player player) {
+
+    }
 }

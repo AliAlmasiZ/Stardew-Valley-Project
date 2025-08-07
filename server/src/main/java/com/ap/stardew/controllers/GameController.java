@@ -34,6 +34,8 @@ public class GameController {
             i++;
         }
 
+        game.initGame(null);
+
         return gameSession;
     }
 }
