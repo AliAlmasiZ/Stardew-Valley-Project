@@ -3,6 +3,7 @@ package com.ap.stardew.app;
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
+import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.LobbyScreen;
@@ -85,13 +86,17 @@ public class GameController {
      * after closing the menu
      * @param player player to trade
      */
-    public static void stopTradeWithPlayer(Player player) {
+    public static void stopTradeWithPlayer(Player player, String message) {
         Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog = null;
+
+
         JSONMessage response = new JSONMessage(JSONMessage.Type.trade);
         response.put("command", "stop_trade");
         response.put("sender", currentPlayer.getUsername());
         response.put("receiver", player.getUsername());
-        response.put("message", currentPlayer.getUsername() + " stopped the trade!");
+        response.put("message", currentPlayer.getUsername() + message);
 
         ClientApp.sendTCP(response);
     }
@@ -110,13 +115,82 @@ public class GameController {
         }
     }
 
+    /**
+     * SEND
+     * after clicking yes
+     * @param player player to send
+     */
     public static void acceptTradeStart(Player player) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.openMainTradeAsReceiver("Wait for sender to complete offer...");
 
+        JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
+        message.put("command", "accept_trade");
+        message.put("receiver", player.getUsername());
+
+        ClientApp.sendTCP(message);
     }
 
-    public static void rejectTradeStart(Player player) {
-
+    /**
+     * HANDLE
+     */
+    public static void acceptTradeRequest() {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.openMainTradeAsSender();
     }
 
-    public static void updateTradeInventory(Player player) {}
+    /**
+     * SEND
+     * update the inventory
+     * @param player player to send
+     * @param item item that is given
+     * @param isSender if it is added to sender inventory or not
+     */
+    public static void updateTradeInventory(Player player, Entity item, boolean isSender) {
+        JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
+        message.put("command", "update_trade");
+        message.put("receiver", player.getUsername());
+        message.put("item", item);
+        message.put("isSender", isSender);
+
+        ClientApp.sendTCP(message);
+    }
+
+    /**
+     * HANDLE
+     * @param message update info
+     */
+    public static void updateTradeInventory(JSONMessage message) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.updateInventory(message.getFromBody("item"), message.getFromBody("isSender"));
+    }
+
+    /**
+     * SEND
+     * finish putting items and wait for response
+     * @param player to send
+     */
+    public static void confirmTrade(Player player) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.openFinalTradeAsSender();
+        JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
+        message.put("command", "confirm");
+        message.put("receiver", player.getUsername());
+
+        ClientApp.sendTCP(message);
+    }
+
+    /**
+     * HANDLE
+     */
+    public static void confirmTrade() {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        gameScreen.tradeDialog.openFinalTradeAsReceiver();
+    }
+
+    public static void doTrade(Player player) {}
+
+    public static void rejectTradeOffer(Player player) {
+
+    }
 }

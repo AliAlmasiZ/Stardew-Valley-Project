@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.player.Player;
@@ -54,6 +55,15 @@ public class ClientConnectionController {
                 }
                 case "stop_trade" -> {
                     GameController.stopTrade(message);
+                }
+                case "accept_trade" -> {
+                    GameController.acceptTradeRequest();
+                }
+                case "update_trade" -> {
+                    GameController.updateTradeInventory(message);
+                }
+                case "confirm" -> {
+                    GameController.confirmTrade();
                 }
             }
         }

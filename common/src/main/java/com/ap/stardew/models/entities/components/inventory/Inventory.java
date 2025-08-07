@@ -359,6 +359,14 @@ public class Inventory extends EntityComponent implements Serializable {
     public boolean doesHaveItem(Entity entity){
         return this.getItem(entity) != null;
     }
+    public boolean doesHaveItems(Inventory inventory) {
+        for (Entity e : inventory.getEntities()) {
+            if (this.doesHaveItem(e)) continue;
+            return false;
+        }
+
+        return true;
+    }
 
     public int getItemCount(String name){
         int count = 0;

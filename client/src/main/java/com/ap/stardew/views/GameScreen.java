@@ -180,8 +180,8 @@ public class GameScreen extends AbstractScreen {
         //TODO: remove this later
         //**************************************
 //        controller.cheatGiveItem("Training Rod", 1);
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatGiveItem("Wood", 500);
+        controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Wood", 16);
 //        controller.cheatGiveItem("Axe", 1);
 //        controller.cheatGiveItem("Pickaxe", 1);
 //        controller.cheatGiveItem("Hoe", 1);
@@ -405,7 +405,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void showTemporaryMessage(String message, float duration, Color color) {
-        Label label = new Label(message, skin);
+        Label label = new Label(message, customSkin);
         label.setPosition(
             (uiStage.getWidth() - label.getWidth()) / 2f,
             (uiStage.getHeight() - label.getHeight() - 50)

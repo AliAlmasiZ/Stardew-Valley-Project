@@ -57,12 +57,12 @@ public class ServerConnectionController {
         if (message.getType() == JSONMessage.Type.trade) {
             String command = message.getFromBody("command");
             switch (command) {
-                case "request_start" -> {
-                    connectionThread.gameThread.sendTCP(message, message.getFromBody("receiver"));
+                case "cc" -> {
                     return null;
                 }
-                case "stop_trade" -> {
+                default -> {
                     connectionThread.gameThread.sendTCP(message, message.getFromBody("receiver"));
+                    return null;
                 }
             }
         }
