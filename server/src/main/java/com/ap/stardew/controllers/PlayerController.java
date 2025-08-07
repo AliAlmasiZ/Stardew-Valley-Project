@@ -39,12 +39,6 @@ public class PlayerController {
     }
 
 
-
-
-
-
-
-
     public void update(float delta) {
 
     }
@@ -52,5 +46,7 @@ public class PlayerController {
     public void updatePlayer() {
         this.player = clientConnectionThread.player;
     }
+
+    // Trade
 
 }

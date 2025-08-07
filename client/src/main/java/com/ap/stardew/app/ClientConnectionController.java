@@ -1,15 +1,11 @@
 package com.ap.stardew.app;
 
-import com.ap.stardew.models.App;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.models.Result;
 import com.ap.stardew.views.LobbyScreen;
-import com.ap.stardew.views.MultiplayerScreen;
 
 import java.util.ArrayList;
 
@@ -47,6 +43,17 @@ public class ClientConnectionController {
                         player.loadFromState(playerState);
                     }
                     return null;
+                }
+            }
+        }
+        if (message.getType() == JSONMessage.Type.trade) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "request_start" -> {
+                    GameController.startTradeRequest(message);
+                }
+                case "stop_trade" -> {
+                    GameController.stopTrade(message);
                 }
             }
         }

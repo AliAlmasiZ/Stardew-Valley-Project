@@ -92,7 +92,7 @@ public class GameScreen extends AbstractScreen {
     private ClockActor clockActor;
 
     // Trade
-
+    public TradeDialog tradeDialog;
 
     private final Game game;
 
@@ -425,6 +425,7 @@ public class GameScreen extends AbstractScreen {
         ));
 
         uiStage.addActor(label);
+        System.out.println(message); // TODO: REMOVE IT
     }
 
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
@@ -1374,7 +1375,12 @@ public class GameScreen extends AbstractScreen {
                     playerNameButton.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
                             GameController.startTradeWithPlayer(player1);
-                            dialog.hide();
+
+                            Actor current = contentTable;
+                            while (current != null && !(current instanceof InGameDialog)) {
+                                current = current.getParent();
+                            }
+                            if (current != null) ((InGameDialog) current).hide();
                         }
                     });
                     contentTable.add(playerNameButton).growX().row();
@@ -1401,7 +1407,7 @@ public class GameScreen extends AbstractScreen {
 
                 // Create a ScrollPane to make the table scrollable
                 ScrollPane scrollPane = new ScrollPane(contentTable, customSkin);
-                scrollPane.setFadeScrollBars(true);
+                scrollPane.setFadeScrollBars(false);
                 scrollPane.setScrollingDisabled(true, false);
 
                 Table container = new Table();
@@ -1523,6 +1529,10 @@ public class GameScreen extends AbstractScreen {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public Stage getUiStage() {
+        return uiStage;
     }
 
     private void setGameInput() {
