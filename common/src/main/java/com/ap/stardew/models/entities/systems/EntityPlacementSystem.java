@@ -28,7 +28,7 @@ import java.util.Map;
 public class EntityPlacementSystem {
     private static final FileSystemTiledReader mapLoader = new FileSystemTiledReader();
 
-    public static Result placeOnTile(Entity entity, Tile tile){
+    public static Result  placeOnTile(Entity entity, Tile tile){
         Entity tileEntity = tile.getContent();
 //        if(tileEntity != null){
 //            return new Result(false, "tile is full");
@@ -128,7 +128,7 @@ public class EntityPlacementSystem {
                 int dest = TiledMapUtils.getProperty(object, "destId", Integer.class);
 
                 int x = Math.round(object.getX() / 16);
-                int y = exteriorData.getHeight() - Math.round(object.getY() / 16);
+                int y = exteriorData.getHeight() - Math.round(object.getY() / 16) - 1;
                 Door door = new Door();
                 exteriorDoors.putIfAbsent(id, door);
                 EntityPlacementSystem.placeOnTile(door, map.getTileByPosition(position.getRow() + y, position.getCol() + x));
@@ -141,7 +141,7 @@ public class EntityPlacementSystem {
                 int dest = TiledMapUtils.getProperty(object, "destId", Integer.class);
 
                 int x = Math.round(object.getX() / 16);
-                int y = interiorData.getHeight() - Math.round(object.getY() / 16);
+                int y = interiorData.getHeight() - Math.round(object.getY() / 16f) - 1;
 
                 Door door = new Door();
                 interiorDoors.putIfAbsent(id, door);

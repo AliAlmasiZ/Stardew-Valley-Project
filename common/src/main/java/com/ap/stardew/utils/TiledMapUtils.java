@@ -96,19 +96,15 @@ public class TiledMapUtils {
 
         if(objectsLayer != null){
             for (TiledObject object : objectsLayer.getObjects()) {
-                if(object.getName().equals("Building")){
-                    Entity building = App.entityRegistry.makeEntity(TiledMapUtils.getProperty(object, "building", String.class));
-                    EntityPlacementSystem.placeEntity(building, new Vec2(object.getX(),
-                        height * 16 - object.getY()), gameMap);
-                }else if(object.getName().equals("Fridge")){
+                if(object.getName().equals("Fridge")){
                     Entity fridge = App.entityRegistry.makeEntity("fridge");
                     EntityPlacementSystem.placeEntity(fridge, new Vec2(object.getX(),
-                        height * 16 - object.getY()), gameMap);
+                        height * 16 - object.getY() - 16), gameMap);
                 }else if(object.getName().equals("Shop")){
                     Entity shopCounter = new Entity("shopCounter");
                     shopCounter.addComponent(new Placeable(false));
                     EntityPlacementSystem.placeEntity(shopCounter, new Vec2(object.getX(),
-                        height * 16 - object.getY()), gameMap);
+                        height * 16 - object.getY() - 16), gameMap);
                 }
             }
         }
@@ -191,7 +187,7 @@ public class TiledMapUtils {
                 if(object.getName().equals("Building")){
                     Entity building = App.entityRegistry.makeEntity(TiledMapUtils.getProperty(object, "building", String.class));
                     EntityPlacementSystem.placeEntity(building, new Vec2(object.getX(),
-                        height * 16 - object.getY()), worldMap);
+                        height * 16 - object.getY() - object.getHeight()), worldMap);
 
                     if(object.getProperty("playerHouse") != null){
                         detailsMap.get(worldMap.getRegion((int)(object.getX() / 16f),

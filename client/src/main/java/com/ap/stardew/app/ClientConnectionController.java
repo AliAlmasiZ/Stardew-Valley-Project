@@ -1,8 +1,12 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
+import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
+import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.FrameworkMessage;
@@ -37,7 +41,19 @@ public class ClientConnectionController {
                         return null;
                     }
                     Player player = ClientApp.getActiveGame().getPlayerByUsername(username);
+                    Tile destTile = player.getCurrentMap().
+                        getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
+                    Entity entity;
+                    if ((entity = destTile.getContent()) != null) {
+                        if(entity instanceof Door door){
+                            EntityPlacementSystem.placeOnMap(player, door.getDestination(), door.getDestination().getMap());
+                        }
+                    }
+
                     player.move(direction, delta);
+                    player.setState(Player.State.WALKING);
+
+                    System.out.println(player.getPosition().getMap());
                     return null;
                 }
                 case "update_players" -> {

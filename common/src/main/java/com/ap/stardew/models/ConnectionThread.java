@@ -243,11 +243,11 @@ abstract public class ConnectionThread extends Thread {
 
 
         kryo.register(Game.class);
+        kryo.register(GameMap.class);
         kryo.register(WorldMap.class);
         kryo.register(Tile[][].class);
         kryo.register(Tile[].class);
         kryo.register(Tile.class);
 
-        kryo.register(GameMap.class, new GameMapSerializer());
     }
 }

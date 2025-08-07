@@ -312,12 +312,16 @@ public class LobbyController {
                 return res;
             }
         }
-        
+
         GameSession session = GameController.createGame(accounts);
         GameThread gameThread = new GameThread(session);
 
 
+
         for (ClientConnectionThread client : gameThread.getClients()) {
+            client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());
+            client.playerController = new PlayerController(client);
+
             JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);
             gameStartDetails.put("command", "startGame");
             gameStartDetails.put("lobby_id", lobby.getLobbyId());

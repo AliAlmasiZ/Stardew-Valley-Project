@@ -25,6 +25,7 @@ public class ClientApp {
 
     private static Game activeGame;
     private static String token;
+    private static String username;
 
     public static boolean isEnded() {
         return exitFlag;
@@ -50,7 +51,7 @@ public class ClientApp {
 
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("new message received in class : " + object.getClass());
+//                System.out.println("new message received in class : " + object.getClass());
                 boolean handled = handleReceived(object);
                 if(!handled) try {
                     receivedMessageQueue.put((JSONMessage) object); // other objects must be handled
@@ -173,28 +174,11 @@ public class ClientApp {
     }
 
     public static String getUsername(){
-        if (activeGame != null) {
-            return activeGame.getCurrentPlayer().getUsername();
-        }
+        return username;
+    }
 
-        if(token == null) return null;
-
-        JSONMessage request = new JSONMessage(JSONMessage.Type.command);
-
-        request.put("command", "getUsername");
-        request.put("token", token);
-
-        JSONMessage response = sendAndWaitForResponse(request, 5000);
-
-
-        System.out.println(response.toString());
-
-
-        if(!response.getFromBody("success", boolean.class)) return null;
-
-        System.out.println(response.getFromBody("username", String.class));
-
-        return response.getFromBody("username");
+    public static void setUsername(String username) {
+        ClientApp.username = username;
     }
 
     public static Game getActiveGame() {

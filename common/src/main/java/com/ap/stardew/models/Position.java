@@ -38,6 +38,14 @@ public class Position extends Vec2 implements Serializable {
         return this;
     }
 
+    public Position set(Position other){
+        super.set(other);
+        if(other.map != null){
+            this.map = other.map;
+        }
+        return this;
+    }
+
     public GameMap getMap() {
         return map;
     }

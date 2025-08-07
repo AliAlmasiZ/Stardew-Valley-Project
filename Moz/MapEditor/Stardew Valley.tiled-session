@@ -369,11 +369,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouse.tmx": {
-            "scale": 3,
+            "scale": 4,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 96.33333333333333,
-                "y": 104.49999999999999
+                "x": 107.75,
+                "y": 84.875
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouse.tmx#1": {
@@ -1058,7 +1058,7 @@
             "scale": 24.6109375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 16.029458447082725,
+                "x": 16.04977461748461,
                 "y": 16.029458447082725
             }
         },
@@ -1536,11 +1536,11 @@
             "scaleInEditor": 8
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 8,
+            "scale": 8,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 3700,
-                "y": 622.7272727272727
+                "x": 1421.75,
+                "y": 1123.9375
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx#Landscape": {

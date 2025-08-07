@@ -70,10 +70,11 @@ public class GameThread extends Thread{
         lastUpdateSent = stateTime;
 
 
-        JSONMessage message = new JSONMessage(JSONMessage.Type.update);
-        message.put("command", "update_players");
-        message.put("player_states", getPlayerStates());
-        sendAllUDP(message);
+//        JSONMessage message = new JSONMessage(JSONMessage.Type.update);
+//
+//        message.put("command", "update_players");
+//        message.put("player_states", getPlayerStates());
+//        sendAllTCP(message);
         //update sent to all
     }
 

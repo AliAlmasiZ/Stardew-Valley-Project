@@ -1,5 +1,6 @@
 package com.ap.stardew.views.widgets;
 
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
@@ -71,7 +72,7 @@ class RegionActor extends Table {
                 return null;
             }
         };
-        image.getColor().a = 0.4f;
+        image.getColor().a = 0.6f;
         image.addListener(new ClickListener(){
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -90,7 +91,7 @@ class RegionActor extends Table {
                 image.addAction(
                     Actions.sequence(
                         Actions.alpha(0.7f, 0.06f),
-                        Actions.alpha(0.4f, 0.06f)
+                        Actions.alpha(0.6f, 0.06f)
                     )
                 );
                 onClick();
@@ -259,12 +260,16 @@ public class MapActor extends Table {
             }
 
             if(previousOwner.isEmpty() && currentOwner != null){
-                Color newCoLor = ColorPalette.green.cpy();
+                Color newCoLor = ColorPalette.red.cpy();
+                if(currentOwner.equals(ClientApp.getUsername())){
+                    newCoLor = Color.CYAN.cpy();
+                }
+
                 newCoLor.a = regionActor.image.getColor().a;
 
                 regionActor.image.addAction(
                     Actions.color(
-                        newCoLor, 0.5f
+                        newCoLor, 0.3f
                     )
                 );
 
@@ -276,7 +281,7 @@ public class MapActor extends Table {
 
                 regionActor.image.addAction(
                     Actions.color(
-                        newCoLor, 0.5f
+                        newCoLor, 0.3f
                     )
                 );
 

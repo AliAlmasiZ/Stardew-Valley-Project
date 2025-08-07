@@ -300,7 +300,7 @@ public class GameScreen extends AbstractScreen {
         });
 
         batch.begin();
-//        for (Entity entity : renderableEntities) {
+        for (Entity entity : renderableEntities) {
 //            entity.setEntityForComponents();
 //
 //            Renderable renderable = entity.getComponent(Renderable.class);
@@ -316,7 +316,9 @@ public class GameScreen extends AbstractScreen {
 //                    sprite.draw(batch);
 //                }
 //            }
-//        }
+            batch.draw(GameAssetManager.getInstance().redCross, entity.getComponent(PositionComponent.class).getX(),
+                entity.getComponent(PositionComponent.class).getY());
+        }
 //
 //        switch (playerController.getEquippedItemState()) {
 //            case PLACEABLE -> {
@@ -347,9 +349,9 @@ public class GameScreen extends AbstractScreen {
 //            }
 //        }
 
-        for (Player p : game.getPlayers()) {
-            batch.draw(GameAssetManager.getInstance().energyBar, p.getPosition().x, p.getPosition().y);
-        }
+//        for (Player p : game.getPlayers()) {
+//            batch.draw(GameAssetManager.getInstance().energyBar, p.getPosition().x, p.getPosition().y);
+//        }
         batch.end();
 
         mapRenderManager.renderFrontLayers(renderer, activeMap);

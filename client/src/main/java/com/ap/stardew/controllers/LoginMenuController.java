@@ -86,6 +86,7 @@ public class LoginMenuController implements Controller{    @Override
         }
 
         ClientApp.setToken(response.getFromBody("token", String.class));
+        ClientApp.setUsername(username);
 
         return new Result(response.getFromBody("success"), response.getFromBody("message"));
     }

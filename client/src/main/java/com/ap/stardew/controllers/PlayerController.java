@@ -4,6 +4,7 @@ import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.App;
 
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
@@ -279,15 +280,12 @@ public class PlayerController implements InputProcessor {
             Entity entity = null;
             if ((entity = destTile.getContent()) != null) {
                 Placeable placeable = entity.getComponent(Placeable.class);
-                if(placeable.isWalkable() && destTile.isWalkable()){
-                    for (CollisionEvent c : placeable.getCollisionEvents()) {
-                        c.onEnter(player);
-                    }
-                }else{
+                if (!placeable.isWalkable() || !destTile.isWalkable()) {
                     canWalk = false;
-                    for (CollisionEvent c : placeable.getCollisionEvents()) {
-                        c.onCollision(player);
-                    }
+                }
+                if(entity instanceof Door door){
+                    EntityPlacementSystem.placeOnMap(player, door.getDestination(), door.getDestination().getMap());
+                    canWalk = true;
                 }
             }
             if(canWalk){

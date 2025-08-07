@@ -17,26 +17,10 @@ public class Door extends Entity implements Serializable {
     public Door() {
         super("DOOR");
         this.addComponent(new Renderable());
-//        this.addComponent( new Placeable(true, new CollisionEvent() {
-//            @Override
-//            public Result onCollision(Player player) {
-//                EntityPlacementSystem.placeOnMap(player, Door.this.destination,
-//                    Door.this.destination.getMap());
-//                App.getActiveGame().setActiveMap(Door.this.destination.getMap());
-//                return new Result(false, "");
-//            }
-//
-//            @Override
-//            public Result onEnter(Player player) {
-//                EntityPlacementSystem.placeOnMap(player, Door.this.destination,
-//                    Door.this.destination.getMap());
-//                App.getActiveGame().setActiveMap(Door.this.destination.getMap());
-//                return new Result(false, "");
-//            }
-//        }));
+        addComponent(new Placeable(true));
     }
     public void setDestination(Position position){
-        this.destination = position;
+        this.destination = position.cpy();
     }
 
     public Position getDestination() {

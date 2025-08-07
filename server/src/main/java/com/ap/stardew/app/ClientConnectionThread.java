@@ -15,9 +15,10 @@ import java.net.Socket;
 
 public class ClientConnectionThread extends ConnectionThread {
     private Account currentAccount = null;
+
+    public PlayerController playerController;
     public Player player;
     public GameThread gameThread;
-    public PlayerController playerController = new PlayerController(this);
 
 
     protected ClientConnectionThread(Socket socket) throws IOException {
@@ -57,7 +58,7 @@ public class ClientConnectionThread extends ConnectionThread {
         connection.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("new message received in class : " + object.getClass());
+//                System.out.println("new message received in class : " + object.getClass());
                 boolean handled = handleReceived(object);
                 if(!handled) try {
                     receivedObjectsQueue.put(object);
@@ -94,7 +95,5 @@ public class ClientConnectionThread extends ConnectionThread {
 
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
-        player = new Player(currentAccount.getUsername());//???
-        playerController.updatePlayer();
     }
 }

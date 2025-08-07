@@ -13,6 +13,7 @@ import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
+import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.enums.Weather;
@@ -43,7 +44,7 @@ public class Player extends Entity implements Serializable {
     private ArrayList<Gift> giftLog = new ArrayList<>();
     private int giftId = 1;
     private ArrayList<Message> messageLog = new ArrayList<>();
-    private final ArrayList<Recipe> unlockedRecipes;
+    private ArrayList<Recipe> unlockedRecipes;
     private ArrayList<TradeOffer> trades = new ArrayList<>();
     private String accountUsername;
     private String nickname;
@@ -74,19 +75,21 @@ public class Player extends Entity implements Serializable {
     private boolean haveNewSuitor = false;
 
     public Player(String username) {
-        this();
+        super("Player", new PositionComponent(0, 0));
         this.accountUsername = username;
     }
+    private Player(){
 
-    public Player(){
-        super("Player", new Inventory(30), new Renderable(), new PositionComponent(0, 0));
+    }
+
+    public void initPlayer(){
+        addComponent(new Inventory(30));
+        addComponent(new Renderable());
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
         for (SkillType s : SkillType.values()) {
             skills.put(s, new Skill());
         }
-
         setActiveSlot(getComponent(Inventory.class).getSlots().get(0));
-
 //Todo        this.spriteManager = new CharacterSpriteManager();
 
 //        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
@@ -102,6 +105,8 @@ public class Player extends Entity implements Serializable {
     }
 
     public void setCurrentMap(GameMap currentMap) {
+        if(this.getCurrentMap() == currentMap) return;
+
         if(this.getCurrentMap() != null){
             this.getCurrentMap().removeEntity(this);
         }
@@ -263,7 +268,8 @@ public class Player extends Entity implements Serializable {
     }
 
     public void setPosition(Position position) {
-        this.getPosition().set(position);
+        position.set(position);
+        if(position.getMap() != null) setCurrentMap(position.getMap());
     }
     public void setPosition(float x, float y) {
         this.getPosition().set(x, y);
