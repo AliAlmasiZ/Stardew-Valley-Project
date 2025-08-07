@@ -21,6 +21,7 @@ public class BuildingShopProduct extends ShopProduct implements Serializable {
         this.woodCost = woodCost;
         this.stoneCost = stoneCost;
     }
+    private BuildingShopProduct(){}
 
     @Override
     public Entity getEntity() {

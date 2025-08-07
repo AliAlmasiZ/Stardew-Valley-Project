@@ -27,6 +27,8 @@ public class InteriorComponent extends EntityComponent implements Serializable {
         this.interiorName = other.interiorName;
     }
 
+    private InteriorComponent(){}
+
     public GameMap getMap() {
         return this.interiorMap;
     }

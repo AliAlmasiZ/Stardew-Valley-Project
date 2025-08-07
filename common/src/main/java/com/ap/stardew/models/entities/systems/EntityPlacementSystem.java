@@ -30,9 +30,9 @@ public class EntityPlacementSystem {
 
     public static Result placeOnTile(Entity entity, Tile tile){
         Entity tileEntity = tile.getContent();
-        if(tileEntity != null){
-            return new Result(false, "tile is full");
-        }
+//        if(tileEntity != null){
+//            return new Result(false, "tile is full");
+//        }
 
         if(entity.getComponent(Placeable.class) == null) return placeOnMap(entity, tile.getPosition(), tile.getMap());
 

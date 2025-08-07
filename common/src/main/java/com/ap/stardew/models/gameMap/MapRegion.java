@@ -16,6 +16,10 @@ public class MapRegion implements Serializable {
         this.center.scl(tilesNum).add(tile.getPosition()).scl(1f / (tilesNum + 1));
         tilesNum++;
     }
+    public void addTile(float x, float y) {
+        this.center.scl(tilesNum).add(x, y).scl(1f / (tilesNum + 1));
+        tilesNum++;
+    }
 
     public MapRegion(String name, boolean isFarm) {
         this.name = name;
@@ -44,5 +48,13 @@ public class MapRegion implements Serializable {
 
     public boolean isFarm() {
         return isFarm;
+    }
+
+    public int getTilesNum() {
+        return tilesNum;
+    }
+
+    public void setTilesNum(int tilesNum) {
+        this.tilesNum = tilesNum;
     }
 }

@@ -44,6 +44,7 @@ public class Placeable extends EntityComponent implements Serializable {
 //        this.exterior = other.exterior;
         this.exteriorName = other.exteriorName;
     }
+    private Placeable(){}
 
     public boolean isWalkable() {
         return isWalkable;

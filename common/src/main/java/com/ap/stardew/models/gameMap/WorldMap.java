@@ -19,7 +19,7 @@ public class WorldMap extends GameMap implements Serializable {
     private transient final Map<String, MapRegion> regions = new HashMap<>();
     private MapRegion[][] regionMap;
     private BiomeType[][] biomeMap;
-    private transient final Map<MapRegion, FarmDetails> farmsDetail = new HashMap<>();
+    private transient Map<MapRegion, FarmDetails> farmsDetail = new HashMap<>();
 
 //    public WorldMap(MapData data) {
 //        super(data, Environment.OUTDOOR);
@@ -106,6 +106,10 @@ public class WorldMap extends GameMap implements Serializable {
 
     public Map<MapRegion, FarmDetails> getFarmsDetail() {
         return farmsDetail;
+    }
+
+    public void setFarmsDetail(Map<MapRegion, FarmDetails> farmsDetail) {
+        this.farmsDetail = farmsDetail;
     }
 
     public void setRegionMap(MapRegion[][] regionMap) {

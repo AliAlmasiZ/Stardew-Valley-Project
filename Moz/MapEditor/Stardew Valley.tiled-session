@@ -439,11 +439,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouseExterior.tmx": {
-            "scale": 4,
-            "selectedLayer": 1,
+            "scale": 11,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 80.25,
-                "y": 80.125
+                "x": 16,
+                "y": 5.772727272727273
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouseExterior.tmx#v16_Shadows": {
@@ -489,7 +489,7 @@
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouses.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Farm_Combat.tmx": {
@@ -1211,11 +1211,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx": {
-            "scale": 1.5,
+            "scale": 0.75,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 1958.6666666666665,
-                "y": 1523
+                "x": 625.3333333333333,
+                "y": 2619.333333333333
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx#1": {
@@ -1536,11 +1536,11 @@
             "scaleInEditor": 8
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx": {
-            "scale": 1,
-            "selectedLayer": 10,
+            "scale": 0.33,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 980,
-                "y": 2079.5
+                "x": 3700,
+                "y": 622.7272727272727
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx#Landscape": {
@@ -1623,14 +1623,14 @@
     "map.tileWidth": 16,
     "map.width": 1000,
     "openFiles": [
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx"
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx"
     ],
     "project": "",
     "property.type": "int",
     "recentFiles": [
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouseExterior.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled tile sheet.tsx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/bigMap.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Biomes.tsx",
@@ -1639,8 +1639,7 @@
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Landscape2.tsx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/Tile sets/biome.json",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/1.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouses.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Woods.tmx"
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouses.tsx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

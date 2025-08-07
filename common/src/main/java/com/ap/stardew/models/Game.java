@@ -276,7 +276,7 @@ public class Game implements Serializable {
 
     public void crowAttack() {
         for (Player player : players) {
-            ArrayList<Tile> tiles = player.getOwnedPlantedTiles();
+            ArrayList<Tile> tiles = player.getOwnedPlantedTiles(mainMap);
 
 
             for (int i = 0; i < Math.floor((double) tiles.size() / 16); i++) {
@@ -305,7 +305,7 @@ public class Game implements Serializable {
         }
 
         for (Player player : players) {
-            ArrayList<Tile> affectedTiles = player.getOwnedTiles();
+            ArrayList<Tile> affectedTiles = player.getOwnedTiles(mainMap);
 
             for (int i = 0; i < 5; i++) {
                 Tile tile = affectedTiles.get((int) (Math.random() * affectedTiles.size()));

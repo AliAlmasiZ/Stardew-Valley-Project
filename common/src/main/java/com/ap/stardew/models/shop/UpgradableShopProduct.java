@@ -25,6 +25,7 @@ public class UpgradableShopProduct extends ShopProduct implements Serializable {
         this.count = count;
         this.dailyLimit = 1;
     }
+    private UpgradableShopProduct(){}
 
     @Override
     public Entity getEntity() {

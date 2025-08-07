@@ -1,5 +1,4 @@
 .gitkeep
-Content (unpacked).zip
 Content(unpacked)/Animals/BabyBlue Chicken.png
 Content(unpacked)/Animals/BabyBrown Chicken.png
 Content(unpacked)/Animals/BabyBrown Cow.png
@@ -2569,6 +2568,7 @@ Content(unpacked)/Maps/summer_town.pt-BR.png
 Content(unpacked)/Maps/summer_town.ru-RU.png
 Content(unpacked)/Maps/summer_town.tr-TR.png
 Content(unpacked)/Maps/summer_town.zh-CN.png
+Content(unpacked)/Maps/test.png
 Content(unpacked)/Maps/tilledSoil.tsx
 Content(unpacked)/Maps/townInterior.de-DE.png
 Content(unpacked)/Maps/townInterior.es-ES.png
@@ -4510,6 +4510,11 @@ Content/GiftIcon.png
 Content/InventoryIcon.png
 Content/InventorySlotFrame.png
 Content/InventorySlotFrame2.png
+Content/Lobby/playerBlue.png
+Content/Lobby/playerColors.png
+Content/Lobby/playerGreen.png
+Content/Lobby/playerRed.png
+Content/Lobby/playerYellow.png
 Content/MapIcon.png
 Content/Minerals/.PC _ Computer - Stardew Valley - Miscellaneous - Harvested Crops, Seed Packets, Minerals, Food, Equipment & Misc. Objects.png-autosave.kra
 Content/Minerals/Amethyst/icon.png
@@ -5234,6 +5239,8 @@ Content/newGameButton.png
 Content/newGameButtonHovered.png
 Content/pixil-frame-0.png
 Content/redCross.png
+Content/scrollBackground.png
+Content/scrollBackgroundNinePatch.9.png
 Content/shadow.png
 Content/shit.png
 Content/skillMenuIcon.png

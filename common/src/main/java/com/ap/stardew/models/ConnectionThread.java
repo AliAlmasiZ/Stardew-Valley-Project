@@ -26,6 +26,7 @@ import com.ap.stardew.models.gameMap.*;
 import com.ap.stardew.models.player.*;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.ap.stardew.models.shop.*;
 import com.ap.stardew.utils.JSONUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -231,6 +232,11 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Recipe.class);
         kryo.register(Ingredient.class);
         kryo.register(RecipeType.class);
+        kryo.register(Shop.class);
+        kryo.register(OtherShopProduct.class);
+        kryo.register(BuildingShopProduct.class);
+        kryo.register(AnimalShopProduct.class);
+        kryo.register(UpgradableShopProduct.class);
 
 
 

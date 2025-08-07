@@ -393,9 +393,9 @@ public class Player extends Entity implements Serializable {
         return tileOwner == null || tileOwner == this || (this.spouse != null && tileOwner == this.spouse);
     }
 
-    public void addRegion(MapRegion region) {
-        this.ownedRegions.add(region);
-        this.getOwnedTiles();
+    public void addRegion(MapRegion region, WorldMap worldMap) {
+        ownedRegions.add(region);
+        updateOwnedTiles(worldMap);
         region.setOwner(this);
     }
 
@@ -510,24 +510,27 @@ public class Player extends Entity implements Serializable {
         this.activeBuff = activeBuff;
     }
 
-    public ArrayList<Tile> getOwnedTiles() {
+    public ArrayList<Tile> getOwnedTiles(WorldMap worldMap) {
         if(ownedTiles != null) return ownedTiles;
-
-        WorldMap map = App.getActiveGame().getMainMap();
+        updateOwnedTiles(worldMap);
+        return ownedTiles;
+    }
+    public void updateOwnedTiles(WorldMap worldMap){
+        if(ownedTiles != null) ownedTiles.clear();
         ownedTiles = new ArrayList<>();
 
-        for(Tile[] row : map.getTiles()){
+        for(Tile[] row : worldMap.getTiles()){
             for(Tile t : row){
+                if(t == null) continue;
                 if(ownedRegions.contains(t.getRegion())){
                     ownedTiles.add(t);
                 }
             }
         }
-        return ownedTiles;
     }
 
-    public ArrayList<Tile> getOwnedPlantedTiles() {
-        ArrayList<Tile> ownedTile = getOwnedTiles();
+    public ArrayList<Tile> getOwnedPlantedTiles(WorldMap worldMap) {
+        ArrayList<Tile> ownedTile = getOwnedTiles(worldMap);
         ArrayList<Tile> plantedTiles = new ArrayList<>();
 
         for(Tile t : ownedTile){

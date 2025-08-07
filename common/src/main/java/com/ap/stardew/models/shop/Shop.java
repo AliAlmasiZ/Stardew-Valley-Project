@@ -44,6 +44,11 @@ public class Shop extends EntityComponent implements Serializable {
         this.upgrades = new ArrayList<>(other.upgrades);
     }
 
+    private Shop(){
+        startHour = 0;
+        endHour = 0;
+    }
+
 
     public List<ShopProduct> getAllProducts() {
         List<ShopProduct> res = new ArrayList<>();

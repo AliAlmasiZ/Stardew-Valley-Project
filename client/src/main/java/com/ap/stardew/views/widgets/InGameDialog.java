@@ -20,6 +20,7 @@ public class InGameDialog extends Table {
 
     public InGameDialog(Stage stage) {
         this.stage = stage;
+        closeButton = new Image(GameAssetManager.getInstance().closeButton);
     }
 
     public void show(){
@@ -37,7 +38,6 @@ public class InGameDialog extends Table {
         stage.setKeyboardFocus(this);
         stage.setScrollFocus(this);
 
-        closeButton = new Image(GameAssetManager.getInstance().closeButton);
         wrapperTable.addActor(closeButton);
 
         closeButton.addListener(new ClickListener(){
@@ -64,10 +64,10 @@ public class InGameDialog extends Table {
         addAction(
             Actions.sequence(
                 Actions.alpha(0f),
-                Actions.moveBy(0, -10),
+                Actions.moveBy(0, -20),
                 Actions.parallel(
                     Actions.alpha(1, 0.3f, Interpolation.smooth),
-                    Actions.moveBy(0, 10, 0.3f, Interpolation.swingOut)
+                    Actions.moveBy(0, 20, 0.3f, Interpolation.exp5Out)
                 )
             )
         );
@@ -169,12 +169,16 @@ public class InGameDialog extends Table {
         closeButtonOffsetY = y;
     }
 
+    public void showCloseButton(boolean show){
+        closeButton.setVisible(show);
+    }
+
     public void hide(){
         addAction(
             Actions.sequence(
                 Actions.parallel(
                     Actions.alpha(0, 0.3f, Interpolation.smooth),
-                    Actions.moveBy(0, -10, 0.3f, Interpolation.swingIn)
+                    Actions.moveBy(0, 20, 0.3f, Interpolation.exp5In)
                 ),
                 Actions.run(() -> {
                     wrapperTable.remove();

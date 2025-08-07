@@ -46,24 +46,23 @@ public class Lobby implements Serializable {
     */
     public Lobby() {}
 
-    public Lobby(String lobbyName, String hostUsername, int maxPlayers, String password, boolean isVisible) {
+    public Lobby(String lobbyName, AccountInfo accountInfo, int maxPlayers, String password, boolean isVisible) {
 
 
         do this.lobbyId = generateShortId(6);
         while (getLobbyById(lobbyId) != null);
 
         this.lobbyName = lobbyName;
-        this.hostUsername = hostUsername;
+        this.hostUsername = accountInfo.getUsername();
 
         this.maxPlayers = maxPlayers;
         this.password = password;
         this.isVisible = isVisible;
         this.players = new ArrayList<>();
 
-        players.add(new AccountInfo(hostUsername));
+        players.add(accountInfo);
         allLobbies.add(this);
     }
-
 
     public String getLobbyName() {
         return lobbyName;

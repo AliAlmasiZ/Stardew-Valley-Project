@@ -17,7 +17,7 @@ public class ClientConnectionController {
             switch (command) {
                 case "updateLobby" -> {
                     if (ClientGame.getInstance().getScreen() instanceof LobbyScreen lobbyScreen){
-                        lobbyScreen.updateLobbyState(message.getFromBody("lobby_info"));
+                        lobbyScreen.updateLobbyState(message.getFromBody("lobby_info"), message.getFromBody("message"));
                     }
                     return null;
                 }

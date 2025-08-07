@@ -32,6 +32,12 @@ public class ServerConnectionController {
                 case "startGame" -> {
                     return LobbyController.startGame(message);
                 }
+                case "toggleReady" -> {
+                    return LobbyController.toggleReady(message);
+                }
+                case "chooseMapRegion" -> {
+                    return LobbyController.chooseMapRegion(message);
+                }
                 default -> {
                     return null;
                 }
