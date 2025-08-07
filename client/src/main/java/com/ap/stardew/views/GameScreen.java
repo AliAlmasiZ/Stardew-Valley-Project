@@ -2,6 +2,8 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.app.GameController;
+import com.ap.stardew.controllers.TradeMenuController;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
@@ -89,6 +91,9 @@ public class GameScreen extends AbstractScreen {
     // Clock
     private ClockActor clockActor;
 
+    // Trade
+
+
     private final Game game;
 
     // NPC
@@ -170,8 +175,6 @@ public class GameScreen extends AbstractScreen {
 
         //NPC
         initNPCDialogs();
-
-
 
 
         //TODO: remove this later
@@ -597,7 +600,7 @@ public class GameScreen extends AbstractScreen {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     Tile tile = tiles[y][x];
-                    if(tile == null) {
+                    if (tile == null) {
                         pixmap.setColor(0, 0, 0, 0);
                         pixmap.drawPixel(x, height - y);
                         continue;
@@ -1347,9 +1350,69 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
+        // Trade Tab
+        Table tradeTable = new Table();
+        TextButton tradeButton = new TextButton("Trade with", customSkin);
+        TextButton tradeHistoryButton = new TextButton("Trade History", customSkin);
 
-        tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon"));
+        tradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table contentTable = new Table();
+                Label label = new Label("Who do you want to start trade?", customSkin);
+                contentTable.add(label).growX().row();
+
+                for (Player player1 : ClientApp.getActiveGame().getPlayers()) {
+                    if (player1.equals(currentPlayer)) continue;
+
+                    TextButton playerNameButton = new TextButton(player1.getUsername(), customSkin);
+                    playerNameButton.addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            GameController.startTradeWithPlayer(player1);
+                            dialog.hide();
+                        }
+                    });
+                    contentTable.add(playerNameButton).growX().row();
+                }
+
+                dialog.hide();
+                showTable(contentTable);
+
+            }
+        });
+        tradeHistoryButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table contentTable = new Table();
+                contentTable.pad(10).top();
+                contentTable.defaults().expandX().left().pad(5);
+
+                String message = TradeMenuController.tradeHistory().message();
+                message = "Ilia\n".repeat(44);
+                Label label = new Label(message, customSkin);
+                label.setWrap(true);
+                label.setAlignment(Align.topLeft);
+                contentTable.add(label).width(240).height(180).pad(10).top().left();
+
+                // Create a ScrollPane to make the table scrollable
+                ScrollPane scrollPane = new ScrollPane(contentTable, customSkin);
+                scrollPane.setFadeScrollBars(true);
+                scrollPane.setScrollingDisabled(true, false);
+
+                Table container = new Table();
+                container.setFillParent(true);
+                container.add(scrollPane).expand().fill();
+
+                showTable(container);
+            }
+        });
+
+        tradeTable.add(tradeButton).pad(5).growX().row();
+        tradeTable.add(tradeHistoryButton).pad(5).growX().row();
+
+        tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon")); //TODO: change them
         tabWidget.addTab(craftTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(tradeTable, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 

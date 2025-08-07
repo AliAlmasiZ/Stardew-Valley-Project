@@ -125,6 +125,10 @@ public class Player extends Entity implements Serializable {
         this.nickname = nickname;
     }
 
+    public void setAccountUsername(String accountUsername) {
+        this.accountUsername = accountUsername;
+    }
+
     public ArrayList<Animal> getAnimals() {
         return animals;
     }

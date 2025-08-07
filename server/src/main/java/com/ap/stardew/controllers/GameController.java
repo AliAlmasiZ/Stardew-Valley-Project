@@ -25,6 +25,7 @@ public class GameController {
         int i = 0;
         for (AccountInfo accountInfo : accountInfos) {
             Player player = new Player();
+            player.setAccountUsername(accountInfo.getUsername());
             game.addPlayer(player);
 
             gameSession.addUserToSession(accountInfo.getUsername(), player);
@@ -33,6 +34,8 @@ public class GameController {
             player.setCurrentMap(game.getMainMap());
             i++;
         }
+
+        game.initGame(null);
 
         return gameSession;
     }
