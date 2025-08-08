@@ -41,4 +41,8 @@ public class VariableDurationAnimation<T> {
         }
         return duration;
     }
+
+    public T[] getKeyFrames() {
+        return keyFrames;
+    }
 }

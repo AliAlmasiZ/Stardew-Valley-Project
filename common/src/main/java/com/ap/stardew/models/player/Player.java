@@ -598,7 +598,7 @@ public class Player extends Entity implements Serializable {
             case WALKING -> {
                 stateTime += delta;
             }
-            case USING_TOOL -> {
+            default -> {
                 stateTime += delta;
                 if(stateTime > GameAssetManager.getInstance().characterSpriteManager.getAnimationDuration(lastDir, action)){
                     setAction(Action.IDLE);
