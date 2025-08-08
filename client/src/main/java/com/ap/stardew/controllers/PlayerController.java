@@ -148,8 +148,7 @@ public class PlayerController implements InputProcessor {
                     function.use(player, entity, tile, null);
                 }
 
-                player.setAction(Player.Action.USING_TOOL);
-
+                player.setAction(Player.Action.PASSING_OUT);
             }
 
             Placeable placeable = entity.getComponent(Placeable.class);

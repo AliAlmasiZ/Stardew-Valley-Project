@@ -746,7 +746,6 @@ Content(unpacked)/Characters/Emily_Beach.png
 Content(unpacked)/Characters/Emily_Winter.png
 Content(unpacked)/Characters/Evelyn.png
 Content(unpacked)/Characters/Evelyn_Winter.png
-Content(unpacked)/Characters/Farmer/.farmer_base.png-autosave.kra
 Content(unpacked)/Characters/Farmer/accessories.png
 Content(unpacked)/Characters/Farmer/farmer_base.png
 Content(unpacked)/Characters/Farmer/farmer_base_bald.png
@@ -5375,9 +5374,6 @@ data/recipes/artisanRecipes.json
 data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
-debug_fbo0.png
-debug_fbo1.png
-debug_fbo2.png
 game.db
 shaders/outline.frag
 shaders/outline.vert
