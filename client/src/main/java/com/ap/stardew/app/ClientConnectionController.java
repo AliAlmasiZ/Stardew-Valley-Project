@@ -1,6 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.building.Door;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.entities.Entity;
@@ -71,6 +72,32 @@ public class ClientConnectionController {
                         player.loadFromState(playerState);
                     }
                     return null;
+                }
+            }
+        }
+        if (message.getType() == JSONMessage.Type.trade) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "request_start" -> {
+                    GameController.startTradeRequest(message);
+                }
+                case "stop_trade" -> {
+                    GameController.stopTrade(message);
+                }
+                case "accept_trade" -> {
+                    GameController.acceptTradeRequest();
+                }
+                case "update_trade" -> {
+                    GameController.updateTradeInventory(message);
+                }
+                case "confirm" -> {
+                    GameController.confirmTrade();
+                }
+                case "reject_trade_offer" -> {
+                    GameController.rejectTradeOffer();
+                }
+                case "finish_trade" -> {
+                    GameController.finishTrade(message);
                 }
             }
         }

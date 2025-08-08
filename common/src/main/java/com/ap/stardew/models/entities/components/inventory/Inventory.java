@@ -180,6 +180,12 @@ public class Inventory extends EntityComponent implements Serializable {
         entity.getComponent(Pickable.class).setStackSize(quantity);
         return addItem(entity);
     }
+    public void addItems(Inventory inventory) {
+        for (Entity entity : inventory.getEntities()) {
+            Entity newEntity = entity.clone();
+            addItem(newEntity);
+        }
+    }
     public int getEmptySpace(){
         int emptySlots = 0;
         for(InventorySlot s : slots){
@@ -259,6 +265,13 @@ public class Inventory extends EntityComponent implements Serializable {
             }
         }
         return null;
+    }
+
+    public void tradeEntities(Inventory remove, Inventory add) {
+        for (Entity e : remove.getEntities()) {
+            this.takeFromInventory(e, e.getComponent(Pickable.class).getStackSize());
+        }
+        this.addItems(add);
     }
 
     public InventorySlot getSlot(String name) {
@@ -359,6 +372,14 @@ public class Inventory extends EntityComponent implements Serializable {
     public boolean doesHaveItem(Entity entity){
         return this.getItem(entity) != null;
     }
+    public boolean doesHaveItems(Inventory inventory) {
+        for (Entity e : inventory.getEntities()) {
+            if (this.doesHaveItem(e)) continue;
+            return false;
+        }
+
+        return true;
+    }
 
     public int getItemCount(String name){
         int count = 0;
@@ -409,6 +430,7 @@ public class Inventory extends EntityComponent implements Serializable {
         }
         return out.toString();
     }
+
 
     public int getSize() {
         return slots.size();

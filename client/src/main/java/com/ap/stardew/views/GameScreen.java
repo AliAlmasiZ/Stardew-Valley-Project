@@ -5,6 +5,7 @@ import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.app.GameController;
 import com.ap.stardew.controllers.TradeMenuController;
 import com.ap.stardew.models.gameMap.GameMap;
+import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
@@ -92,7 +93,7 @@ public class GameScreen extends AbstractScreen {
     private ClockActor clockActor;
 
     // Trade
-
+    public TradeDialog tradeDialog;
 
     private final Game game;
 
@@ -180,8 +181,8 @@ public class GameScreen extends AbstractScreen {
         //TODO: remove this later
         //**************************************
 //        controller.cheatGiveItem("Training Rod", 1);
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatGiveItem("Wood", 500);
+        controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Wood", 16);
 //        controller.cheatGiveItem("Axe", 1);
 //        controller.cheatGiveItem("Pickaxe", 1);
 //        controller.cheatGiveItem("Hoe", 1);
@@ -402,7 +403,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void showTemporaryMessage(String message, float duration, Color color) {
-        Label label = new Label(message, skin);
+        Label label = new Label(message, customSkin);
         label.setPosition(
             (uiStage.getWidth() - label.getWidth()) / 2f,
             (uiStage.getHeight() - label.getHeight() - 50)
@@ -422,6 +423,7 @@ public class GameScreen extends AbstractScreen {
         ));
 
         uiStage.addActor(label);
+        System.out.println(message); // TODO: REMOVE IT
     }
 
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
@@ -1371,7 +1373,12 @@ public class GameScreen extends AbstractScreen {
                     playerNameButton.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
                             GameController.startTradeWithPlayer(player1);
-                            dialog.hide();
+
+                            Actor current = contentTable;
+                            while (current != null && !(current instanceof InGameDialog)) {
+                                current = current.getParent();
+                            }
+                            if (current != null) ((InGameDialog) current).hide();
                         }
                     });
                     contentTable.add(playerNameButton).growX().row();
@@ -1385,32 +1392,51 @@ public class GameScreen extends AbstractScreen {
         tradeHistoryButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Table contentTable = new Table();
-                contentTable.pad(10).top();
-                contentTable.defaults().expandX().left().pad(5);
+                Table contentTable = new Table(customSkin);
+                ArrayList<TradeHistoryItem> trades = currentPlayer.getTradeHistory();
 
-                String message = TradeMenuController.tradeHistory().message();
-                message = "Ilia\n".repeat(44);
-                Label label = new Label(message, customSkin);
-                label.setWrap(true);
-                label.setAlignment(Align.topLeft);
-                contentTable.add(label).width(240).height(180).pad(10).top().left();
+// 1) Header row
+                contentTable.add("ID").pad(5).center();
+                contentTable.add("Sender").pad(5).center();
+                contentTable.add("Receiver").pad(5).center();
+                contentTable.add("Sender Inv").pad(5).center();
+                contentTable.add("Receiver Inv").pad(5).center();
+                contentTable.add("Accepted").pad(5).center();
+                contentTable.add("Date").pad(5).center();
+                contentTable.row();
 
-                // Create a ScrollPane to make the table scrollable
-                ScrollPane scrollPane = new ScrollPane(contentTable, customSkin);
-                scrollPane.setFadeScrollBars(true);
-                scrollPane.setScrollingDisabled(true, false);
+// 2) Sort trades from newest to oldest by ID (or by date if you prefer)
+                trades.sort((a, b) -> Integer.compare(b.getId(), a.getId()));
 
-                Table container = new Table();
-                container.setFillParent(true);
-                container.add(scrollPane).expand().fill();
+// 3) Create an inner table for the rows
+                Table rowsTable = new Table(customSkin);
+                for (TradeHistoryItem t : trades) {
+                    rowsTable.add(String.valueOf(t.getId())).pad(4);
+                    rowsTable.add(t.getSender().getUsername()).pad(4);
+                    rowsTable.add(t.getReceiver().getUsername()).pad(4);
+                    rowsTable.add(t.getSenderInventory().toString()).pad(4);
+                    rowsTable.add(t.getReceiverInventory().toString()).pad(4);
+                    rowsTable.add(t.isAccepted() ? "Yes" : "No").pad(4);
+                    rowsTable.add(t.getDate().toString()).pad(4);
+                    rowsTable.row();
+                }
 
-                showTable(container);
+// 4) Wrap rows into a ScrollPane and add it
+                ScrollPane scroll = new ScrollPane(rowsTable);
+                scroll.setFadeScrollBars(true);
+                scroll.setScrollingDisabled(false, false);
+
+// Make the scroll take up all available space
+                contentTable.add(scroll).colspan(7).expand().fill();
+
+// 5) Finally show it
+                showTable(contentTable);
+
             }
         });
 
-        tradeTable.add(tradeButton).pad(5).growX().row();
-        tradeTable.add(tradeHistoryButton).pad(5).growX().row();
+        tradeTable.add(tradeButton).pad(3).growX().row();
+        tradeTable.add(tradeHistoryButton).pad(3).growX().row();
 
         tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon")); //TODO: change them
         tabWidget.addTab(craftTable, customSkin.getDrawable("skillMenuIcon"));
@@ -1520,6 +1546,10 @@ public class GameScreen extends AbstractScreen {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public Stage getUiStage() {
+        return uiStage;
     }
 
     private void setGameInput() {

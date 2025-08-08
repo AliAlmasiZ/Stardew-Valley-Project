@@ -189,9 +189,33 @@ public class InGameDialog extends Table {
         );
     }
 
+    public void hide(boolean check) {
+        addAction(
+            Actions.sequence(
+                Actions.parallel(
+                    Actions.alpha(0, 0.3f, Interpolation.smooth),
+                    Actions.moveBy(0, -10, 0.3f, Interpolation.swingIn)
+                ),
+                Actions.run(() -> {
+                    wrapperTable.remove();
+                    remove();
+                    wrapperTable = null;
+                })
+            )
+        );
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         batch.setColor(1, 1, 1, 1);
+    }
+
+    public Table getWrapperTable() {
+        return wrapperTable;
+    }
+
+    public void setWrapperTable(Table wrapperTable) {
+        this.wrapperTable = wrapperTable;
     }
 }

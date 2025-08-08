@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.GameSession;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
@@ -89,6 +90,15 @@ public class GameThread extends Thread{
         }
     }
 
+    public void sendTCP(JSONMessage message, String username) {
+        for (ClientConnectionThread client : clients) {
+            if (client.player.getUsername().equals(username)) {
+                client.sendTCP(message);
+                return;
+            }
+        }
+    }
+
     public void sendAllUDP(Object object) {
         for (ClientConnectionThread client : clients) {
             client.sendUDP(object);
@@ -101,5 +111,16 @@ public class GameThread extends Thread{
 
     public ArrayList<ClientConnectionThread> getClients() {
         return clients;
+    }
+
+    public ClientConnectionThread getClientByUsername(String username) {
+        for (ClientConnectionThread client : clients) {
+            if (client.player.getUsername().equals(username)) return client;
+        }
+        return null;
+    }
+
+    public Game getGame() {
+        return gameSession.getGame();
     }
 }
