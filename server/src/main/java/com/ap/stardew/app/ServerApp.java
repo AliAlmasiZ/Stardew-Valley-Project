@@ -151,7 +151,7 @@ public class ServerApp {
         server.bind(tcpPort, udpPort);
         registerClasses();
 
-
+//
 //        AccountInfo test = new AccountInfo("a");
 //        test.setSelectedMapRegion("Suncrest Farm");
 //        ArrayList<AccountInfo> testAccounts = new ArrayList<>();

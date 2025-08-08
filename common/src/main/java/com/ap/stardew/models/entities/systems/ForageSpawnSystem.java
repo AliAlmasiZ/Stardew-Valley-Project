@@ -1,6 +1,7 @@
 package com.ap.stardew.models.entities.systems;
 
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Forageable;
@@ -17,18 +18,18 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ForageSpawnSystem {
-    public static void updatePerDay(){
-        placeForageables();
+    public static void updatePerDay(Game game){
+        placeForageables(game);
     }
     public static void updatePerHour(){
 
     }
-    public static void placeForageables(){
+    public static void placeForageables(Game game){
         SecureRandom random = new SecureRandom();
-        WorldMap map = App.getActiveGame().getMainMap();
+        WorldMap map = game.getMainMap();
         Tile[][] tiles = map.getTiles();
         BiomeType[][] biomeMap = map.getBiomeMap();
-        Map<BiomeType, ArrayList<BiomeType.Spawnable>> candidates = BiomeType.getCandidates(App.getActiveGame().getDate().getSeason());
+        Map<BiomeType, ArrayList<BiomeType.Spawnable>> candidates = BiomeType.getCandidates(game.getDate().getSeason());
 
         double[][] weightMap = new double[tiles.length][tiles[0].length];
 

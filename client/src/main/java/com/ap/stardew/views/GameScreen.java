@@ -311,7 +311,7 @@ public class GameScreen extends AbstractScreen {
             if(renderable.getRenderFunction() != null){
                 renderable.getRenderFunction().render(entity, batch);
             }else{
-                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
+                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, game, delta);
                 if (sprite != null) {
                     sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
                     sprite.draw(batch);

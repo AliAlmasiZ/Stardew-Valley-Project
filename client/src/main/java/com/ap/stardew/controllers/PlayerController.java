@@ -145,7 +145,7 @@ public class PlayerController implements InputProcessor {
             if(useable != null && (player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f)){
 
                 for (UseFunction function : useable.getFunctions()) {
-                    function.use(player, entity, tile, null);
+                    function.use(player, entity, ClientApp.getActiveGame(), tile, null);
                 }
 
                 player.setAction(Player.Action.PASSING_OUT);

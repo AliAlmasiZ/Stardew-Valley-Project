@@ -2,6 +2,7 @@ package com.ap.stardew.models.entities;
 
 import com.ap.stardew.models.App;
 
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.entities.components.*;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public enum UseFunction {
     PLOW () {
         @Override
-        public Result use(Player player,Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             if(tile.getContent() != null){
                 return new Result(false, "The tile isn't empty");
             }
@@ -36,7 +37,7 @@ public enum UseFunction {
             if(player.getActiveBuff() != null)
                 energyCost -= player.getActiveBuff().effectOnSkill(SkillType.FARMING);
 
-            player.reduceEnergy(Math.max(energyCost, 0), App.getActiveGame().getTodayWeather());
+            player.reduceEnergy(Math.max(energyCost, 0), game.getTodayWeather());
             player.addExperince(SkillType.FARMING, 5);
 
             TIlePlower.plowTile(tile);
@@ -46,7 +47,7 @@ public enum UseFunction {
     },
     DE_PLOW(){
         @Override
-        public Result use(Player player,Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             if(tile.getContent() != null){
                 return new Result(false, "The tile isn't empty");
             }
@@ -59,14 +60,14 @@ public enum UseFunction {
             if(player.getActiveBuff() != null)
                 energyCost -= player.getActiveBuff().effectOnSkill(SkillType.FARMING);
 
-            player.reduceEnergy(Math.abs(energyCost), App.getActiveGame().getTodayWeather());
+            player.reduceEnergy(Math.abs(energyCost), game.getTodayWeather());
             player.addExperince(SkillType.FARMING, 5);
             return new Result(true, "Hoed Ground converted to Grass");
         }
     },
     MINE(){
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             Entity mineral = tile.getContent();
             if(mineral == null){
                 return new Result(false, "Nothing to mine!");
@@ -81,7 +82,7 @@ public enum UseFunction {
             if(player.getActiveBuff() != null)
                 energyCost -= player.getActiveBuff().effectOnSkill(SkillType.MINING);
 
-            player.reduceEnergy(Math.abs(energyCost), App.getActiveGame().getTodayWeather());
+            player.reduceEnergy(Math.abs(energyCost), game.getTodayWeather());
             if(harvestable.getMaterial().getLevel() > tool.getComponent(Upgradable.class).getMaterial().getLevel()){
                 return new Result(false, "Your pickaxe cant mine that mineral. you need " + harvestable.getMaterial() + " pickaxe.");
             }
@@ -105,13 +106,13 @@ public enum UseFunction {
     },
     DESTROY_ITEMS {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             return null;
         }
     },
     CHOP_TREE {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             Entity tree = tile.getContent();
             if(tree == null){
                 return new Result(false, "No tree to chop!");
@@ -127,7 +128,7 @@ public enum UseFunction {
             if(player.getActiveBuff() != null)
                 energyCost -= player.getActiveBuff().effectOnSkill(SkillType.FORAGING);
 
-            player.reduceEnergy(Math.max(energyCost, 0), App.getActiveGame().getTodayWeather());
+            player.reduceEnergy(Math.max(energyCost, 0), game.getTodayWeather());
             if(harvestable.getMaterial().getLevel() > tool.getComponent(Upgradable.class).getMaterial().getLevel()){
                 return new Result(false, "Your axe cant chop that tree. you need " + harvestable.getMaterial() + " axe.");
             }
@@ -145,13 +146,13 @@ public enum UseFunction {
     DESTROY_BRANCHES {
         @Override
         //TODO
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             return null;
         }
     },
     WATER_GROUND {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             Container container =  tool.getComponent(Container.class);
             if(tile.getContent() == null || tile.getContent().getComponent(Growable.class) == null)
                 return new Result(false, "you can't water this ground");
@@ -162,14 +163,14 @@ public enum UseFunction {
             energyCost -= player.getSkill(SkillType.FARMING).getLevel() == 4 ? 1 : 0;
             if(player.getActiveBuff() != null)
                 energyCost -= player.getActiveBuff().effectOnSkill(SkillType.FARMING);
-            player.reduceEnergy(Math.max(energyCost, 0), App.getActiveGame().getTodayWeather());
+            player.reduceEnergy(Math.max(energyCost, 0), game.getTodayWeather());
             container.decreaseCharge();
             return new Result(true, "tile watered successfully");
         }
     },
     FILL_WATER {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             if(tile.getType().equals(TileType.WATER) /*TODO: or greenhouse water*/) {
                 tool.getComponent(Container.class).fillContainer();
                 int energyCost = 5 - tool.getComponent(Upgradable.class).getMaterial().getLevel();
@@ -185,26 +186,26 @@ public enum UseFunction {
     },
     FISH {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             return null;
         }
     },
     CUT_GRASS {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity targetEntity) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity targetEntity) {
             return null;
         }
     },
     HARVEST_PLANTS {
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             Entity entity = tile.getContent();
             Growable growable;
             if(entity == null || (growable = entity.getComponent(Growable.class)) == null){
                 return new Result(false, "nothing to harvest in that tile");
             }
 
-            Result result = growable.canCollectProduct();
+            Result result = growable.canCollectProduct(game);
             if (!result.isSuccessful()) {
                 return result;
             }
@@ -220,7 +221,7 @@ public enum UseFunction {
                 entity.getComponent(Pickable.class).setStackSize(1);
                 inventory.addItem(entity);
             } else {
-                Entity fruit = growable.collectFruit();
+                Entity fruit = growable.collectFruit(game);
                 growable.setDaysPastFromRegrowth(0);
                 fruit.getComponent(Pickable.class).setStackSize(1);
                 fruit.getComponent(Sellable.class).
@@ -238,7 +239,7 @@ public enum UseFunction {
     EXTRACT_MILK {
 
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
 
             if(tool.getComponent(Container.class).getCharge() > 0)
                 return new Result(false, "milk pail is full");
@@ -269,8 +270,8 @@ public enum UseFunction {
     },
     COLLECT_WOOL{
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
-            player.reduceEnergy(4, App.getActiveGame().getTodayWeather());
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
+            player.reduceEnergy(4, game.getTodayWeather());
             if(!(target instanceof Animal))
                 return new Result(false, "you should select an animal");
 
@@ -291,7 +292,7 @@ public enum UseFunction {
     },
     BREAK_PLACEABLES{
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             Entity entity = tile.getContent();
             if(entity == null){
                 return new Result(false, "nothing to break");
@@ -313,7 +314,7 @@ public enum UseFunction {
     },
     INSPECT_ENTITY{
         @Override
-        public Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Game game, Tile tile, Entity target) {
             Entity entity = tile.getContent();
             StringBuilder out = new StringBuilder();
 
@@ -338,5 +339,5 @@ public enum UseFunction {
     ;
 
 
-    abstract public Result use(Player player,Entity tool, Tile tile, Entity target);
+    abstract public Result use(Player player, Entity tool, Game game, Tile tile, Entity target);
 }

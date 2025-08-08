@@ -92,7 +92,11 @@ public class Game implements Serializable {
 
 //        currentPlayer.setPosition(new Position(55, 86, currentPlayer.getCurrentMap()));
 
-
+        todayWeather = Weather.RAINY;
+        for (int i = 0; i < 100; i++) {
+            ForageSpawnSystem.updatePerDay(this);
+            GrowthSystem.updatePerDay(this, mainMap);
+        }
     }
 
     public void initNPCs() {
@@ -492,9 +496,9 @@ public class Game implements Serializable {
             playerFriendship.updateDaily();
         }
 
-        GrowthSystem.updatePerDay(this.mainMap);
+        GrowthSystem.updatePerDay(this, this.mainMap);
 
-        ForageSpawnSystem.updatePerDay();
+        ForageSpawnSystem.updatePerDay(this);
 
         ShopSystem.updatePerDay();
 

@@ -11,16 +11,17 @@ import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
+import com.ap.stardew.models.entities.RenderFunction;
 import com.ap.stardew.models.entities.Renderable;
-import com.ap.stardew.models.entities.components.EntityComponent;
-import com.ap.stardew.models.entities.components.InteriorComponent;
-import com.ap.stardew.models.entities.components.Placeable;
-import com.ap.stardew.models.entities.components.PositionComponent;
+import com.ap.stardew.models.entities.components.*;
+import com.ap.stardew.models.entities.components.harvestable.Harvestable;
+import com.ap.stardew.models.entities.components.harvestable.HarvestableResource;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.enums.*;
 import com.ap.stardew.models.gameMap.*;
 import com.ap.stardew.models.player.*;
+import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.models.shop.*;
 import com.ap.stardew.utils.JSONUtils;
@@ -233,6 +234,18 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(BuildingShopProduct.class);
         kryo.register(AnimalShopProduct.class);
         kryo.register(UpgradableShopProduct.class);
+        kryo.register(Sellable.class);
+        kryo.register(Growable.class);
+        kryo.register(Forageable.class);
+        kryo.register(ProductQuality.class);
+        kryo.register(Harvestable.class);
+        kryo.register(Edible.class);
+        kryo.register(Buff.class);
+        kryo.register(Pickable.class);
+        kryo.register(RenderFunction.class);
+        kryo.register(Material.class);
+        kryo.register(HarvestableResource.class);
+        kryo.register(BiomeType.Spawnable.class);
 
 
 

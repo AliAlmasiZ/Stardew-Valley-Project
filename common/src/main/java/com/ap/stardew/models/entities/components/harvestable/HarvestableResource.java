@@ -36,6 +36,8 @@ public class HarvestableResource implements Serializable {
         this.max = b.max;
         this.probability = b.probability;
     }
+    private HarvestableResource(){
+    }
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder{

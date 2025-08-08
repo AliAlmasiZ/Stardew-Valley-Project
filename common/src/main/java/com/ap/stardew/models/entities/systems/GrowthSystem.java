@@ -1,5 +1,6 @@
 package com.ap.stardew.models.entities.systems;
 
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.Growable;
 import com.ap.stardew.models.entities.components.InteriorComponent;
@@ -13,13 +14,13 @@ public class GrowthSystem {
     public static Result plantOnTile(Entity seed, Tile tile){
         return null;
     }
-    public static void updatePerDay(GameMap map){
+    public static void updatePerDay(Game game, GameMap map){
         ArrayList<Growable> growables = map.getComponentsOfType(Growable.class);
 
         if(growables == null) return;
 
         for (Growable growable : growables) {
-            growable.updatePerDay();
+            growable.updatePerDay(game);
         }
 
         ArrayList<Entity> toDelete = new ArrayList<>();
@@ -38,7 +39,7 @@ public class GrowthSystem {
         ArrayList<InteriorComponent> buildings = map.getComponentsOfType(InteriorComponent.class);
         for(InteriorComponent c : buildings){
             //TODO is this enough for greenhouse logic? i don know.
-            updatePerDay(c.getMap());
+            updatePerDay(game, c.getMap());
         }
     }
 
