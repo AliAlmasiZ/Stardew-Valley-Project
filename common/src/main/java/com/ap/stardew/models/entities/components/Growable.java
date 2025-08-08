@@ -212,8 +212,7 @@ public class Growable extends EntityComponent implements Serializable {
         return stage;
     }
 
-    public void updatePerDay() {
-        Game game = App.getActiveGame();
+    public void updatePerDay(Game game) {
         Season season = game.getDate().getSeason();
         if (isInGreenhouse() || this.getGrowingSeasons().contains(season)) {
             if (daysPastFromPlant < totalHarvestTime) {
@@ -239,7 +238,7 @@ public class Growable extends EntityComponent implements Serializable {
             setWateredToday(false);
         }
 
-        Weather weather = App.getActiveGame().getTodayWeather();
+        Weather weather = game.getTodayWeather();
         if (weather == Weather.STORMY || weather == Weather.RAINY) {
             setWateredToday(true);
         }
@@ -248,8 +247,7 @@ public class Growable extends EntityComponent implements Serializable {
 
     }
 
-    public Result canCollectProduct() {
-        Game game = App.getActiveGame();
+    public Result canCollectProduct(Game game) {
         Season season = game.getDate().getSeason();
 
         if (!this.getGrowingSeasons().contains(season)) {
@@ -265,8 +263,8 @@ public class Growable extends EntityComponent implements Serializable {
         return new Result(true, "Collected successfully!");
     }
 
-    public Entity collectFruit() {
-        if (!canCollectProduct().isSuccessful()) {
+    public Entity collectFruit(Game game) {
+        if (!canCollectProduct(game).isSuccessful()) {
             return null;
         }
 

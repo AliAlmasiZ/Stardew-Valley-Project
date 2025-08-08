@@ -30,7 +30,7 @@ public class Harvestable extends EntityComponent implements Serializable {
         this.resources.addAll(other.resources);
         this.material = other.material;
     }
-    public Harvestable(){
+    private Harvestable(){
         this(Material.STONE, new ArrayList<>());
     }
 

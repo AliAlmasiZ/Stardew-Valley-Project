@@ -1,6 +1,7 @@
 package com.ap.stardew.view;
 
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
@@ -178,8 +179,8 @@ public class GameAssetManager extends AssetManager {
             return redCross;
         }
     }
-    public Sprite getEntitySpriteToRender(Entity entity, float deltaTime) {
-        if (entity.hasTag(EntityTag.TREE) || entity.hasTag(EntityTag.CROP)) return getPlantSprite(entity);
+    public Sprite getEntitySpriteToRender(Entity entity, Game game, float deltaTime) {
+        if (entity.hasTag(EntityTag.TREE) || entity.hasTag(EntityTag.CROP)) return getPlantSprite(entity, game);
 
         if (entity instanceof Player player) {
             return player.getSprite();
@@ -242,7 +243,7 @@ public class GameAssetManager extends AssetManager {
         return null;
     }
 
-    public Sprite getPlantSprite(Entity entity) {
+    public Sprite getPlantSprite(Entity entity, Game game) {
         String plantName = entity.getEntityName();
         if (!plantsSprites.containsKey(plantName)) loadPlantSprite(plantName);
         Sprite[] sprites = plantsSprites.get(plantName);
@@ -250,7 +251,7 @@ public class GameAssetManager extends AssetManager {
         Growable growable = entity.getComponent(Growable.class);
         int stage = growable.getStage();
 
-        if (growable.canCollectProduct().isSuccessful()) return sprites[stage + 1];
+        if (growable.canCollectProduct(game).isSuccessful()) return sprites[stage + 1];
         else if (growable.getDaysPastFromPlant() >= growable.getTotalHarvestTime()) return sprites[stage];
         else return sprites[stage - 1];
     }
