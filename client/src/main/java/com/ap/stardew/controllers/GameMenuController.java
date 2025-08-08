@@ -1638,7 +1638,7 @@ public class GameMenuController implements Controller {
 //        App.setCurrentMenu(Menu.TRADE_MENU);
         StringBuilder message = new StringBuilder("Welcome to TradeMenu!\nYour new offers: \n");
 
-        for (TradeOffer tradeOffer : currentPlayer.getTrades()) {
+        for (TradeOffer tradeOffer : currentPlayer.getTradeOffers()) {
             if (tradeOffer.getReceiver().equals(currentPlayer) && !tradeOffer.isSeen()) {
                 tradeOffer.setSeen(true);
                 message.append(tradeOffer.infoMessage(false));

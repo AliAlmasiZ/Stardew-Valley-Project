@@ -44,7 +44,8 @@ public class Player extends Entity implements Serializable {
     private int giftId = 1;
     private ArrayList<Message> messageLog = new ArrayList<>();
     private final ArrayList<Recipe> unlockedRecipes;
-    private ArrayList<TradeOffer> trades = new ArrayList<>();
+    private ArrayList<TradeOffer> tradeOffers = new ArrayList<>(); //for phase one
+    private ArrayList<TradeHistoryItem> trades = new ArrayList<>();
     private String accountUsername;
     private String nickname;
     private Gender gender;
@@ -78,7 +79,7 @@ public class Player extends Entity implements Serializable {
         this.accountUsername = username;
     }
 
-    public Player(){
+    public Player() {
         super("Player", new Inventory(30), new Renderable(), new PositionComponent(0, 0));
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
         for (SkillType s : SkillType.values()) {
@@ -102,14 +103,15 @@ public class Player extends Entity implements Serializable {
     }
 
     public void setCurrentMap(GameMap currentMap) {
-        if(this.getCurrentMap() != null){
+        if (this.getCurrentMap() != null) {
             this.getCurrentMap().removeEntity(this);
         }
         this.getPosition().setMap(currentMap);
-        if(currentMap != null){
+        if (currentMap != null) {
             currentMap.addEntity(this);
         }
     }
+
     public int getTrashcanLevel() {
         return trashcanLevel;
     }
@@ -154,7 +156,19 @@ public class Player extends Entity implements Serializable {
         return giftLog;
     }
 
-    public ArrayList<TradeOffer> getTrades() {
+    public ArrayList<TradeOffer> getTradeOffers() {
+        return tradeOffers;
+    }
+
+    public ArrayList<TradeHistoryItem> getTradeHistoryWith(Player player) {
+        ArrayList<TradeHistoryItem> tradeHistory = new ArrayList<>();
+        for (TradeHistoryItem tradeHistoryItem : trades) {
+            if (tradeHistoryItem.hasPlayer(player)) tradeHistory.add(tradeHistoryItem);
+        }
+        return tradeHistory;
+    }
+
+    public ArrayList<TradeHistoryItem> getTradeHistory() {
         return trades;
     }
 
@@ -202,7 +216,7 @@ public class Player extends Entity implements Serializable {
         this.energy.reduceEnergy(energyCost);
     }
 
-    public void reduceEnergy(double energyCost , Weather weather) {
+    public void reduceEnergy(double energyCost, Weather weather) {
         this.energy.reduceEnergy(energyCost * weather.getEnergyEffect());
     }
 
@@ -265,6 +279,7 @@ public class Player extends Entity implements Serializable {
     public void setPosition(Position position) {
         this.getPosition().set(position);
     }
+
     public void setPosition(float x, float y) {
         this.getPosition().set(x, y);
     }
@@ -326,12 +341,16 @@ public class Player extends Entity implements Serializable {
     }
 
     public TradeOffer findTradeOffer(int id) {
-        for (TradeOffer tradeOffer : trades) {
+        for (TradeOffer tradeOffer : tradeOffers) {
             if (tradeOffer.getId() == id) {
                 return tradeOffer;
             }
         }
         return null;
+    }
+
+    public void addTradeHistory(TradeHistoryItem tradeHistoryItem) {
+        trades.add(tradeHistoryItem);
     }
 
 
@@ -361,7 +380,7 @@ public class Player extends Entity implements Serializable {
     }
 
     public void addRecipe(String recipeName) {
-      addRecipe(App.recipeRegistry.getRecipe(recipeName));
+        addRecipe(App.recipeRegistry.getRecipe(recipeName));
     }
 
     public void addRecipe(Recipe recipe) {
@@ -520,14 +539,14 @@ public class Player extends Entity implements Serializable {
     }
 
     public ArrayList<Tile> getOwnedTiles() {
-        if(ownedTiles != null) return ownedTiles;
+        if (ownedTiles != null) return ownedTiles;
 
         WorldMap map = App.getActiveGame().getMainMap();
         ownedTiles = new ArrayList<>();
 
-        for(Tile[] row : map.getTiles()){
-            for(Tile t : row){
-                if(ownedRegions.contains(t.getRegion())){
+        for (Tile[] row : map.getTiles()) {
+            for (Tile t : row) {
+                if (ownedRegions.contains(t.getRegion())) {
                     ownedTiles.add(t);
                 }
             }
@@ -539,8 +558,8 @@ public class Player extends Entity implements Serializable {
         ArrayList<Tile> ownedTile = getOwnedTiles();
         ArrayList<Tile> plantedTiles = new ArrayList<>();
 
-        for(Tile t : ownedTile){
-            if((t.getContent() != null) && (t.getContent().getComponent(Growable.class) != null)) plantedTiles.add(t);
+        for (Tile t : ownedTile) {
+            if ((t.getContent() != null) && (t.getContent().getComponent(Growable.class) != null)) plantedTiles.add(t);
         }
         return plantedTiles;
     }
@@ -553,12 +572,12 @@ public class Player extends Entity implements Serializable {
         this.greenHouse = greenHouse;
     }
 
-    public boolean isGhashed(){
+    public boolean isGhashed() {
         return this.energy.isGhashed();
     }
 
     public void move(Vector2 direction, float delta) {
-        if(direction.isZero()) return;
+        if (direction.isZero()) return;
         lastDir = direction;
         getComponent(PositionComponent.class).move(direction, delta * speed);
     }
@@ -583,7 +602,7 @@ public class Player extends Entity implements Serializable {
 
     public void update(float delta) {
         stateTime += delta;
-        if(state.equals(State.IDLE)) {
+        if (state.equals(State.IDLE)) {
             stateTime = 0;
         }
         //Todo : sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));

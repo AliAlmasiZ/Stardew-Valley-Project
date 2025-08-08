@@ -24,6 +24,7 @@ import com.ap.stardew.models.player.*;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.utils.JSONUtils;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
@@ -241,7 +242,14 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Recipe.class);
         kryo.register(Ingredient.class);
         kryo.register(RecipeType.class);
-
+        kryo.register(TradeHistoryItem.class);
+        kryo.register(Position.class);
+        kryo.register(MapRegion.class);
+        kryo.register(Buff.class);
+        kryo.register(Sprite.class);
+        kryo.register(Player.State.class);
+        kryo.register(Rectangle.class);
+        kryo.register(Vector2.class);
 
 
 

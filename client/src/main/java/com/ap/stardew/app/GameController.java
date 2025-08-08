@@ -196,30 +196,24 @@ public class GameController {
      */
     public static void doTrade(Player player) {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
-        finishTrade(false);
-
-
 
         JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
         message.put("command", "do_trade");
         message.put("receiver", player.getUsername());
+        message.put("senderInventory", gameScreen.tradeDialog.getSenderInventory());
+        message.put("receiverInventory", gameScreen.tradeDialog.getReceiverInventory());
 
         ClientApp.sendTCP(message);
     }
 
-    public static void finishTrade(boolean isSender) {
+    public static void finishTrade(JSONMessage message) {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
+        currentPlayer.getComponent(Inventory.class).empty();
+        currentPlayer.getComponent(Inventory.class).addItems(message.getFromBody("inventory"));
+        currentPlayer.addTradeHistory(message.getFromBody("trade_history"));
 
-
-        Inventory inventoryToAdd = gameScreen.tradeDialog.getSenderInventory();
-        if (isSender) {
-            inventoryToAdd = gameScreen.tradeDialog.getSenderInventory();
-        } else {
-            inventoryToAdd = gameScreen.tradeDialog.getReceiverInventory();
-        }
-
-        ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItems(inventoryToAdd);
-        gameScreen.showTemporaryMessage("Trade done successfully!", 5, Color.GREEN);
+        gameScreen.showTemporaryMessage("Trade has done successfully!", 5, Color.GREEN);
 
         gameScreen.tradeDialog.hide();
         gameScreen.tradeDialog = null;

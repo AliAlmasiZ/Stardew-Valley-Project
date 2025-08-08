@@ -68,8 +68,8 @@ public class ClientConnectionController {
                 case "reject_trade_offer" -> {
                     GameController.rejectTradeOffer();
                 }
-                case "do_trade" -> {
-                    GameController.finishTrade(true);
+                case "finish_trade" -> {
+                    GameController.finishTrade(message);
                 }
             }
         }
