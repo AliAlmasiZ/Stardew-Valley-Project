@@ -40,8 +40,6 @@ public class LoginMenuController implements Controller{    @Override
             return new Result(false, "Invalid gender! type \"male\" or \"female\" for gender!");
         }
 
-
-
         Account account = new Account(genderEnum, email,name, password, username);
         App.setRegisteredAccount(account);
 //        App.addAccount(account);

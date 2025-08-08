@@ -7,11 +7,8 @@ import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.dto.AccountInfo;
-import com.ap.stardew.models.dto.GameMapInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
-import com.ap.stardew.models.dto.serilizers.GameMapSerializer;
-import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.Renderable;
@@ -24,7 +21,6 @@ import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.enums.*;
 import com.ap.stardew.models.gameMap.*;
 import com.ap.stardew.models.player.*;
-import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.models.shop.*;
 import com.ap.stardew.utils.JSONUtils;
@@ -180,7 +176,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(JSONMessage.Type.class);
         kryo.register(com.ap.stardew.models.LobbyInfo.class);
         kryo.register(PlayerState.class);
-        kryo.register(Player.State.class);
+        kryo.register(Player.Action.class);
         kryo.register(AccountInfo.class);
         kryo.register(Result.class);
 
@@ -229,7 +225,6 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(InteriorComponent.class);
         kryo.register(Placeable.class);
         kryo.register(Door.class);
-        kryo.register(CollisionEvent.class);
         kryo.register(Recipe.class);
         kryo.register(Ingredient.class);
         kryo.register(RecipeType.class);

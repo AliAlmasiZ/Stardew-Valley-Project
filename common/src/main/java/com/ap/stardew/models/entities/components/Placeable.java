@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.enums.TileType;
 
 import java.io.IOException;
@@ -24,23 +23,17 @@ public class Placeable extends EntityComponent implements Serializable {
 //    private TileType[][] exterior;
     @JsonProperty("isWalkable")
     private boolean isWalkable;
-    @JsonProperty("collisionFunctions")
-    private ArrayList<CollisionEvent> collisionFunctions = new ArrayList<>();
 
-    public Placeable(boolean isWalkable, TileType[][] exterior, String exteriorName, CollisionEvent... collisionFunctions) {
+    public Placeable(boolean isWalkable, TileType[][] exterior, String exteriorName) {
         this.isWalkable = isWalkable;
-        if(collisionFunctions != null){
-            this.collisionFunctions.addAll(Arrays.asList(collisionFunctions));
-        }
 //        this.exterior = exterior;
         this.exteriorName = exteriorName;
     }
-    public Placeable(boolean isWalkable, CollisionEvent... collisionFunctions) {
-        this(isWalkable, null, null, collisionFunctions);
+    public Placeable(boolean isWalkable) {
+        this(isWalkable, null, null);
     }
     private Placeable(Placeable other){
         this.isWalkable = other.isWalkable;
-        this.collisionFunctions.addAll(other.collisionFunctions);
 //        this.exterior = other.exterior;
         this.exteriorName = other.exteriorName;
     }
@@ -48,11 +41,6 @@ public class Placeable extends EntityComponent implements Serializable {
 
     public boolean isWalkable() {
         return isWalkable;
-    }
-
-
-    public ArrayList<CollisionEvent> getCollisionEvents() {
-        return collisionFunctions;
     }
 
     @Override
@@ -86,16 +74,13 @@ class PlaceableDeserializer extends JsonDeserializer<Placeable> {
 
 
         boolean isWalkable = false;
-        CollisionEvent[] collisionFunctions = null;
         String exteriorName = null;
         TileType[][] exterior = null;
 
         if(isWalkableNode != null) isWalkable = isWalkableNode.asBoolean();
-        if(collisionFunctionsNode != null) collisionFunctions = p.getCodec().treeToValue(collisionFunctionsNode, CollisionEvent[].class);
         if(exteriorNameNode != null) exteriorName = exteriorNameNode.asText();
         if(exteriorMapNode != null) exterior = p.getCodec().treeToValue(exteriorMapNode, TileType[][].class);
 
-
-        return new Placeable(isWalkable, exterior,exteriorName, collisionFunctions);
+        return new Placeable(isWalkable, exterior,exteriorName);
     }
 }

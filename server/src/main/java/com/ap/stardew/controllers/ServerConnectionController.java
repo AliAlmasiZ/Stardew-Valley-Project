@@ -14,6 +14,9 @@ public class ServerConnectionController {
                 case "player_move" -> {
                     return connectionThread.playerController.handleWalk(message);
                 }
+                case "update_player_action" -> {
+                    connectionThread.playerController.handleChangeAction(message);
+                }
             }
         }
         if(message.getType() == JSONMessage.Type.lobby_command) {

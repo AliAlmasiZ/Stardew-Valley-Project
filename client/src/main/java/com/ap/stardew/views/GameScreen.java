@@ -301,57 +301,52 @@ public class GameScreen extends AbstractScreen {
 
         batch.begin();
         for (Entity entity : renderableEntities) {
-//            entity.setEntityForComponents();
-//
-//            Renderable renderable = entity.getComponent(Renderable.class);
-//            //update animals:
-//            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
-//
-//            if(renderable.getRenderFunction() != null){
-//                renderable.getRenderFunction().render(entity, batch);
-//            }else{
-//                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
-//                if (sprite != null) {
-//                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
-//                    sprite.draw(batch);
-//                }
-//            }
-            batch.draw(GameAssetManager.getInstance().redCross, entity.getComponent(PositionComponent.class).getX(),
-                entity.getComponent(PositionComponent.class).getY());
-        }
-//
-//        switch (playerController.getEquippedItemState()) {
-//            case PLACEABLE -> {
-//                batch.setColor(0, 1, 0, 0.3f);
-//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-//                batch.draw(GameAssetManager.getInstance()
-//                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-//                    playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16);
-//                batch.setColor(1, 1, 1, 1);
-//            }
-//            case PLACEABLE_INVALID -> {
-//                batch.setColor(1, 0, 0, 0.3f);
-//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-//                batch.draw(GameAssetManager.getInstance()
-//                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-//                    playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16);
-//                batch.setColor(1, 1, 1, 1);
-//            }
-//            case USEABLE -> {
-//                batch.setColor(0, 1, 0, 0.3f);
-//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-//                batch.setColor(1, 1, 1, 1);
-//            }
-//        }
+            entity.setEntityForComponents();
 
-//        for (Player p : game.getPlayers()) {
-//            batch.draw(GameAssetManager.getInstance().energyBar, p.getPosition().x, p.getPosition().y);
-//        }
+            Renderable renderable = entity.getComponent(Renderable.class);
+            //update animals:
+            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
+            if (entity instanceof Player) ((Player) entity).update(delta);
+
+            if(renderable.getRenderFunction() != null){
+                renderable.getRenderFunction().render(entity, batch);
+            }else{
+                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
+                if (sprite != null) {
+                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
+                    sprite.draw(batch);
+                }
+            }
+        }
+
+        switch (playerController.getEquippedItemState()) {
+            case PLACEABLE -> {
+                batch.setColor(0, 1, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.draw(GameAssetManager.getInstance()
+                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+            case PLACEABLE_INVALID -> {
+                batch.setColor(1, 0, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.draw(GameAssetManager.getInstance()
+                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+            case USEABLE -> {
+                batch.setColor(0, 1, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+        }
         batch.end();
 
         mapRenderManager.renderFrontLayers(renderer, activeMap);

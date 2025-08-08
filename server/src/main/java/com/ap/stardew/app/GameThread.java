@@ -46,10 +46,7 @@ public class GameThread extends Thread{
             lastTime = currentTime;
             stateTime += deltaTime;
 
-
-
             update(deltaTime);
-
         }
 
     }

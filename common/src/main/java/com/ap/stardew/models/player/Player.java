@@ -13,7 +13,6 @@ import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
-import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SkillType;
 import com.ap.stardew.models.enums.Weather;
@@ -23,6 +22,7 @@ import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -63,7 +63,7 @@ public class Player extends Entity implements Serializable {
     private float stateTime = 0f;
     private Rectangle bounds;
     private float speed = 200f;
-    private State state = State.IDLE;
+    private Action action = Action.IDLE;
     private Vector2 lastDir = new Vector2(0, -1);
 
     private transient ArrayList<Tile> ownedTiles = null;
@@ -84,16 +84,15 @@ public class Player extends Entity implements Serializable {
 
     public void initPlayer(){
         addComponent(new Inventory(30));
-        addComponent(new Renderable());
+
+        action = Action.IDLE;
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
         for (SkillType s : SkillType.values()) {
             skills.put(s, new Skill());
         }
         setActiveSlot(getComponent(Inventory.class).getSlots().get(0));
-//Todo        this.spriteManager = new CharacterSpriteManager();
-
-//        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
-//Todo        sprite = new Sprite(spriteManager.getFrame(0, lastDir, state));
+        Renderable renderable = new Renderable();
+        addComponent(renderable);
     }
 
     public GameMap getCurrentMap() {
@@ -186,10 +185,6 @@ public class Player extends Entity implements Serializable {
     public void trashItem(Entity item) {
 
     }
-
-//Todo    public CharacterSpriteManager getSpriteManager() {
-//        return spriteManager;
-//    }
 
     public Energy getEnergy() {
         return energy;
@@ -580,30 +575,49 @@ public class Player extends Entity implements Serializable {
         this.sprite = sprite;
     }
 
-    public enum State {
+    public enum Action {
         IDLE,
-        WALKING;
-
+        WALKING,
+        HARVESTING,
+        USING_TOOL,
+        USING_SCYTHE,
+        PASSING_OUT,
+        WATERING
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setAction(Action action) {
+        this.action = action;
     }
 
-    public void update(float delta) {
-        stateTime += delta;
-        if(state.equals(State.IDLE)) {
-            stateTime = 0;
+    public boolean update(float delta) {
+        boolean actionChanged = false;
+        switch (action){
+            case IDLE -> {
+                stateTime = 0;
+            }
+            case WALKING -> {
+                stateTime += delta;
+            }
+            case USING_TOOL -> {
+                stateTime += delta;
+                if(stateTime > GameAssetManager.getInstance().characterSpriteManager.getAnimationDuration(lastDir, action)){
+                    setAction(Action.IDLE);
+
+                    actionChanged = true;
+                }
+            }
         }
-        //Todo : sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
-//        sprite.setPosition(getPosition().x, getPosition().y);
+        sprite.setRegion(GameAssetManager.getInstance().characterSpriteManager.getFrame(stateTime, lastDir, action));
+        sprite.setBounds(getPosition().x, getPosition().y, sprite.getRegionWidth(), sprite.getRegionHeight());
+
+        return actionChanged;
     }
 
     public PlayerState getPlayerState() {
         PlayerState state = new PlayerState();
         state.energy = getEnergy().getAmount();
         state.position = getPosition();
-        state.state = this.state; //WTF this piece of shit
+        state.action = this.action; //WTF this piece of shit -> fixed :3
         state.username = this.getUsername();
         //TODO
 
@@ -613,7 +627,7 @@ public class Player extends Entity implements Serializable {
     public void loadFromState(PlayerState state) {
         this.getEnergy().setAmount(state.energy);
         this.setPosition(state.position.x, state.position.y);
-        this.state = state.state; //WTF
+        this.action = state.action; //WTF
 
     }
 
@@ -623,5 +637,9 @@ public class Player extends Entity implements Serializable {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Action getAction() {
+        return action;
     }
 }

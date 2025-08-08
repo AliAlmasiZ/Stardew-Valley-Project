@@ -6,6 +6,7 @@ import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
+import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.math.Vector2;
 
@@ -33,7 +34,7 @@ public class PlayerController {
         }
 
         player.move(direction, delta);
-        player.setState(Player.State.WALKING);
+        player.setAction(Player.Action.WALKING);
 
         JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
         updateMessage.put("command", "players_update");
@@ -45,7 +46,17 @@ public class PlayerController {
         return null;
     }
 
+    public void handleChangeAction(JSONMessage message){
+        Player.Action action = message.getFromBody("action");
 
+        player.setAction(action);
+
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_player_action");
+        updateMessage.put("username", player.getUsername());
+        updateMessage.put("action", action);
+        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+    }
 
 
 

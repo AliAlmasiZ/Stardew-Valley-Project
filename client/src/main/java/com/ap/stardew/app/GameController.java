@@ -1,13 +1,17 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
+import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.player.Player;
+import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.LobbyScreen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.Map;
 
@@ -23,9 +27,14 @@ public class GameController {
 
         game.setCurrentPlayer(details.getFromBody("player"));
 
+        for (Player player : game.getPlayers()) {
+            player.setSprite(new Sprite());
+        }
+
+        GameMenuController gameMenuController = new GameMenuController();
 
 
-
+        game.getCurrentPlayer().getComponent(Inventory.class).addItem(App.entityRegistry.makeEntity("Axe"));
 
         ClientApp.setActiveGame(game);
 

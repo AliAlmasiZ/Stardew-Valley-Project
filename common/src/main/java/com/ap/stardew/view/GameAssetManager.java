@@ -63,8 +63,9 @@ public class GameAssetManager extends AssetManager {
     public final Texture smallPlus;
     public final Texture miniMap;
 
-
     public final Texture tileSelectionBox;
+
+    public CharacterSpriteManager characterSpriteManager;
 
     //Trees and Crops
     private HashMap<String, Sprite[]> plantsSprites = new HashMap<>();
@@ -99,7 +100,6 @@ public class GameAssetManager extends AssetManager {
 
         this.font = new BitmapFont(Gdx.files.internal("Content/font/khodayaBaseDige.fnt"));
         this.font.getData().setScale(Gdx.graphics.getDensity() * 0.3f);
-        System.out.println(Gdx.graphics.getDensity());
 
         // Clock Images
         clock = new TextureRegion(new Texture(Gdx.files.internal("Content/ClockImages/Clock.png")));
@@ -181,8 +181,7 @@ public class GameAssetManager extends AssetManager {
     public Sprite getEntitySpriteToRender(Entity entity, float deltaTime) {
         if (entity.hasTag(EntityTag.TREE) || entity.hasTag(EntityTag.CROP)) return getPlantSprite(entity);
 
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if (entity instanceof Player player) {
             return player.getSprite();
         }
 

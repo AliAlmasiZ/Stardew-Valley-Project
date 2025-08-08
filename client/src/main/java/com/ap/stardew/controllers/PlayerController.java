@@ -1,12 +1,10 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.models.App;
 
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
-import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.UseFunction;
@@ -147,8 +145,11 @@ public class PlayerController implements InputProcessor {
             if(useable != null && (player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f)){
 
                 for (UseFunction function : useable.getFunctions()) {
-                    function.use(entity, tile);
+                    function.use(player, entity, tile, null);
                 }
+
+                player.setAction(Player.Action.USING_TOOL);
+
             }
 
             Placeable placeable = entity.getComponent(Placeable.class);
@@ -274,7 +275,13 @@ public class PlayerController implements InputProcessor {
             getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
 
         if((!up && !down && !right && !left) || destTile == null) {
-            player.setState(Player.State.IDLE);
+            if(player.getAction() == Player.Action.WALKING){
+                JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
+                message.put("command", "update_player_action");
+                message.put("action", Player.Action.IDLE);
+                ClientApp.sendTCP(message);
+                player.setAction(Player.Action.IDLE);
+            }
         }else {
             boolean canWalk = destTile.isWalkable();
             Entity entity = null;
@@ -295,9 +302,15 @@ public class PlayerController implements InputProcessor {
                 message.put("delta", delta);
                 ClientApp.sendTCP(message);
                 player.move(direction, delta);
-                player.setState(Player.State.WALKING);
+                player.setAction(Player.Action.WALKING);
             }else{
-                player.setState(Player.State.IDLE);
+                if(player.getAction() == Player.Action.WALKING){
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
+                    message.put("command", "update_player_action");
+                    message.put("action", Player.Action.IDLE);
+                    ClientApp.sendTCP(message);
+                    player.setAction(Player.Action.IDLE);
+                }
             }
         }
     }

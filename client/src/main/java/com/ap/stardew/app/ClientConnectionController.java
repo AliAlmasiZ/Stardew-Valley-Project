@@ -1,6 +1,5 @@
 package com.ap.stardew.app;
 
-import com.ap.stardew.models.App;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
@@ -9,11 +8,8 @@ import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.models.Result;
 import com.ap.stardew.views.LobbyScreen;
-import com.ap.stardew.views.MultiplayerScreen;
 
 import java.util.ArrayList;
 
@@ -21,6 +17,7 @@ public class ClientConnectionController {
     public static JSONMessage handleCommand(JSONMessage message) {
         if(message.getType() == JSONMessage.Type.update) {
             String command = message.getFromBody("command");
+//            System.out.println(command);
             switch (command) {
                 case "updateLobby" -> {
                     if (ClientGame.getInstance().getScreen() instanceof LobbyScreen lobbyScreen){
@@ -51,9 +48,20 @@ public class ClientConnectionController {
                     }
 
                     player.move(direction, delta);
-                    player.setState(Player.State.WALKING);
+                    player.setAction(Player.Action.WALKING);
 
-                    System.out.println(player.getPosition().getMap());
+                    return null;
+                }
+                case "update_player_action" -> {
+                    String username = message.getFromBody("username");
+                    Player.Action action = message.getFromBody("action");
+
+                    if(ClientApp.getUsername().equals(username)) {
+                        return null;
+                    }
+                    Player player = ClientApp.getActiveGame().getPlayerByUsername(username);
+                    player.setAction(action);
+
                     return null;
                 }
                 case "update_players" -> {
