@@ -247,9 +247,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(TradeHistoryItem.class);
         kryo.register(Position.class);
         kryo.register(MapRegion.class);
-        kryo.register(Buff.class);
         kryo.register(Sprite.class);
-        kryo.register(Player.State.class);
         kryo.register(Rectangle.class);
         kryo.register(Vector2.class);
 
