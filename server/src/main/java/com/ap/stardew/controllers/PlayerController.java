@@ -60,8 +60,18 @@ public class PlayerController {
         Inventory receiverInventory = message.getFromBody("receiverInventory");
         Inventory senderInventory = message.getFromBody("senderInventory");
 
+        System.out.println(receiverInventory);
+        System.out.println(senderInventory);
+
         sender.getComponent(Inventory.class).tradeEntities(senderInventory, receiverInventory);
+
+        System.out.println(receiverInventory);
+        System.out.println(senderInventory);
+
         receiver.getComponent(Inventory.class).tradeEntities(receiverInventory, senderInventory);
+
+        System.out.println(receiverInventory);
+        System.out.println(senderInventory);
 
         TradeHistoryItem tradeHistoryItem = new TradeHistoryItem(sender,
             receiver, senderInventory, receiverInventory, game.getDate(), game.getTradeId(), true);

@@ -227,6 +227,9 @@ public class GameController {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
         gameScreen.tradeDialog.openMainTradeAsReceiver();
 
+        gameScreen.tradeDialog.getReceiverInventory().empty();
+        gameScreen.tradeDialog.getSenderInventory().empty();
+
         JSONMessage message = new JSONMessage(JSONMessage.Type.trade);
         message.put("command", "reject_trade_offer");
         message.put("receiver", player.getUsername());
@@ -242,5 +245,7 @@ public class GameController {
         gameScreen.tradeDialog.openMainTradeAsSender();
         gameScreen.tradeDialog.errorLabel.setVisible(true);
         gameScreen.tradeDialog.errorLabel.setText("Your offer has been rejected...");
+        gameScreen.tradeDialog.getReceiverInventory().empty();
+        gameScreen.tradeDialog.getSenderInventory().empty();
     }
 }

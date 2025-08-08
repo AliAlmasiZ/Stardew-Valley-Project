@@ -1426,7 +1426,7 @@ public class GameScreen extends AbstractScreen {
 
 // 4) Wrap rows into a ScrollPane and add it
                 ScrollPane scroll = new ScrollPane(rowsTable);
-                scroll.setFadeScrollBars(false);
+                scroll.setFadeScrollBars(true);
                 scroll.setScrollingDisabled(false, false);
 
 // Make the scroll take up all available space
