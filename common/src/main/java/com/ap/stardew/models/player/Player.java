@@ -264,8 +264,8 @@ public class Player extends Entity implements Serializable {
 
     }
 
-    public void addMessage() {
-
+    public void addMessage(Message message) {
+        messageLog.add(message);
     }
 
     public void changePosition(int x, int y) {

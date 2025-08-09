@@ -95,6 +95,7 @@ public class GameScreen extends AbstractScreen {
     // Trade
     public TradeDialog tradeDialog;
 
+
     private final Game game;
 
     // NPC
@@ -404,26 +405,29 @@ public class GameScreen extends AbstractScreen {
 
     public void showTemporaryMessage(String message, float duration, Color color) {
         Label label = new Label(message, customSkin);
-        label.setPosition(
-            (uiStage.getWidth() - label.getWidth()) / 2f,
-            (uiStage.getHeight() - label.getHeight() - 50)
-        );
-
+//        label.setPosition(
+//            (uiStage.getWidth() - label.getWidth()) / 2f,
+//            (uiStage.getHeight() - label.getHeight() - 50)
+//        );
+//
         label.setColor(color);
         label.scaleBy(2);
-        label.getColor().a = 0; // start invisible
-
-
-        // Sequence of actions: fade in → wait → fade out → remove
-        label.addAction(Actions.sequence(
-            Actions.fadeIn(0.5f),
-            Actions.delay(duration),
-            Actions.fadeOut(0.5f),
-            Actions.removeActor()
-        ));
-
-        uiStage.addActor(label);
-        System.out.println(message); // TODO: REMOVE IT
+//        label.getColor().a = 0; // start invisible
+//
+//
+//        // Sequence of actions: fade in → wait → fade out → remove
+//        label.addAction(Actions.sequence(
+//            Actions.fadeIn(0.5f),
+//            Actions.delay(duration),
+//            Actions.fadeOut(0.5f),
+//            Actions.removeActor()
+//        ));
+//
+//        uiStage.addActor(label);
+//        System.out.println(message); // TODO: REMOVE IT
+        PopUpMessage popUpMessage = new PopUpMessage(PopUpMessage.PopUpMessageType.TOP_CENTER);
+        popUpMessage.add(label);
+        popUpMessage.show(uiStage);
     }
 
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
@@ -1395,7 +1399,7 @@ public class GameScreen extends AbstractScreen {
                 Table contentTable = new Table(customSkin);
                 ArrayList<TradeHistoryItem> trades = currentPlayer.getTradeHistory();
 
-// 1) Header row
+                // 1) Header row
                 contentTable.add("ID").pad(5).center();
                 contentTable.add("Sender").pad(5).center();
                 contentTable.add("Receiver").pad(5).center();
@@ -1405,31 +1409,31 @@ public class GameScreen extends AbstractScreen {
                 contentTable.add("Date").pad(5).center();
                 contentTable.row();
 
-// 2) Sort trades from newest to oldest by ID (or by date if you prefer)
+                // 2) Sort trades from newest to oldest by ID (or by date if you prefer)
                 trades.sort((a, b) -> Integer.compare(b.getId(), a.getId()));
 
-// 3) Create an inner table for the rows
+                // 3) Create an inner table for the rows
                 Table rowsTable = new Table(customSkin);
                 for (TradeHistoryItem t : trades) {
-                    rowsTable.add(String.valueOf(t.getId())).pad(4);
-                    rowsTable.add(t.getSender().getUsername()).pad(4);
-                    rowsTable.add(t.getReceiver().getUsername()).pad(4);
-                    rowsTable.add(t.getSenderInventory().toString()).pad(4);
-                    rowsTable.add(t.getReceiverInventory().toString()).pad(4);
-                    rowsTable.add(t.isAccepted() ? "Yes" : "No").pad(4);
-                    rowsTable.add(t.getDate().toString()).pad(4);
+                    rowsTable.add(String.valueOf(t.getId())).pad(5);
+                    rowsTable.add(t.getSender().getUsername()).pad(5);
+                    rowsTable.add(t.getReceiver().getUsername()).pad(5);
+                    rowsTable.add(t.getSenderInventory().toString()).pad(5);
+                    rowsTable.add(t.getReceiverInventory().toString()).pad(5);
+                    rowsTable.add(t.isAccepted() ? "Yes" : "No").pad(5);
+                    rowsTable.add(t.getDate().toString()).pad(5);
                     rowsTable.row();
                 }
 
-// 4) Wrap rows into a ScrollPane and add it
+                // 4) Wrap rows into a ScrollPane and add it
                 ScrollPane scroll = new ScrollPane(rowsTable);
                 scroll.setFadeScrollBars(true);
                 scroll.setScrollingDisabled(false, false);
 
-// Make the scroll take up all available space
+                // Make the scroll take up all available space
                 contentTable.add(scroll).colspan(7).expand().fill();
 
-// 5) Finally show it
+                // 5) Finally show it
                 showTable(contentTable);
 
             }

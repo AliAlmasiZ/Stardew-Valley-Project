@@ -75,6 +75,17 @@ public class ServerConnectionController {
                 }
             }
         }
+        if (message.getType() == JSONMessage.Type.chat) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "send_private_message" -> {
+                    connectionThread.playerController.sendPrivateMessage(message);
+                }
+                case "send_public_message" -> {
+                    connectionThread.playerController.sendPublicMessage(message);
+                }
+            }
+        }
             throw new UnsupportedOperationException("didn't handle");
     }
 

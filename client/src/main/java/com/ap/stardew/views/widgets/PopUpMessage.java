@@ -11,10 +11,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PopUpMessage extends Table {
     private static PopUpMessage activeMessage = null;
+    private static PopUpMessageType popUpMessageType = PopUpMessageType.STANDARD;
 
     private Table wrapperTable;
     public PopUpMessage(){
         setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
+    }
+
+    public PopUpMessage(PopUpMessageType popUpMessageType){
+        setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
+        this.popUpMessageType = popUpMessageType;
+    }
+
+    public enum PopUpMessageType {
+        STANDARD,
+        TOP_CENTER,
+
     }
 
     public void show(Stage stage){
@@ -26,7 +38,14 @@ public class PopUpMessage extends Table {
 
         wrapperTable = new Table();
         wrapperTable.setFillParent(true);
-        wrapperTable.bottom().right().pad(5);
+        switch(popUpMessageType){
+            case STANDARD -> {
+                wrapperTable.bottom().right().pad(5);
+            }
+            case TOP_CENTER -> {
+                wrapperTable.top().center().pad(8);
+            }
+        }
 
         stage.addActor(wrapperTable);
 

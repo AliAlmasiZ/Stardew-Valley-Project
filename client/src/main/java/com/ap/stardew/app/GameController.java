@@ -7,17 +7,18 @@ import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.components.inventory.Inventory;
+import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.LobbyScreen;
 import com.ap.stardew.views.TradeDialog;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import java.util.Map;
 import com.badlogic.gdx.graphics.Color;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GameController {
     public static void startGame(JSONMessage details){
@@ -47,7 +48,7 @@ public class GameController {
         });
     }
 
-    // Trade
+    /***************************************** Trade **********************************************/
 
     /**
      * SEND
@@ -260,4 +261,78 @@ public class GameController {
         gameScreen.tradeDialog.getReceiverInventory().empty();
         gameScreen.tradeDialog.getSenderInventory().empty();
     }
+
+    /*************************************************************************************************/
+
+    /***************************************** Chat **********************************************/
+
+    /**
+     * SEND
+     * @param player to send
+     * @param text message text
+     */
+    public static void sendPrivateMessage(Player player, String text) {
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.chat);
+        jsonMessage.put("command", "send_private_message");
+        jsonMessage.put("receiver", player.getUsername());
+        Message message = new Message(ClientApp.getActiveGame().getDate(), text, player, ClientApp.getActiveGame().getCurrentPlayer());
+        jsonMessage.put("message", message);
+
+        //TODO: update GRAPHICS
+
+        ClientApp.sendTCP(jsonMessage);
+    }
+
+    public static void receivePrivateMessage(JSONMessage jsonMessage) {
+        Message message = jsonMessage.getFromBody("message");
+        ClientApp.getActiveGame().getCurrentPlayer().addMessage(message);
+
+        //TODO: update GRAPHICS
+    }
+
+    /**
+     * SEND
+     * @param text message text
+     */
+    public static void sendPublicMessage(String text) {
+        Game game = ClientApp.getActiveGame();
+        Message message = new Message(game.getDate(), text, null, game.getCurrentPlayer());
+
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.chat);
+        jsonMessage.put("command", "send_public_message");
+        jsonMessage.put("message", message);
+    }
+
+    /**
+     * HANDLE
+     * the logic after receiving
+     * @param jsonMessage message
+     */
+    public static void receivePublicMessage(JSONMessage jsonMessage) {
+        if (!(ClientGame.getInstance().getScreen() instanceof GameScreen)) return;
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+
+        Message message = jsonMessage.getFromBody("message");
+        ClientApp.getActiveGame().addPublicMessage(message);
+
+        //TODO: Graphics
+
+        if (isTagged(message.getMessage()))  gameScreen.showTemporaryMessage(
+            "\"" + message.getSender().getUsername() + "\" tagged you in public chat" ,
+            5, Color.GREEN);
+    }
+
+    private static boolean isTagged(String text) {
+        String username = ClientApp.getActiveGame().getCurrentPlayer().getUsername();
+
+        Pattern pattern = Pattern.compile("(?<!\\\\S)@[A-Za-z0-9_-]+");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            if (matcher.group().substring(1).equals(username)) return true;
+        }
+
+        return false;
+    }
+
 }

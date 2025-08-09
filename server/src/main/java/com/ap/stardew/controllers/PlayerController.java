@@ -7,8 +7,8 @@ import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
-import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
+import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.badlogic.gdx.math.Vector2;
@@ -127,6 +127,21 @@ public class PlayerController {
         updateMessage.put("trade_history", tradeHistoryItem);
 
         clientConnectionThread.gameThread.sendTCP(updateMessage, player.getUsername());
+    }
+
+    /***************************************** Chat **********************************************/
+    public void sendPrivateMessage(JSONMessage jsonMessage) {
+        String receiverName = jsonMessage.getFromBody("receiver");
+        clientConnectionThread.gameThread.getClientByUsername(receiverName).player.addMessage(jsonMessage.getFromBody("message"));
+
+        clientConnectionThread.gameThread.sendTCP(jsonMessage,jsonMessage.getFromBody("receiver"));
+    }
+
+    public void sendPublicMessage(JSONMessage jsonMessage) {
+        Message message = jsonMessage.getFromBody("message");
+        clientConnectionThread.gameThread.getGame().addPublicMessage(message);
+
+        clientConnectionThread.gameThread.sendAllTCP(jsonMessage);
     }
 
 }
