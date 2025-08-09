@@ -297,6 +297,9 @@ public class GameController {
 
         gameScreen.chatDialog.updateMessage(message.getSender(), message);
 
+        if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))  gameScreen.showTemporaryMessage(
+            "\"" + message.getSender() + "\" sent you a message!" ,
+            5, Color.GREEN);
     }
 
     /**
@@ -311,8 +314,6 @@ public class GameController {
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.chat);
         jsonMessage.put("command", "send_public_message");
         jsonMessage.put("message", message);
-
-        gameScreen.chatDialog.updateMessage(null, message);
 
         ClientApp.sendTCP(jsonMessage);
     }

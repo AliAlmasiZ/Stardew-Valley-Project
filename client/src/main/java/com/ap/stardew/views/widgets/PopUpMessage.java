@@ -43,7 +43,7 @@ public class PopUpMessage extends Table {
                 wrapperTable.bottom().right().pad(5);
             }
             case TOP_CENTER -> {
-                wrapperTable.top().center().pad(8);
+                wrapperTable.center().top().pad(8);
             }
         }
 

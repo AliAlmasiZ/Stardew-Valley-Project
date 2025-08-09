@@ -8,11 +8,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Message implements Serializable {
-    private final String sender;
-    private final String receiver;
-    private final String message;
-    private final Date date;
+    private String sender;
+    private String receiver;
+    private String message;
+    private Date date;
     private boolean seen;
+
+    public Message() {
+    }
 
     public Message(Date date, String message, Player receiver, Player sender) {
         this.date = date;
