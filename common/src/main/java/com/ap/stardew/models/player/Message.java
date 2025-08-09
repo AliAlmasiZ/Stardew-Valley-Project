@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Message implements Serializable {
-    private final Player sender;
-    private final Player receiver;
+    private final String sender;
+    private final String receiver;
     private final String message;
     private final Date date;
     private boolean seen;
@@ -17,17 +17,21 @@ public class Message implements Serializable {
     public Message(Date date, String message, Player receiver, Player sender) {
         this.date = date;
         this.message = message;
-        this.receiver = receiver;
-        this.sender = sender;
+        if (receiver != null) {
+            this.receiver = receiver.getUsername();
+        }else {
+            this.receiver = null;
+        }
+        this.sender = sender.getUsername();
 
         seen = false;
     }
 
-    public Player getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public Player getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
@@ -62,11 +66,11 @@ public class Message implements Serializable {
         Game game = App.getActiveGame();
 
         StringBuilder result = new StringBuilder();
-        result.append("Sender: ").append(message.getSender().getUsername()).append("\n");
-        result.append("Receiver: ").append(message.getReceiver().getUsername()).append("\n");
+        result.append("Sender: ").append(message.getSender()).append("\n");
+        result.append("Receiver: ").append(message.getReceiver()).append("\n");
         result.append("Message: ").append(message.getMessage()).append("\n");
         result.append(message.getDate().toString()).append("\n");
-        if (game.getCurrentPlayer() == message.getSender()) {
+        if (game.getCurrentPlayer().getUsername().equals(message.getSender())) {
             result.append("Seen: ").append(message.isSeen()).append("\n");
         }
         result.append("-----------------------------------------------\n");

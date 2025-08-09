@@ -323,7 +323,7 @@ public class GameController {
      * @param jsonMessage message
      */
     public static void receivePublicMessage(JSONMessage jsonMessage) {
-        if (!(ClientGame.getInstance().getScreen() instanceof GameScreen)) return;
+//        if (!(ClientGame.getInstance().getScreen() instanceof GameScreen)) return;
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
 
         Message message = jsonMessage.getFromBody("message");
@@ -332,7 +332,7 @@ public class GameController {
         gameScreen.chatDialog.updateMessage(null, message);
 
         if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))  gameScreen.showTemporaryMessage(
-            "\"" + message.getSender().getUsername() + "\" tagged you in public chat" ,
+            "\"" + message.getSender() + "\" tagged you in public chat" ,
             5, Color.GREEN);
     }
 

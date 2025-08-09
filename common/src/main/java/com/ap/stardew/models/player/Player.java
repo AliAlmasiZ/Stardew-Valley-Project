@@ -323,7 +323,7 @@ public class Player extends Entity implements Serializable {
 
     public void makeMessagesSeen() {
         for (Message message : messageLog) {
-            if (message.getReceiver() == this) {
+            if (this.getUsername().equals(message.getReceiver())) {
                 message.setSeen(true);
             }
         }

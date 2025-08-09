@@ -7,12 +7,15 @@ import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.views.widgets.InGameDialog;
+import com.ap.stardew.views.widgets.TabWidget;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +27,7 @@ public class ChatDialog {
     private Table mainChatTable;
     private ScrollPane scrollPane;
     private Table publicChatTable;
-    private HashMap<Player, Table> chatTables = new HashMap<>();
+    private HashMap<String, Table> chatTables = new HashMap<>();
     private Skin skin = GameAssetManager.getInstance().getCustomSkin();
 
     private String chosenChat = "public";
@@ -34,12 +37,15 @@ public class ChatDialog {
 
     public ChatDialog(ArrayList<Player> players, Stage stage) {
         dialog = new InGameDialog(stage);
-        chooseChatTable = new Table(skin);
-        publicChatTable = new Table(skin);
+        dialog.setBackground((Drawable) null);
+        TabWidget tabWidget = new TabWidget();
+
+        chooseChatTable = new Table();
+        publicChatTable = new Table();
         activeChatTable = publicChatTable;
         for (Player player : players) {
             if (player.getUsername().equals(currentPlayer.getUsername())) continue;
-            chatTables.put(player, new Table(skin));
+            chatTables.put(player.getUsername(), new Table(skin));
         }
 
         Label title = new Label("Chat with:", skin);
@@ -63,12 +69,12 @@ public class ChatDialog {
         });
         chooseChatTable.add(title).center().growX().row();
         chooseChatTable.add(publicChatButton).width(40).pad(5);
-        for (Player p : chatTables.keySet()) {
-            TextButton nameButton = new TextButton(p.getUsername(), skin);
+        for (String p : chatTables.keySet()) {
+            TextButton nameButton = new TextButton(p, skin);
             publicChatButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    chosenChat = p.getUsername();
+                    chosenChat = p;
                     activeChatTable = chatTables.get(p);
                 }
 
@@ -109,16 +115,18 @@ public class ChatDialog {
         sendButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (messageField.getText().isEmpty()) return;
                 if (chosenChat.equals("public")) {
                     GameController.sendPublicMessage(messageField.getText());
+                }else {
+                    GameController.sendPrivateMessage(chosenChat, messageField.getText());
                 }
-                GameController.sendPrivateMessage(chosenChat, messageField.getText());
             }
         });
 
         scrollPane = new ScrollPane(activeChatTable, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setSize(chooseChatTable.getWidth(), 300);
+        scrollPane.setHeight(150);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.layout();
         scrollPane.setScrollY(scrollPane.getMaxY());
@@ -126,22 +134,22 @@ public class ChatDialog {
 
         mainChatTable.add(title).right().pad(3);
         mainChatTable.add(chatWithLabel).left().pad(3).row();
-        mainChatTable.add(scrollPane).colspan(2).pad(8);
+        mainChatTable.add(scrollPane).width((float) Gdx.graphics.getWidth() / 2).height(150).colspan(2).pad(8);
         mainChatTable.row();
-        mainChatTable.add(messageField).colspan(2).growX().pad(5).row();
-        mainChatTable.add(sendButton).colspan(2).growX().pad(5).row();
+        mainChatTable.add(messageField).colspan(2).growX().pad(2).row();
+        mainChatTable.add(sendButton).colspan(2).growX().pad(2).row();
     }
 
-    public void updateMessage(Player player, Message message) {
+    public void updateMessage(String playerUsername, Message message) {
         Table table;
-        if (player == null) table = publicChatTable;
-        else table = chatTables.get(player);
+        if (playerUsername == null) table = publicChatTable;
+        else table = chatTables.get(playerUsername);
 
         Table messageContainer = new Table(skin);
         Label dateLabel = new Label(message.getDate().toString(), skin);
         dateLabel.setScale(0.5f);
-        Label senderLabel = new Label(message.getSender().getUsername(), skin);
-        if (message.getSender().getUsername().equals(currentPlayer.getUsername())) {
+        Label senderLabel = new Label(message.getSender(), skin);
+        if (message.getSender().equals(currentPlayer.getUsername())) {
             senderLabel.setColor(Color.CYAN);
         } else {
             senderLabel.setColor(Color.GREEN);
@@ -149,7 +157,7 @@ public class ChatDialog {
         senderLabel.setScale(0.5f);
 
         Label text = new Label(wrapByWords(message.getMessage(), 75), skin);
-        if (message.getSender().getUsername().equals(currentPlayer.getUsername())) {
+        if (message.getSender().equals(currentPlayer.getUsername())) {
             senderLabel.setColor(Color.CYAN);
         } else {
             senderLabel.setColor(Color.GREEN);
@@ -162,9 +170,12 @@ public class ChatDialog {
 
 
 
-        table.add(messageContainer).width(chooseChatTable.getWidth()).pad(10);
+        table.add(messageContainer).width(chooseChatTable.getWidth()).pad(10).row();
         scrollPane.layout();
         scrollPane.setScrollY(scrollPane.getMaxY());
+
+        if (playerUsername == null) publicChatTable = table;
+        else chatTables.put(playerUsername, table);
     }
 
     public void initMessages() {
@@ -178,7 +189,7 @@ public class ChatDialog {
     }
 
     public void show() {
-        isOpen =true;
+        isOpen = true;
         dialog.show();
     }
 
