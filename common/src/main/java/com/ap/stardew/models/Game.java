@@ -1,5 +1,6 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.records.GameStartingDetails;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,7 @@ public class Game implements Serializable {
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private ArrayList<PlayerFriendship> playerFriendships = new ArrayList<>();
+    private ArrayList<Message> publicChat = new ArrayList<>();
     private ArrayList<NPC> gameNPCs = new ArrayList<>();
     private boolean mapVisible = true;
     private ArrayList<Quest> quests = new ArrayList<>();
@@ -204,6 +206,14 @@ public class Game implements Serializable {
 
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public ArrayList<Message> getPublicChat() {
+        return publicChat;
+    }
+
+    public void addPublicMessage(Message message) {
+        publicChat.add(message);
     }
 
     public void nextTurn(){

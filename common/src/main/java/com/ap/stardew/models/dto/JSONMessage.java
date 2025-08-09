@@ -53,6 +53,7 @@ public class JSONMessage {
         player_input_command,
         update,
         trade,
+        chat,
     }
 
     @Override

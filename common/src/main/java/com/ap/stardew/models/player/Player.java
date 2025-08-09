@@ -264,8 +264,8 @@ public class Player extends Entity implements Serializable {
 
     }
 
-    public void addMessage() {
-
+    public void addMessage(Message message) {
+        messageLog.add(message);
     }
 
     public void changePosition(int x, int y) {
@@ -323,7 +323,7 @@ public class Player extends Entity implements Serializable {
 
     public void makeMessagesSeen() {
         for (Message message : messageLog) {
-            if (message.getReceiver() == this) {
+            if (this.getUsername().equals(message.getReceiver())) {
                 message.setSeen(true);
             }
         }

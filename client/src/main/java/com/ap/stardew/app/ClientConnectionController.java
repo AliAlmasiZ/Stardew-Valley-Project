@@ -101,6 +101,17 @@ public class ClientConnectionController {
                 }
             }
         }
+        if (message.getType() == JSONMessage.Type.chat) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "send_private_message" -> {
+                    GameController.receivePrivateMessage(message);
+                }
+                case "send_public_message" -> {
+                    GameController.receivePublicMessage(message);
+                }
+            }
+        }
         throw new UnsupportedOperationException(); // for messages cant handle
     }
 }
