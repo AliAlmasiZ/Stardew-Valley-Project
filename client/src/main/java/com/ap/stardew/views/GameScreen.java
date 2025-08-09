@@ -184,35 +184,6 @@ public class GameScreen extends AbstractScreen {
         //TODO: remove this later
         //**************************************
 
-
-//        controller.cheatGiveItem("Training Rod", 1);
-        controller.cheatGiveItem("Hay", 500);
-        controller.cheatGiveItem("Wood", 16);
-        controller.cheatGiveItem("Axe", 1);
-//        controller.cheatGiveItem("Pickaxe", 1);
-//        controller.cheatGiveItem("Hoe", 1);
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatGiveItem("Apple", 10);
-//        controller.cheatGiveItem("Bee House", 1);
-//        controller.cheatGiveItem("Frozen Tear", 10);
-//        controller.cheatGiveItem("Cheese Press", 1);
-//        controller.cheatGiveItem("Keg", 1);
-//        controller.cheatGiveItem("Dehydrator", 1);
-//        controller.cheatGiveItem("Charcoal Klin", 1);
-//        controller.cheatGiveItem("Loom", 1);
-//        controller.cheatGiveItem("Mayonnaise Machine", 1);
-//        controller.cheatGiveItem("Oil Maker", 1);
-//        controller.cheatGiveItem("Preserves Jar", 1);
-//        controller.cheatGiveItem("Fish Smoker", 1);
-//        controller.cheatGiveItem("Furnace", 1);
-//
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-
 //        Player player = ClientApp.getActiveGame().getCurrentPlayer();
 //        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
 //        System.out.println(EntityPlacementSystem.placeEntity(animal1, player.getPosition()).message());
@@ -273,6 +244,7 @@ public class GameScreen extends AbstractScreen {
     public void show() {
         super.show();
         setGameInput();
+        initialCheats();
     }
 
     @Override
@@ -389,21 +361,23 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-
+        super.pause();
     }
 
     @Override
     public void resume() {
-
+        super.resume();
     }
+
 
     @Override
     public void hide() {
-
+        super.hide();
     }
 
     @Override
     public void dispose() {
+        super.dispose();
         gameStage.dispose();
     }
 
@@ -1492,11 +1466,18 @@ public class GameScreen extends AbstractScreen {
     }
 
 
-    /* --- Crafting ---*/
-    /**
-     * shows the crafting dialog
-     * */
+    /* --- Crafting --- */
     public void openCraftingMenu() {
+        openRecipeMenu(RecipeType.CRAFTING);
+    }
+
+    /* --- Cooking --- */
+    public void openCookingMenu() {
+        openRecipeMenu(RecipeType.COOKING);
+    }
+
+
+    private void openRecipeMenu(RecipeType type) {
         InGameDialog craftingDialog = new InGameDialog(uiStage);
         craftingDialog.pad(10);
 
@@ -1509,7 +1490,7 @@ public class GameScreen extends AbstractScreen {
         int itemsPerRow = 5;
         int itemsCount = 0;
 
-        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(RecipeType.CRAFTING);
+        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(type);
 
         for (Recipe recipe : recipes) {
             String recipeName = recipe.getName();
@@ -1523,15 +1504,19 @@ public class GameScreen extends AbstractScreen {
             recipeButton.add(itemImage).width(32).height(32).pad(5);
 
             if(!isUnlocked) {
-                recipeButton.getColor().set(Color.GRAY);
+                recipeButton.setColor(Color.GRAY);
+                itemImage.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             } else {
-                recipeButton.getColor().set(Color.WHITE);
+                recipeButton.setColor(Color.WHITE);
+                itemImage.setColor(Color.WHITE);
             }
 
+            //TODO : Make ToolTip contents graphical
             ToolTip toolTip = new ToolTip(recipeButton);
-            Label toolTipLabel = new Label("Ingredients:\n", customSkin);
+            Label toolTipLabel = new Label(recipeName, customSkin);
+            toolTipLabel.setText(toolTipLabel.getText() + (isUnlocked ? " (Unlocked)" : " (Locked)"));
+            toolTipLabel.setText(toolTipLabel.getText() + "\n" + "Ingredients:\n");
             toolTipLabel.setAlignment(Align.left);
-
 
             for (Ingredient ingredient : recipe.getIngredients()) {
                 toolTipLabel.setText(toolTipLabel.getText() + "- " + ingredient.toString() + "\n");
@@ -1542,7 +1527,7 @@ public class GameScreen extends AbstractScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (isUnlocked && recipe.canCraft(player.getComponent(Inventory.class))) {
-                        Result result = controller.craftingCraft(recipeName);
+                        Result result = controller.craftingCraft(recipeName); // TODO: do it on server side
                         if (!result.isSuccessful()) {
                             showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                         } else {
@@ -1572,7 +1557,15 @@ public class GameScreen extends AbstractScreen {
 
         ScrollPane recipeScrollPane = new ScrollPane(recipeTable, customSkin);
 
-        //TODO
+        Table inventoryPanel = new Table();
+        inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
+        inventoryPanel.add(new InventoryGrid(player.getComponent(Inventory.class), 10)).grow();
+
+        mainTable.add(recipeScrollPane).colspan(2).fillX().height(200).row();
+        mainTable.add(inventoryPanel).colspan(2).grow().padTop(10);
+
+        craftingDialog.add(mainTable).grow();
+        craftingDialog.show();
 
 
     }
@@ -1658,4 +1651,41 @@ public class GameScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
+
+    private void initialCheats() {
+
+
+
+
+        player.addRecipe("Preserves Jar");
+//        controller.cheatGiveItem("Training Rod", 1);
+        controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Wood", 50);
+        controller.cheatGiveItem("Stone", 40);
+        controller.cheatGiveItem("Coal", 8);
+        controller.cheatGiveItem("Axe", 1);
+//        controller.cheatGiveItem("Pickaxe", 1);
+//        controller.cheatGiveItem("Hoe", 1);
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatGiveItem("Apple", 10);
+//        controller.cheatGiveItem("Bee House", 1);
+//        controller.cheatGiveItem("Frozen Tear", 10);
+//        controller.cheatGiveItem("Cheese Press", 1);
+//        controller.cheatGiveItem("Keg", 1);
+//        controller.cheatGiveItem("Dehydrator", 1);
+//        controller.cheatGiveItem("Charcoal Klin", 1);
+//        controller.cheatGiveItem("Loom", 1);
+//        controller.cheatGiveItem("Mayonnaise Machine", 1);
+//        controller.cheatGiveItem("Oil Maker", 1);
+//        controller.cheatGiveItem("Preserves Jar", 1);
+//        controller.cheatGiveItem("Fish Smoker", 1);
+//        controller.cheatGiveItem("Furnace", 1);
+//
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+    }
 }

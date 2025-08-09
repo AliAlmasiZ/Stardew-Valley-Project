@@ -100,9 +100,12 @@ public class PlayerController implements InputProcessor {
             this.advanceTime = true;
         if (keycode == Input.Keys.TAB)
             screen.openJournal();
-        if (keycode == Input.Keys.P) //TODO: Temporarily
+        if (keycode == Input.Keys.P) //TODO: TemporarilyBoo
             screen.startFishing();
-
+        if (keycode == Input.Keys.B)
+            screen.openCraftingMenu();
+        if (keycode == Input.Keys.C)
+            screen.openCookingMenu();
 
 
         return false;
