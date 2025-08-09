@@ -2,6 +2,9 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.models.crafting.Ingredient;
+import com.ap.stardew.models.crafting.Recipe;
+import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
@@ -181,7 +184,7 @@ public class GameScreen extends AbstractScreen {
 //        controller.cheatGiveItem("Training Rod", 1);
 //        controller.cheatGiveItem("Hay", 500);
 //        controller.cheatGiveItem("Wood", 500);
-//        controller.cheatGiveItem("Axe", 1);
+        controller.cheatGiveItem("Axe", 1);
 //        controller.cheatGiveItem("Pickaxe", 1);
 //        controller.cheatGiveItem("Hoe", 1);
 //        controller.cheatGiveItem("Hay", 500);
@@ -1432,7 +1435,86 @@ public class GameScreen extends AbstractScreen {
     /**
      * shows the crafting dialog
      * */
+    public void openCraftingMenu() {
+        InGameDialog craftingDialog = new InGameDialog(uiStage);
+        craftingDialog.pad(10);
 
+        Table mainTable = new Table();
+        mainTable.top().left();
+
+        Table recipeTable = new Table();
+        recipeTable.top().pad(5);
+
+        int itemsPerRow = 5;
+        int itemsCount = 0;
+
+        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(RecipeType.CRAFTING);
+
+        for (Recipe recipe : recipes) {
+            String recipeName = recipe.getName();
+            boolean isUnlocked = player.hasRecipe(recipe);
+
+            Image itemImage = new Image(recipe.getEntityTexture());
+            itemImage.setScaling(Scaling.fit);
+
+            Table recipeButton = new Table();
+            recipeButton.setBackground(customSkin.getDrawable("frameNinePatch2"));
+            recipeButton.add(itemImage).width(32).height(32).pad(5);
+
+            if(!isUnlocked) {
+                recipeButton.getColor().set(Color.GRAY);
+            } else {
+                recipeButton.getColor().set(Color.WHITE);
+            }
+
+            ToolTip toolTip = new ToolTip(recipeButton);
+            Label toolTipLabel = new Label("Ingredients:\n", customSkin);
+            toolTipLabel.setAlignment(Align.left);
+
+
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                toolTipLabel.setText(toolTipLabel.getText() + "- " + ingredient.toString() + "\n");
+            }
+            toolTip.add(toolTipLabel).pad(5).grow();
+
+            recipeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (isUnlocked && recipe.canCraft(player.getComponent(Inventory.class))) {
+                        Result result = controller.craftingCraft(recipeName);
+                        if (!result.isSuccessful()) {
+                            showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                        } else {
+                            showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                        }
+                    } else {
+                        showTemporaryMessage("You cannot craft this item yet.", ERROR_MESSAGE_DELAY, Color.RED);
+                    }
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    toolTip.show();
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    toolTip.hide();
+                }
+            });
+
+            recipeTable.add(recipeButton).size(60, 60).pad(2);
+            itemsCount++;
+
+            if(itemsCount % itemsPerRow == 0) {
+                recipeTable.row();
+            }
+        }
+
+        ScrollPane recipeScrollPane = new ScrollPane(recipeTable, customSkin);
+
+        //TODO
+
+
+    }
 
 
 

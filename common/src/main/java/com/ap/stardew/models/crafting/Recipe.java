@@ -1,6 +1,10 @@
 package com.ap.stardew.models.crafting;
 
 import com.ap.stardew.models.Vec2;
+import com.ap.stardew.models.entities.components.Pickable;
+import com.ap.stardew.view.GameAssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.ap.stardew.models.App;
@@ -90,9 +94,25 @@ public class Recipe implements Serializable {
         return true;
     }
 
+
+
+    public Texture getEntityTexture() {
+        Entity e = App.entityRegistry.getEntityDetails(name);
+        String iconPath = e.getComponent(Pickable.class).getIcon();
+        Texture tex;
+        if(iconPath != null) {
+            tex = GameAssetManager.getInstance().get(iconPath);
+        }
+        else {
+            tex = GameAssetManager.getInstance().redCross;
+        }
+
+        return tex;
+    }
+
     /*
     *Should check can craft before it
-    **/
+    */
     public Entity craft(Inventory inventory) {
         Entity baseEntity = null;
         for (Ingredient ingredient : ingredients) {
