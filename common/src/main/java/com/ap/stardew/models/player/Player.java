@@ -41,7 +41,8 @@ public class Player extends Entity implements Serializable {
     private final Map<Player, PlayerFriendship> playerFriendships = null;
     private HashMap<Player, Entity> suitors = new HashMap<>();
     private Player spouse;
-    private ArrayList<Gift> giftLog = new ArrayList<>();
+    private ArrayList<Gift> giftReceived = new ArrayList<>();
+    private ArrayList<Gift> giftSent = new ArrayList<>();
     private int giftId = 1;
     private ArrayList<Message> messageLog = new ArrayList<>();
     private ArrayList<Recipe> unlockedRecipes;
@@ -128,6 +129,14 @@ public class Player extends Entity implements Serializable {
         //TODO
     }
 
+    public ArrayList<Gift> getGiftSent() {
+        return giftSent;
+    }
+
+    public void addGiftSent(Gift gift) {
+        giftSent.add(gift);
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -156,8 +165,8 @@ public class Player extends Entity implements Serializable {
         this.suitors = suitors;
     }
 
-    public ArrayList<Gift> getGiftLog() {
-        return giftLog;
+    public ArrayList<Gift> getGiftReceived() {
+        return giftReceived;
     }
 
     public ArrayList<TradeOffer> getTradeOffers() {
@@ -176,8 +185,8 @@ public class Player extends Entity implements Serializable {
         return trades;
     }
 
-    public void setGiftLog(ArrayList<Gift> giftLog) {
-        this.giftLog = giftLog;
+    public void setGiftReceived(ArrayList<Gift> giftReceived) {
+        this.giftReceived = giftReceived;
     }
 
     public Entity getHouse() {
@@ -330,10 +339,12 @@ public class Player extends Entity implements Serializable {
     }
 
     public void receiveGift(Gift gift) {
-        giftLog.add(gift);
+        giftReceived.add(gift);
         gift.setId(giftId);
         giftId++;
         haveNewGift = true;
+
+        this.getComponent(Inventory.class).addItem(gift.getContent().clone());
     }
 
     public void receiveFlower() {
@@ -356,7 +367,7 @@ public class Player extends Entity implements Serializable {
 
 
     public Gift findGift(int giftId) {
-        for (Gift gift : giftLog) {
+        for (Gift gift : giftReceived) {
             if (gift.getId() == giftId) {
                 return gift;
             }

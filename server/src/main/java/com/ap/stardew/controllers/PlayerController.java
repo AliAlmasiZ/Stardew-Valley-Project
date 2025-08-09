@@ -5,13 +5,16 @@ import com.ap.stardew.models.Game;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
+import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryonet.Client;
 
 public class PlayerController {
     private ClientConnectionThread clientConnectionThread;
@@ -142,6 +145,22 @@ public class PlayerController {
         clientConnectionThread.gameThread.getGame().addPublicMessage(message);
 
         clientConnectionThread.gameThread.sendAllTCP(jsonMessage);
+    }
+
+    /***************************************** **** **********************************************/
+
+    public void giftPlayer(JSONMessage jsonMessage) {
+        Gift gift = jsonMessage.getFromBody("gift");
+
+        Player sender = gift.getSender();
+        Player receiver = gift.getReceiver();
+        Entity entity = gift.getContent();
+
+        sender.getComponent(Inventory.class).takeFromInventory(entity, entity.getComponent(Pickable.class).getStackSize());
+        sender.addGiftSent(gift);
+        receiver.receiveGift(gift);
+
+        clientConnectionThread.gameThread.sendTCP(jsonMessage, jsonMessage.getFromBody("receiver"));
     }
 
 }

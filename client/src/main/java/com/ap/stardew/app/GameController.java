@@ -7,6 +7,7 @@ import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
@@ -349,5 +350,24 @@ public class GameController {
 
         return false;
     }
+
+    /*************************************************************************************************/
+
+    public static void giftPlayer(Player player, Gift gift) {
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
+        jsonMessage.put("command", "gift_player");
+        jsonMessage.put("receiver", player.getUsername());
+        jsonMessage.put("gift", gift);
+    }
+
+    public static void receiveGift(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Gift gift = jsonMessage.getFromBody("gift");
+
+        ClientApp.getActiveGame().getCurrentPlayer().receiveGift(gift);
+
+        gameScreen.showTemporaryMessage(jsonMessage.getFromBody("sender"), 5, Color.CYAN);
+    }
+
 
 }

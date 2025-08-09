@@ -1348,7 +1348,7 @@ public class GameMenuController implements Controller {
         return new Result(true, message);
     }
 
-    public Result giveGift(String playerName, String itemName, int amount) {
+    public Result canGiveGift(String playerName, String itemName, int amount) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player giftedPlayer = game.findPlayer(playerName);
@@ -1377,13 +1377,29 @@ public class GameMenuController implements Controller {
         if (!currentPlayer.getComponent(Inventory.class).doesHaveItem(itemName, amount)) {
             return new Result(false, "You don't have " + amount + " items!");
         }
-        Entity item = inventory.takeFromInventory(itemName, amount);
 
-        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
-        giftedPlayer.receiveGift(gift);
+//        Entity item = inventory.takeFromInventory(itemName, amount);
+//
+//        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
+//        giftedPlayer.receiveGift(gift);
 
 
         return new Result(true, "You gave gift to " + giftedPlayer.getUsername());
+    }
+
+    public Gift giveGift(String playerName, String itemName, int amount) {
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        Player giftedPlayer = game.findPlayer(playerName);
+        Inventory inventory = currentPlayer.getComponent(Inventory.class);
+
+        Entity item = inventory.takeFromInventory(itemName, amount);
+
+        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
+        currentPlayer.addGiftSent(gift);
+        giftedPlayer.receiveGift(gift);
+
+        return gift;
     }
 
     public Result giftList() {
@@ -1391,7 +1407,7 @@ public class GameMenuController implements Controller {
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder message = new StringBuilder("Your gift list:\n");
 
-        for (Gift gift : currentPlayer.getGiftLog()) {
+        for (Gift gift : currentPlayer.getGiftReceived()) {
             message.append(gift.toString());
         }
 
@@ -1421,10 +1437,7 @@ public class GameMenuController implements Controller {
         if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
         else playerFriendship.addXp((rating - 3) * 30 + 15);
 
-        Entity item = gift.getContent().clone();
-        currentPlayer.getComponent(Inventory.class).addItem(item);
-
-        return new Result(true, "Rated and collected successfully!");
+        return new Result(true, "Rated successfully!");
     }
 
     public Result giftHistory(String username) {
@@ -1443,13 +1456,13 @@ public class GameMenuController implements Controller {
         message.append(giftedPlayer.getUsername()).append(":\n");
 
         ArrayList<Gift> gifts = new ArrayList<>();
-        for (Gift gift : currentPlayer.getGiftLog()) {
+        for (Gift gift : currentPlayer.getGiftReceived()) {
             if (gift.getSender().equals(giftedPlayer)) {
                 gifts.add(gift);
             }
         }
 
-        for (Gift gift : giftedPlayer.getGiftLog()) {
+        for (Gift gift : giftedPlayer.getGiftReceived()) {
             if (gift.getSender().equals(giftedPlayer)) {
                 gifts.add(gift);
             }
