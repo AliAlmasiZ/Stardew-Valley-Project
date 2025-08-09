@@ -22,6 +22,7 @@ import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -43,8 +44,9 @@ public class Player extends Entity implements Serializable {
     private ArrayList<Gift> giftLog = new ArrayList<>();
     private int giftId = 1;
     private ArrayList<Message> messageLog = new ArrayList<>();
-    private final ArrayList<Recipe> unlockedRecipes;
-    private ArrayList<TradeOffer> trades = new ArrayList<>();
+    private ArrayList<Recipe> unlockedRecipes;
+    private ArrayList<TradeOffer> tradeOffers = new ArrayList<>(); //for phase one
+    private ArrayList<TradeHistoryItem> trades = new ArrayList<>();
     private String accountUsername;
     private String nickname;
     private Gender gender;
@@ -62,7 +64,7 @@ public class Player extends Entity implements Serializable {
     private float stateTime = 0f;
     private Rectangle bounds;
     private float speed = 200f;
-    private State state = State.IDLE;
+    private Action action = Action.IDLE;
     private Vector2 lastDir = new Vector2(0, -1);
 
     private transient ArrayList<Tile> ownedTiles = null;
@@ -74,23 +76,24 @@ public class Player extends Entity implements Serializable {
     private boolean haveNewSuitor = false;
 
     public Player(String username) {
-        this();
+        super("Player", new PositionComponent(0, 0));
         this.accountUsername = username;
     }
+    private Player(){
 
-    public Player(){
-        super("Player", new Inventory(30), new Renderable(), new PositionComponent(0, 0));
+    }
+
+    public void initPlayer(){
+        addComponent(new Inventory(30));
+
+        action = Action.IDLE;
         unlockedRecipes = new ArrayList<>(App.recipeRegistry.getUnlockedRecipes());
         for (SkillType s : SkillType.values()) {
             skills.put(s, new Skill());
         }
-
         setActiveSlot(getComponent(Inventory.class).getSlots().get(0));
-
-//Todo        this.spriteManager = new CharacterSpriteManager();
-
-//        sprite = new Sprite(new Texture("./Content(unpacked)/Characters/Bouncer.png"));
-//Todo        sprite = new Sprite(spriteManager.getFrame(0, lastDir, state));
+        Renderable renderable = new Renderable();
+        addComponent(renderable);
     }
 
     public GameMap getCurrentMap() {
@@ -102,14 +105,17 @@ public class Player extends Entity implements Serializable {
     }
 
     public void setCurrentMap(GameMap currentMap) {
-        if(this.getCurrentMap() != null){
+        if(this.getCurrentMap() == currentMap) return;
+
+        if (this.getCurrentMap() != null) {
             this.getCurrentMap().removeEntity(this);
         }
         this.getPosition().setMap(currentMap);
-        if(currentMap != null){
+        if (currentMap != null) {
             currentMap.addEntity(this);
         }
     }
+
     public int getTrashcanLevel() {
         return trashcanLevel;
     }
@@ -128,6 +134,10 @@ public class Player extends Entity implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void setAccountUsername(String accountUsername) {
+        this.accountUsername = accountUsername;
     }
 
     public ArrayList<Animal> getAnimals() {
@@ -150,7 +160,19 @@ public class Player extends Entity implements Serializable {
         return giftLog;
     }
 
-    public ArrayList<TradeOffer> getTrades() {
+    public ArrayList<TradeOffer> getTradeOffers() {
+        return tradeOffers;
+    }
+
+    public ArrayList<TradeHistoryItem> getTradeHistoryWith(Player player) {
+        ArrayList<TradeHistoryItem> tradeHistory = new ArrayList<>();
+        for (TradeHistoryItem tradeHistoryItem : trades) {
+            if (tradeHistoryItem.hasPlayer(player)) tradeHistory.add(tradeHistoryItem);
+        }
+        return tradeHistory;
+    }
+
+    public ArrayList<TradeHistoryItem> getTradeHistory() {
         return trades;
     }
 
@@ -178,10 +200,6 @@ public class Player extends Entity implements Serializable {
 
     }
 
-//Todo    public CharacterSpriteManager getSpriteManager() {
-//        return spriteManager;
-//    }
-
     public Energy getEnergy() {
         return energy;
     }
@@ -198,7 +216,7 @@ public class Player extends Entity implements Serializable {
         this.energy.reduceEnergy(energyCost);
     }
 
-    public void reduceEnergy(double energyCost , Weather weather) {
+    public void reduceEnergy(double energyCost, Weather weather) {
         this.energy.reduceEnergy(energyCost * weather.getEnergyEffect());
     }
 
@@ -259,8 +277,10 @@ public class Player extends Entity implements Serializable {
     }
 
     public void setPosition(Position position) {
-        this.getPosition().set(position);
+        position.set(position);
+        if(position.getMap() != null) setCurrentMap(position.getMap());
     }
+
     public void setPosition(float x, float y) {
         this.getPosition().set(x, y);
     }
@@ -322,12 +342,16 @@ public class Player extends Entity implements Serializable {
     }
 
     public TradeOffer findTradeOffer(int id) {
-        for (TradeOffer tradeOffer : trades) {
+        for (TradeOffer tradeOffer : tradeOffers) {
             if (tradeOffer.getId() == id) {
                 return tradeOffer;
             }
         }
         return null;
+    }
+
+    public void addTradeHistory(TradeHistoryItem tradeHistoryItem) {
+        trades.add(tradeHistoryItem);
     }
 
 
@@ -357,7 +381,7 @@ public class Player extends Entity implements Serializable {
     }
 
     public void addRecipe(String recipeName) {
-      addRecipe(App.recipeRegistry.getRecipe(recipeName));
+        addRecipe(App.recipeRegistry.getRecipe(recipeName));
     }
 
     public void addRecipe(Recipe recipe) {
@@ -398,9 +422,9 @@ public class Player extends Entity implements Serializable {
         return tileOwner == null || tileOwner == this || (this.spouse != null && tileOwner == this.spouse);
     }
 
-    public void addRegion(MapRegion region) {
-        this.ownedRegions.add(region);
-        this.getOwnedTiles();
+    public void addRegion(MapRegion region, WorldMap worldMap) {
+        ownedRegions.add(region);
+        updateOwnedTiles(worldMap);
         region.setOwner(this);
     }
 
@@ -515,28 +539,31 @@ public class Player extends Entity implements Serializable {
         this.activeBuff = activeBuff;
     }
 
-    public ArrayList<Tile> getOwnedTiles() {
-        if(ownedTiles != null) return ownedTiles;
-
-        WorldMap map = App.getActiveGame().getMainMap();
+    public ArrayList<Tile> getOwnedTiles(WorldMap worldMap) {
+        if (ownedTiles != null) return ownedTiles;
+        updateOwnedTiles(worldMap);
+        return ownedTiles;
+    }
+    public void updateOwnedTiles(WorldMap worldMap){
+        if(ownedTiles != null) ownedTiles.clear();
         ownedTiles = new ArrayList<>();
 
-        for(Tile[] row : map.getTiles()){
-            for(Tile t : row){
-                if(ownedRegions.contains(t.getRegion())){
+        for(Tile[] row : worldMap.getTiles()){
+            for (Tile t : row) {
+                if(t == null) continue;
+                if (ownedRegions.contains(t.getRegion())) {
                     ownedTiles.add(t);
                 }
             }
         }
-        return ownedTiles;
     }
 
-    public ArrayList<Tile> getOwnedPlantedTiles() {
-        ArrayList<Tile> ownedTile = getOwnedTiles();
+    public ArrayList<Tile> getOwnedPlantedTiles(WorldMap worldMap) {
+        ArrayList<Tile> ownedTile = getOwnedTiles(worldMap);
         ArrayList<Tile> plantedTiles = new ArrayList<>();
 
-        for(Tile t : ownedTile){
-            if((t.getContent() != null) && (t.getContent().getComponent(Growable.class) != null)) plantedTiles.add(t);
+        for (Tile t : ownedTile) {
+            if ((t.getContent() != null) && (t.getContent().getComponent(Growable.class) != null)) plantedTiles.add(t);
         }
         return plantedTiles;
     }
@@ -549,12 +576,12 @@ public class Player extends Entity implements Serializable {
         this.greenHouse = greenHouse;
     }
 
-    public boolean isGhashed(){
+    public boolean isGhashed() {
         return this.energy.isGhashed();
     }
 
     public void move(Vector2 direction, float delta) {
-        if(direction.isZero()) return;
+        if (direction.isZero()) return;
         lastDir = direction;
         getComponent(PositionComponent.class).move(direction, delta * speed);
     }
@@ -567,30 +594,49 @@ public class Player extends Entity implements Serializable {
         this.sprite = sprite;
     }
 
-    public enum State {
+    public enum Action {
         IDLE,
-        WALKING;
-
+        WALKING,
+        HARVESTING,
+        USING_TOOL,
+        USING_SCYTHE,
+        PASSING_OUT,
+        WATERING
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setAction(Action action) {
+        this.action = action;
     }
 
-    public void update(float delta) {
-        stateTime += delta;
-        if(state.equals(State.IDLE)) {
-            stateTime = 0;
+    public boolean update(float delta) {
+        boolean actionChanged = false;
+        switch (action){
+            case IDLE -> {
+                stateTime = 0;
+            }
+            case WALKING -> {
+                stateTime += delta;
+            }
+            default -> {
+                stateTime += delta;
+                if(stateTime > GameAssetManager.getInstance().characterSpriteManager.getAnimationDuration(lastDir, action)){
+                    setAction(Action.IDLE);
+
+                    actionChanged = true;
+                }
+            }
         }
-        //Todo : sprite.setRegion(spriteManager.getFrame(stateTime, lastDir, state));
-//        sprite.setPosition(getPosition().x, getPosition().y);
+        sprite.setRegion(GameAssetManager.getInstance().characterSpriteManager.getFrame(stateTime, lastDir, action));
+        sprite.setBounds(getPosition().x, getPosition().y, sprite.getRegionWidth(), sprite.getRegionHeight());
+
+        return actionChanged;
     }
 
     public PlayerState getPlayerState() {
         PlayerState state = new PlayerState();
         state.energy = getEnergy().getAmount();
         state.position = getPosition();
-        state.state = this.state; //WTF this piece of shit
+        state.action = this.action; //WTF this piece of shit -> fixed :3
         state.username = this.getUsername();
         //TODO
 
@@ -600,7 +646,7 @@ public class Player extends Entity implements Serializable {
     public void loadFromState(PlayerState state) {
         this.getEnergy().setAmount(state.energy);
         this.setPosition(state.position.x, state.position.y);
-        this.state = state.state; //WTF
+        this.action = state.action; //WTF
 
     }
 
@@ -610,5 +656,9 @@ public class Player extends Entity implements Serializable {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Action getAction() {
+        return action;
     }
 }

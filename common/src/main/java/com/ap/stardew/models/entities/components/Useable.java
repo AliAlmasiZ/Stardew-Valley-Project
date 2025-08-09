@@ -64,17 +64,18 @@ public class Useable extends EntityComponent implements Serializable {
     }
 
     private Result applyFunctions(Tile targetTile) {
-        StringBuilder errors = new StringBuilder();
-        for (UseFunction function : functions) {
-            Result result = function.use(entity, targetTile);
-            if(!result.isSuccessful())
-                errors.append(result).append("\n");
-            else
-                return result;
-        }
-        if(errors.isEmpty())
-            return new Result(true, "Tool used successfully");
-        errors.deleteCharAt(errors.length() - 1);
-        return new Result(false, errors.toString());
+//        StringBuilder errors = new StringBuilder();
+//        for (UseFunction function : functions) {
+//            Result result = function.use(entity, targetTile);
+//            if(!result.isSuccessful())
+//                errors.append(result).append("\n");
+//            else
+//                return result;
+//        }
+//        if(errors.isEmpty())
+//            return new Result(true, "Tool used successfully");
+//        errors.deleteCharAt(errors.length() - 1);
+//        return new Result(false, errors.toString());
+        return null;
     }
 }

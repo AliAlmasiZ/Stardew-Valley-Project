@@ -10,11 +10,7 @@ import com.ap.stardew.models.enums.EntityTag;
 import com.ap.stardew.utils.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.*;
 
 
 /***
@@ -27,7 +23,11 @@ import java.util.Set;
         property  = "id")
 public class Entity implements Serializable, Cloneable{
     private static int entityCounter = 1;
-    //jsonProperty tells jackson to serialize and deserialize according to these names
+    private static Map<Integer, Entity> entities = new HashMap<>();
+    private static Entity getEntityById(int id){
+        return entities.get(id);
+    }
+
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")
@@ -40,7 +40,7 @@ public class Entity implements Serializable, Cloneable{
 
     private boolean entitySetForComponents = false;
 
-    public Entity(String entityName, ArrayList<EntityComponent> components, HashSet<EntityTag> tags, int id){
+    public Entity(String entityName, ArrayList<EntityComponent> components, HashSet<EntityTag> tags){
         if(entityName == null){
             throw new RuntimeException("The entity name is null");
         }
@@ -56,27 +56,19 @@ public class Entity implements Serializable, Cloneable{
         if(tags != null){
             this.tags.addAll(tags);
         }
-
-        if(id == 0){
-            this.id = entityCounter;
-            entityCounter++;
-        }else{
-            this.id = id;
-        }
-
-    }
-    public Entity() {
-        this.entityName = "Unnamed Entity";
-        this.id = entityCounter++;
+        entities.put(entityCounter++, this);
     }
     public Entity(String entityName, HashSet<EntityTag> tags, EntityComponent... components){
-        this(entityName, new ArrayList<>(Arrays.asList(components)), tags, 0);
+        this(entityName, new ArrayList<>(Arrays.asList(components)), tags);
     }
     public Entity(String entityName, EntityComponent... components){
         this(entityName, null, components);
     }
+    public Entity() {
+        this("unnamed entity");
+    }
     private Entity(Builder b){
-        this(b.entityName, b.components, b.tags, b.id);
+        this(b.entityName, b.components, b.tags);
     }
 
     public ArrayList<EntityComponent> getComponents() {
@@ -96,11 +88,13 @@ public class Entity implements Serializable, Cloneable{
             removeComponent(clazz);
         }
         this.components.add(component);
+        component.setEntity(this);
     }
     public <T extends EntityComponent> void removeComponent(Class<T> componentClass) {
         for (EntityComponent c : components) {
             if (componentClass.isInstance(c)) {
                 components.remove(c);
+                c.setEntity(null);
                 break;
             }
         }
@@ -138,7 +132,7 @@ public class Entity implements Serializable, Cloneable{
 
     @Override
     public Entity clone() {
-        Entity entity = new Builder().name(this.entityName).id(0).tags(this.tags).build();
+        Entity entity = new Builder().name(this.entityName).tags(this.tags).build();
         for(EntityComponent c : this.components){
             EntityComponent clonedComponent = c.clone();
             clonedComponent.setEntity(entity);
@@ -155,19 +149,16 @@ public class Entity implements Serializable, Cloneable{
     public static class Builder{
         private String entityName;
         private String address;
-        private int id;
         private ArrayList<EntityComponent> components = new ArrayList<>();
         private HashSet<EntityTag> tags = new HashSet<>();
 
         private void reset(){
-            this.id = 0;
             this.entityName = null;
             this.tags.clear();
             this.components.clear();
         }
 
         public Builder name(String n)            { this.entityName = n; return this; }
-        public Builder id(int n)                 { this.id = n; return this; }
         public Builder components(ArrayList<EntityComponent> components) { this.components.addAll(components); return this; }
         public Builder tags(HashSet<EntityTag> t) {this.tags.addAll(t); return this;}
         public Entity build(){

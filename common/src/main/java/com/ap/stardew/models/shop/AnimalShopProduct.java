@@ -17,6 +17,7 @@ public class AnimalShopProduct extends ShopProduct implements Serializable {
         super(name, dailyLimit, price);
         this.requiredBuildingName = requiredBuildingName;
     }
+    private AnimalShopProduct(){}
 
     @Override
     public Animal getEntity() {

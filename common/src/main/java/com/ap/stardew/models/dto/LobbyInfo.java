@@ -5,6 +5,7 @@ import com.ap.stardew.models.dto.AccountInfo;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A Data Transfer Object (DTO) that represents the public-facing information of a lobby.

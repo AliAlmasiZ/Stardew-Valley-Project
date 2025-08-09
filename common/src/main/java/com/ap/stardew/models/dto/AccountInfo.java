@@ -1,5 +1,7 @@
 package com.ap.stardew.models.dto;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -9,6 +11,7 @@ public class AccountInfo implements Serializable {
 
     private String username;
     private boolean isReady;
+    private String selectedMapRegion;
 
     /*
      * Empty constructor for Deserialization
@@ -24,4 +27,12 @@ public class AccountInfo implements Serializable {
     public String getUsername() { return username; }
     public boolean isReady() { return isReady; }
     public void setReady(boolean ready) { isReady = ready; }
+
+    public String getSelectedMapRegion() {
+        return selectedMapRegion;
+    }
+
+    public void setSelectedMapRegion(String selectedMapRegion) {
+        this.selectedMapRegion = selectedMapRegion;
+    }
 }

@@ -13,14 +13,14 @@ white-pixel
   index: -1
 InventoryIcon
   rotate: false
-  xy: 421, 52
+  xy: 710, 765
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 MapIcon
   rotate: false
-  xy: 710, 765
+  xy: 885, 850
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -99,7 +99,7 @@ buttonDown
   index: -1
 buttonUp
   rotate: false
-  xy: 639, 396
+  xy: 786, 525
   size: 13, 9
   split: 3, 3, 3, 3
   orig: 13, 9
@@ -168,14 +168,14 @@ khodayaBaseDige
   index: -1
 frame
   rotate: false
-  xy: 759, 510
+  xy: 421, 44
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 frameNinePatch
   rotate: false
-  xy: 759, 510
+  xy: 421, 44
   size: 24, 24
   split: 8, 8, 8, 8
   pad: 5, 5, 5, 5
@@ -192,7 +192,7 @@ frameNinePatch2
   index: -1
 inventoryIconRotated
   rotate: false
-  xy: 1000, 1002
+  xy: 639, 384
   size: 16, 21
   orig: 16, 21
   offset: 0, 0
@@ -304,16 +304,25 @@ newGameButtonHovered
   orig: 74, 58
   offset: 0, 0
   index: -1
+scrollBackgroundNinePatch
+  rotate: false
+  xy: 759, 516
+  size: 25, 18
+  split: 12, 12, 7, 10
+  pad: 8, 8, 3, 3
+  orig: 25, 18
+  offset: 0, 0
+  index: -1
 shit
   rotate: false
-  xy: 885, 850
+  xy: 767, 810
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 skillMenuIcon
   rotate: false
-  xy: 767, 810
+  xy: 970, 975
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -327,7 +336,7 @@ farmingSkillIcon
   index: -1
 fishingSkillIcon
   rotate: false
-  xy: 785, 524
+  xy: 447, 58
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
@@ -395,7 +404,7 @@ smallPanelNinePatch
   index: -1
 storageIcon
   rotate: false
-  xy: 970, 970
+  xy: 1000, 1002
   size: 16, 21
   orig: 16, 21
   offset: 0, 0

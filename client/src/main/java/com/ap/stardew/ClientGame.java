@@ -1,6 +1,7 @@
 package com.ap.stardew;
 
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.views.MainScreen;
@@ -41,8 +42,6 @@ public class ClientGame extends Game {
     }
 
     private static void loadDatas() {
-
-
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Tools"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Crops"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Trees"));
@@ -52,6 +51,7 @@ public class ClientGame extends Game {
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/ForagingCrops"));
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Workstations"));
         GameAssetManager.getInstance().finishLoading();
+        GameAssetManager.getInstance().characterSpriteManager = new CharacterSpriteManager();
     }
 
     @Override

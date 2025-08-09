@@ -10,7 +10,6 @@ import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
-import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
@@ -207,9 +206,6 @@ public class GameMenuController implements Controller {
         Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(p.y(), p.x());
         if (tile != null && (entity = tile.getContent()) != null) {
             Placeable placeable = entity.getComponent(Placeable.class);
-            for (CollisionEvent c : placeable.getCollisionEvents()) {
-                //c.onEnter();
-            }
         }
         return new Result(true, "you walked to "
             + player.getPosition()
@@ -1638,7 +1634,7 @@ public class GameMenuController implements Controller {
 //        App.setCurrentMenu(Menu.TRADE_MENU);
         StringBuilder message = new StringBuilder("Welcome to TradeMenu!\nYour new offers: \n");
 
-        for (TradeOffer tradeOffer : currentPlayer.getTrades()) {
+        for (TradeOffer tradeOffer : currentPlayer.getTradeOffers()) {
             if (tradeOffer.getReceiver().equals(currentPlayer) && !tradeOffer.isSeen()) {
                 tradeOffer.setSeen(true);
                 message.append(tradeOffer.infoMessage(false));

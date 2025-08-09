@@ -47,7 +47,7 @@ abstract public class ShopProduct implements Serializable {
      *
      * */
 
-    private ShopProduct() {
+    protected ShopProduct() {
 
     }
 

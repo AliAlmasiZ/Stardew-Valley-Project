@@ -99,7 +99,7 @@ public class TradeMenuController implements Controller {
 
         StringBuilder message = new StringBuilder("Your not decided trade requests:\n\n");
 
-        for (TradeOffer tradeOffer : currentPlayer.getTrades()) {
+        for (TradeOffer tradeOffer : currentPlayer.getTradeOffers()) {
             if (tradeOffer.getReceiver() == currentPlayer && !tradeOffer.isDecided()) {
                 message.append(tradeOffer.infoMessage(false)).append("\n");
             }
@@ -108,13 +108,13 @@ public class TradeMenuController implements Controller {
         return new Result(true, message.toString());
     }
 
-    public Result tradeHistory() {
+    public static Result tradeHistory() {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
 
         StringBuilder message = new StringBuilder("Your trade history:\n\n");
 
-        for (TradeOffer tradeOffer : currentPlayer.getTrades()) {
+        for (TradeOffer tradeOffer : currentPlayer.getTradeOffers()) {
             if (tradeOffer.isDecided()) {
                 message.append(tradeOffer.infoMessage(true)).append("\n");
             }
@@ -131,8 +131,8 @@ public class TradeMenuController implements Controller {
         Player sender = tradeOffer.getSender();
         Player receiver = tradeOffer.getReceiver();
 
-        sender.getTrades().add(tradeOffer);
-        receiver.getTrades().add(tradeOffer);
+        sender.getTradeOffers().add(tradeOffer);
+        receiver.getTradeOffers().add(tradeOffer);
         receiver.setHaveNewTrade(true);
     }
 

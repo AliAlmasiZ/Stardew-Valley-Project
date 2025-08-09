@@ -6,12 +6,21 @@ import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.dto.AccountInfo;
+import com.ap.stardew.models.gameMap.MapRegion;
+import com.ap.stardew.models.gameMap.WorldMap;
+import com.ap.stardew.utils.TiledMapUtils;
+import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.widgets.MapActor;
+import com.ap.stardew.views.widgets.PopUpMessage;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 
 
 public class LobbyScreen extends AbstractMenuScreen{
@@ -21,9 +30,10 @@ public class LobbyScreen extends AbstractMenuScreen{
     private Label lobbyNameLabel;
     private TextButton lobbyIdButton;
     private Label copyFeedbackLabel;
-    private List<String> playerList;
+    private Table playerList;
     private ScrollPane scrollPane;
     private TextButton startGameBtn, readyBtn, leaveBtn;
+    private MapActor mapActor;
 
     public LobbyScreen(LobbyInfo lobby, boolean isHost) {
         super();
@@ -36,6 +46,7 @@ public class LobbyScreen extends AbstractMenuScreen{
 
     private void setupUI() {
         Table headerTable  = new Table();
+        playerList = new Table();
         lobbyNameLabel = new Label("Lobby: " + currentLobby.getLobbyName(), customSkin);
         headerTable.add(lobbyNameLabel).expandX().left();
 
@@ -48,15 +59,72 @@ public class LobbyScreen extends AbstractMenuScreen{
 
         rootTable.add(headerTable).padBottom(20).colspan(3).row();
 
-
-        playerList = new List<>(customSkin);
         scrollPane = new ScrollPane(playerList, customSkin);
 
         startGameBtn = new TextButton("Start Game", customSkin);
         readyBtn = new TextButton("Ready", customSkin);
         leaveBtn = new TextButton("Leave Lobby", customSkin);
 
-        rootTable.add(scrollPane).colspan(3).grow().pad(10).row();
+        Table mainBox = new Table();
+        Table leftPanel = new Table();
+        Table rightPanel = new Table();
+
+        rightPanel.top();
+        leftPanel.top();
+
+        leftPanel.add(new Table(){
+            {
+                setBackground(customSkin.getDrawable("scrollBackgroundNinePatch"));
+                Label label = new Label("Players", customSkin, "big");
+                label.setColor(0, 0, 0, 1);
+                add(label);
+            }
+        }).spaceBottom(5).row();
+        leftPanel.add(scrollPane).left().grow();
+
+        GameAssetManager.getInstance().miniMap.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        rightPanel.add(new Table(){
+            {
+                setBackground(customSkin.getDrawable("scrollBackgroundNinePatch"));
+                Label label = new Label("Farm Selection", customSkin, "big");
+                label.setColor(0, 0, 0, 1);
+                add(label);
+            }
+        }).spaceBottom(5).row();
+
+        WorldMap worldMap = TiledMapUtils.getRegionData("./Content(unpacked)/Maps/untitled.tmx");
+        mapActor = new MapActor(worldMap, GameAssetManager.getInstance().miniMap){
+            @Override
+            public void regionClicked(MapRegion mapRegion) {
+                JSONMessage req = new JSONMessage(JSONMessage.Type.lobby_command);
+
+                req.put("command", "chooseMapRegion");
+                req.put("token", ClientApp.getToken());
+                req.put("lobby_id", currentLobby.getLobbyId());
+                req.put("mapRegion", mapRegion.getName());
+
+                JSONMessage res = ClientApp.sendAndWaitForResponse(req, 500);
+
+                if(res == null) return;
+
+                if(res.getFromBody("result", Result.class).message().contains("map region already selected by")){
+                    PopUpMessage popUpMessage = new PopUpMessage();
+                    popUpMessage.add(new Label(res.getFromBody("result", Result.class).message(), customSkin));
+                    popUpMessage.show(uiStage);
+                }
+            }
+        };
+        rightPanel.add(mapActor).width(200).height(200f * GameAssetManager.getInstance().miniMap.getHeight() /
+            GameAssetManager.getInstance().miniMap.getWidth());
+
+        mainBox.add(leftPanel).width(100).grow().pad(5).padLeft(2.5f);
+        mainBox.add(rightPanel).pad(5).padRight(2.5f);
+
+        mainBox.setBackground(customSkin.getDrawable("frameNinePatch2"));
+
+        mainBox.pack();
+
+        rootTable.add(mainBox).colspan(3).row();
         if (isHost) {
             rootTable.add(startGameBtn).pad(10);
         } else {
@@ -94,14 +162,24 @@ public class LobbyScreen extends AbstractMenuScreen{
 
                 Result result = message1.getFromBody("result");
                 if(!result.isSuccessful()){
-                    System.out.println(result.message());
+                    PopUpMessage popUpMessage = new PopUpMessage();
+                    popUpMessage.add(new Label(result.message(), customSkin));
+                    popUpMessage.show(uiStage);
                 }
             }
         });
         readyBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: send toggle ready request to server
+                JSONMessage req = new JSONMessage(JSONMessage.Type.lobby_command);
+                req.put("command", "toggleReady");
+                req.put("lobby_id", currentLobby.getLobbyId());
+                req.put("token", ClientApp.getToken());
+
+                JSONMessage message = ClientApp.sendAndWaitForResponse(req, 500);
+
+                if(message == null || !message.getFromBody("result", Result.class).isSuccessful()) return;
+
                 readyBtn.setText(readyBtn.isChecked() ? "Not Ready" : "Ready");
             }
         });
@@ -123,22 +201,50 @@ public class LobbyScreen extends AbstractMenuScreen{
     /** This method would be called whenever the client receives an update about the lobby state
      *
      * @param updatedLobby
+     * @param message
      */
-    public void updateLobbyState(LobbyInfo updatedLobby) {
+    public void updateLobbyState(LobbyInfo updatedLobby, String message) {
         this.currentLobby = updatedLobby;
         lobbyNameLabel.setText("Lobby: " + currentLobby.getLobbyName());
         lobbyIdButton.setText("ID: " + currentLobby.getLobbyId());
         updatePlayerList();
+
+        if(message != null){
+            PopUpMessage popUpMessage = new PopUpMessage();
+            popUpMessage.add(new Label(message, customSkin));
+            popUpMessage.show(uiStage);
+        }
     }
 
     private void updatePlayerList() {
-        Array<String> players = new Array<>();
+        playerList.clearChildren();
+        playerList.top();
+        playerList.pad(3);
+
+        mapActor.updateOwners(currentLobby.getAccounts());
+
         for (AccountInfo player : currentLobby.getAccounts()) {
-            String status = player.getUsername().equals(currentLobby.getHostUsername()) ? "[Host]" :
-                            player.isReady() ? "[Ready]" : "[Not Ready]";
-            players.add(String.format("%s %s", player.getUsername(), status));
+            Table table = new Table();
+
+            Label user = new Label(player.getUsername(), customSkin);
+            user.setColor(0, 0, 0, 1);
+            table.add(user).left().growX();
+
+            Label status = new Label("", customSkin);
+            if(player.getUsername().equals(currentLobby.getHostUsername())){
+                status.setText("Host");
+                status.setColor(Color.YELLOW);
+            }else if (player.isReady()){
+                status.setText("ready");
+                status.setColor(ColorPalette.green);
+            }else {
+                status.setText("not ready");
+                status.setColor(ColorPalette.red);
+            }
+            table.add(status).right();
+
+            playerList.add(table).growX().row();
         }
-        playerList.setItems(players);
     }
 
     public LobbyInfo getCurrentLobby() {

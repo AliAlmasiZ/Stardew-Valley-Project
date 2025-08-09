@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public enum UseFunction {
     PLOW () {
         @Override
-        protected Result use(Player player,Entity tool, Tile tile, Entity target) {
+        public Result use(Player player,Entity tool, Tile tile, Entity target) {
             if(tile.getContent() != null){
                 return new Result(false, "The tile isn't empty");
             }
@@ -46,7 +46,7 @@ public enum UseFunction {
     },
     DE_PLOW(){
         @Override
-        protected Result use(Player player,Entity tool, Tile tile, Entity target) {
+        public Result use(Player player,Entity tool, Tile tile, Entity target) {
             if(tile.getContent() != null){
                 return new Result(false, "The tile isn't empty");
             }
@@ -66,7 +66,7 @@ public enum UseFunction {
     },
     MINE(){
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             Entity mineral = tile.getContent();
             if(mineral == null){
                 return new Result(false, "Nothing to mine!");
@@ -105,13 +105,13 @@ public enum UseFunction {
     },
     DESTROY_ITEMS {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             return null;
         }
     },
     CHOP_TREE {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             Entity tree = tile.getContent();
             if(tree == null){
                 return new Result(false, "No tree to chop!");
@@ -145,13 +145,13 @@ public enum UseFunction {
     DESTROY_BRANCHES {
         @Override
         //TODO
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             return null;
         }
     },
     WATER_GROUND {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             Container container =  tool.getComponent(Container.class);
             if(tile.getContent() == null || tile.getContent().getComponent(Growable.class) == null)
                 return new Result(false, "you can't water this ground");
@@ -169,7 +169,7 @@ public enum UseFunction {
     },
     FILL_WATER {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             if(tile.getType().equals(TileType.WATER) /*TODO: or greenhouse water*/) {
                 tool.getComponent(Container.class).fillContainer();
                 int energyCost = 5 - tool.getComponent(Upgradable.class).getMaterial().getLevel();
@@ -185,19 +185,19 @@ public enum UseFunction {
     },
     FISH {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             return null;
         }
     },
     CUT_GRASS {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity targetEntity) {
+        public Result use(Player player, Entity tool, Tile tile, Entity targetEntity) {
             return null;
         }
     },
     HARVEST_PLANTS {
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             Entity entity = tile.getContent();
             Growable growable;
             if(entity == null || (growable = entity.getComponent(Growable.class)) == null){
@@ -238,7 +238,7 @@ public enum UseFunction {
     EXTRACT_MILK {
 
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
 
             if(tool.getComponent(Container.class).getCharge() > 0)
                 return new Result(false, "milk pail is full");
@@ -269,7 +269,7 @@ public enum UseFunction {
     },
     COLLECT_WOOL{
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             player.reduceEnergy(4, App.getActiveGame().getTodayWeather());
             if(!(target instanceof Animal))
                 return new Result(false, "you should select an animal");
@@ -291,7 +291,7 @@ public enum UseFunction {
     },
     BREAK_PLACEABLES{
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             Entity entity = tile.getContent();
             if(entity == null){
                 return new Result(false, "nothing to break");
@@ -313,7 +313,7 @@ public enum UseFunction {
     },
     INSPECT_ENTITY{
         @Override
-        protected Result use(Player player, Entity tool, Tile tile, Entity target) {
+        public Result use(Player player, Entity tool, Tile tile, Entity target) {
             Entity entity = tile.getContent();
             StringBuilder out = new StringBuilder();
 
@@ -338,14 +338,5 @@ public enum UseFunction {
     ;
 
 
-    abstract protected Result use(Player player,Entity tool, Tile tile, Entity target);
-    public Result use(Entity tool, Tile tile, Entity target){
-        return this.use(App.getActiveGame().getCurrentPlayer(), tool, tile, target);
-    }
-    public Result use(Entity tool, Tile tile){
-        return this.use(App.getActiveGame().getCurrentPlayer(), tool, tile, null);
-    }
-    public Result use(Entity tool, Entity target){
-        return this.use(App.getActiveGame().getCurrentPlayer(), tool, null, target);
-    }
+    abstract public Result use(Player player,Entity tool, Tile tile, Entity target);
 }

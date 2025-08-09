@@ -5,7 +5,10 @@ import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
+import com.ap.stardew.app.GameController;
+import com.ap.stardew.controllers.TradeMenuController;
 import com.ap.stardew.models.gameMap.GameMap;
+import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
@@ -92,6 +95,9 @@ public class GameScreen extends AbstractScreen {
     // Clock
     private ClockActor clockActor;
 
+    // Trade
+    public TradeDialog tradeDialog;
+
     private final Game game;
 
     // NPC
@@ -175,15 +181,13 @@ public class GameScreen extends AbstractScreen {
         initNPCDialogs();
 
 
-
-
         //TODO: remove this later
         //**************************************
 
 
 //        controller.cheatGiveItem("Training Rod", 1);
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatGiveItem("Wood", 500);
+        controller.cheatGiveItem("Hay", 500);
+        controller.cheatGiveItem("Wood", 16);
         controller.cheatGiveItem("Axe", 1);
 //        controller.cheatGiveItem("Pickaxe", 1);
 //        controller.cheatGiveItem("Hoe", 1);
@@ -302,55 +306,52 @@ public class GameScreen extends AbstractScreen {
         });
 
         batch.begin();
-//        for (Entity entity : renderableEntities) {
-//            entity.setEntityForComponents();
-//
-//            Renderable renderable = entity.getComponent(Renderable.class);
-//            //update animals:
-//            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
-//
-//            if(renderable.getRenderFunction() != null){
-//                renderable.getRenderFunction().render(entity, batch);
-//            }else{
-//                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
-//                if (sprite != null) {
-//                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
-//                    sprite.draw(batch);
-//                }
-//            }
-//        }
-//
-//        switch (playerController.getEquippedItemState()) {
-//            case PLACEABLE -> {
-//                batch.setColor(0, 1, 0, 0.3f);
-//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-//                batch.draw(GameAssetManager.getInstance()
-//                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-//                    playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16);
-//                batch.setColor(1, 1, 1, 1);
-//            }
-//            case PLACEABLE_INVALID -> {
-//                batch.setColor(1, 0, 0, 0.3f);
-//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-//                batch.draw(GameAssetManager.getInstance()
-//                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
-//                    playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16);
-//                batch.setColor(1, 1, 1, 1);
-//            }
-//            case USEABLE -> {
-//                batch.setColor(0, 1, 0, 0.3f);
-//                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
-//                    , playerController.getCursorPos().getRow() * 16, 16, 16);
-//                batch.setColor(1, 1, 1, 1);
-//            }
-//        }
+        for (Entity entity : renderableEntities) {
+            entity.setEntityForComponents();
 
-        for (Player p : game.getPlayers()) {
-            batch.draw(GameAssetManager.getInstance().energyBar, p.getPosition().x, p.getPosition().y);
+            Renderable renderable = entity.getComponent(Renderable.class);
+            //update animals:
+            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
+            if (entity instanceof Player) ((Player) entity).update(delta);
+
+            if(renderable.getRenderFunction() != null){
+                renderable.getRenderFunction().render(entity, batch);
+            }else{
+                Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, delta);
+                if (sprite != null) {
+                    sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
+                    sprite.draw(batch);
+                }
+            }
+        }
+
+        switch (playerController.getEquippedItemState()) {
+            case PLACEABLE -> {
+                batch.setColor(0, 1, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.draw(GameAssetManager.getInstance()
+                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+            case PLACEABLE_INVALID -> {
+                batch.setColor(1, 0, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.draw(GameAssetManager.getInstance()
+                        .get(player.getActiveSlot().getEntity().getComponent(Pickable.class).getIcon(), Texture.class),
+                    playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16);
+                batch.setColor(1, 1, 1, 1);
+            }
+            case USEABLE -> {
+                batch.setColor(0, 1, 0, 0.3f);
+                batch.draw(GameAssetManager.getInstance().tileSelectionBox, playerController.getCursorPos().getCol() * 16
+                    , playerController.getCursorPos().getRow() * 16, 16, 16);
+                batch.setColor(1, 1, 1, 1);
+            }
         }
         batch.end();
 
@@ -407,7 +408,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void showTemporaryMessage(String message, float duration, Color color) {
-        Label label = new Label(message, skin);
+        Label label = new Label(message, customSkin);
         label.setPosition(
             (uiStage.getWidth() - label.getWidth()) / 2f,
             (uiStage.getHeight() - label.getHeight() - 50)
@@ -427,6 +428,7 @@ public class GameScreen extends AbstractScreen {
         ));
 
         uiStage.addActor(label);
+        System.out.println(message); // TODO: REMOVE IT
     }
 
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
@@ -449,23 +451,6 @@ public class GameScreen extends AbstractScreen {
 
         uiStage.addActor(label);
     }
-
-
-    public void startFishing() {
-        //TODO: Ilia doesnt know how to get equipped tool
-        EntityResult entityResult = controller.fishing("Training Rod"); // This is just for test
-
-        if (entityResult.entity() == null) {
-            System.out.println(entityResult.message());
-            showTemporaryMessage(entityResult.message(), ERROR_MESSAGE_DELAY, Color.RED);
-            return;
-        }
-
-        FishingMiniGame fishingMiniGame = new FishingMiniGame(this, FishMovement.getRandomFishMovement(), entityResult.entity());
-        minigameStage.addActor(fishingMiniGame);
-        Gdx.input.setInputProcessor(minigameStage);
-    }
-
 
     public void showSkillDetails(SkillType type, Table table) {
         table.clearChildren();
@@ -602,7 +587,7 @@ public class GameScreen extends AbstractScreen {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     Tile tile = tiles[y][x];
-                    if(tile == null) {
+                    if (tile == null) {
                         pixmap.setColor(0, 0, 0, 0);
                         pixmap.drawPixel(x, height - y);
                         continue;
@@ -661,103 +646,6 @@ public class GameScreen extends AbstractScreen {
         openMenuWithInventory(panel);
     }
 
-    public void openSendGiftMenu(Entity giftedOne) {
-        Table table = new Table();
-        table.setBackground(customSkin.getDrawable("frameNinePatch2"));
-
-        Inventory giftInventory = new Inventory(1);
-
-        Table giftGrid = new InventoryGrid(giftInventory, 0);
-
-        TextField amountField = new TextField("", customSkin);
-        amountField.setMessageText("Amount...");
-        amountField.setTextFieldFilter(new TextField.TextFieldFilter() {
-            @Override
-            public boolean acceptChar(TextField textField, char c) {
-                return Character.isDigit(c);
-            }
-        });
-
-        Label errorLabel = new Label("", customSkin);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setVisible(false);
-
-        TextButton sendButton = new TextButton("Send Gift", customSkin);
-
-        table.add(giftGrid).pad(3).row();
-        table.add(amountField).pad(3).row();
-        table.add(errorLabel).pad(3).row();
-        table.add(sendButton).pad(3);
-
-        sendButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Entity gift;
-
-                try {
-                    gift = giftInventory.getEntities().get(0);
-                } catch (Exception e) {
-                    errorLabel.setVisible(true);
-                    errorLabel.setText("Please select a gift first!");
-                    return;
-                }
-
-                if (amountField.getText().isEmpty()) {
-                    errorLabel.setVisible(true);
-                    errorLabel.setText("Amount cannot be empty!");
-                    return;
-                }
-
-                int amount = Integer.parseInt(amountField.getText());
-                if (amount == 0) {
-                    errorLabel.setVisible(true);
-                    errorLabel.setText("Amount cannot be zero!");
-                    return;
-                }
-
-                ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
-                giftInventory.getItem(gift);
-                amountField.setText("");
-
-                if (giftedOne instanceof NPC) {
-                    Result result = controller.giftNPC(((NPC) giftedOne).getName(), gift.getEntityName(), amount);
-                    if (!result.isSuccessful()) {
-                        errorLabel.setVisible(true);
-                        errorLabel.setText(result.message());
-                        return;
-                    } else {
-                        errorLabel.setVisible(false);
-                        Actor current = table;
-                        while (current != null && !(current instanceof InGameDialog)) {
-                            current = current.getParent();
-                        }
-                        if (current instanceof InGameDialog) {
-                            ((InGameDialog) current).hide();
-                        }
-
-                        showNPCDialog(((NPC) giftedOne), "Thanks for the gift!");
-                        return;
-                    }
-
-                } else if (giftedOne instanceof Player) {
-                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
-                    if (!result.isSuccessful()) {
-                        errorLabel.setVisible(true);
-                        errorLabel.setText(result.message());
-                        return;
-                    } else {
-                        errorLabel.setVisible(true);
-                        errorLabel.setColor(Color.GREEN);
-                        errorLabel.setText(result.message());
-                        return;
-                    }
-                }
-            }
-        });
-
-        openMenuWithInventory(table);
-    }
-
     public void openMenuWithInventory(Table menu) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
@@ -810,6 +698,21 @@ public class GameScreen extends AbstractScreen {
         dialog.show();
     }
 
+    public void startFishing() {
+        //TODO: Ilia doesnt know how to get equipped tool
+        EntityResult entityResult = controller.fishing("Training Rod"); // This is just for test
+
+        if (entityResult.entity() == null) {
+            System.out.println(entityResult.message());
+            showTemporaryMessage(entityResult.message(), ERROR_MESSAGE_DELAY, Color.RED);
+            return;
+        }
+
+        FishingMiniGame fishingMiniGame = new FishingMiniGame(this, FishMovement.getRandomFishMovement(), entityResult.entity());
+        minigameStage.addActor(fishingMiniGame);
+        Gdx.input.setInputProcessor(minigameStage);
+    }
+
     public void stopFishing(FishingMiniGame fishingMiniGame) {
         minigameStage.clear();
         setGameInput();
@@ -849,14 +752,6 @@ public class GameScreen extends AbstractScreen {
         inventory.addItem(fish);
 
         showTemporaryMessage(message.toString(), 7, color);
-    }
-
-    private void setGameInput() {
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(uiStage);
-        inputMultiplexer.addProcessor(gameStage);
-        inputMultiplexer.addProcessor(playerController);
-        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     public void openAnimalMenu(Animal animal) {
@@ -920,12 +815,7 @@ public class GameScreen extends AbstractScreen {
 
         collectProduceButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.collectProduces(animal.getName());
-                if (!result.isSuccessful()) {
-                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
-                } else {
-                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
-                }
+                openCollectProduceMenu(animal);
                 dialog.hide();
             }
         });
@@ -954,7 +844,7 @@ public class GameScreen extends AbstractScreen {
 
     }
 
-    public void openAnimalMovementMenu(Animal animal) {
+    private void openAnimalMovementMenu(Animal animal) {
         InGameDialog dialog = new InGameDialog(uiStage);
         TabWidget tabWidget = new TabWidget();
 
@@ -1015,17 +905,54 @@ public class GameScreen extends AbstractScreen {
         });
 
 
-        mainTable.add(infoLabel).growX().row();
-        mainTable.add(xField);
-        mainTable.add(yField).row();
-        mainTable.add(errorLabel).growX().row();
-        mainTable.add(confirmButton).growX().row();
+        mainTable.add(infoLabel).center().colspan(2).pad(3).row();
+        mainTable.add(xField).right().pad(3);
+        mainTable.add(yField).left().pad(3).row();
+        mainTable.add(errorLabel).center().colspan(2).pad(3).growX().row();
+        mainTable.add(confirmButton).center().colspan(2).growX().pad(3).row();
 
         tabWidget.addTab(mainTable, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
+    }
+
+    private void openCollectProduceMenu(Animal animal) {
+        Table table = new Table();
+
+        Entity product = animal.getTodayProduct();
+
+        if (product == null) {
+            Label message = new Label("This animal doesn't have produce today...", customSkin);
+            message.setColor(Color.RED);
+            table.add(message).pad(3).growX().row();
+        } else {
+            Label message = new Label("Do you want to collect " + product.getEntityName() + "?", customSkin);
+            TextButton collectButton = new TextButton("Collect", customSkin);
+
+            collectButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result result = controller.collectProduces(animal.getName());
+                    if (!result.isSuccessful()) {
+                        showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
+                    } else {
+                        showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                    }
+
+                    Actor actor = table;
+                    while (actor != null && !(actor instanceof InGameDialog)) {
+                        actor = actor.getParent();
+                    }
+                    if (actor != null) {
+                        ((InGameDialog) actor).hide();
+                    }
+                }
+            });
+        }
+
+        showTable(table);
     }
 
     public void openNPCMenu(NPC npc) {
@@ -1149,7 +1076,104 @@ public class GameScreen extends AbstractScreen {
         dialog.show();
     }
 
-    public void openQuestMenu(Quest quest) {
+    private void openSendGiftMenu(Entity giftedOne) {
+        Table table = new Table();
+        table.setBackground(customSkin.getDrawable("frameNinePatch2"));
+
+        Inventory giftInventory = new Inventory(1);
+
+        Table giftGrid = new InventoryGrid(giftInventory, 0);
+
+        TextField amountField = new TextField("", customSkin);
+        amountField.setMessageText("Amount...");
+        amountField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+
+        TextButton sendButton = new TextButton("Send Gift", customSkin);
+
+        table.add(giftGrid).pad(3).row();
+        table.add(amountField).pad(3).row();
+        table.add(errorLabel).pad(3).row();
+        table.add(sendButton).pad(3);
+
+        sendButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Entity gift;
+
+                try {
+                    gift = giftInventory.getEntities().get(0);
+                } catch (Exception e) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Please select a gift first!");
+                    return;
+                }
+
+                if (amountField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Amount cannot be empty!");
+                    return;
+                }
+
+                int amount = Integer.parseInt(amountField.getText());
+                if (amount == 0) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Amount cannot be zero!");
+                    return;
+                }
+
+                App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
+                giftInventory.getItem(gift);
+                amountField.setText("");
+
+                if (giftedOne instanceof NPC) {
+                    Result result = controller.giftNPC(((NPC) giftedOne).getName(), gift.getEntityName(), amount);
+                    if (!result.isSuccessful()) {
+                        errorLabel.setVisible(true);
+                        errorLabel.setText(result.message());
+                        return;
+                    } else {
+                        errorLabel.setVisible(false);
+                        Actor current = table;
+                        while (current != null && !(current instanceof InGameDialog)) {
+                            current = current.getParent();
+                        }
+                        if (current != null) {
+                            ((InGameDialog) current).hide();
+                        }
+
+                        showNPCDialog(((NPC) giftedOne), "Thanks for the gift!");
+                        return;
+                    }
+
+                } else if (giftedOne instanceof Player) {
+                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
+                    if (!result.isSuccessful()) {
+                        errorLabel.setVisible(true);
+                        errorLabel.setText(result.message());
+                        return;
+                    } else {
+                        errorLabel.setVisible(true);
+                        errorLabel.setColor(Color.GREEN);
+                        errorLabel.setText(result.message());
+                        return;
+                    }
+                }
+            }
+        });
+
+        openMenuWithInventory(table);
+    }
+
+    private void openQuestMenu(Quest quest) {
         InGameDialog dialog = new InGameDialog(uiStage);
         dialog.setBackground((Drawable) null);
 
@@ -1260,23 +1284,6 @@ public class GameScreen extends AbstractScreen {
 
     }
 
-    /**
-     * This will show table in InGameDialog
-     *
-     * @param table the table which will be shown
-     */
-    public void showTable(Table table) {
-        InGameDialog dialog = new InGameDialog(uiStage);
-        dialog.setBackground((Drawable) null);
-
-        TabWidget tabWidget = new TabWidget();
-
-        tabWidget.addTab(table, customSkin.getDrawable("skillMenuIcon"));
-        dialog.add(tabWidget).fill().grow();
-
-        dialog.show();
-    }
-
     public void openDataMenu() {
         InGameDialog dialog = new InGameDialog(uiStage);
 
@@ -1352,39 +1359,93 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
+        // Trade Tab
+        Table tradeTable = new Table();
+        TextButton tradeButton = new TextButton("Trade with", customSkin);
+        TextButton tradeHistoryButton = new TextButton("Trade History", customSkin);
 
-        tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon"));
+        tradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table contentTable = new Table();
+                Label label = new Label("Who do you want to start trade?", customSkin);
+                contentTable.add(label).growX().row();
+
+                for (Player player1 : ClientApp.getActiveGame().getPlayers()) {
+                    if (player1.equals(currentPlayer)) continue;
+
+                    TextButton playerNameButton = new TextButton(player1.getUsername(), customSkin);
+                    playerNameButton.addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            GameController.startTradeWithPlayer(player1);
+
+                            Actor current = contentTable;
+                            while (current != null && !(current instanceof InGameDialog)) {
+                                current = current.getParent();
+                            }
+                            if (current != null) ((InGameDialog) current).hide();
+                        }
+                    });
+                    contentTable.add(playerNameButton).growX().row();
+                }
+
+                dialog.hide();
+                showTable(contentTable);
+
+            }
+        });
+        tradeHistoryButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table contentTable = new Table(customSkin);
+                ArrayList<TradeHistoryItem> trades = currentPlayer.getTradeHistory();
+
+// 1) Header row
+                contentTable.add("ID").pad(5).center();
+                contentTable.add("Sender").pad(5).center();
+                contentTable.add("Receiver").pad(5).center();
+                contentTable.add("Sender Inv").pad(5).center();
+                contentTable.add("Receiver Inv").pad(5).center();
+                contentTable.add("Accepted").pad(5).center();
+                contentTable.add("Date").pad(5).center();
+                contentTable.row();
+
+// 2) Sort trades from newest to oldest by ID (or by date if you prefer)
+                trades.sort((a, b) -> Integer.compare(b.getId(), a.getId()));
+
+// 3) Create an inner table for the rows
+                Table rowsTable = new Table(customSkin);
+                for (TradeHistoryItem t : trades) {
+                    rowsTable.add(String.valueOf(t.getId())).pad(4);
+                    rowsTable.add(t.getSender().getUsername()).pad(4);
+                    rowsTable.add(t.getReceiver().getUsername()).pad(4);
+                    rowsTable.add(t.getSenderInventory().toString()).pad(4);
+                    rowsTable.add(t.getReceiverInventory().toString()).pad(4);
+                    rowsTable.add(t.isAccepted() ? "Yes" : "No").pad(4);
+                    rowsTable.add(t.getDate().toString()).pad(4);
+                    rowsTable.row();
+                }
+
+// 4) Wrap rows into a ScrollPane and add it
+                ScrollPane scroll = new ScrollPane(rowsTable);
+                scroll.setFadeScrollBars(true);
+                scroll.setScrollingDisabled(false, false);
+
+// Make the scroll take up all available space
+                contentTable.add(scroll).colspan(7).expand().fill();
+
+// 5) Finally show it
+                showTable(contentTable);
+
+            }
+        });
+
+        tradeTable.add(tradeButton).pad(3).growX().row();
+        tradeTable.add(tradeHistoryButton).pad(3).growX().row();
+
+        tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon")); //TODO: change them
         tabWidget.addTab(craftTable, customSkin.getDrawable("skillMenuIcon"));
-
-        dialog.add(tabWidget).fill().grow();
-
-        dialog.show();
-    }
-
-    public void openPlayerGiftMenu(Player friend) {
-        InGameDialog dialog = new InGameDialog(uiStage);
-
-        TabWidget tabWidget = new TabWidget();
-
-        // send gift
-        Table sendGiftTable = new Table();
-
-        // gift History
-        Table giftHistory = new Table();
-
-
-        // rate gift
-        Table rateGift = new Table();
-        Label rateLabel = new Label("Enter the Gift ID and your Rating: ", customSkin);
-        TextField giftId = new TextField("", skin);
-        giftId.setMessageText("Gift ID...");
-        TextField rating = new TextField("", skin);
-        rating.setMessageText("Rating");
-
-
-        tabWidget.addTab(sendGiftTable, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(giftHistory, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(rateGift, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(tradeTable, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 
@@ -1523,6 +1584,53 @@ public class GameScreen extends AbstractScreen {
 
 
 
+    public void openPlayerGiftMenu(Player friend) {
+        InGameDialog dialog = new InGameDialog(uiStage);
+
+        TabWidget tabWidget = new TabWidget();
+
+        // send gift
+        Table sendGiftTable = new Table();
+
+        // gift History
+        Table giftHistory = new Table();
+
+
+        // rate gift
+        Table rateGift = new Table();
+        Label rateLabel = new Label("Enter the Gift ID and your Rating: ", customSkin);
+        TextField giftId = new TextField("", skin);
+        giftId.setMessageText("Gift ID...");
+        TextField rating = new TextField("", skin);
+        rating.setMessageText("Rating");
+
+
+        tabWidget.addTab(sendGiftTable, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giftHistory, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(rateGift, skin.getDrawable("skillMenuIcon"));
+
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+    }
+
+    /**
+     * This will show table in InGameDialog
+     *
+     * @param table the table which will be shown
+     */
+    public void showTable(Table table) {
+        InGameDialog dialog = new InGameDialog(uiStage);
+        dialog.setBackground((Drawable) null);
+
+        TabWidget tabWidget = new TabWidget();
+
+        tabWidget.addTab(table, customSkin.getDrawable("skillMenuIcon"));
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+    }
+
     public Entity chooseFromInventory() {
         // TODO: open a dialog to select item and number
         Entity temptity = App.buildingRegistry.makeEntity("Salmon");
@@ -1537,4 +1645,17 @@ public class GameScreen extends AbstractScreen {
     public OrthographicCamera getCamera() {
         return camera;
     }
+
+    public Stage getUiStage() {
+        return uiStage;
+    }
+
+    private void setGameInput() {
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(uiStage);
+        inputMultiplexer.addProcessor(gameStage);
+        inputMultiplexer.addProcessor(playerController);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.ap.stardew.app;
 
 import com.ap.stardew.controllers.GameController;
 import com.ap.stardew.models.*;
+import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.controllers.DatabaseManager;
 import com.ap.stardew.models.Account;
@@ -49,6 +50,7 @@ public class ServerApp {
         accounts.add(new Account(Gender.MALE, "asd3", "a", "a", "f"));
 
         saveAccounts(accounts);
+
     }
 
     public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {
@@ -148,6 +150,30 @@ public class ServerApp {
         server.start();
         server.bind(tcpPort, udpPort);
         registerClasses();
+
+
+//        AccountInfo test = new AccountInfo("a");
+//        test.setSelectedMapRegion("Suncrest Farm");
+//        ArrayList<AccountInfo> testAccounts = new ArrayList<>();
+//        testAccounts.add(test);
+//
+//        GameSession session = GameController.createGame(testAccounts);
+//
+//        JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);
+//        gameStartDetails.put("command", "startGame");
+//        gameStartDetails.put("gameData", session.getGame());
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        Output output = new Output(baos);
+////        server.getKryo().setRegistrationRequired(false);
+//        server.getKryo().setReferences(true);
+//        server.getKryo().writeObject(output, gameStartDetails);
+//        output.close();
+//        byte[] serialized = baos.toByteArray();
+//
+//        Input input = new Input(new ByteArrayInputStream(serialized));
+//        JSONMessage deserializedMsg = server.getKryo().readObject(input, JSONMessage.class);
+//        input.close();
+
     }
 
     public static void initializeServerListener() {

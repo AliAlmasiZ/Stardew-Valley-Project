@@ -19,6 +19,9 @@ public class OtherShopProduct extends ShopProduct implements Serializable {
         super(name, dailyLimit, price);
         this.season = season;
     }
+    public OtherShopProduct(){
+        super();
+    }
 
     @Override
     public Entity getEntity() {

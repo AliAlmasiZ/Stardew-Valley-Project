@@ -1,6 +1,8 @@
 package com.ap.stardew.models.gameMap;
 
+import com.ap.stardew.models.entities.Entity;
+
 public class FarmDetails {
-    public MapData.MapLayerData<String>.ObjectData cottage;
+    public Entity farmHouse;
     public MapData.MapLayerData<String>.ObjectData abandonedGreenhouse;
 }

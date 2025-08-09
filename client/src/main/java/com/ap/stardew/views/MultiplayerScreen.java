@@ -5,6 +5,8 @@ import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
+import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.widgets.InGameDialog;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -110,8 +112,10 @@ public class MultiplayerScreen extends AbstractMenuScreen {
     }
 
     private void showCreateLobbyDialog() {
-        Dialog dialog = new Dialog("Create Lobby", customSkin);
-        Table contentTable = dialog.getContentTable();
+        InGameDialog dialog = new InGameDialog(uiStage);
+        dialog.showCloseButton(false);
+        Table contentTable = new Table();
+        Table buttonTable = new Table();
 
         TextField nameField = new TextField("", customSkin);
         nameField.setMessageText("Lobby Name");
@@ -138,8 +142,8 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         contentTable.add(maxPlayersSelectBox).pad(10);
         contentTable.add(visibleCheckbox).right().padBottom(20).row();
 
-        dialog.getButtonTable().add(confirmButton).pad(10);
-        dialog.getButtonTable().add(cancelButton).pad(10);
+        buttonTable.add(confirmButton).pad(10);
+        buttonTable.add(cancelButton).pad(10);
 
         confirmButton.addListener(new ClickListener() {
             @Override
@@ -177,7 +181,14 @@ public class MultiplayerScreen extends AbstractMenuScreen {
             }
         });
 
-        dialog.show(uiStage);
+
+        dialog.add(contentTable).row();
+        dialog.add(buttonTable);
+        contentTable.pack();
+        buttonTable.pack();
+
+        dialog.setBackground(customSkin.getDrawable("bigButtonNinePatch"));
+        dialog.show();
     }
 
     private void showJoinPrivateLobbyDialog(LobbyInfo lobby) {

@@ -7,26 +7,21 @@ import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.dto.AccountInfo;
-import com.ap.stardew.models.dto.GameMapInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
-import com.ap.stardew.models.dto.serilizers.GameMapSerializer;
-import com.ap.stardew.models.entities.CollisionEvent;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.EntityList;
 import com.ap.stardew.models.entities.Renderable;
-import com.ap.stardew.models.entities.components.EntityComponent;
-import com.ap.stardew.models.entities.components.InteriorComponent;
-import com.ap.stardew.models.entities.components.Placeable;
-import com.ap.stardew.models.entities.components.PositionComponent;
+import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.enums.*;
 import com.ap.stardew.models.gameMap.*;
 import com.ap.stardew.models.player.*;
-import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.ap.stardew.models.shop.*;
 import com.ap.stardew.utils.JSONUtils;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
@@ -179,7 +174,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(JSONMessage.Type.class);
         kryo.register(com.ap.stardew.models.LobbyInfo.class);
         kryo.register(PlayerState.class);
-        kryo.register(Player.State.class);
+        kryo.register(Player.Action.class);
         kryo.register(AccountInfo.class);
         kryo.register(Result.class);
 
@@ -204,6 +199,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(TileType[][].class);
         kryo.register(TileType[][].class);
         kryo.register(Player.class);
+        kryo.register(PlayerFriendship.class);
         kryo.register(Entity.class);
         kryo.register(EntityComponent.class);
         kryo.register(Inventory.class);
@@ -213,7 +209,19 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Energy.class);
         kryo.register(Wallet.class);
         kryo.register(SkillType.class);
+        kryo.register(AnimalHouse.class);
+        kryo.register(Edible.class);
+        kryo.register(Useable.class);
+        kryo.register(Sellable.class);
+        kryo.register(FishingPoleComponent.class);
+        kryo.register(Growable.class);
+        kryo.register(Pickable.class);
+        kryo.register(SeedComponent.class);
+        kryo.register(Placeable.class);
+        kryo.register(Container.class);
+        kryo.register(InteriorComponent.class);
         kryo.register(Skill.class);
+        kryo.register(ProductQuality.class);
         kryo.register(NPC.class);
         kryo.register(NpcFriendship.class);
         kryo.register(PlayerFriendship.class);
@@ -227,20 +235,30 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(InteriorComponent.class);
         kryo.register(Placeable.class);
         kryo.register(Door.class);
-        kryo.register(CollisionEvent.class);
         kryo.register(Recipe.class);
         kryo.register(Ingredient.class);
         kryo.register(RecipeType.class);
+        kryo.register(Shop.class);
+        kryo.register(OtherShopProduct.class);
+        kryo.register(BuildingShopProduct.class);
+        kryo.register(AnimalShopProduct.class);
+        kryo.register(UpgradableShopProduct.class);
 
+        kryo.register(TradeHistoryItem.class);
+        kryo.register(Position.class);
+        kryo.register(MapRegion.class);
+        kryo.register(Sprite.class);
+        kryo.register(Rectangle.class);
+        kryo.register(Vector2.class);
 
 
 
         kryo.register(Game.class);
+        kryo.register(GameMap.class);
         kryo.register(WorldMap.class);
         kryo.register(Tile[][].class);
         kryo.register(Tile[].class);
         kryo.register(Tile.class);
 
-//        kryo.register(GameMap.class, new GameMapSerializer());
     }
 }

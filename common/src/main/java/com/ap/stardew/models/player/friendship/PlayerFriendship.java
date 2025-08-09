@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerFriendship implements Serializable {
-    private final ArrayList<Player> friends;
+    private ArrayList<Player> friends;
     private int level;
     private int xp = 0;
     private boolean hadContactToday = false;
@@ -61,6 +61,9 @@ public class PlayerFriendship implements Serializable {
 
     public PlayerFriendship(Player player1, Player player2) {
         friends = new ArrayList<>(List.of(new Player[]{player1, player2}));
+    }
+
+    public PlayerFriendship() {
     }
 
     public void addXp(int xp) {

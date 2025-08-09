@@ -8,16 +8,19 @@ import io.jsonwebtoken.*;
 
 public class ServerConnectionController {
     public static JSONMessage handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
-        if(message.getType() == JSONMessage.Type.player_input_command) {
+        if (message.getType() == JSONMessage.Type.player_input_command) {
             String command = message.getFromBody("command");
             switch (command) {
                 case "player_move" -> {
                     return connectionThread.playerController.handleWalk(message);
                 }
+                case "update_player_action" -> {
+                    connectionThread.playerController.handleChangeAction(message);
+                }
             }
         }
-        if(message.getType() == JSONMessage.Type.lobby_command) {
-            String command =  message.getFromBody("command");
+        if (message.getType() == JSONMessage.Type.lobby_command) {
+            String command = message.getFromBody("command");
             switch (command) {
                 case "fetch" -> {
                     return LobbyController.fetch();
@@ -34,15 +37,21 @@ public class ServerConnectionController {
                 case "startGame" -> {
                     return LobbyController.startGame(message);
                 }
+                case "toggleReady" -> {
+                    return LobbyController.toggleReady(message);
+                }
+                case "chooseMapRegion" -> {
+                    return LobbyController.chooseMapRegion(message);
+                }
                 default -> {
                     return null;
                 }
             }
         }
-        if(message.getType() == JSONMessage.Type.command){
+        if (message.getType() == JSONMessage.Type.command) {
             JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
-            switch ((String) message.getFromBody("command")){
+            switch ((String) message.getFromBody("command")) {
                 case "login" -> {
                     return login(message.getFromBody("username"), message.getFromBody("password"), connectionThread);
                 }
@@ -54,10 +63,22 @@ public class ServerConnectionController {
 
             return response;
         }
-        throw new UnsupportedOperationException("didn't handle");
+        if (message.getType() == JSONMessage.Type.trade) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "do_trade" -> {
+                    connectionThread.playerController.doTrade(message);
+                }
+                default -> {
+                    connectionThread.gameThread.sendTCP(message, message.getFromBody("receiver"));
+                    return null;
+                }
+            }
+        }
+            throw new UnsupportedOperationException("didn't handle");
     }
 
-    public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread){
+    public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread) {
         Account account = ServerApp.getAccountByUsername(username);
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
@@ -83,7 +104,7 @@ public class ServerConnectionController {
         return response;
     }
 
-    private static JSONMessage getUsernameCommand(String token){
+    private static JSONMessage getUsernameCommand(String token) {
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
         Claims payload;
         try {

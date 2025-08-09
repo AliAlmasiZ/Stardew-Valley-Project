@@ -4,6 +4,7 @@ import com.ap.stardew.models.Position;
 import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.components.PositionComponent;
+import com.ap.stardew.models.player.Player;
 import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
