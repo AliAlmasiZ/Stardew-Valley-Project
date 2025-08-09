@@ -11,7 +11,13 @@
   ],
   "entities": [
     {
-      "name": "Fried egg"
+      "name": "Fried egg",
+      "components": [
+        {
+          "type" : "Pickable",
+          "maxStack" : 64
+        }
+      ]
     },
     {
       "name": "Baked Fish"
@@ -84,7 +90,14 @@
       ]
     },
     {
-      "name": "fruit salad"
+      "name": "fruit salad",
+      "components": [
+        {
+          "type": "Pickable",
+          "maxStack" : 64,
+          "icon" : "Content/Trees/Fruit_Salad.png"
+        }
+      ]
     },
     {
       "name": "red plate",
