@@ -369,5 +369,16 @@ public class GameController {
         gameScreen.showTemporaryMessage(jsonMessage.getFromBody("sender"), 5, Color.CYAN);
     }
 
+    public static void rateGift(int id, int rating, Player player) {
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
+        jsonMessage.put("command", "rate_gift");
+        jsonMessage.put("sender", ClientApp.getActiveGame().getCurrentPlayer().getUsername());
+        jsonMessage.put("receiver", player.getUsername());
+        jsonMessage.put("id", id);
+        jsonMessage.put("rating", rating);
+
+        ClientApp.sendTCP(jsonMessage);
+    }
+
 
 }

@@ -1110,7 +1110,7 @@ public class GameScreen extends AbstractScreen {
                     return;
                 }
 
-                App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
+                ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
                 giftInventory.getItem(gift);
                 amountField.setText("");
 
@@ -1587,18 +1587,20 @@ public class GameScreen extends AbstractScreen {
         // send gift
         Table sendGiftTable = new Table();
 
-        TextButton sendGift = new TextButton("Send Gift", skin);
-        sendGift.addListener(new ClickListener() {
+        TextButton sendGiftButton = new TextButton("Send Gift", customSkin);
+        sendGiftButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 openSendGiftMenu(friend);
             }
         });
 
+        sendGiftTable.add(sendGiftButton).growX().pad(3);
+
         // gift History
         Table giftHistoryTable = new Table();
-        TextButton giftList = new TextButton("Gift list", skin);
-        TextButton giftHistory = new TextButton("Gift history", skin);
+        TextButton giftHistory = new TextButton("Gift history", customSkin);
+        TextButton giftList = new TextButton("Gift received", customSkin);
 
         giftHistory.addListener(new ClickListener() {
             @Override
@@ -1621,33 +1623,73 @@ public class GameScreen extends AbstractScreen {
         });
 
         giftHistoryTable.add(giftHistory).growX().pad(3).row();
-        giftHistoryTable.add(giftList).growX().pad(3).row();
+        giftHistoryTable.add(giftList).growX().pad(3);
 
         // rate gift
         Table rateGift = new Table();
 
         Label rateLabel = new Label("Enter the Gift ID and your Rating: ", customSkin);
-        TextField giftId = new TextField("", skin);
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+        TextField giftId = new TextField("", customSkin);
         giftId.setMessageText("Gift ID...");
-        TextField rating = new TextField("", skin);
-        rating.setMessageText("Rating");
-        TextButton confirmButton = new TextButton("Confirm", skin);
+        TextField ratingField = new TextField("", customSkin);
+        ratingField.setMessageText("Rating");
+
+        giftId.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+
+        ratingField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
 
         confirmButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (giftId.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Enter the Gift ID");
+                    return;
+                } else if (ratingField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Enter the Rating");
+                    return;
+                }
 
+                int id = Integer.parseInt(giftId.getText());
+                int rating = Integer.parseInt(ratingField.getText());
+                Result result = controller.giftRate(id, rating);
+                if (!result.isSuccessful()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText(result.message());
+                    return;
+                }else {
+                    GameController.rateGift(id, rating, friend);
+                    dialog.hide();
+                    showTemporaryMessage(result.message(), 5, Color.CYAN);
+                }
             }
         });
 
         rateGift.add(rateLabel).colspan(2).grow().pad(3).row();
         rateGift.add(giftId).grow().pad(3);
-        rateGift.add(rating).grow().pad(3).row();
+        rateGift.add(ratingField).grow().pad(3).row();
+        rateGift.add(errorLabel).colspan(2).grow().pad(3).row();
+        rateGift.add(confirmButton).colspan(2).pad(3).row();
 
 
-        tabWidget.addTab(sendGiftTable, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(giftHistory, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(rateGift, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(sendGiftTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giftHistory, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(rateGift, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 

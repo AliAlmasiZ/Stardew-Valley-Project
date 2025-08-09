@@ -1414,6 +1414,20 @@ public class GameMenuController implements Controller {
         return new Result(true, message.toString());
     }
 
+    public Result giftList(Player player) {
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        StringBuilder message = new StringBuilder("Your gift list:\n");
+
+        for (Gift gift : currentPlayer.getGiftReceived()) {
+            if (gift.getSender().equals(player)) {
+                message.append(gift.toString());
+            }
+        }
+
+        return new Result(true, message.toString());
+    }
+
     public Result giftRate(int giftNumber, int rating) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
@@ -1475,6 +1489,8 @@ public class GameMenuController implements Controller {
 
         return new Result(true, message.toString());
     }
+
+
 
     public Result hug(String username) {
         Game game = ClientApp.getActiveGame();

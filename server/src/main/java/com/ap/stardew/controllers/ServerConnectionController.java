@@ -92,6 +92,9 @@ public class ServerConnectionController {
                 case "gift_player" -> {
                     connectionThread.playerController.giftPlayer(message);
                 }
+                case "rate_gift" -> {
+                    //TODO
+                }
             }
         }
             throw new UnsupportedOperationException("didn't handle");
