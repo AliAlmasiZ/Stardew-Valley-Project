@@ -268,26 +268,35 @@ public class GameController {
 
     /**
      * SEND
-     * @param player to send
+     * @param username to send
      * @param text message text
      */
-    public static void sendPrivateMessage(Player player, String text) {
+    public static void sendPrivateMessage(String username, String text) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+
+        Player player = ClientApp.getActiveGame().getPlayerByUsername(username);
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.chat);
         jsonMessage.put("command", "send_private_message");
         jsonMessage.put("receiver", player.getUsername());
         Message message = new Message(ClientApp.getActiveGame().getDate(), text, player, ClientApp.getActiveGame().getCurrentPlayer());
         jsonMessage.put("message", message);
 
-        //TODO: update GRAPHICS
+        gameScreen.chatDialog.updateMessage(message.getReceiver(), message);
 
         ClientApp.sendTCP(jsonMessage);
     }
 
+    /**
+     * HANDLE
+     * @param jsonMessage to handle
+     */
     public static void receivePrivateMessage(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
         Message message = jsonMessage.getFromBody("message");
         ClientApp.getActiveGame().getCurrentPlayer().addMessage(message);
 
-        //TODO: update GRAPHICS
+        gameScreen.chatDialog.updateMessage(message.getSender(), message);
+
     }
 
     /**
@@ -295,12 +304,17 @@ public class GameController {
      * @param text message text
      */
     public static void sendPublicMessage(String text) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
         Game game = ClientApp.getActiveGame();
         Message message = new Message(game.getDate(), text, null, game.getCurrentPlayer());
 
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.chat);
         jsonMessage.put("command", "send_public_message");
         jsonMessage.put("message", message);
+
+        gameScreen.chatDialog.updateMessage(null, message);
+
+        ClientApp.sendTCP(jsonMessage);
     }
 
     /**
@@ -315,9 +329,9 @@ public class GameController {
         Message message = jsonMessage.getFromBody("message");
         ClientApp.getActiveGame().addPublicMessage(message);
 
-        //TODO: Graphics
+        gameScreen.chatDialog.updateMessage(null, message);
 
-        if (isTagged(message.getMessage()))  gameScreen.showTemporaryMessage(
+        if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))  gameScreen.showTemporaryMessage(
             "\"" + message.getSender().getUsername() + "\" tagged you in public chat" ,
             5, Color.GREEN);
     }

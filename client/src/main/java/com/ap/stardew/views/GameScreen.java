@@ -3,7 +3,6 @@ package com.ap.stardew.views;
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.app.GameController;
-import com.ap.stardew.controllers.TradeMenuController;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
@@ -95,6 +94,9 @@ public class GameScreen extends AbstractScreen {
     // Trade
     public TradeDialog tradeDialog;
 
+    // Chat
+    public ChatDialog chatDialog;
+
 
     private final Game game;
 
@@ -160,14 +162,12 @@ public class GameScreen extends AbstractScreen {
 
         //Buttons at top right
         int buttonWidth = 20;
+        int buttonHeight = 20;
         Table buttonTable = new Table();
+
         Button button = new Button(customSkin);
         button.setWidth(buttonWidth);
-        button.setHeight(buttonWidth);
-        buttonTable.add(button).width(buttonWidth).height(buttonWidth);
-        buttonTable.top().left().pad(15);
-        stack.add(buttonTable);
-
+        button.setHeight(buttonHeight);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -175,9 +175,26 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
+        Image chatButton = new Image(new Texture("Content/Bale.png"));
+        chatButton.setWidth(buttonWidth);
+        chatButton.setHeight(buttonHeight);
+        chatButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                chatDialog.show();
+            }
+        });
+
+
+        buttonTable.add(button).width(buttonWidth).height(buttonHeight).pad(5);
+        buttonTable.add(chatButton).width(buttonWidth).height(buttonHeight).pad(5);
+        buttonTable.top().left().pad(15);
+        stack.add(buttonTable);
+
         //NPC
         initNPCDialogs();
 
+        chatDialog = new ChatDialog(ClientApp.getActiveGame().getPlayers(),uiStage);
 
         //TODO: remove this later
         //**************************************

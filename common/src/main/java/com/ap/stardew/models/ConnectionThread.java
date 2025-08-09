@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
+import org.tiledreader.TiledMap;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -244,6 +245,8 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(AnimalShopProduct.class);
         kryo.register(UpgradableShopProduct.class);
 
+        kryo.register(Tile.class);
+        kryo.register(TiledMap.class);
         kryo.register(TradeHistoryItem.class);
         kryo.register(Position.class);
         kryo.register(MapRegion.class);

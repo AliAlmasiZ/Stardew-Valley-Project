@@ -3639,6 +3639,8 @@ Content/Animal/sheep/idle.png
 Content/Animal/sheep/normal.png
 Content/Animal/sheep/pet.png
 Content/Animal/sheep/walking.png
+Content/Bale-Logo.png
+Content/Bale.png
 Content/BuildingMenuIcon.png
 Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
