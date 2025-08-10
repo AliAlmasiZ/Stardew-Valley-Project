@@ -1277,9 +1277,9 @@ public class GameScreen extends AbstractScreen {
         Player currentPlayer = game.getCurrentPlayer();
         ArrayList<PlayerFriendship> playerFriendships = game.getCurrentPlayerFriendships();
         for (PlayerFriendship playerFriendship : playerFriendships) {
-            Player friend = playerFriendship.getFriends().get(1);
+            Player friend = game.getPlayerByUsername(playerFriendship.getFriends().get(1));
             if (friend.equals(currentPlayer)) {
-                friend = playerFriendship.getFriends().get(0);
+                friend = game.getPlayerByUsername(playerFriendship.getFriends().get(0));
             }
 
             Label label = new Label(friend.getUsername(), customSkin);

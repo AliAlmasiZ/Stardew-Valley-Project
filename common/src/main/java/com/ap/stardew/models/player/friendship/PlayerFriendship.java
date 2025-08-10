@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerFriendship implements Serializable {
-    private ArrayList<Player> friends;
+    private ArrayList<String> friends;
     private int level;
     private int xp = 0;
     private boolean hadContactToday = false;
@@ -39,7 +39,7 @@ public class PlayerFriendship implements Serializable {
         this.hadMessageToday = hadMessageToday;
     }
 
-    public ArrayList<Player> getFriends() {
+    public ArrayList<String> getFriends() {
         return friends;
     }
 
@@ -60,7 +60,7 @@ public class PlayerFriendship implements Serializable {
     }
 
     public PlayerFriendship(Player player1, Player player2) {
-        friends = new ArrayList<>(List.of(new Player[]{player1, player2}));
+        friends = new ArrayList<>(List.of(new String[]{player1.getUsername(), player2.getUsername()}));
     }
 
     public PlayerFriendship() {
@@ -68,9 +68,9 @@ public class PlayerFriendship implements Serializable {
 
     public void addXp(int xp) {
         if (!hadContactToday && level == 4) {
-            for (Player player : friends) {
-                player.getEnergy().addEnergy(50);
-            }
+//            for (Player player : friends) {
+//                player.getEnergy().addEnergy(50);
+//            }
         }
         hadContactToday = true;
         this.xp += xp;
@@ -112,12 +112,12 @@ public class PlayerFriendship implements Serializable {
 
     public static String buildFriendshipDetailMessage(Player currentPlayer, PlayerFriendship playerFriendship) {
         StringBuilder result = new StringBuilder();
-        Player friend = playerFriendship.getFriends().get(0);
-        if (friend == currentPlayer) {
+        String friend = playerFriendship.getFriends().get(0);
+        if (friend.equals(currentPlayer.getUsername())) {
             friend = playerFriendship.getFriends().get(1);
         }
 
-        result.append("Friend Name: ").append(friend.getUsername()).append("\n");
+        result.append("Friend Name: ").append(friend).append("\n");
         result.append("Friendship level: ").append(playerFriendship.getLevel()).append("\n");
         result.append("Friendship XP: ").append(playerFriendship.getXp()).append("\n");
         result.append(".............................................................\n");

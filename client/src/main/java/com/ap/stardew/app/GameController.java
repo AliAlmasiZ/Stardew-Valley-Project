@@ -56,7 +56,12 @@ public class GameController {
     }
 
     public static void updatePlayer(String username, JSONMessage message){
+        Game game = ClientApp.getActiveGame();
+        Player player = game.getPlayerByUsername(username);
 
+        if (message.containsKey("giftReceived")) {
+
+        }
     }
 
     /***************************************** Trade **********************************************/
