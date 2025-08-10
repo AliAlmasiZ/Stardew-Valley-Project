@@ -10,6 +10,7 @@ import com.ap.stardew.controllers.TradeMenuController;
 import com.ap.stardew.models.entities.RenderFunction;
 import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.gameMap.GameMap;
+import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
@@ -437,26 +438,10 @@ public class GameScreen extends AbstractScreen {
 
     public void showTemporaryMessage(String message, float duration, Color color) {
         Label label = new Label(message, customSkin);
-//        label.setPosition(
-//            (uiStage.getWidth() - label.getWidth()) / 2f,
-//            (uiStage.getHeight() - label.getHeight() - 50)
-//        );
-//
+
         label.setColor(color);
         label.scaleBy(2);
-//        label.getColor().a = 0; // start invisible
-//
-//
-//        // Sequence of actions: fade in → wait → fade out → remove
-//        label.addAction(Actions.sequence(
-//            Actions.fadeIn(0.5f),
-//            Actions.delay(duration),
-//            Actions.fadeOut(0.5f),
-//            Actions.removeActor()
-//        ));
-//
-//        uiStage.addActor(label);
-//        System.out.println(message); // TODO: REMOVE IT
+
         PopUpMessage popUpMessage = new PopUpMessage(PopUpMessage.PopUpMessageType.TOP_CENTER);
         popUpMessage.add(label);
         popUpMessage.show(uiStage);
@@ -1161,7 +1146,7 @@ public class GameScreen extends AbstractScreen {
                     return;
                 }
 
-                App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
+                ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
                 giftInventory.getItem(gift);
                 amountField.setText("");
 
@@ -1186,7 +1171,7 @@ public class GameScreen extends AbstractScreen {
                     }
 
                 } else if (giftedOne instanceof Player) {
-                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
+                    Result result = controller.canGiveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
                     if (!result.isSuccessful()) {
                         errorLabel.setVisible(true);
                         errorLabel.setText(result.message());
@@ -1195,6 +1180,8 @@ public class GameScreen extends AbstractScreen {
                         errorLabel.setVisible(true);
                         errorLabel.setColor(Color.GREEN);
                         errorLabel.setText(result.message());
+                        Gift gift1 = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
+                        GameController.giftPlayer((Player) giftedOne, gift1);
                         return;
                     }
                 }
@@ -1326,9 +1313,9 @@ public class GameScreen extends AbstractScreen {
         Player currentPlayer = game.getCurrentPlayer();
         ArrayList<PlayerFriendship> playerFriendships = game.getCurrentPlayerFriendships();
         for (PlayerFriendship playerFriendship : playerFriendships) {
-            Player friend = playerFriendship.getFriends().get(1);
+            Player friend = game.getPlayerByUsername(playerFriendship.getFriends().get(1));
             if (friend.equals(currentPlayer)) {
-                friend = playerFriendship.getFriends().get(0);
+                friend = game.getPlayerByUsername(playerFriendship.getFriends().get(0));
             }
 
             Label label = new Label(friend.getUsername(), customSkin);
@@ -1352,9 +1339,9 @@ public class GameScreen extends AbstractScreen {
                 }
             });
 
-            friendshipTable.add(label);
-            friendshipTable.add(giftImage).pad(5);
-            friendshipTable.add(friendshipDetail).pad(5);
+            friendshipTable.add(label).left();
+            friendshipTable.add(giftImage).right().pad(5);
+            friendshipTable.add(friendshipDetail).right().pad(5).row();
 
         }
 
@@ -1733,12 +1720,6 @@ public class GameScreen extends AbstractScreen {
     }
 
 
-
-
-
-
-
-
     public void openPlayerGiftMenu(Player friend) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
@@ -1747,22 +1728,109 @@ public class GameScreen extends AbstractScreen {
         // send gift
         Table sendGiftTable = new Table();
 
-        // gift History
-        Table giftHistory = new Table();
+        TextButton sendGiftButton = new TextButton("Send Gift", customSkin);
+        sendGiftButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openSendGiftMenu(friend);
+            }
+        });
 
+        sendGiftTable.add(sendGiftButton).growX().pad(3);
+
+        // gift History
+        Table giftHistoryTable = new Table();
+        TextButton giftHistory = new TextButton("Gift history", customSkin);
+        TextButton giftList = new TextButton("Gift received", customSkin);
+
+        giftHistory.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table table = new Table();
+                Label label = new Label(controller.giftHistory(friend.getUsername()).message(), customSkin);
+                table.add(label).pad(3);
+                showTable(table);
+            }
+        });
+
+        giftList.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table table = new Table();
+                Label label = new Label(controller.giftList().message(), customSkin);
+                table.add(label).pad(3);
+                showTable(table);
+            }
+        });
+
+        giftHistoryTable.add(giftHistory).growX().pad(3).row();
+        giftHistoryTable.add(giftList).growX().pad(3);
 
         // rate gift
         Table rateGift = new Table();
+
         Label rateLabel = new Label("Enter the Gift ID and your Rating: ", customSkin);
-        TextField giftId = new TextField("", skin);
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+        TextField giftId = new TextField("", customSkin);
         giftId.setMessageText("Gift ID...");
-        TextField rating = new TextField("", skin);
-        rating.setMessageText("Rating");
+        TextField ratingField = new TextField("", customSkin);
+        ratingField.setMessageText("Rating");
+
+        giftId.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+
+        ratingField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
+
+        confirmButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (giftId.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Enter the Gift ID");
+                    return;
+                } else if (ratingField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Enter the Rating");
+                    return;
+                }
+
+                int id = Integer.parseInt(giftId.getText());
+                int rating = Integer.parseInt(ratingField.getText());
+                Result result = controller.giftRate(id, rating);
+                if (!result.isSuccessful()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText(result.message());
+                    return;
+                }else {
+                    GameController.rateGift(id, rating, friend);
+                    dialog.hide();
+                    showTemporaryMessage(result.message(), 5, Color.CYAN);
+                }
+            }
+        });
+
+        rateGift.add(rateLabel).colspan(2).grow().pad(3).row();
+        rateGift.add(giftId).grow().pad(3);
+        rateGift.add(ratingField).grow().pad(3).row();
+        rateGift.add(errorLabel).colspan(2).grow().pad(3).row();
+        rateGift.add(confirmButton).colspan(2).pad(3).row();
 
 
-        tabWidget.addTab(sendGiftTable, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(giftHistory, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(rateGift, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(sendGiftTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giftHistoryTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(rateGift, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 

@@ -86,6 +86,17 @@ public class ServerConnectionController {
                 }
             }
         }
+        if (message.getType() == JSONMessage.Type.update) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "gift_player" -> {
+                    connectionThread.playerController.giftPlayer(message);
+                }
+                case "rate_gift" -> {
+                    connectionThread.playerController.rateGift(message);
+                }
+            }
+        }
             throw new UnsupportedOperationException("didn't handle");
     }
 

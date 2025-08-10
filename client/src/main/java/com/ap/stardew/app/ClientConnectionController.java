@@ -73,6 +73,12 @@ public class ClientConnectionController {
                     }
                     return null;
                 }
+                case "gift_player" -> {
+                    GameController.receiveGift(message);
+                }
+                case "rate_gift" -> {
+                    GameController.receiveGiftRate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {
