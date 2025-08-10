@@ -154,7 +154,7 @@ public class LobbyScreen extends AbstractMenuScreen{
                 message.put("lobby_id", currentLobby.getLobbyId());
                 message.put("token", ClientApp.getToken());
 
-                JSONMessage message1 = ClientApp.sendAndWaitForResponse(message, 500);
+                JSONMessage message1 = ClientApp.sendAndWaitForResponse(message, 5000);
 
                 if(message1 == null) return;
 

@@ -97,6 +97,10 @@ public class ServerApp {
         }
     }
 
+    public static ArrayList<GameThread> getGames(){
+        return games;
+    }
+
     public static ArrayList<Account> loadAccounts(){
         /*JsonMapper mapper = new JsonMapper();
         try {
@@ -248,4 +252,6 @@ public class ServerApp {
         }
         return payload.getSubject();
     }
+
+
 }

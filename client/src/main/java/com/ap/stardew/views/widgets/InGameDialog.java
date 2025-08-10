@@ -23,7 +23,7 @@ public class InGameDialog extends Table {
         closeButton = new Image(GameAssetManager.getInstance().closeButton);
     }
 
-    public void show(){
+    public void show(float width, float height){
         clearActions();
 
         wrapperTable = new Table();
@@ -31,7 +31,7 @@ public class InGameDialog extends Table {
         wrapperTable.setFillParent(true);
         wrapperTable.center();
 
-        wrapperTable.add(this);
+        wrapperTable.add(this).minSize(width, height);
         stage.addActor(wrapperTable);
 
         stage.cancelTouchFocus();
@@ -147,6 +147,10 @@ public class InGameDialog extends Table {
         setTouchable(Touchable.enabled);
         wrapperTable.toFront();
         wrapperTable.setTouchable(Touchable.enabled);
+    }
+
+    public void show(){
+        show(0, 0);
     }
 
     @Override

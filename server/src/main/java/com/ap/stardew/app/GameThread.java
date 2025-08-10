@@ -1,13 +1,19 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.controllers.DatabaseManager;
+import com.ap.stardew.controllers.GameController;
+import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.GameSession;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.player.Player;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,14 +24,21 @@ public class GameThread extends Thread{
     private float stateTime = 0;
     private float deltaTime;
     private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
+    private final List<String> disconnectedClients = new ArrayList<>();
+    private final List<String> playersWithSentReconnectionRequests = new ArrayList<>(); // sorry (*^ω^*)
     private AtomicBoolean end = new AtomicBoolean(false);
     private final GameSession gameSession;
+    private float timeLeftToTermination;
+
+    private AtomicBoolean gamePaused = new AtomicBoolean(false);
 
     public GameThread(GameSession gameSession) {
         this.gameSession = gameSession;
 
         for (Map.Entry<String, Player> entry : gameSession.getUserPlayerMap().entrySet()) {
-            clients.add(ServerApp.getConnectionByUsername(entry.getKey()));
+            ClientConnectionThread connectionThread = ServerApp.getConnectionByUsername(entry.getKey());
+            clients.add(connectionThread);
+
             System.out.println("client " + entry.getKey() + " added to game");
         }
     }
@@ -49,16 +62,62 @@ public class GameThread extends Thread{
 
             update(deltaTime);
         }
-
     }
 
-
-
     private void update(float delta) {
-        for (ClientConnectionThread client : clients) {
-            client.update(delta);
+        if(gamePaused.get()){
+            if(stateTime - lastUpdateSent < 0.2f){
+                return;
+            }
+            lastUpdateSent = stateTime;
+            for (int i = clients.size() - 1; i >= 0; i--) {
+                ClientConnectionThread client = clients.get(i);
+                if(!client.getConnection().isConnected()){
+                    handleUserDisconnection(client);
+                }
+            }
+            System.out.println("game is paused");
+            synchronized (disconnectedClients) {
+                for (String disconnectedClient : disconnectedClients) {
+                    ClientConnectionThread connection = ServerApp.getConnectionByUsername(disconnectedClient);
+                    if(connection != null && connection.getConnection().isConnected()){
+                        if(playersWithSentReconnectionRequests.contains(disconnectedClient)) continue;
+
+                        JSONMessage req = new JSONMessage(JSONMessage.Type.command);
+                        req.put("command", "game_reconnect_request");
+                        connection.sendTCP(req);
+
+                        playersWithSentReconnectionRequests.add(disconnectedClient);
+                    }
+                }
+            }
+            timeLeftToTermination -= delta;
+        }else {
+            for (int i = clients.size() - 1; i >= 0; i--) {
+                ClientConnectionThread client = clients.get(i);
+                if(!client.getConnection().isConnected()){
+                    handleUserDisconnection(client);
+                    gamePaused.set(true);
+                    timeLeftToTermination = 120f;
+                    return;
+                }
+                client.update(delta);
+            }
+            sendUpdates();
         }
-        sendUpdates();
+    }
+
+    private void handleUserDisconnection(ClientConnectionThread disconnectedClient){
+        clients.remove(disconnectedClient);
+
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
+        jsonMessage.put("command", "player_disconnected");
+        synchronized (disconnectedClients) {
+            disconnectedClients.add(disconnectedClient.getCurrentAccount().getUsername());
+            jsonMessage.put("usernames", new ArrayList<>(disconnectedClients));
+        }
+        jsonMessage.put("timeLeft", timeLeftToTermination);
+        sendAllTCP(jsonMessage);
     }
 
     private void sendUpdates() {
@@ -122,5 +181,93 @@ public class GameThread extends Thread{
 
     public Game getGame() {
         return gameSession.getGame();
+    }
+
+    public List<String> getDisconnectedClients() {
+        return disconnectedClients;
+    }
+
+    public JSONMessage handleReconnectRequest(String username, boolean accepted){
+        if(!accepted){
+            saveGame();
+            endGame();
+
+            JSONMessage gameSavedMessage = new JSONMessage(JSONMessage.Type.update);
+            gameSavedMessage.put("command", "gameSaved");
+            gameSavedMessage.put("message", username + "didn't connect. the game was saved");
+            sendAllTCP(gameSavedMessage);
+
+            JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.response);
+            jsonMessage.put("result", new Result(false, "Game was saved"));
+            return jsonMessage;
+        }
+
+        ClientConnectionThread connection = ServerApp.getConnectionByUsername(username);
+
+        if(connection == null){
+            JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.response);
+            jsonMessage.put("result", new Result(false, "wtf"));
+            return jsonMessage;
+        }
+
+        //clean up the disconnected users information
+        synchronized (disconnectedClients){
+            for (int i = disconnectedClients.size() - 1; i >= 0; i--) {
+                if(disconnectedClients.get(i).equals(username)){
+                    disconnectedClients.remove(i);
+                    break;
+                }
+            }
+            playersWithSentReconnectionRequests.remove(username);
+
+            //check whether the game should resume
+            JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
+            if(disconnectedClients.isEmpty()){
+                jsonMessage.put("command", "resume_game");
+                gamePaused.set(false);
+            }else {
+                jsonMessage.put("command", "player_disconnected");
+                jsonMessage.put("usernames", disconnectedClients);
+            }
+            sendAllTCP(jsonMessage);
+            //add the client to the game
+            clients.add(connection);
+            connection.gameThread = this;
+            connection.player = gameSession.getUserPlayerMap().get(username);
+            connection.playerController = new PlayerController(connection);
+
+            JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.response);
+            gameStartDetails.put("result", new Result(true, "reconnecting"));
+            gameStartDetails.put("gameData", gameSession.getGame());
+            gameStartDetails.put("player", gameSession.getUserPlayerMap().get(username));
+            gameStartDetails.put("gamePaused", gamePaused.get());
+            synchronized (disconnectedClients){
+                if(gamePaused.get()){
+                    gameStartDetails.put("usernames", disconnectedClients);
+                    gameStartDetails.put("timeLeft", timeLeftToTermination);
+                }
+            }
+
+            return gameStartDetails;
+        }
+    }
+
+    public void saveGame(){
+        try {
+            GameController.saveGame(gameSession);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void endGame(){
+        end.set(true);
+
+        for (ClientConnectionThread client : clients) {
+            client.gameThread = null;
+            client.playerController = null;
+            client.player = null;
+        }
     }
 }

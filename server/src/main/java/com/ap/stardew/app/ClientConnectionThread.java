@@ -20,11 +20,6 @@ public class ClientConnectionThread extends ConnectionThread {
     public Player player;
     public GameThread gameThread;
 
-
-    protected ClientConnectionThread(Socket socket) throws IOException {
-        super(socket);
-    }
-
     public ClientConnectionThread(Connection connection) throws IOException {
         super(connection);
     }
@@ -35,7 +30,6 @@ public class ClientConnectionThread extends ConnectionThread {
         return true;
     }
 
-    @Override
     protected boolean handleMessage(JSONMessage message) {
         try {
 
@@ -53,29 +47,14 @@ public class ClientConnectionThread extends ConnectionThread {
     @Override
     public void run() {
         // this is for socket
-//        super.run();
+        super.run();
 
-        connection.addListener(new Listener(){
-            @Override
-            public void received(Connection connection, Object object) {
-//                System.out.println("new message received in class : " + object.getClass());
-                boolean handled = handleReceived(object);
-                if(!handled) try {
-                    receivedObjectsQueue.put(object);
-                } catch (InterruptedException e) {
-                    System.err.println("Error occurred in add object message to queue :");
-                    System.err.println(e.getMessage());
-                }
-            }
-        });
 
-        while (!end.get()) { // to keep thread alive
-
-        }
         ServerApp.removeClientConnection(this);
     }
 
-    private boolean handleReceived(Object received) {
+    @Override
+    protected boolean handleReceived(Object received) {
         if(received instanceof JSONMessage) {
             return handleMessage((JSONMessage) received);
         }
@@ -86,7 +65,11 @@ public class ClientConnectionThread extends ConnectionThread {
     }
 
     public void update(float delta) {
-        playerController.update(delta);
+        try {
+            playerController.update(delta);
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     public Account getCurrentAccount() {

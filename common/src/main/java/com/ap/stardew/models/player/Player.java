@@ -661,4 +661,8 @@ public class Player extends Entity implements Serializable {
     public Action getAction() {
         return action;
     }
+
+    public ArrayList<MapRegion> getOwnedRegions() {
+        return ownedRegions;
+    }
 }

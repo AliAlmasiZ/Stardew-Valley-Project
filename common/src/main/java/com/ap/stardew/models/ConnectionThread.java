@@ -9,10 +9,8 @@ import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
-import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.EntityList;
-import com.ap.stardew.models.entities.RenderFunction;
-import com.ap.stardew.models.entities.Renderable;
+import com.ap.stardew.models.dto.SavedGameDetails;
+import com.ap.stardew.models.entities.*;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.harvestable.Harvestable;
 import com.ap.stardew.models.entities.components.harvestable.HarvestableResource;
@@ -31,6 +29,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -60,15 +59,6 @@ abstract public class ConnectionThread extends Thread {
     protected AtomicBoolean end;
     protected boolean initialized = false;
 
-    protected ConnectionThread(Socket socket) throws IOException {
-        this.socket = socket;
-        this.dataInputStream = new DataInputStream(socket.getInputStream());
-        this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        this.receivedMessagesQueue = new LinkedBlockingQueue<>();
-        this.receivedObjectsQueue = null;
-        this.end = new AtomicBoolean(false);
-    }
-
     protected ConnectionThread(Connection connection) throws IOException {// kryonet
         this.dataInputStream = null;
         this.dataOutputStream = null;
@@ -81,20 +71,17 @@ abstract public class ConnectionThread extends Thread {
     public JSONMessage sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
         sendTCP(message);
         try {
-            if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
-            socket.setSoTimeout(timeoutMilli);
-            var result = JSONUtils.fromJson(dataInputStream.readUTF());
-            socket.setSoTimeout(0);
-            return result;
+            return (JSONMessage) receivedObjectsQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             System.err.println("Request Timed out.");
             return null;
         }
     }
 
+
     abstract public boolean initialHandshake();
 
-    abstract protected boolean handleMessage(JSONMessage message);
+    abstract protected boolean handleReceived(Object object);
 
     public synchronized void sendTCP(Object object) {
         connection.sendTCP(object);
@@ -106,26 +93,22 @@ abstract public class ConnectionThread extends Thread {
 
     @Override
     public void run() {
-        initialized = false;
-        if (!initialHandshake()) {
-            System.err.println("Inital HandShake failed with remote device.");
-            end();
-            return;
-        }
-
-        initialized = true;
-        while (!end.get()) {
-            try {
-                String receivedStr = dataInputStream.readUTF();
-                JSONMessage message = JSONUtils.fromJson(receivedStr);
-                boolean handled = handleMessage(message);
-                if (!handled) try {
-                    receivedMessagesQueue.put(message);
-                } catch (InterruptedException e) {}
-            } catch (Exception e) {
-                System.out.println(e);
-                break;
+        connection.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+//                System.out.println("new message received in class : " + object.getClass());
+                boolean handled = handleReceived(object);
+                if(!handled) try {
+                    receivedObjectsQueue.put(object);
+                } catch (InterruptedException e) {
+                    System.err.println("Error occurred in add object message to queue :");
+                    System.err.println(e.getMessage());
+                }
             }
+        });
+
+        while (!end.get()) { // to keep thread alive
+
         }
 
         end();
@@ -182,7 +165,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Player.Action.class);
         kryo.register(AccountInfo.class);
         kryo.register(Result.class);
-
+        kryo.register(String.class);
         kryo.register(GameMap.class);
         kryo.register(Date.class);
         kryo.register(Season.class);
@@ -260,15 +243,16 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Material.class);
         kryo.register(HarvestableResource.class);
         kryo.register(BiomeType.Spawnable.class);
-
+        kryo.register(UseFunction.class);
+        kryo.register(Upgradable.class);
+        kryo.register(Useable.class);
         kryo.register(TradeHistoryItem.class);
         kryo.register(Position.class);
         kryo.register(MapRegion.class);
         kryo.register(Sprite.class);
         kryo.register(Rectangle.class);
         kryo.register(Vector2.class);
-
-
+        kryo.register(SavedGameDetails.class);
 
         kryo.register(Game.class);
         kryo.register(GameMap.class);

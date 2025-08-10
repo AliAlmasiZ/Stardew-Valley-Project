@@ -1,32 +1,30 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.player.Player;
-import com.ap.stardew.view.CharacterSpriteManager;
-import com.ap.stardew.views.GameScreen;
-import com.ap.stardew.views.LobbyScreen;
-import com.ap.stardew.views.TradeDialog;
+import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.*;
+import com.ap.stardew.views.widgets.PopUpMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GameController {
-    public static void startGame(JSONMessage details){
-        String lobbyId = details.getFromBody("lobby_id");
-
-        if(!(ClientGame.getInstance().getScreen() instanceof LobbyScreen lobbyScreen)) return;
-
-        if(!lobbyId.equals(lobbyScreen.getCurrentLobby().getLobbyId())) return;
-
+    public static Game makeGame(JSONMessage details){
         Game game = details.getFromBody("gameData");
 
         game.setCurrentPlayer(details.getFromBody("player"));
@@ -35,10 +33,12 @@ public class GameController {
             player.setSprite(new Sprite());
         }
 
-        GameMenuController gameMenuController = new GameMenuController();
-
-
         game.getCurrentPlayer().getComponent(Inventory.class).addItem(App.entityRegistry.makeEntity("Axe"));
+
+        return game;
+    }
+    public static void startGame(JSONMessage details){
+        Game game = makeGame(details);
 
         ClientApp.setActiveGame(game);
 
@@ -259,5 +259,105 @@ public class GameController {
         gameScreen.tradeDialog.errorLabel.setText("Your offer has been rejected...");
         gameScreen.tradeDialog.getReceiverInventory().empty();
         gameScreen.tradeDialog.getSenderInventory().empty();
+    }
+
+    public static Result sendReconnectRequestResponse(boolean accept){
+        JSONMessage req = new JSONMessage(JSONMessage.Type.command);
+        req.put("command", "game_reconnect_request");
+        req.put("token", ClientApp.getToken());
+        req.put("accepted", accept);
+
+        JSONMessage response = ClientApp.sendAndWaitForResponse(req, 3000);
+
+        if(response == null) return new Result(false, "failed to reconnect");
+
+        Result result = response.getFromBody("result", Result.class);
+        if(result == null) return new Result(false, result.message());
+        if(!result.isSuccessful()) return new Result(false, result.message());
+
+
+        final Game game = makeGame(response);
+        Gdx.app.postRunnable(()->{
+            ClientApp.setActiveGame(game);
+            GameScreen gameScreen = new GameScreen(game);
+            ClientGame.getInstance().setScreen(gameScreen);
+            if(response.getFromBody("gamePaused")){
+                handleGamePauseForDisconnection(response);
+            }
+        });
+
+        return new Result(true, "reconnected");
+    }
+
+    public static void handleGameDisconnection(GameScreen gameScreen){
+        gameScreen.camera = null;
+        gameScreen.tradeDialog = null;
+        gameScreen.dispose();
+        ClientApp.setActiveGame(null);
+
+        ClientGame.getInstance().setScreen(new DisconnectionScreen(null, List.of(ClientApp.getUsername()), 120f));
+    }
+
+    public static void handleGamePauseForDisconnection(JSONMessage message){
+        final ArrayList<String> usernames = message.getFromBody("usernames");
+
+        if(ClientGame.getInstance().getScreen() instanceof GameScreen gameScreen){
+            Game activeGame = ClientApp.getActiveGame();
+            for (String username : usernames) {
+                if(activeGame.getPlayerByUsername(username) == null) return;
+            }
+            Gdx.app.postRunnable(()->{
+                DisconnectionScreen disconnectionScreen = new DisconnectionScreen(gameScreen, usernames, message.getFromBody("timeLeft"));
+                ClientGame.getInstance().setScreen(disconnectionScreen);
+            });
+        }else if(ClientGame.getInstance().getScreen() instanceof DisconnectionScreen disconnectionScreen){
+            Gdx.app.postRunnable(()->{
+                disconnectionScreen.updateDisconnectedPlayers(usernames);
+            });
+        }
+    }
+
+    public static void endGame(){
+        ClientApp.setActiveGame(null);
+    }
+
+    public static void handleGameReconnectionRequest(JSONMessage message){
+        Gdx.app.postRunnable(()->{
+            PopUpMessage popUpMessage = new PopUpMessage();
+            popUpMessage.add(new Label("You were disconnected from a session. Do you want to rejoin?",
+                GameAssetManager.getInstance().getCustomSkin())).row();
+            popUpMessage.fadeOutTime = 20;
+
+            Button acceptButton = new Button(GameAssetManager.getInstance().getCustomSkin(), "accept");
+            Button rejectButton = new Button(GameAssetManager.getInstance().getCustomSkin(), "reject");
+
+            popUpMessage.add(acceptButton).right();
+            popUpMessage.add(rejectButton).left();
+            popUpMessage.add().growX();
+
+            popUpMessage.show(AbstractScreen.getFrontStage());
+
+            acceptButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result result = GameController.sendReconnectRequestResponse(true);
+                    PopUpMessage popUpMessage = new PopUpMessage();
+                    popUpMessage.add(new Label(result.message(),
+                        GameAssetManager.getInstance().getCustomSkin())).row();
+                    popUpMessage.show(AbstractScreen.getFrontStage());
+                }
+            });
+
+            rejectButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result result = GameController.sendReconnectRequestResponse(false);
+                    PopUpMessage popUpMessage = new PopUpMessage();
+                    popUpMessage.add(new Label(result.message(),
+                        GameAssetManager.getInstance().getCustomSkin())).row();
+                    popUpMessage.show(AbstractScreen.getFrontStage());
+                }
+            });
+        });
     }
 }

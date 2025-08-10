@@ -17,6 +17,7 @@ public class ServerConnectionController {
                 case "update_player_action" -> {
                     connectionThread.playerController.handleChangeAction(message);
                 }
+
             }
         }
         if (message.getType() == JSONMessage.Type.lobby_command) {
@@ -43,6 +44,7 @@ public class ServerConnectionController {
                 case "chooseMapRegion" -> {
                     return LobbyController.chooseMapRegion(message);
                 }
+
                 default -> {
                     return null;
                 }
@@ -53,12 +55,23 @@ public class ServerConnectionController {
 
             switch ((String) message.getFromBody("command")) {
                 case "login" -> {
-                    return login(message.getFromBody("username"), message.getFromBody("password"), connectionThread);
+                    return login(message, connectionThread);
                 }
                 case "getUsername" -> {
                     return getUsernameCommand(message.getFromBody("token"));
                 }
-
+                case "game_reconnect_request" -> {
+                    return GameController.handleGameReconnectRequest(message);
+                }
+                case "getSavedGames" -> {
+                    return GameController.getSavedGames(message);
+                }
+                case "startInGameVote" -> {
+                    return GameController.startInGameVote(message);
+                }
+                case "inGameVote" -> {
+                    return GameController.handleInGameVote(message);
+                }
             }
 
             return response;
@@ -78,9 +91,35 @@ public class ServerConnectionController {
             throw new UnsupportedOperationException("didn't handle");
     }
 
-    public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread) {
-        Account account = ServerApp.getAccountByUsername(username);
+    public static JSONMessage login(JSONMessage message, ClientConnectionThread connectionThread) {
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+
+        if(message.getFromBody("token") != null){
+            String username = ServerApp.getUsername(message.getFromBody("token"));
+            if(username == null){
+                response.put("success", false);
+                response.put("message", "failed to login with token");
+                return response;
+            }
+
+            Account account = ServerApp.getAccountByUsername(username);
+
+            if (account == null) {
+                response.put("success", false);
+                response.put("message", "username doesn't exist");
+                return response;
+            }
+
+            connectionThread.setCurrentAccount(account);
+
+            response.put("success", true);
+            response.put("username", username);
+            return response;
+        }
+
+        String username = message.getFromBody("username");
+        String password = message.getFromBody("password");
+        Account account = ServerApp.getAccountByUsername(username);
 
         if (account == null) {
             response.put("success", false);

@@ -4,11 +4,18 @@ import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
+import com.ap.stardew.views.AbstractScreen;
+import com.ap.stardew.views.DisconnectionScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class ClientGame extends Game {
@@ -26,12 +33,12 @@ public class ClientGame extends Game {
     @Override
     public void create() {
         ClientApp.startClient();
-        ClientApp.connectServer();
 
         loadDatas();
         instance = this;
         batch = new SpriteBatch();
         setScreen(new MainScreen());
+        ClientApp.connectServer();
     }
 
     @Override

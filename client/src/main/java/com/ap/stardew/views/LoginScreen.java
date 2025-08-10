@@ -10,6 +10,7 @@ import com.ap.stardew.models.App;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.views.widgets.InGameDialog;
+import com.ap.stardew.views.widgets.PopUpMessage;
 import com.ap.stardew.views.widgets.ValidatedTextField;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -98,6 +99,8 @@ public class LoginScreen extends AbstractMenuScreen{
                     usernameTextfield.setMessage("Username doesnt exist");
                 }else if(result.message().equals("incorrect password")){
                     passwordTextfield.setMessage("incorrect password");
+                }else{
+                    new PopUpMessage("failed to login").show(AbstractScreen.getFrontStage());
                 }
             }
         });

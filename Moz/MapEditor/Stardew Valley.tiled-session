@@ -861,8 +861,8 @@
             "scale": 2.3453125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 166.92871419053964,
-                "y": 160.1065956029314
+                "x": 167.1419053964024,
+                "y": 160.53297801465692
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Hospital.tmx#1": {
@@ -1058,7 +1058,7 @@
             "scale": 24.6109375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 16.04977461748461,
+                "x": 16.090406958288362,
                 "y": 16.029458447082725
             }
         },
@@ -1629,6 +1629,8 @@
     "property.type": "int",
     "recentFiles": [
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Hospital.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/PierresExterior.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouseExterior.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled tile sheet.tsx",
@@ -1637,9 +1639,7 @@
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Regions.tsx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/Tile sets/region.json",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Landscape2.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/Tile sets/biome.json",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/1.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouses.tsx"
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/Tile sets/biome.json"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

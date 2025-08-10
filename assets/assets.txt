@@ -2568,6 +2568,7 @@ Content(unpacked)/Maps/summer_town.pt-BR.png
 Content(unpacked)/Maps/summer_town.ru-RU.png
 Content(unpacked)/Maps/summer_town.tr-TR.png
 Content(unpacked)/Maps/summer_town.zh-CN.png
+Content(unpacked)/Maps/test.png
 Content(unpacked)/Maps/tilledSoil.tsx
 Content(unpacked)/Maps/townInterior.de-DE.png
 Content(unpacked)/Maps/townInterior.es-ES.png
@@ -3639,6 +3640,24 @@ Content/Animal/sheep/idle.png
 Content/Animal/sheep/normal.png
 Content/Animal/sheep/pet.png
 Content/Animal/sheep/walking.png
+Content/BorderedTable/0010.png
+Content/BorderedTable/0011.9.png
+Content/BorderedTable/0011.png
+Content/BorderedTable/0021.png
+Content/BorderedTable/0110.9.png
+Content/BorderedTable/0110.png
+Content/BorderedTable/0120.9.png
+Content/BorderedTable/0120.png
+Content/BorderedTable/0220.9.png
+Content/BorderedTable/0220.png
+Content/BorderedTable/1111.png
+Content/BorderedTable/1122.png
+Content/BorderedTable/1221.png
+Content/BorderedTable/1222.9.png
+Content/BorderedTable/1222.png
+Content/BorderedTable/2211.9.png
+Content/BorderedTable/2222.png
+Content/BorderedTable/base2.png
 Content/BuildingMenuIcon.png
 Content/ClockImages/Clock.png
 Content/ClockImages/ClockHand.png
@@ -4613,7 +4632,6 @@ Content/NPC/Abigael/parts/image_part_051.png
 Content/NPC/Abigael/parts/image_part_052.png
 Content/NPC/Abigael/parts/image_part_053.png
 Content/NPC/Abigael/parts/image_part_054.png
-Content/NPC/Abigael/split.zip
 Content/NPC/Cursors.png
 Content/NPC/Harvey.png
 Content/NPC/Harvey/Harvey_Beach.png
@@ -4680,7 +4698,6 @@ Content/NPC/Lia.png
 Content/NPC/Lia/Leah_Beach.png
 Content/NPC/Lia/Leah_Winter.png
 Content/NPC/Lia/Leah_normal.png
-Content/NPC/Lia/parts.zip
 Content/NPC/Lia/parts/image_part_001.png
 Content/NPC/Lia/parts/image_part_002.png
 Content/NPC/Lia/parts/image_part_003.png
@@ -4738,7 +4755,6 @@ Content/NPC/Robin.png
 Content/NPC/Robin/Robin_Beach.png
 Content/NPC/Robin/Robin_Winter.png
 Content/NPC/Robin/Robin_normal.png
-Content/NPC/Robin/parts.zip
 Content/NPC/Robin/parts/image_part_001.png
 Content/NPC/Robin/parts/image_part_002.png
 Content/NPC/Robin/parts/image_part_003.png
@@ -4783,7 +4799,6 @@ Content/NPC/Sebastian.png
 Content/NPC/Sebastian/Sebastian_Beach.png
 Content/NPC/Sebastian/Sebastian_Winter.png
 Content/NPC/Sebastian/Sebastian_normal.png
-Content/NPC/Sebastian/parts.zip
 Content/NPC/Sebastian/parts/image_part_001.png
 Content/NPC/Sebastian/parts/image_part_002.png
 Content/NPC/Sebastian/parts/image_part_003.png
@@ -4849,6 +4864,7 @@ Content/NPC/dialog.png
 Content/NPC/textBox.png
 Content/PC _ Computer - Stardew Valley - Miscellaneous - Harvested Crops, Seed Packets, Minerals, Food, Equipment & Misc. Objects.png
 Content/PC _ Computer - Stardew Valley - Miscellaneous - Title Screen.png
+Content/PC _ Computer - Stardew Valley - Unused Content - Menu Elements.png
 Content/Quest/Done.png
 Content/Quest/DoneByOther.png
 Content/Quest/Locked-1.png
@@ -5185,6 +5201,10 @@ Content/button1.png
 Content/button2.png
 Content/buttonDown.9.png
 Content/buttonUp.9.png
+Content/checkBox.png
+Content/checkBoxChecked.png
+Content/checkBoxCheckedOver.png
+Content/checkBoxOver.png
 Content/closeButton.png
 Content/daybg.png
 Content/energyBar.png
@@ -5211,12 +5231,12 @@ Content/font/misc/Buy GGBotNet a Coffee-543f.url
 Content/font/misc/GGBotNet - itch.io-3086.url
 Content/font/misc/License-473a.txt
 Content/font/misc/Pixelated Elegance v0.3-7344.pxf
-Content/font/viafont_6918416.zip
 Content/frame.png
 Content/frame2.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png
 Content/frameNinePatch2.9.png
+Content/goldCoin.png
 Content/inventoryIconRotated.png
 Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
@@ -5242,9 +5262,15 @@ Content/miniMap/miniMapBackground.9.png
 Content/newGameButton.png
 Content/newGameButtonHovered.png
 Content/pixil-frame-0.png
+Content/playButton.png
+Content/playButtonOver.png
 Content/redCross.png
+Content/savedGameBox.9.png
+Content/savedGameBox.png
 Content/scrollBackground.png
 Content/scrollBackgroundNinePatch.9.png
+Content/scrollBarKnob.9.png
+Content/scrollBarKnob.png
 Content/shadow.png
 Content/shit.png
 Content/skillMenuIcon.png
@@ -5259,9 +5285,12 @@ Content/sliderButtonDown.png
 Content/sliderButtonUp.png
 Content/sliderNinePatch.9.png
 Content/sliderNinePatch2.9.png
+Content/smallAcceptButton.png
 Content/smallPanel.png
 Content/smallPanelNinePatch.9.png
 Content/smallPlus.png
+Content/smallRejectButton.png
+Content/smallTip.png
 Content/storageIcon.png
 Content/textBox.png
 Content/textboxNinePatch.9.png
@@ -5375,6 +5404,14 @@ data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
 game.db
+games/2025-08-10/game_2025-08-10_18-39-15_e42c3b71.sav
+games/2025-08-10/game_2025-08-10_19-06-38_efc36114.sav
+games/2025-08-10/game_2025-08-10_19-27-47_9acf4544.sav
+games/2025-08-10/game_2025-08-10_19-28-15_b1797949.sav
+games/2025-08-10/game_2025-08-10_20-59-36_8acd041d.sav
+games/2025-08-10/game_2025-08-10_21-15-06_fc3954a8.sav
+games/2025-08-10/game_2025-08-10_21-25-37_e023b225.sav
+games/2025-08-10/game_2025-08-10_22-13-24_c0056a03.sav
 shaders/outline.frag
 shaders/outline.vert
 skin/Stardew Valley Skin/Brawl.fnt

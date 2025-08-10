@@ -75,7 +75,7 @@ public class Date implements Serializable, Cloneable{    private Season season;
 
     @Override
     public String toString() {
-        return "Day: " + day + "  Hour: " + hour + "  Season: " + season.name().toLowerCase();
+        return "Day " + day + " of " + season.name().toLowerCase() + ", Year" + (int) ((totalHours / 24f / 4f / 28f) + 1);
     }
 
     @Override

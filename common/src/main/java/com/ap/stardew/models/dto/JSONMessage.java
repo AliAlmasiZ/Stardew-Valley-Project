@@ -12,7 +12,7 @@ public class JSONMessage {
     /*
      * Empty constructor needed for JSON Serialization/Deserialization
      */
-    public JSONMessage() {
+    private JSONMessage() {
 
     }
     public JSONMessage(Map<String, Object> body, Type type) {

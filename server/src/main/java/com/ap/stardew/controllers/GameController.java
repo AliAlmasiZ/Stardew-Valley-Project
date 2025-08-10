@@ -1,11 +1,14 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.GameSession;
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.AccountInfo;
+import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.InteriorComponent;
 import com.ap.stardew.models.entities.components.PositionComponent;
@@ -17,9 +20,19 @@ import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.utils.TiledMapUtils;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryonet.Client;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GameController {
     public static GameSession createGame(List<AccountInfo> accountInfos){
@@ -54,5 +67,92 @@ public class GameController {
         return gameSession;
     }
 
+    public static JSONMessage handleGameReconnectRequest(JSONMessage req){
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
+        String username = ServerApp.getUsername(req.getFromBody("token"));
+        if (username == null){
+            Result result = new Result(false, "Invalid token");
+            response.put("result", result);
+            return response;
+        }
+
+        boolean accepted = req.getFromBody("accepted");
+
+        GameThread gameThread = null;
+        for (GameThread game : ServerApp.getGames()) {
+            for (String disconnectedClient : game.getDisconnectedClients()) {
+                if (disconnectedClient.equals(username)) {
+                    gameThread = game;
+                    break;
+                }
+            }
+        }
+        if (gameThread == null){
+            Result result = new Result(false, "No game to join to");
+            response.put("result", result);
+            return response;
+        }
+
+        return gameThread.handleReconnectRequest(username, accepted);
+    }
+
+    public static String generateSavePath(String baseDir) throws IOException {
+        Files.createDirectories(Path.of(baseDir));
+
+        String dateFolder = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Path folderPath = Path.of(baseDir, dateFolder);
+        Files.createDirectories(folderPath);
+
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        String randomToken = UUID.randomUUID().toString().substring(0, 8);
+
+        String fileName = "game_" + timestamp + "_" + randomToken + ".sav";
+        return folderPath.resolve(fileName).toString();
+    }
+
+    public static void saveGame(GameSession gameSession) throws IOException, SQLException{
+        String savePath = generateSavePath("./games");
+
+        try (Output output = new Output(new FileOutputStream(savePath))) {
+            ServerApp.getServer().getKryo().writeObject(output, gameSession.getGame());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save game session file", e);
+        }
+
+        DatabaseManager.saveGame(savePath, gameSession.getGame(), new ArrayList<>(gameSession.getUserPlayerMap().keySet()));
+    }
+
+    public static JSONMessage getSavedGames(JSONMessage req){
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+
+        String username = ServerApp.getUsername(req.getFromBody("token"));
+        if (username == null){
+            Result result = new Result(false, "Invalid token");
+            response.put("result", result);
+            return response;
+        }
+
+        List<SavedGameDetails> gamesByUser;
+        try {
+            gamesByUser = DatabaseManager.findGamesByUser(username);
+        } catch (SQLException e) {
+            Result result = new Result(false, "failed to retrieve saved games from the database: " + e);
+            response.put("result", result);
+            return response;
+        }
+
+        Result result = new Result(true, "found the games");
+        response.put("result", result);
+        response.put("games", gamesByUser);
+        return response;
+    }
+
+    public static JSONMessage startInGameVote(JSONMessage message){
+        return new JSONMessage(JSONMessage.Type.command);
+    }
+
+    public static JSONMessage handleInGameVote(JSONMessage message){
+        return new JSONMessage(JSONMessage.Type.command);
+    }
 }

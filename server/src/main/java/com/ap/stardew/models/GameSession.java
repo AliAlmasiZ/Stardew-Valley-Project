@@ -8,6 +8,7 @@ import java.util.Map;
 public class GameSession {
     private final Game game;
     private final Map<String, Player> userPlayerMap = new HashMap<>();
+    private int id;
 
     public GameSession(Game game) {
         this.game = game;

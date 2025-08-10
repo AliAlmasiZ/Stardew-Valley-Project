@@ -317,7 +317,6 @@ public class LobbyController {
         GameThread gameThread = new GameThread(session);
 
 
-
         for (ClientConnectionThread client : gameThread.getClients()) {
             client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());
             client.playerController = new PlayerController(client);
