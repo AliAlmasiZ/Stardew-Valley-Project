@@ -1,7 +1,9 @@
 package com.ap.stardew.models.NPC;
 
+import com.ap.stardew.models.entities.components.EntityComponent;
 import com.ap.stardew.models.entities.components.Placeable;
 import com.ap.stardew.models.entities.components.PositionComponent;
+import com.ap.stardew.models.enums.EntityTag;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,6 +15,7 @@ import com.ap.stardew.models.player.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NPC extends Entity implements Serializable {
@@ -20,11 +23,15 @@ public class NPC extends Entity implements Serializable {
     private ArrayList<String> favorites = new ArrayList<>();
     private ArrayList<String> gifts = new ArrayList<>();
     private ArrayList<Dialogue> dialogues = new ArrayList<>();
-    private Image avatar;
+    private String avatarPath;
 
 
     public String getName() {
         return name;
+    }
+
+    public NPC() {
+
     }
 
     public NPC(String name) {
@@ -35,7 +42,9 @@ public class NPC extends Entity implements Serializable {
         addComponent(new Renderable());
         Renderable renderable = this.getComponent(Renderable.class);
         renderable.setSpritePath("Content/NPC/" + name + "/parts/image_part_001.png");
-        avatar = new Image(new Texture("Content/NPC/" + name + ".png"));
+
+        avatarPath = "Content/NPC/" + name + ".png";
+
     }
 
     public ArrayList<String> getFavorites() {
@@ -46,8 +55,8 @@ public class NPC extends Entity implements Serializable {
         this.favorites = favorites;
     }
 
-    public Image getAvatar() {
-        return avatar;
+    public String getAvatarPath() {
+        return avatarPath;
     }
 
     public ArrayList<Dialogue> getDialogues() {

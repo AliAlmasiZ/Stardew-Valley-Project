@@ -241,7 +241,6 @@ public class GameScreen extends AbstractScreen {
         //**************************************
 
 
-        //TODO
     }
 
     public void initNPCDialogs() {
@@ -1258,7 +1257,7 @@ public class GameScreen extends AbstractScreen {
         dialogTable.bottom().pad(10); // Align to bottom with optional padding
 
         // --- Avatar image
-        Image npcAvatar = npc.getAvatar();
+        Image npcAvatar = new Image(GameAssetManager.getInstance().getTexture(npc.getAvatarPath()));
 
         // --- Dialog background with label
         TextureRegionDrawable bgDrawable = new TextureRegionDrawable(new TextureRegion(GameAssetManager.getInstance().textBox));
