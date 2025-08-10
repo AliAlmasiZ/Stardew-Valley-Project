@@ -123,4 +123,8 @@ public class GameThread extends Thread{
     public Game getGame() {
         return gameSession.getGame();
     }
+
+    public void end() {
+        end.set(true);
+    }
 }

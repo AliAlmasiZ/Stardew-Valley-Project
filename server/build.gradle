@@ -34,6 +34,9 @@ run {
   workingDir = rootProject.file('assets').path
   group = "Application"
   description = "Runs the Stardew Online Server"
+
+  standardInput = System.in
+
 }
 
 jar {

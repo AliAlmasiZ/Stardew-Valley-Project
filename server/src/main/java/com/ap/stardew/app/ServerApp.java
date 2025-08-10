@@ -76,7 +76,11 @@ public class ServerApp {
         exitFlag = true;
         for (ClientConnectionThread connection : connections)
             connection.end();
+        for (GameThread game : games) {
+            game.end();
+        }
         connections.clear();
+        games.clear();
     }
 
     public static void removeClientConnection(ClientConnectionThread clientConnectionThread) {
@@ -248,5 +252,9 @@ public class ServerApp {
             return null;
         }
         return payload.getSubject();
+    }
+
+    public static List<GameThread> getGameThreads() {
+        return new ArrayList<>(games);
     }
 }

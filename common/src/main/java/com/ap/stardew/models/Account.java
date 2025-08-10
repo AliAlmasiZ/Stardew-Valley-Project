@@ -2,13 +2,11 @@ package com.ap.stardew.models;
 
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SecurityQuestions;
+import com.ap.stardew.utils.SHA256Hash;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -38,7 +36,7 @@ public class Account implements Serializable {
         this.gender = gender;
         this.email = email;
         this.nickname = nickname;
-        this.password = hashPassword(password);
+        this.password = SHA256Hash.hashString(password);
         this.username = username;
 
     }
@@ -79,26 +77,6 @@ public class Account implements Serializable {
             return new Result(false, "Password must contain at least one special character");
         }
         return new Result(true, "");
-    }
-
-    public static String hashPassword(String password) {
-
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 algorithm not found", e);
-        }
     }
 
     public static Result isEmailValid(String email) {
@@ -149,11 +127,11 @@ public class Account implements Serializable {
     }
 
     public boolean isPasswordCorrect(String password) { /* !! don't use getPassword because of SHA-256 */
-        return this.password.equals(hashPassword(password));
+        return this.password.equals(SHA256Hash.hashString(password));
     }
 
     public void setPasswordNotHashed(String password) {
-        this.password = hashPassword(password);
+        this.password = SHA256Hash.hashString(password);
     }
     public void setPasswordHashed(String passwordHashed) {
         this.password = passwordHashed;
