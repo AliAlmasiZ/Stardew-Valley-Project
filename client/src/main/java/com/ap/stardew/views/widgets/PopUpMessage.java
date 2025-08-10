@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -18,6 +19,19 @@ public class PopUpMessage extends Table {
 
     public PopUpMessage() {
         setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
+
+    }
+    public PopUpMessage(String message){
+        this();
+
+        Label label = new Label(message, GameAssetManager.getInstance().getCustomSkin());
+
+        if(label.getPrefWidth() < 200){
+            add(label).grow().width(label.getPrefWidth());
+        }else{
+            add(label).grow().width(200);
+            label.setWrap(true);
+        }
     }
 
     public PopUpMessage(PopUpMessageType popUpMessageType) {

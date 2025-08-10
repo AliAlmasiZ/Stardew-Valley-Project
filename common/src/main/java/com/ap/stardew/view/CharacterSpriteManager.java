@@ -262,7 +262,7 @@ public class CharacterSpriteManager {
             frame.flip(flip[0], flip[1]);
 
             frames.add(frame);
-            durations.add(duration * 2);
+            durations.add(duration);
         }
 
 

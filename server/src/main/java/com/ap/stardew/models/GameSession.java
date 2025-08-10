@@ -11,6 +11,10 @@ public class GameSession {
 
     public GameSession(Game game) {
         this.game = game;
+
+        for (Player player : game.getPlayers()) {
+            addUserToSession(player.getUsername(), player);
+        }
     }
 
     public void addUserToSession(String username, Player player){

@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.ap.stardew.models.LobbyInfo;
+import com.ap.stardew.models.dto.SavedGameDetails;
 
 /**
  * Represents a Lobby and its users
@@ -18,11 +19,18 @@ public class Lobby implements Serializable {
     private final static long serialVersionUID = 1L;
     private static CopyOnWriteArrayList<Lobby> allLobbies = new CopyOnWriteArrayList<>();
 
+    public enum Type{
+        NEW_GAME,
+        SAVED_GAME
+    }
+
+    private Type type;
     private String lobbyId;
     private String lobbyName;
     private String hostUsername;
     private List<AccountInfo> players;
     private int maxPlayers;
+    private SavedGameDetails savedGameDetails;
     private String password;
     private boolean isVisible;
 
@@ -46,9 +54,15 @@ public class Lobby implements Serializable {
     */
     public Lobby() {}
 
+    /**
+     * Creates a new game Lobby
+     * @param lobbyName
+     * @param accountInfo
+     * @param maxPlayers
+     * @param password
+     * @param isVisible
+     */
     public Lobby(String lobbyName, AccountInfo accountInfo, int maxPlayers, String password, boolean isVisible) {
-
-
         do this.lobbyId = generateShortId(6);
         while (getLobbyById(lobbyId) != null);
 
@@ -63,6 +77,32 @@ public class Lobby implements Serializable {
         players.add(accountInfo);
         allLobbies.add(this);
     }
+
+    /***
+     * Creates a saved game lobby
+     * @param lobbyName
+     * @param accountInfo
+     * @param savedGameDetails
+     */
+    public Lobby(String lobbyName, AccountInfo accountInfo, SavedGameDetails savedGameDetails) {
+        do this.lobbyId = generateShortId(6);
+        while (getLobbyById(lobbyId) != null);
+
+        this.lobbyName = lobbyName;
+        this.hostUsername = accountInfo.getUsername();
+
+        this.maxPlayers = savedGameDetails.players.size();
+        this.password = "";
+        this.isVisible = true;
+        this.players = new ArrayList<>();
+        this.savedGameDetails = savedGameDetails;
+
+        accountInfo.setSelectedMapRegion(savedGameDetails.farms.get(hostUsername));
+
+        players.add(accountInfo);
+        allLobbies.add(this);
+    }
+
 
     public String getLobbyName() {
         return lobbyName;
@@ -125,6 +165,7 @@ public class Lobby implements Serializable {
         lobbyInfo.setAccounts(players);
         lobbyInfo.setMaxPlayers(maxPlayers);
         lobbyInfo.setPrivate(isPrivate());
+        lobbyInfo.setSavedGameDetails(savedGameDetails);
 
         return lobbyInfo;
     }
@@ -135,5 +176,9 @@ public class Lobby implements Serializable {
 
     public void setHostUsername(String hostUsername) {
         this.hostUsername = hostUsername;
+    }
+
+    public SavedGameDetails getSavedGameDetails() {
+        return savedGameDetails;
     }
 }

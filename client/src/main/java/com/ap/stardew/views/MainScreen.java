@@ -2,6 +2,10 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.models.Account;
+import com.ap.stardew.models.App;
+import com.ap.stardew.models.Game;
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.app.GameController;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.*;
@@ -13,6 +17,7 @@ import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.records.GameStartingDetails;
+import com.ap.stardew.views.widgets.PopUpMessage;
 import com.ap.stardew.utils.TiledMapUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
@@ -66,6 +71,10 @@ public class MainScreen extends AbstractMenuScreen {
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(!ClientApp.isConnected()){
+                    new PopUpMessage("You should be connected to the server").show(getFrontStage());
+                    return;
+                }
                 ClientGame.getInstance().setScreen(new LoginScreen());
             }
         });
@@ -169,11 +178,6 @@ public class MainScreen extends AbstractMenuScreen {
 
     public void registerDialog() {
         //TODO
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(uiStage);
     }
 
     @Override

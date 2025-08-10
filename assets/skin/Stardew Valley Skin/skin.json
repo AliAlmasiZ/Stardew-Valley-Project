@@ -87,6 +87,15 @@
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+	"smallAcceptButton2": {
+		"name": "smallAcceptButton",
+		"color": {
+			"r": 0.6862745,
+			"g": 0.6862745,
+			"b": 0.6862745,
+			"a": 1
+		}
+	},
 	"sliderFill": {
 		"name": "white-pixel",
 		"color": "RGBA_247_221_76_255",
@@ -124,6 +133,26 @@
 	"back": {
 		"up": "backButton",
 		"over": "backButtonHovered"
+	},
+	"accept": {
+		"up": "smallAcceptButton"
+	},
+	"reject": {
+		"up": "smallRejectButton"
+	},
+	"play": {
+		"up": "playButton",
+		"down": "playButton",
+		"over": "playButtonOver"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+	"default": {
+		"checkboxOn": "checkBoxChecked",
+		"checkboxOff": "checkBox",
+		"checkboxOnOver": "checkBoxCheckedOver",
+		"checkboxOver": "checkBoxOver",
+		"font": "khodayaBaseDige"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
@@ -136,6 +165,14 @@
 	"big": {
 		"font": "svbold2",
 		"fontColor": "RGBA_255_255_255_255"
+	},
+	"withBackground": {
+		"font": "khodayaBaseDige",
+		"background": "buttonDown"
+	},
+	"black": {
+		"parent": "default",
+		"fontColor": "RGBA_0_0_0_255"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
@@ -154,7 +191,7 @@
 		"hScroll": "sliderNinePatch2",
 		"hScrollKnob": "sliderFill",
 		"vScroll": "sliderNinePatch2",
-		"vScrollKnob": "sliderFill"
+		"vScrollKnob": "scrollBarKnob"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {

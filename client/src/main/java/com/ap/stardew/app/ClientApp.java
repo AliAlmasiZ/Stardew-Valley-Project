@@ -1,9 +1,22 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
+import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.AbstractScreen;
+import com.ap.stardew.views.ColorPalette;
+import com.ap.stardew.views.LoginScreen;
+import com.ap.stardew.views.MultiplayerScreen;
+import com.ap.stardew.views.widgets.PopUpMessage;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.ap.stardew.utils.NetworkUtils;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -16,6 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import static com.ap.stardew.models.ConnectionThread.*;
+import static com.ap.stardew.views.AbstractScreen.updateNetworkStatus;
 
 public class ClientApp {
     private static Client client;
@@ -38,16 +52,19 @@ public class ClientApp {
     }
 
     public static void connectServer(String host, int tcpPort, int udpPort) throws IOException {
-        client.connect(TIMEOUT_MILLIS, host, tcpPort, udpPort);
         client.addListener(new Listener(){
             @Override
             public void connected(Connection connection) {
-                System.out.println("connected");
+                Gdx.app.postRunnable(()->{
+                    updateNetworkStatus("connected");
+                });
             }
 
             @Override
             public void disconnected(Connection connection) {
-                System.err.println("disconnected");
+                Gdx.app.postRunnable(()->{
+                    updateNetworkStatus("disconnected");
+                });
             }
 
             @Override
@@ -62,10 +79,16 @@ public class ClientApp {
                 }
             }
         });
+        try {
+            client.connect(TIMEOUT_MILLIS, host, tcpPort, udpPort);
+        }catch (IOException e){
+            Gdx.app.postRunnable(()->{
+                updateNetworkStatus("disconnected");
+            });
+        }
     }
 
     public static void connectServer() {
-
         try {
             connectServer(HOST, TCP_PORT, UDP_PORT);
         } catch (IOException e) {
@@ -129,6 +152,34 @@ public class ClientApp {
             return null;
         }
     }
+    public static void reconnect(){
+        try {
+            ClientApp.getClient().reconnect(2000);
+
+            if(token != null){
+                JSONMessage loginRequest = new JSONMessage(JSONMessage.Type.command);
+                loginRequest.put("command", "login");
+                loginRequest.put("token", token);
+
+                JSONMessage jsonMessage = sendAndWaitForResponse(loginRequest, 3000);
+                System.out.println(jsonMessage);
+                if(jsonMessage == null || !jsonMessage.getFromBody("success", boolean.class)){
+                    PopUpMessage popUpMessage = new PopUpMessage(jsonMessage != null ? jsonMessage.getFromBody("message") : "failed to log in");
+                    popUpMessage.show(AbstractScreen.getFrontStage());
+                    ClientGame.getInstance().setScreen(new LoginScreen());
+                    return;
+                }
+
+                ClientApp.setUsername(jsonMessage.getFromBody("username"));
+                PopUpMessage popUpMessage = new PopUpMessage("logged in as " + username);
+                popUpMessage.show(AbstractScreen.getFrontStage());
+
+                ClientGame.getInstance().setScreen(new MultiplayerScreen());
+            }
+        } catch (IOException e) {
+            updateNetworkStatus("disconnected");
+        }
+    }
 
     public static Client getClient() {
         return client;
@@ -161,8 +212,6 @@ public class ClientApp {
 //    }
 
     public static boolean isConnected(){
-//        return serverConnectionThread != null && serverConnectionThread.isAlive();
-
         return client.isConnected() ;
     }
 

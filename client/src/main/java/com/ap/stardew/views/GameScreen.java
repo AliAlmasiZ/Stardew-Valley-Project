@@ -62,6 +62,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import java.util.ArrayList;
 
@@ -269,6 +271,11 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        if(!ClientApp.isConnected()){
+            GameController.handleGameDisconnection(this);
+            return;
+        }
+
         controller.update(delta);
         playerController.update(delta);
 
@@ -398,12 +405,17 @@ public class GameScreen extends AbstractScreen {
         minigameStage.draw();
 
 
+        frontStage.act(delta);
+        frontStage.draw();
+
+
         /**
          * UPDATES
          */
         // Clock
         clockActor.update(delta);
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -620,7 +632,7 @@ public class GameScreen extends AbstractScreen {
 
             ScrollPane scrollPane = new ScrollPane(map);
 
-            background.add(scrollPane).expand(false, false);
+            background.add(scrollPane).size(100, map.getHeight() / map.getWidth() * 100f);
 
             background.pack();
 
@@ -1872,6 +1884,7 @@ public class GameScreen extends AbstractScreen {
     private void setGameInput() {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(uiStage);
+        inputMultiplexer.addProcessor(frontStage);
         inputMultiplexer.addProcessor(gameStage);
         inputMultiplexer.addProcessor(playerController);
         Gdx.input.setInputProcessor(inputMultiplexer);

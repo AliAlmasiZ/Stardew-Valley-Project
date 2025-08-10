@@ -7,3 +7,19 @@ CREATE TABLE IF NOT EXISTS users (
     maximumMoneyEarned  INTEGER NOT NULL DEFAULT 0,
     password            TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS games (
+    game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    save_path TEXT NOT NULL,
+    game_date TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_game (
+    game_id     INTEGER NOT NULL,
+    username    TEXT NOT NULL,
+    farm TEXT NOT NULL,
+    gold INTEGER NOT NULL,
+    PRIMARY KEY (game_id, username),
+    FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
+);

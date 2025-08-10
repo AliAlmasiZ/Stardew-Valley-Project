@@ -79,9 +79,7 @@ public class LoginMenuController implements Controller{    @Override
 
         if(response == null) return new Result(false, "no response");
 
-        if(response.getFromBody("success", boolean.class)){
-            System.out.println(response.getFromBody("token", String.class));
-        }
+        if(!response.getFromBody("success", boolean.class)) return new Result(false, "failed to login");
 
         ClientApp.setToken(response.getFromBody("token", String.class));
         ClientApp.setUsername(username);

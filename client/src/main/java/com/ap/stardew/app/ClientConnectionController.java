@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
@@ -7,17 +8,27 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
+import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.*;
+import com.ap.stardew.views.widgets.PopUpMessage;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.views.LobbyScreen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientConnectionController {
     public static JSONMessage handleCommand(JSONMessage message) {
         if(message.getType() == JSONMessage.Type.update) {
             String command = message.getFromBody("command");
 //            System.out.println(command);
+            if(command == null) return null;
             switch (command) {
                 case "updateLobby" -> {
                     if (ClientGame.getInstance().getScreen() instanceof LobbyScreen lobbyScreen){
@@ -72,6 +83,33 @@ public class ClientConnectionController {
                     }
                     return null;
                 }
+                case "player_disconnected" -> {
+                    GameController.handleGamePauseForDisconnection(message);
+                    return null;
+                }
+                case "resume_game" -> {
+                    if(ClientGame.getInstance().getScreen() instanceof DisconnectionScreen disconnectionScreen){
+                        Gdx.app.postRunnable(()->{
+                            disconnectionScreen.resumeGame();
+                        });
+                    }
+                    return null;
+                }
+                case "gameSaved" -> {
+                    if(ClientApp.getActiveGame() != null){
+                        Gdx.app.postRunnable(()->{
+                            if(message.getFromBody("message") != null){
+                                new PopUpMessage(message.getFromBody("message")).show(AbstractScreen.getFrontStage());
+                            }else {
+                                new PopUpMessage("Player reconnection timed out. The game was saved.").show(AbstractScreen.getFrontStage());
+                            }
+                            GameController.endGame();
+                            ClientGame.getInstance().getScreen().dispose();
+                            ClientGame.getInstance().setScreen(new MultiplayerScreen());
+                        });
+                    }
+                    return null;
+                }
                 case "update_player_gift" -> {
                     GameController.receiveGiftUpdate(message);
                 }
@@ -103,6 +141,15 @@ public class ClientConnectionController {
                 }
                 case "finish_trade" -> {
                     GameController.finishTrade(message);
+                }
+            }
+        }
+        if(message.getType() == JSONMessage.Type.command){
+            String command = message.getFromBody("command");
+            switch (command){
+                case "game_reconnect_request" -> {
+                    GameController.handleGameReconnectionRequest(message);
+                    return null;
                 }
             }
         }

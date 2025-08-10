@@ -19,9 +19,11 @@ public class AbstractMenuScreen extends AbstractScreen {
     public void render(float delta) {
         backgroundStage.act(delta);
         uiStage.act(delta);
+        frontStage.act(delta);
 
         backgroundStage.draw();
         uiStage.draw();
+        frontStage.draw();
     }
 
     @Override
