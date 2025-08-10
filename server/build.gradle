@@ -44,6 +44,13 @@ jar {
     attributes 'Main-Class' : mainClassName
   }
 
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+
   doLast {
     file(archiveFile).setExecutable(true, false)
   }

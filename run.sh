@@ -17,6 +17,11 @@ fi
 
 num_clients=$1
 
+echo -e "${MAGENTA}Starting Server...${RESET}"
+./gradlew server:run > "server.log" 2>&1 &
+sleep 2
+
+
 for (( i=1; i<=num_clients; i++ )); do
   echo -e "${CYAN}Starting client #${i}${RESET}"
   ./gradlew lwjgl3:run > "client${i}.log" 2>&1 &

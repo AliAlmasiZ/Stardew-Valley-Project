@@ -4,6 +4,7 @@ import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
+import com.ap.stardew.utils.NetworkUtils;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
@@ -84,7 +85,7 @@ public class ClientApp {
     }
 
     private static void registerClasses() {
-        ConnectionThread.registerClasses(client.getKryo());
+        NetworkUtils.registerClasses(client.getKryo());
     }
 
     public static void sendTCP(Object o) {
