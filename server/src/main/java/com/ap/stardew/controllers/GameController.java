@@ -2,10 +2,7 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
-import com.ap.stardew.models.Game;
-import com.ap.stardew.models.GameSession;
-import com.ap.stardew.models.Position;
-import com.ap.stardew.models.Result;
+import com.ap.stardew.models.*;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.InteriorComponent;
@@ -110,6 +107,28 @@ public class GameController {
         playerFriendship.setHadHuggedToday(true);
         playerFriendship.addXp(60);
 
+    }
+
+    public static void flower(Game game, String SenderName,String receiverName) {
+        Player sender = game.getPlayerByUsername(SenderName);
+        Player receiver = game.getPlayerByUsername(receiverName);
+        Inventory inventory = sender.getComponent(Inventory.class);
+        Inventory inventory2 = receiver.getComponent(Inventory.class);
+
+        sender.setAction(Player.Action.GIVING_FLOWER);
+        receiver.setAction(Player.Action.RECEIVING_FLOWER);
+
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(sender, receiver);
+
+
+
+        if (playerFriendship.getLevel() == 2) {
+            playerFriendship.setLevel(3);
+            playerFriendship.setXp(0);
+        }
+
+        inventory.takeFromInventory("Bouquet", 1);
+        inventory2.addItem(App.entityRegistry.makeEntity("Bouquet"), 1);
     }
 
 }

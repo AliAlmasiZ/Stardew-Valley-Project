@@ -81,6 +81,9 @@ public class ClientConnectionController {
                 case "update_hug" -> {
                     GameController.hugUpdate(message);
                 }
+                case "update_flower" -> {
+                    GameController.flowerUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

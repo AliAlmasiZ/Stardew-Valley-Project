@@ -1515,7 +1515,7 @@ public class GameMenuController implements Controller {
         return new Result(true, "Hugged successfully!");
     }
 
-    public Result flower(String username) {
+    public Result canFlower(String username) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player floweredPlayer = game.findPlayer(username);
@@ -1542,12 +1542,12 @@ public class GameMenuController implements Controller {
             return new Result(false, "You don't have bouquet!");
         }
 
-        if (playerFriendship.getLevel() == 2) {
-            playerFriendship.setLevel(3);
-            playerFriendship.setXp(0);
-        }
-
-        inventory.takeFromInventory("Bouquet", 1);
+//        if (playerFriendship.getLevel() == 2) {
+//            playerFriendship.setLevel(3);
+//            playerFriendship.setXp(0);
+//        }
+//
+//        inventory.takeFromInventory("Bouquet", 1);
         return new Result(true, "You have flowered " + floweredPlayer.getUsername() + "!");
     }
 

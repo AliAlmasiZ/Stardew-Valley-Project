@@ -1487,19 +1487,25 @@ public class GameScreen extends AbstractScreen {
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 }
+                hideTable(actionsTable);
             }
         });
 
         flowerButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.flower(friend.getUsername());
+                Result result = controller.canFlower(friend.getUsername());
                 if (result.isSuccessful()) {
-                    //TODO: GRAPHIC
-                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.update);
+                    message.put("command", "flower");
+                    message.put("sender", game.getCurrentPlayer().getUsername());
+                    message.put("receiver", friend.getUsername());
 
+                    ClientApp.sendTCP(message);
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 }
+                hideTable(actionsTable);
+
             }
         });
 
@@ -1860,6 +1866,16 @@ public class GameScreen extends AbstractScreen {
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
+    }
+
+    public void hideTable(Table table) {
+        Actor current = table;
+        while (current != null && !(current instanceof InGameDialog)) {
+            current = current.getParent();
+        }
+        if (current != null) {
+            ((InGameDialog) current).hide();
+        }
     }
 
     public Entity chooseFromInventory() {

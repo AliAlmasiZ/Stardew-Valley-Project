@@ -471,6 +471,10 @@ public class GameController {
         updatePlayers(jsonMessage.getFromBody("players_update"));
     }
 
+    public static void flowerUpdate(JSONMessage jsonMessage) {
+        updatePlayers(jsonMessage.getFromBody("players_update"));
+    }
+
 
     /*************************************************************************************************/
 
