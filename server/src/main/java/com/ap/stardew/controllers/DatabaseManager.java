@@ -4,19 +4,12 @@ import com.ap.stardew.models.Account;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.enums.Gender;
-import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.utils.JSONUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class DatabaseManager {
     private static final String URL = "jdbc:sqlite:game.db";
@@ -114,9 +107,15 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * find the games which the player has played
+     * @param username
+     * @return
+     * @throws SQLException
+     */
     public static List<SavedGameDetails> findGamesByUser(String username) throws SQLException {
         String sqlGames = """
-        SELECT g.game_date, ug.farm, ug.gold, g.game_id
+        SELECT g.game_id
         FROM games g
         JOIN user_game ug ON g.game_id = ug.game_id
         WHERE ug.username = ?
@@ -139,21 +138,8 @@ public class DatabaseManager {
             try (ResultSet rsGames = stmtGames.executeQuery()) {
                 while (rsGames.next()) {
                     int gameId = rsGames.getInt("game_id");
-                    String gameDate = rsGames.getString("game_date");
-                    String farm = rsGames.getString("farm");
-                    int gold = rsGames.getInt("gold");
 
-                    // Get all players for this game
-                    List<String> players = new ArrayList<>();
-                    stmtPlayers.setInt(1, gameId);
-                    try (ResultSet rsPlayers = stmtPlayers.executeQuery()) {
-                        while (rsPlayers.next()) {
-                            players.add(rsPlayers.getString("username"));
-                        }
-                    }
-
-                    // Fill DTO
-                    SavedGameDetails details = new SavedGameDetails(gameDate, players, gold, farm, gameId);
+                    SavedGameDetails details = getSavedGameDetails(gameId);
 
                     games.add(details);
                 }
@@ -162,6 +148,91 @@ public class DatabaseManager {
 
         return games;
     }
+
+    /**
+     * get the details of a specific game
+     * @param gameId
+     * @return
+     * @throws SQLException
+     */
+    public static SavedGameDetails getSavedGameDetails(int gameId) throws SQLException {
+        String sqlGame = """
+        SELECT g.game_id, g.game_date, ug.username, ug.farm, ug.gold
+        FROM games g
+        JOIN user_game ug ON g.game_id = ug.game_id
+        WHERE g.game_id = ?
+    """;
+
+        SavedGameDetails details = new SavedGameDetails();
+        details.players = new ArrayList<>();
+        details.farms = new HashMap<>();
+        details.gold = new HashMap<>();
+
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement stmt = conn.prepareStatement(sqlGame)) {
+
+            stmt.setInt(1, gameId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                boolean firstRow = true;
+                while (rs.next()) {
+                    String username = rs.getString("username");
+
+                    if (firstRow) {
+                        details.gameId = rs.getInt("game_id");
+                        details.inGameDate = rs.getString("game_date");
+                        firstRow = false;
+                    }
+
+                    // Add player
+                    details.players.add(username);
+
+                    // Add farm and gold for this player
+                    details.farms.put(username, rs.getString("farm"));
+                    details.gold.put(username, rs.getInt("gold"));
+                }
+            }
+        }
+
+        return details;
+    }
+
+    /**
+     * get the save path of a specific game
+     * @param gameId
+     * @return
+     * @throws SQLException
+     */
+    public static String getSavedGamePath(int gameId) throws SQLException {
+        String sql = "SELECT save_path FROM games WHERE game_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, gameId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("save_path");
+                } else {
+                    return null; // or throw exception if game not found
+                }
+            }
+        }
+    }
+
+    public static boolean deleteGame(int gameId) throws SQLException {
+        String sql = "DELETE FROM games WHERE game_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, gameId);
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        }
+    }
+
 
     public static Account loadAccount(String username) {
         var sql = """

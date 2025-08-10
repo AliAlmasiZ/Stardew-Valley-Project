@@ -8,8 +8,6 @@ import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.PopUpMessage;
-import com.ap.stardew.views.widgets.WrapperWithBackground;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -157,10 +155,35 @@ public class MultiplayerScreen extends AbstractMenuScreen {
             SavedGameDetails game = games.get(i);
             Label dateLabel = new Label(game.inGameDate, customSkin);
             Label playersLabel = new Label("", customSkin);
-            Label goldLabel = new Label(Integer.toString(game.gold), customSkin, "inventoryQuantity");
-            Label farmLabel = new Label(game.farm, customSkin, "black");
+            Label goldLabel = new Label(Integer.toString(game.gold.get(ClientApp.getUsername())), customSkin, "inventoryQuantity");
+            Label farmLabel = new Label(game.farms.get(ClientApp.getUsername()), customSkin, "black");
 
             Button button = new Button(customSkin, "play");
+            button.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    JSONMessage request = new JSONMessage(JSONMessage.Type.lobby_command);
+                    request.put("command", "hostSavedGame");
+                    request.put("host_username", ClientApp.getUsername());
+                    request.put("saved_game_id", game.gameId);
+
+                    JSONMessage response = ClientApp.sendAndWaitForResponse(request, 1000);
+
+                    if(response == null || response.getFromBody("result") == null){
+                        new PopUpMessage("failed to create lobby").show(AbstractScreen.getFrontStage());
+                        return;
+                    }
+
+                    if(response.getFromBody("lobby_info") == null || !response.getFromBody("result",Result.class).isSuccessful()){
+                        new PopUpMessage(response.getFromBody("result",Result.class).message()).show(AbstractScreen.getFrontStage());
+                        return;
+                    }
+
+                    LobbyScreen lobbyScreen = new LobbyScreen(response.getFromBody("lobby_info"), true);
+                    dispose();
+                    ClientGame.getInstance().setScreen(lobbyScreen);
+                }
+            });
 
             StringBuilder playersString = new StringBuilder();
             for (int j = 0; j < game.players.size(); j++) {

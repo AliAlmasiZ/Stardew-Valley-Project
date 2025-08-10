@@ -20,9 +20,13 @@ import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.utils.TiledMapUtils;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Client;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +47,6 @@ public class GameController {
         game.setTomorrowWeather(Weather.SUNNY);
         game.setMainMap(worldMap);
 
-        GameSession gameSession = new GameSession(game);
 
         for (AccountInfo accountInfo : accountInfos) {
             Player player = new Player(accountInfo.getUsername());
@@ -58,13 +61,11 @@ public class GameController {
 
             EntityPlacementSystem.placeOnMap(player, new Position(5, 5),
                 player.getHouse().getComponent(InteriorComponent.class).getMap());
-
-            gameSession.addUserToSession(accountInfo.getUsername(), player);
         }
 
         game.initGame(null);
 
-        return gameSession;
+        return new GameSession(game);
     }
 
     public static JSONMessage handleGameReconnectRequest(JSONMessage req){
@@ -154,5 +155,19 @@ public class GameController {
 
     public static JSONMessage handleInGameVote(JSONMessage message){
         return new JSONMessage(JSONMessage.Type.command);
+    }
+
+    public static GameSession loadGame(int gameId) throws SQLException, FileNotFoundException {
+        String savedGamePath = DatabaseManager.getSavedGamePath(gameId);
+
+        if(savedGamePath == null) return null;
+
+        try (Input input = new Input(new FileInputStream(savedGamePath))) {
+            GameSession gameSession = new GameSession(ServerApp.getServer().getKryo().readObject(input, Game.class));
+
+            DatabaseManager.deleteGame(gameId);
+
+            return gameSession;
+        }
     }
 }

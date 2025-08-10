@@ -1,22 +1,15 @@
 package com.ap.stardew.models.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class SavedGameDetails {
     public String inGameDate;
     public List<String> players;
-    public int gold;
-    public String farm;
+    public Map<String, Integer> gold;
+    public Map<String, String> farms;
     public int gameId;
 
     public SavedGameDetails() {
-    }
-
-    public SavedGameDetails(String inGameDate, List<String> players, int gold, String farm, int gameId) {
-        this.inGameDate = inGameDate;
-        this.players = players;
-        this.gold = gold;
-        this.farm = farm;
-        this.gameId = gameId;
     }
 }

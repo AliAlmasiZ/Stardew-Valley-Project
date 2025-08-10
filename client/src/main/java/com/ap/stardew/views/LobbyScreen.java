@@ -96,6 +96,10 @@ public class LobbyScreen extends AbstractMenuScreen{
         mapActor = new MapActor(worldMap, GameAssetManager.getInstance().miniMap){
             @Override
             public void regionClicked(MapRegion mapRegion) {
+                if(currentLobby.getSavedGameDetails() != null){
+                    new PopUpMessage("can't change the farms").show(AbstractScreen.getFrontStage());
+                    return;
+                }
                 JSONMessage req = new JSONMessage(JSONMessage.Type.lobby_command);
 
                 req.put("command", "chooseMapRegion");
@@ -244,6 +248,27 @@ public class LobbyScreen extends AbstractMenuScreen{
             table.add(status).right();
 
             playerList.add(table).growX().row();
+        }
+        if(currentLobby.getSavedGameDetails()!= null){
+            outerLoop:
+            for (String player : currentLobby.getSavedGameDetails().players){
+                for (AccountInfo account : currentLobby.getAccounts()) {
+                    if(account.getUsername().equals(player)){
+                        continue outerLoop;
+                    }
+                }
+                Table table = new Table();
+
+                Label user = new Label(player, customSkin);
+                user.setColor(0, 0, 0, 1);
+                table.add(user).left().growX();
+
+                Label status = new Label("not joined", customSkin);
+                status.setColor(ColorPalette.red);
+                table.add(status).right();
+
+                playerList.add(table).growX().row();
+            }
         }
     }
 

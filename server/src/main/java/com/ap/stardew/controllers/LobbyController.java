@@ -10,10 +10,13 @@ import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.PlayerState;
+import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.player.Player;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +57,47 @@ public class LobbyController {
 
         return response;
     }
+    static public JSONMessage createSavedGameLobby(JSONMessage request) {
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+
+        String name = request.getFromBody("lobby_name");
+        String hostUsername = request.getFromBody("host_username");
+        int gameId = request.getFromBody("saved_game_id");
+
+        SavedGameDetails savedGameDetails = null;
+        try {
+            savedGameDetails = DatabaseManager.getSavedGameDetails(gameId);
+        } catch (SQLException e) {
+            Result result = new Result(false, "faild to retrieve game data from server");
+            response.put("result", result);
+            return response;
+        }
+
+        AccountInfo accountInfo = new AccountInfo(hostUsername);
+        Lobby lobby = new Lobby(name, accountInfo, savedGameDetails);
+
+        ClientConnectionThread connection = ServerApp.getConnectionByUsername(hostUsername);
+
+        if(connection == null){
+            Result result = new Result(false, "wtf");
+            response.put("result", result);
+            return response;
+        }
+
+        connection.getConnection().addListener(new Listener(){
+            @Override
+            public void disconnected(Connection connection) {
+                leaveLobby(lobby, accountInfo);
+                connection.removeListener(this);
+            }
+        });
+
+        response.put("lobby_info", lobby.getLobbyInfo());
+        Result result = new Result(true, "created lobby");
+        response.put("result", result);
+
+        return response;
+    }
 
     static public JSONMessage joinLobby(JSONMessage request) {
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
@@ -67,6 +111,13 @@ public class LobbyController {
             Result result = new Result(false, "There is no lobby with this ID");
             response.put("result", result);
             return response;
+        }
+        if(lobby.getSavedGameDetails() != null){
+            if(!lobby.getSavedGameDetails().players.contains(username)){
+                Result result = new Result(false, "This lobby is hosting a saved game which you didn't participate in.");
+                response.put("result", result);
+                return response;
+            }
         }
         else if(lobby.getCurrentPlayers() >= lobby.getMaxPlayers()) {
             Result result = new Result(false, "Lobby is full");
@@ -82,6 +133,9 @@ public class LobbyController {
         }
 
         AccountInfo accountInfo = new AccountInfo(username);
+        if(lobby.getLobbyInfo().getSavedGameDetails() != null){
+            accountInfo.setSelectedMapRegion(lobby.getSavedGameDetails().farms.get(username));
+        }
         lobby.addAccountInfo(accountInfo);
         Result result = new Result(true, "you joined lobby " + lobbyId);
         response.put("result", result);
@@ -313,9 +367,23 @@ public class LobbyController {
             }
         }
 
-        GameSession session = GameController.createGame(accounts);
-        GameThread gameThread = new GameThread(session);
+        GameSession session;
+        if(lobby.getSavedGameDetails() == null){
+            session = GameController.createGame(accounts);
+        }else{
+            try {
+                session = GameController.loadGame(lobby.getSavedGameDetails().gameId);
 
+                if(session == null) throw new RuntimeException();
+            } catch (Exception e){
+                System.out.println(e);
+                Result result = new Result(false, "failed to load the game");
+                res.put("result", result);
+                return res;
+            }
+        }
+
+        GameThread gameThread = new GameThread(session);
 
         for (ClientConnectionThread client : gameThread.getClients()) {
             client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());

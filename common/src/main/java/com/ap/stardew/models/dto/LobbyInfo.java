@@ -1,6 +1,7 @@
 package com.ap.stardew.models;
 
 import com.ap.stardew.models.dto.AccountInfo;
+import com.ap.stardew.models.dto.SavedGameDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class LobbyInfo implements Serializable {
     private String lobbyName;
     private String hostUsername;
     private List<AccountInfo> accounts;
+    private SavedGameDetails savedGameDetails;
     private int maxPlayers;
     private boolean isPrivate;
 
@@ -76,5 +78,13 @@ public class LobbyInfo implements Serializable {
 
     public int getCurrentPlayers() {
         return accounts.size();
+    }
+
+    public SavedGameDetails getSavedGameDetails() {
+        return savedGameDetails;
+    }
+
+    public void setSavedGameDetails(SavedGameDetails savedGameDetails) {
+        this.savedGameDetails = savedGameDetails;
     }
 }

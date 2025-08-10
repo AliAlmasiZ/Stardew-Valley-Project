@@ -29,6 +29,9 @@ public class ServerConnectionController {
                 case "host" -> {
                     return LobbyController.createLobby(message);
                 }
+                case "hostSavedGame" -> {
+                    return LobbyController.createSavedGameLobby(message);
+                }
                 case "join" -> {
                     return LobbyController.joinLobby(message);
                 }
