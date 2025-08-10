@@ -273,10 +273,9 @@ public class PlayerController implements InputProcessor {
         }
 
         //Todo: that walkable check i wrote is ass
-        Tile destTile = ClientApp.getActiveGame().getActiveMap().
-            getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
 
-        if((!up && !down && !right && !left) || destTile == null) {
+
+        if((!up && !down && !right && !left)) {
             if(player.getAction() == Player.Action.WALKING){
                 JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
                 message.put("command", "update_player_action");
@@ -285,19 +284,10 @@ public class PlayerController implements InputProcessor {
                 player.setAction(Player.Action.IDLE);
             }
         }else {
-            boolean canWalk = destTile.isWalkable();
-            Entity entity = null;
-            if ((entity = destTile.getContent()) != null) {
-                Placeable placeable = entity.getComponent(Placeable.class);
-                if (!placeable.isWalkable() || !destTile.isWalkable()) {
-                    canWalk = false;
-                }
-                if(entity instanceof Door door){
-                    EntityPlacementSystem.placeOnMap(player, door.getDestination(), door.getDestination().getMap());
-                    canWalk = true;
-                }
-            }
-            if(canWalk){
+            MovementHandler.MoveResult moveResult = MovementHandler.tryMove(player, direction);
+            direction.set(moveResult.adjustedDirection);
+
+            if(moveResult.canMove){
                 JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
                 message.put("command", "player_move");
                 message.put("direction", direction);
