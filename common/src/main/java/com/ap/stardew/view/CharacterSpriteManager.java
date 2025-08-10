@@ -30,7 +30,7 @@ public class CharacterSpriteManager {
 
     private Direction lastDir = Direction.DOWN;
 
-    private final Map<Player.Action, Map<Direction, VariableDurationAnimation<TextureRegion>>> animations = new HashMap<>();
+    public final Map<Player.Action, Map<Direction, VariableDurationAnimation<TextureRegion>>> animations = new HashMap<>();
     private final Map<Player.Action, Map<Direction, VariableDurationAnimation<ToolFrameInfo>>> toolFrames = new HashMap<>();
 
     private final TextureRegion[][] baseFrames;

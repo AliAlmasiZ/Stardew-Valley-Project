@@ -1,5 +1,6 @@
 package com.ap.stardew.models.entities.workstations;
 
+import com.ap.stardew.models.player.Player;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.models.App;
@@ -98,10 +99,10 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
         return activeProcess.isCompleted();
     }
 
-    public Result addProcess(String name) {
+    public Result addProcess(String name, Player player) {
         for (Recipe recipe : recipes) {
             if(recipe.getName().equals(name)) {
-                Inventory inventory = App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class);
+                Inventory inventory = player.getComponent(Inventory.class);
                 /* I hate this part :/ */
                 if(materials.get(name) != null) {
                     List<String> ingredients = materials.get(name);
@@ -129,5 +130,13 @@ public class ArtisanComponent extends EntityComponent implements Serializable {
             }
         }
         return new Result(false, "This artisan doesn't have recipe with this name");
+    }
+
+    public float getProcessProgress(){
+        return activeProcess.getProgress();
+    }
+
+    public List<Recipe> getRecipes() {
+        return new ArrayList<>(recipes);
     }
 }

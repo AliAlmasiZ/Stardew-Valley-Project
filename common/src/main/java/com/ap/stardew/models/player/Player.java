@@ -646,7 +646,7 @@ public class Player extends Entity implements Serializable {
     public void loadFromState(PlayerState state) {
         this.getEnergy().setAmount(state.energy);
         this.setPosition(state.position.x, state.position.y);
-        this.action = state.action; //WTF
+        this.action = state.action;
 
     }
 

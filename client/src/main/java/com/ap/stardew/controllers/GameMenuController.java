@@ -381,6 +381,13 @@ public class GameMenuController implements Controller {
         return tool.getComponent(Useable.class).use(map.getTileByPosition(position));
     }
 
+    public Result useArtisan(Entity artisan, String itemName) {
+        ArtisanComponent artisanComponent = artisan.getComponent(ArtisanComponent.class);
+        if (artisanComponent.isInProcess())
+            return new Result(false, "another recipe already in process");
+        return artisanComponent.addProcess(itemName, ClientApp.getActiveGame().getCurrentPlayer());
+    }
+
     public Result useArtisan(String artisanName, String itemName) {
         Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
@@ -394,10 +401,7 @@ public class GameMenuController implements Controller {
             Tile tile = game.getActiveMap().getTileByPosition(y + dir[0], x + dir[1]);
             if (tile == null) continue;
             if (tile.getContent() != null && StringUtils.isNamesEqual(tile.getContent().getEntityName(), artisanName)) {
-                ArtisanComponent artisan = tile.getContent().getComponent(ArtisanComponent.class);
-                if (artisan.isInProcess())/* TODO: should fix in phase2 (what if there is two artisan near player)*/
-                    return new Result(false, "another recipe already in process");
-                return artisan.addProcess(itemName);
+                return useArtisan(tile.getContent(), itemName);
             }
         }
         return new Result(false, "There isn't any " + artisanName + " around you!");
@@ -2265,14 +2269,25 @@ public class GameMenuController implements Controller {
         }
 
 
-        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
-        Entity tileEntity = tile.getContent();
 
-        if (tileEntity != null) {
-            if (tileEntity.getEntityName().equals("Fridge")) {
-                screen.showStorage(tileEntity.getComponent(Inventory.class));
-            } else if (tileEntity.getEntityName().equals("shopCounter")) {
-                screen.openShopMenu(tile.getMap().getBuilding().getComponent(Shop.class));
+
+        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
+        if(tile != null && tile.getContent() != null) {
+            Entity tileEntity = tile.getContent();
+
+            /* -- Check Artisans -- */
+            if(tileEntity.hasTag(EntityTag.ARTISAN)) {
+                screen.openArtisanMenu(tileEntity);
+                return;
+            }
+            /* -- End of Check Artisans -- */
+
+            if (tileEntity != null) {
+                if (tileEntity.getEntityName().equals("Fridge")) {
+                    screen.showStorage(tileEntity.getComponent(Inventory.class));
+                } else if (tileEntity.getEntityName().equals("shopCounter")) {
+                    screen.openShopMenu(tile.getMap().getBuilding().getComponent(Shop.class));
+                }
             }
         }
     }

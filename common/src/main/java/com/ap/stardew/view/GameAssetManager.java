@@ -62,6 +62,7 @@ public class GameAssetManager extends AssetManager {
     public final Texture emptyTexture;
     public final Texture smallPlus;
     public final Texture miniMap;
+    public final Texture success, error;
 
     public final Texture tileSelectionBox;
 
@@ -125,6 +126,10 @@ public class GameAssetManager extends AssetManager {
         redCross = new Texture("Content/redCross.png");
         shadow = new Texture("Content/shadow.png");
         smallPlus = new Texture("Content/smallPlus.png");
+
+        success = new Texture("Content/success.png");
+        error = new Texture("Content/error.png");
+
 
         miniMap = new Texture("Content/miniMap/map.png");
 

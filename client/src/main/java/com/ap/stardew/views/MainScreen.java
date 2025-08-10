@@ -9,6 +9,7 @@ import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.enums.Weather;
+import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.records.GameStartingDetails;
@@ -122,6 +123,25 @@ public class MainScreen extends AbstractMenuScreen {
                     return;
 
                 ClientGame.getInstance().setScreen(new LobbyScreen(lobbyInfo, true));
+
+                WorldMap worldMap = TiledMapUtils.getRegionData("./Content(unpacked)/Maps/untitled.tmx");
+                MapRegion region = null;
+                for (MapRegion mapRegion : worldMap.getRegions()) {
+                    if(mapRegion.getTilesNum() == 0) continue;
+                    region = mapRegion;
+                    break;
+                }
+
+                JSONMessage selectMap = new JSONMessage(JSONMessage.Type.lobby_command);
+                selectMap.put("command", "chooseMapRegion");
+                selectMap.put("token", ClientApp.getToken());
+                selectMap.put("lobby_id", lobbyInfo.getLobbyId());
+                selectMap.put("mapRegion", region.getName());
+
+                ClientApp.sendAndWaitForResponse(selectMap, 500);
+
+
+
                 JSONMessage m1 = new JSONMessage(JSONMessage.Type.lobby_command);
                 m1.put("command", "startGame");
                 m1.put("lobby_id", lobbyInfo.getLobbyId());

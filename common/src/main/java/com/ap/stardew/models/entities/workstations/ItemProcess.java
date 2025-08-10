@@ -44,4 +44,9 @@ public class ItemProcess implements Serializable {
     public Entity getOutput() {
         return output;
     }
+
+    public float getProgress() {
+        // TODO: implement this after fix date on server side
+        return 0.5f; // temp
+    }
 }
