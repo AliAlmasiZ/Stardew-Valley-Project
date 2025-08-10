@@ -3640,9 +3640,11 @@ Content/Animal/sheep/idle.png
 Content/Animal/sheep/normal.png
 Content/Animal/sheep/pet.png
 Content/Animal/sheep/walking.png
+Content/BorderedTable/0010.9.png
 Content/BorderedTable/0010.png
 Content/BorderedTable/0011.9.png
 Content/BorderedTable/0011.png
+Content/BorderedTable/0021.9.png
 Content/BorderedTable/0021.png
 Content/BorderedTable/0110.9.png
 Content/BorderedTable/0110.png
@@ -5412,6 +5414,8 @@ games/2025-08-10/game_2025-08-10_20-59-36_8acd041d.sav
 games/2025-08-10/game_2025-08-10_21-15-06_fc3954a8.sav
 games/2025-08-10/game_2025-08-10_21-25-37_e023b225.sav
 games/2025-08-10/game_2025-08-10_22-13-24_c0056a03.sav
+games/2025-08-10/game_2025-08-10_23-00-46_adec7773.sav
+games/2025-08-10/game_2025-08-10_23-24-38_005459d1.sav
 shaders/outline.frag
 shaders/outline.vert
 skin/Stardew Valley Skin/Brawl.fnt

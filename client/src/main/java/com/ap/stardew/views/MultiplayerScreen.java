@@ -130,12 +130,16 @@ public class MultiplayerScreen extends AbstractMenuScreen {
 
         JSONMessage jsonMessage = ClientApp.sendAndWaitForResponse(request, 2000);
 
-        if(jsonMessage == null || jsonMessage.getFromBody("result") == null){
+        if(jsonMessage == null || jsonMessage.getFromBody("result") == null || jsonMessage.getFromBody("games") == null){
             new PopUpMessage("failed to retrieve saved games").show(AbstractMenuScreen.getFrontStage());
             return;
         }
         if(!jsonMessage.getFromBody("result", Result.class).isSuccessful()){
             new PopUpMessage(jsonMessage.getFromBody("result", Result.class).message()).show(AbstractMenuScreen.getFrontStage());
+            return;
+        }
+        if(jsonMessage.getFromBody("games", ArrayList.class).isEmpty()){
+            new PopUpMessage("you have no saved games").show(AbstractMenuScreen.getFrontStage());
             return;
         }
 

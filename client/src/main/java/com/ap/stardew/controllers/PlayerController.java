@@ -218,7 +218,7 @@ public class PlayerController implements InputProcessor {
 
     public void update(float delta) {
         processInput(delta);
-        player.update(delta);
+//        player.update(delta);
 
         equippedItemState = EquippedItemState.NONE;
 

@@ -17,13 +17,12 @@ public class PopUpMessage extends Table {
     private Table wrapperTable;
     public PopUpMessage(){
         setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
+
     }
     public PopUpMessage(String message){
         this();
 
         Label label = new Label(message, GameAssetManager.getInstance().getCustomSkin());
-
-
 
         if(label.getPrefWidth() < 200){
             add(label).grow().width(label.getPrefWidth());
