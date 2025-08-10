@@ -1361,17 +1361,18 @@ public class GameMenuController implements Controller {
             return new Result(false, "you can't gift yourself!");
         }
 
-        if (!game.checkPlayerDistance(currentPlayer, giftedPlayer)) {
-            return new Result(false, giftedPlayer.getEntityName() + " is out of distance");
-        }
+        //TODO: I commented them just for test
+//        if (!game.checkPlayerDistance(currentPlayer, giftedPlayer)) {
+//            return new Result(false, giftedPlayer.getEntityName() + " is out of distance");
+//        }
 
         if (!App.entityRegistry.doesEntityExist(itemName)) {
             return new Result(false, "Item not found");
         }
 
-        if (game.getFriendshipWith(giftedPlayer).getLevel() == 0) {
-            return new Result(false, "Don't be cousin too soon:)");
-        }
+//        if (game.getFriendshipWith(giftedPlayer).getLevel() == 0) {
+//            return new Result(false, "Don't be cousin too soon:)");
+//        }
 
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
         if (!currentPlayer.getComponent(Inventory.class).doesHaveItem(itemName, amount)) {

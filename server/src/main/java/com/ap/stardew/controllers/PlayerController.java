@@ -13,6 +13,7 @@ import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
+import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 
@@ -135,7 +136,16 @@ public class PlayerController {
     /***************************************** Chat **********************************************/
     public void sendPrivateMessage(JSONMessage jsonMessage) {
         String receiverName = jsonMessage.getFromBody("receiver");
+        Message message = jsonMessage.getFromBody("message");
         clientConnectionThread.gameThread.getClientByUsername(receiverName).player.addMessage(jsonMessage.getFromBody("message"));
+
+        PlayerFriendship playerFriendship = clientConnectionThread.gameThread.getGame()
+            .getFriendshipBetween(message.getSender(), message.getReceiver());
+
+        if (!playerFriendship.isHadMessageToday()) {
+            playerFriendship.setHadMessageToday(true);
+            playerFriendship.addXp(20);
+        }
 
         clientConnectionThread.gameThread.sendTCP(jsonMessage,jsonMessage.getFromBody("receiver"));
     }

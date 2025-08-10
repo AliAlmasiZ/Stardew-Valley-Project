@@ -416,6 +416,12 @@ public class Game implements Serializable {
         return null;
     }
 
+    public PlayerFriendship getFriendshipBetween(String friend1N, String friend2N) {
+        Player friend1 = findPlayer(friend1N);
+        Player friend2 = findPlayer(friend2N);
+        return getFriendshipBetween(friend1, friend2);
+    }
+
     public Quest findQuest(int questId) {
         for (Quest quest : quests) {
             if (quest.getId() == questId) {

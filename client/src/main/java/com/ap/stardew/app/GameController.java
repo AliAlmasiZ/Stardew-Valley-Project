@@ -11,6 +11,7 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
+import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.LobbyScreen;
 import com.ap.stardew.views.TradeDialog;
@@ -283,6 +284,13 @@ public class GameController {
         Message message = new Message(ClientApp.getActiveGame().getDate(), text, player, ClientApp.getActiveGame().getCurrentPlayer());
         jsonMessage.put("message", message);
 
+        PlayerFriendship playerFriendship = ClientApp.getActiveGame().getFriendshipBetween(username, ClientApp.getActiveGame().getCurrentPlayer().getUsername());
+
+        if (!playerFriendship.isHadMessageToday()) {
+            playerFriendship.setHadMessageToday(true);
+            playerFriendship.addXp(20);
+        }
+
         gameScreen.chatDialog.updateMessage(message.getReceiver(), message);
 
         ClientApp.sendTCP(jsonMessage);
@@ -298,6 +306,13 @@ public class GameController {
         ClientApp.getActiveGame().getCurrentPlayer().addMessage(message);
 
         gameScreen.chatDialog.updateMessage(message.getSender(), message);
+
+        PlayerFriendship playerFriendship = ClientApp.getActiveGame().getFriendshipBetween(message.getSender(), message.getReceiver());
+
+        if (!playerFriendship.isHadMessageToday()) {
+            playerFriendship.setHadMessageToday(true);
+            playerFriendship.addXp(20);
+        }
 
         if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))  gameScreen.showTemporaryMessage(
             "\"" + message.getSender() + "\" sent you a message!" ,
@@ -359,6 +374,8 @@ public class GameController {
         jsonMessage.put("command", "gift_player");
         jsonMessage.put("receiver", player.getUsername());
         jsonMessage.put("gift", gift);
+
+        ClientApp.sendTCP(jsonMessage);
     }
 
     public static void receiveGift(JSONMessage jsonMessage) {
