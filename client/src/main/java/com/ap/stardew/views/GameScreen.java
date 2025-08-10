@@ -2,8 +2,12 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.models.crafting.Ingredient;
+import com.ap.stardew.models.crafting.Recipe;
+import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.app.GameController;
-import com.ap.stardew.controllers.TradeMenuController;
+import com.ap.stardew.models.entities.RenderFunction;
+import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
@@ -69,7 +73,7 @@ public class GameScreen extends AbstractScreen {
 
     private GameMenuController controller;
     private PlayerController playerController;
-    private Player player;
+    public Player player;
     private Sprite currentPlayerSprite;
 
     //Renderers
@@ -94,6 +98,10 @@ public class GameScreen extends AbstractScreen {
 
     // Trade
     public TradeDialog tradeDialog;
+
+    // Chat
+    public ChatDialog chatDialog;
+
 
     private final Game game;
 
@@ -159,14 +167,12 @@ public class GameScreen extends AbstractScreen {
 
         //Buttons at top right
         int buttonWidth = 20;
+        int buttonHeight = 20;
         Table buttonTable = new Table();
+
         Button button = new Button(customSkin);
         button.setWidth(buttonWidth);
-        button.setHeight(buttonWidth);
-        buttonTable.add(button).width(buttonWidth).height(buttonWidth);
-        buttonTable.top().left().pad(15);
-        stack.add(buttonTable);
-
+        button.setHeight(buttonHeight);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -174,39 +180,29 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
+        Image chatButton = new Image(new Texture("Content/Bale.png"));
+        chatButton.setWidth(buttonWidth);
+        chatButton.setHeight(buttonHeight);
+        chatButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                chatDialog.show();
+            }
+        });
+
+
+        buttonTable.add(button).width(buttonWidth).height(buttonHeight).pad(5);
+        buttonTable.add(chatButton).width(buttonWidth).height(buttonHeight).pad(5);
+        buttonTable.top().left().pad(15);
+        stack.add(buttonTable);
+
         //NPC
         initNPCDialogs();
 
+        chatDialog = new ChatDialog(ClientApp.getActiveGame().getPlayers(),uiStage);
 
         //TODO: remove this later
         //**************************************
-//        controller.cheatGiveItem("Training Rod", 1);
-        controller.cheatGiveItem("Hay", 500);
-        controller.cheatGiveItem("Wood", 16);
-//        controller.cheatGiveItem("Axe", 1);
-//        controller.cheatGiveItem("Pickaxe", 1);
-//        controller.cheatGiveItem("Hoe", 1);
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatGiveItem("Apple", 10);
-//        controller.cheatGiveItem("Bee House", 1);
-//        controller.cheatGiveItem("Frozen Tear", 10);
-//        controller.cheatGiveItem("Cheese Press", 1);
-//        controller.cheatGiveItem("Keg", 1);
-//        controller.cheatGiveItem("Dehydrator", 1);
-//        controller.cheatGiveItem("Charcoal Klin", 1);
-//        controller.cheatGiveItem("Loom", 1);
-//        controller.cheatGiveItem("Mayonnaise Machine", 1);
-//        controller.cheatGiveItem("Oil Maker", 1);
-//        controller.cheatGiveItem("Preserves Jar", 1);
-//        controller.cheatGiveItem("Fish Smoker", 1);
-//        controller.cheatGiveItem("Furnace", 1);
-//
-//        controller.cheatGiveItem("Hay", 500);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
-//        controller.cheatAddSkill("fishing", 200);
 
 //        Player player = ClientApp.getActiveGame().getCurrentPlayer();
 //        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
@@ -268,6 +264,7 @@ public class GameScreen extends AbstractScreen {
     public void show() {
         super.show();
         setGameInput();
+        initialCheats();
     }
 
     @Override
@@ -350,6 +347,38 @@ public class GameScreen extends AbstractScreen {
         }
         batch.end();
 
+        /* --- Artisan Progress Bar --- */
+        Gdx.gl.glEnable(GL32.GL_BLEND);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (Entity entity : activeMap.getEntitiesWithComponent(ArtisanComponent.class)) {
+            ArtisanComponent artisanComponent = entity.getComponent(ArtisanComponent.class);
+            if (artisanComponent.isInProcess()) {
+                PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
+                float progress = artisanComponent.getProcessProgress();
+
+                RenderFunction renderFunction = entity.getComponent(Renderable.class).getRenderFunction();
+
+
+                float barWidth = 32;
+                float barHeight = 4;
+                float barX = positionComponent.getX() + (renderFunction.getCurrentTexture(entity).getWidth() / 2f) - (barWidth / 2f);
+                float barY = positionComponent.getY() + renderFunction.getCurrentTexture(entity).getHeight() + 2;
+
+                // Draw background of the bar
+                shapeRenderer.setColor(Color.DARK_GRAY);
+                shapeRenderer.rect(barX, barY, barWidth, barHeight);
+
+                // Draw filled portion of the bar
+                shapeRenderer.setColor(Color.LIME);
+                shapeRenderer.rect(barX, barY, barWidth * progress, barHeight);
+            }
+        }
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL32.GL_BLEND);
+        /* --- Artisan Progress Bar --- */
+
         mapRenderManager.renderFrontLayers(renderer, activeMap);
 
         gameStage.act(delta);
@@ -384,46 +413,35 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-
+        super.pause();
     }
 
     @Override
     public void resume() {
-
+        super.resume();
     }
+
 
     @Override
     public void hide() {
-
+        super.hide();
     }
 
     @Override
     public void dispose() {
+        super.dispose();
         gameStage.dispose();
     }
 
     public void showTemporaryMessage(String message, float duration, Color color) {
         Label label = new Label(message, customSkin);
-        label.setPosition(
-            (uiStage.getWidth() - label.getWidth()) / 2f,
-            (uiStage.getHeight() - label.getHeight() - 50)
-        );
 
         label.setColor(color);
         label.scaleBy(2);
-        label.getColor().a = 0; // start invisible
 
-
-        // Sequence of actions: fade in → wait → fade out → remove
-        label.addAction(Actions.sequence(
-            Actions.fadeIn(0.5f),
-            Actions.delay(duration),
-            Actions.fadeOut(0.5f),
-            Actions.removeActor()
-        ));
-
-        uiStage.addActor(label);
-        System.out.println(message); // TODO: REMOVE IT
+        PopUpMessage popUpMessage = new PopUpMessage(PopUpMessage.PopUpMessageType.TOP_CENTER);
+        popUpMessage.add(label);
+        popUpMessage.show(uiStage);
     }
 
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {
@@ -1125,7 +1143,7 @@ public class GameScreen extends AbstractScreen {
                     return;
                 }
 
-                App.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
+                ClientApp.getActiveGame().getCurrentPlayer().getComponent(Inventory.class).addItem(gift);
                 giftInventory.getItem(gift);
                 amountField.setText("");
 
@@ -1150,7 +1168,7 @@ public class GameScreen extends AbstractScreen {
                     }
 
                 } else if (giftedOne instanceof Player) {
-                    Result result = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
+                    Result result = controller.canGiveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
                     if (!result.isSuccessful()) {
                         errorLabel.setVisible(true);
                         errorLabel.setText(result.message());
@@ -1159,6 +1177,7 @@ public class GameScreen extends AbstractScreen {
                         errorLabel.setVisible(true);
                         errorLabel.setColor(Color.GREEN);
                         errorLabel.setText(result.message());
+                        GameController.giftPlayer((Player) giftedOne, gift.getEntityName(), amount);
                         return;
                     }
                 }
@@ -1290,9 +1309,9 @@ public class GameScreen extends AbstractScreen {
         Player currentPlayer = game.getCurrentPlayer();
         ArrayList<PlayerFriendship> playerFriendships = game.getCurrentPlayerFriendships();
         for (PlayerFriendship playerFriendship : playerFriendships) {
-            Player friend = playerFriendship.getFriends().get(1);
+            Player friend = game.getPlayerByUsername(playerFriendship.getFriends().get(1));
             if (friend.equals(currentPlayer)) {
-                friend = playerFriendship.getFriends().get(0);
+                friend = game.getPlayerByUsername(playerFriendship.getFriends().get(0));
             }
 
             Label label = new Label(friend.getUsername(), customSkin);
@@ -1316,9 +1335,9 @@ public class GameScreen extends AbstractScreen {
                 }
             });
 
-            friendshipTable.add(label);
-            friendshipTable.add(giftImage).pad(5);
-            friendshipTable.add(friendshipDetail).pad(5);
+            friendshipTable.add(label).left();
+            friendshipTable.add(giftImage).right().pad(5);
+            friendshipTable.add(friendshipDetail).right().pad(5).row();
 
         }
 
@@ -1395,7 +1414,7 @@ public class GameScreen extends AbstractScreen {
                 Table contentTable = new Table(customSkin);
                 ArrayList<TradeHistoryItem> trades = currentPlayer.getTradeHistory();
 
-// 1) Header row
+                // 1) Header row
                 contentTable.add("ID").pad(5).center();
                 contentTable.add("Sender").pad(5).center();
                 contentTable.add("Receiver").pad(5).center();
@@ -1405,31 +1424,31 @@ public class GameScreen extends AbstractScreen {
                 contentTable.add("Date").pad(5).center();
                 contentTable.row();
 
-// 2) Sort trades from newest to oldest by ID (or by date if you prefer)
+                // 2) Sort trades from newest to oldest by ID (or by date if you prefer)
                 trades.sort((a, b) -> Integer.compare(b.getId(), a.getId()));
 
-// 3) Create an inner table for the rows
+                // 3) Create an inner table for the rows
                 Table rowsTable = new Table(customSkin);
                 for (TradeHistoryItem t : trades) {
-                    rowsTable.add(String.valueOf(t.getId())).pad(4);
-                    rowsTable.add(t.getSender().getUsername()).pad(4);
-                    rowsTable.add(t.getReceiver().getUsername()).pad(4);
-                    rowsTable.add(t.getSenderInventory().toString()).pad(4);
-                    rowsTable.add(t.getReceiverInventory().toString()).pad(4);
-                    rowsTable.add(t.isAccepted() ? "Yes" : "No").pad(4);
-                    rowsTable.add(t.getDate().toString()).pad(4);
+                    rowsTable.add(String.valueOf(t.getId())).pad(5);
+                    rowsTable.add(t.getSender().getUsername()).pad(5);
+                    rowsTable.add(t.getReceiver().getUsername()).pad(5);
+                    rowsTable.add(t.getSenderInventory().toString()).pad(5);
+                    rowsTable.add(t.getReceiverInventory().toString()).pad(5);
+                    rowsTable.add(t.isAccepted() ? "Yes" : "No").pad(5);
+                    rowsTable.add(t.getDate().toString()).pad(5);
                     rowsTable.row();
                 }
 
-// 4) Wrap rows into a ScrollPane and add it
+                // 4) Wrap rows into a ScrollPane and add it
                 ScrollPane scroll = new ScrollPane(rowsTable);
                 scroll.setFadeScrollBars(true);
                 scroll.setScrollingDisabled(false, false);
 
-// Make the scroll take up all available space
+                // Make the scroll take up all available space
                 contentTable.add(scroll).colspan(7).expand().fill();
 
-// 5) Finally show it
+                // 5) Finally show it
                 showTable(contentTable);
 
             }
@@ -1486,6 +1505,217 @@ public class GameScreen extends AbstractScreen {
 
     }
 
+
+    /* --- Crafting --- */
+    public void openCraftingMenu() {
+        InGameDialog craftingDialog = new InGameDialog(uiStage);
+        craftingDialog.pad(10);
+
+
+
+        Table mainTable = new Table();
+        mainTable.top().left();
+
+        Table recipeTable = new Table();
+        recipeTable.top().pad(5);
+
+        int itemsPerRow = 5;
+        int itemsCount = 0;
+
+        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(RecipeType.CRAFTING);
+
+        for (Recipe recipe : recipes) {
+            String recipeName = recipe.getName();
+            boolean isUnlocked = player.hasRecipe(recipe);
+
+            Image itemImage = new Image(recipe.getEntityTexture());
+            itemImage.setScaling(Scaling.fit);
+
+            Table recipeButton = new Table();
+            recipeButton.setBackground(customSkin.getDrawable("frameNinePatch2"));
+            recipeButton.add(itemImage).width(32).height(32).pad(5);
+
+            if(!isUnlocked) {
+                recipeButton.setColor(Color.GRAY);
+                itemImage.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+            } else {
+                recipeButton.setColor(Color.WHITE);
+                itemImage.setColor(Color.WHITE);
+            }
+
+            //TODO : Make ToolTip contents graphical
+            ToolTip toolTip = new ToolTip(recipeButton);
+            Label toolTipLabel = new Label(recipeName, customSkin);
+            toolTipLabel.setText(toolTipLabel.getText() + (isUnlocked ? " (Unlocked)" : " (Locked)"));
+            toolTipLabel.setText(toolTipLabel.getText() + "\n" + "Ingredients:\n");
+            toolTipLabel.setAlignment(Align.left);
+
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                toolTipLabel.setText(toolTipLabel.getText() + "- " + ingredient.toString() + "\n");
+            }
+            toolTip.add(toolTipLabel).pad(5).grow();
+
+            recipeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result result = controller.craftingCraft(recipeName); // TODO: do it on server side
+                    Image icon;
+                    if(result.isSuccessful())
+                        icon = new Image(GameAssetManager.getInstance().success);
+                    else
+                        icon = new Image(GameAssetManager.getInstance().error);
+
+                    PopUpMessage popUp = new PopUpMessage();
+                    Label label = new Label(result.message(), customSkin);
+                    popUp.add(icon).size(16,16).pad(5);
+                    popUp.add(label).pad(10);
+                    popUp.show(uiStage);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    toolTip.show();
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    toolTip.hide();
+                }
+            });
+
+            recipeTable.add(recipeButton).size(60, 60).pad(2);
+            itemsCount++;
+
+            if(itemsCount % itemsPerRow == 0) {
+                recipeTable.row();
+            }
+        }
+
+        ScrollPane recipeScrollPane = new ScrollPane(recipeTable, customSkin);
+
+
+        /* -- Show Player's Inventory -- */
+        Table inventoryPanel = new Table();
+        inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
+        inventoryPanel.add(new InventoryGrid(player.getComponent(Inventory.class), 10)).grow();
+
+        mainTable.add(recipeScrollPane).colspan(2).fillX().height(200).row();
+        mainTable.add(inventoryPanel).colspan(2).grow().padTop(10);
+
+
+        craftingDialog.add(mainTable);
+        craftingDialog.show();
+    }
+
+    /* --- Cooking --- */
+    public void openCookingMenu() {
+        InGameDialog cookingDialog = new InGameDialog(uiStage);
+        cookingDialog.pad(10);
+
+
+
+
+        Table mainTable = new Table();
+        mainTable.top().left();
+
+        Table recipeTable = new Table();
+        recipeTable.top().pad(5);
+
+        int itemsPerRow = 5;
+        int itemsCount = 0;
+
+
+        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(RecipeType.COOKING);
+
+        for (Recipe recipe : recipes) {
+            String recipeName = recipe.getName();
+            boolean isUnlocked = player.hasRecipe(recipe);
+
+            Image itemImage = new Image(recipe.getEntityTexture());
+            itemImage.setScaling(Scaling.fit);
+
+            Table recipeButton = new Table();
+            recipeButton.setBackground(customSkin.getDrawable("frameNinePatch2"));
+            recipeButton.add(itemImage).width(32).height(32).pad(5);
+
+            if(!isUnlocked) {
+                recipeButton.setColor(Color.GRAY);
+                itemImage.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+            } else {
+                recipeButton.setColor(Color.WHITE);
+                itemImage.setColor(Color.WHITE);
+            }
+
+            //TODO : Make ToolTip contents graphical
+            ToolTip toolTip = new ToolTip(recipeButton);
+            Label toolTipLabel = new Label(recipeName, customSkin);
+            toolTipLabel.setText(toolTipLabel.getText() + (isUnlocked ? " (Unlocked)" : " (Locked)"));
+            toolTipLabel.setText(toolTipLabel.getText() + "\n" + "Ingredients:\n");
+            toolTipLabel.setAlignment(Align.left);
+
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                toolTipLabel.setText(toolTipLabel.getText() + "- " + ingredient.toString() + "\n");
+            }
+            toolTip.add(toolTipLabel).pad(5).grow();
+
+            recipeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result result = controller.cookingPrepare(recipeName); // TODO: do it on server side
+                    Image icon;
+                    if(result.isSuccessful())
+                        icon = new Image(GameAssetManager.getInstance().success);
+                    else
+                        icon = new Image(GameAssetManager.getInstance().error);
+
+                    PopUpMessage popUp = new PopUpMessage();
+                    Label label = new Label(result.message(), customSkin);
+                    popUp.add(icon).size(16,16).pad(5);
+                    popUp.add(label).pad(10);
+                    popUp.show(uiStage);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    toolTip.show();
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    toolTip.hide();
+                }
+            });
+
+            recipeTable.add(recipeButton).size(60, 60).pad(2);
+            itemsCount++;
+
+            if(itemsCount % itemsPerRow == 0) {
+                recipeTable.row();
+            }
+        }
+
+        ScrollPane recipeScrollPane = new ScrollPane(recipeTable, customSkin);
+
+
+        /* -- Show Player's Inventory -- */
+        Table inventoryPanel = new Table();
+        inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
+        inventoryPanel.add(new InventoryGrid(player.getComponent(Inventory.class), 10)).grow();
+
+        mainTable.add(recipeScrollPane).colspan(2).fillX().height(200).row();
+        mainTable.add(inventoryPanel).colspan(2).grow().padTop(10);
+
+        cookingDialog.add(mainTable).grow();
+        cookingDialog.show();
+    }
+
+
+    /* --- Artisan Menu --- */
+    public void openArtisanMenu(Entity artisanEntity) {
+        ArtisanMenuContent content = new ArtisanMenuContent(this, artisanEntity);
+        InGameDialog artisanDialog = new InGameDialog(uiStage);
+        artisanDialog.add(content).grow();
+        artisanDialog.show();
+
+    }
+
+
     public void openPlayerGiftMenu(Player friend) {
         InGameDialog dialog = new InGameDialog(uiStage);
 
@@ -1494,22 +1724,109 @@ public class GameScreen extends AbstractScreen {
         // send gift
         Table sendGiftTable = new Table();
 
-        // gift History
-        Table giftHistory = new Table();
+        TextButton sendGiftButton = new TextButton("Send Gift", customSkin);
+        sendGiftButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openSendGiftMenu(friend);
+            }
+        });
 
+        sendGiftTable.add(sendGiftButton).growX().pad(3);
+
+        // gift History
+        Table giftHistoryTable = new Table();
+        TextButton giftHistory = new TextButton("Gift history", customSkin);
+        TextButton giftList = new TextButton("Gift received", customSkin);
+
+        giftHistory.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table table = new Table();
+                Label label = new Label(controller.giftHistory(friend.getUsername()).message(), customSkin);
+                table.add(label).pad(3);
+                showTable(table);
+            }
+        });
+
+        giftList.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Table table = new Table();
+                Label label = new Label(controller.giftList().message(), customSkin);
+                table.add(label).pad(3);
+                showTable(table);
+            }
+        });
+
+        giftHistoryTable.add(giftHistory).growX().pad(3).row();
+        giftHistoryTable.add(giftList).growX().pad(3);
 
         // rate gift
         Table rateGift = new Table();
+
         Label rateLabel = new Label("Enter the Gift ID and your Rating: ", customSkin);
-        TextField giftId = new TextField("", skin);
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+        TextField giftId = new TextField("", customSkin);
         giftId.setMessageText("Gift ID...");
-        TextField rating = new TextField("", skin);
-        rating.setMessageText("Rating");
+        TextField ratingField = new TextField("", customSkin);
+        ratingField.setMessageText("Rating");
+
+        giftId.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+
+        ratingField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c);
+            }
+        });
+        TextButton confirmButton = new TextButton("Confirm", customSkin);
+
+        confirmButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (giftId.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Enter the Gift ID");
+                    return;
+                } else if (ratingField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Enter the Rating");
+                    return;
+                }
+
+                int id = Integer.parseInt(giftId.getText());
+                int rating = Integer.parseInt(ratingField.getText());
+                Result result = controller.canRateGift(id, rating);
+                if (!result.isSuccessful()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText(result.message());
+                    return;
+                }else {
+                    GameController.rateGift(id, rating, friend);
+                    dialog.hide();
+                    showTemporaryMessage(result.message(), 5, Color.CYAN);
+                }
+            }
+        });
+
+        rateGift.add(rateLabel).colspan(2).grow().pad(3).row();
+        rateGift.add(giftId).grow().pad(3);
+        rateGift.add(ratingField).grow().pad(3).row();
+        rateGift.add(errorLabel).colspan(2).grow().pad(3).row();
+        rateGift.add(confirmButton).colspan(2).pad(3).row();
 
 
-        tabWidget.addTab(sendGiftTable, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(giftHistory, skin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(rateGift, skin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(sendGiftTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giftHistoryTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(rateGift, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();
 
@@ -1560,4 +1877,43 @@ public class GameScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
+
+    private void initialCheats() {
+
+/// IMPORTANT do it in server
+
+
+        player.addRecipe("Preserves Jar");
+//        controller.cheatGiveItem("Training Rod", 1);
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatGiveItem("Wood", 50);
+//        controller.cheatGiveItem("Stone", 40);
+//        controller.cheatGiveItem("Coal", 8);
+//        controller.cheatGiveItem("Axe", 1);
+//        controller.cheatGiveItem("vegetable", 1);
+//        controller.cheatGiveItem("Cherry", 10);
+//        controller.cheatGiveItem("Pickaxe", 1);
+//        controller.cheatGiveItem("Hoe", 1);
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatGiveItem("Apple", 10);
+//        controller.cheatGiveItem("Bee House", 1);
+//        controller.cheatGiveItem("Frozen Tear", 10);
+//        controller.cheatGiveItem("Cheese Press", 1);
+//        controller.cheatGiveItem("Keg", 1);
+//        controller.cheatGiveItem("Dehydrator", 1);
+//        controller.cheatGiveItem("Charcoal Klin", 1);
+//        controller.cheatGiveItem("Loom", 1);
+//        controller.cheatGiveItem("Mayonnaise Machine", 1);
+//        controller.cheatGiveItem("Oil Maker", 1);
+//        controller.cheatGiveItem("Preserves Jar", 1);
+//        controller.cheatGiveItem("Fish Smoker", 1);
+//        controller.cheatGiveItem("Furnace", 1);
+//
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+//        controller.cheatAddSkill("fishing", 200);
+    }
 }

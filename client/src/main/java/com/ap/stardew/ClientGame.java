@@ -31,6 +31,8 @@ public class ClientGame extends Game {
         loadDatas();
         instance = this;
         batch = new SpriteBatch();
+
+
         setScreen(new MainScreen());
     }
 

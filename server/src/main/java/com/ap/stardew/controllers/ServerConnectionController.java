@@ -75,6 +75,28 @@ public class ServerConnectionController {
                 }
             }
         }
+        if (message.getType() == JSONMessage.Type.chat) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "send_private_message" -> {
+                    connectionThread.playerController.sendPrivateMessage(message);
+                }
+                case "send_public_message" -> {
+                    connectionThread.playerController.sendPublicMessage(message);
+                }
+            }
+        }
+        if (message.getType() == JSONMessage.Type.update) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "gift_player" -> {
+                    connectionThread.playerController.giftPlayer(message);
+                }
+                case "rate_gift" -> {
+                    connectionThread.playerController.rateGift(message);
+                }
+            }
+        }
             throw new UnsupportedOperationException("didn't handle");
     }
 

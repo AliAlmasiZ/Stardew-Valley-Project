@@ -41,7 +41,8 @@ public class Player extends Entity implements Serializable {
     private final Map<Player, PlayerFriendship> playerFriendships = null;
     private HashMap<Player, Entity> suitors = new HashMap<>();
     private Player spouse;
-    private ArrayList<Gift> giftLog = new ArrayList<>();
+    private ArrayList<Gift> giftReceived = new ArrayList<>();
+    private ArrayList<Gift> giftSent = new ArrayList<>();
     private int giftId = 1;
     private ArrayList<Message> messageLog = new ArrayList<>();
     private ArrayList<Recipe> unlockedRecipes;
@@ -128,6 +129,14 @@ public class Player extends Entity implements Serializable {
         //TODO
     }
 
+    public ArrayList<Gift> getGiftSent() {
+        return giftSent;
+    }
+
+    public void addGiftSent(Gift gift) {
+        giftSent.add(gift);
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -156,8 +165,108 @@ public class Player extends Entity implements Serializable {
         this.suitors = suitors;
     }
 
-    public ArrayList<Gift> getGiftLog() {
-        return giftLog;
+    public ArrayList<Gift> getGiftReceived() {
+        return giftReceived;
+    }
+
+    public void setTrashcanLevel(int trashcanLevel) {
+        this.trashcanLevel = trashcanLevel;
+    }
+
+    public Map<Player, PlayerFriendship> getPlayerFriendships() {
+        return playerFriendships;
+    }
+
+    public void setGiftSent(ArrayList<Gift> giftSent) {
+        this.giftSent = giftSent;
+    }
+
+    public int getGiftId() {
+        return giftId;
+    }
+
+    public void setGiftId(int giftId) {
+        this.giftId = giftId;
+    }
+
+    public void setUnlockedRecipes(ArrayList<Recipe> unlockedRecipes) {
+        this.unlockedRecipes = unlockedRecipes;
+    }
+
+    public void setTradeOffers(ArrayList<TradeOffer> tradeOffers) {
+        this.tradeOffers = tradeOffers;
+    }
+
+    public ArrayList<TradeHistoryItem> getTrades() {
+        return trades;
+    }
+
+    public void setTrades(ArrayList<TradeHistoryItem> trades) {
+        this.trades = trades;
+    }
+
+    public String getAccountUsername() {
+        return accountUsername;
+    }
+
+    public ArrayList<MapRegion> getOwnedRegions() {
+        return ownedRegions;
+    }
+
+    public Entity getTrashcan() {
+        return trashcan;
+    }
+
+    public void setTrashcan(Entity trashcan) {
+        this.trashcan = trashcan;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public Vector2 getLastDir() {
+        return lastDir;
+    }
+
+    public void setLastDir(Vector2 lastDir) {
+        this.lastDir = lastDir;
+    }
+
+    public ArrayList<Tile> getOwnedTiles() {
+        return ownedTiles;
+    }
+
+    public void setOwnedTiles(ArrayList<Tile> ownedTiles) {
+        this.ownedTiles = ownedTiles;
+    }
+
+    public boolean isHaveNewSuitor() {
+        return haveNewSuitor;
+    }
+
+    public void setHaveNewSuitor(boolean haveNewSuitor) {
+        this.haveNewSuitor = haveNewSuitor;
     }
 
     public ArrayList<TradeOffer> getTradeOffers() {
@@ -176,8 +285,8 @@ public class Player extends Entity implements Serializable {
         return trades;
     }
 
-    public void setGiftLog(ArrayList<Gift> giftLog) {
-        this.giftLog = giftLog;
+    public void setGiftReceived(ArrayList<Gift> giftReceived) {
+        this.giftReceived = giftReceived;
     }
 
     public Entity getHouse() {
@@ -264,8 +373,8 @@ public class Player extends Entity implements Serializable {
 
     }
 
-    public void addMessage() {
-
+    public void addMessage(Message message) {
+        messageLog.add(message);
     }
 
     public void changePosition(int x, int y) {
@@ -323,17 +432,19 @@ public class Player extends Entity implements Serializable {
 
     public void makeMessagesSeen() {
         for (Message message : messageLog) {
-            if (message.getReceiver() == this) {
+            if (this.getUsername().equals(message.getReceiver())) {
                 message.setSeen(true);
             }
         }
     }
 
     public void receiveGift(Gift gift) {
-        giftLog.add(gift);
+        giftReceived.add(gift);
         gift.setId(giftId);
         giftId++;
         haveNewGift = true;
+
+        this.getComponent(Inventory.class).addItem(gift.getContent().clone());
     }
 
     public void receiveFlower() {
@@ -356,7 +467,7 @@ public class Player extends Entity implements Serializable {
 
 
     public Gift findGift(int giftId) {
-        for (Gift gift : giftLog) {
+        for (Gift gift : giftReceived) {
             if (gift.getId() == giftId) {
                 return gift;
             }
@@ -646,7 +757,7 @@ public class Player extends Entity implements Serializable {
     public void loadFromState(PlayerState state) {
         this.getEnergy().setAmount(state.energy);
         this.setPosition(state.position.x, state.position.y);
-        this.action = state.action; //WTF
+        this.action = state.action;
 
     }
 

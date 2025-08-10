@@ -1,7 +1,6 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.building.Door;
-import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.entities.Entity;
@@ -73,6 +72,12 @@ public class ClientConnectionController {
                     }
                     return null;
                 }
+                case "update_player_gift" -> {
+                    GameController.receiveGiftUpdate(message);
+                }
+                case "update_rate_gift" -> {
+                    GameController.receiveGiftRateUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {
@@ -98,6 +103,17 @@ public class ClientConnectionController {
                 }
                 case "finish_trade" -> {
                     GameController.finishTrade(message);
+                }
+            }
+        }
+        if (message.getType() == JSONMessage.Type.chat) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "send_private_message" -> {
+                    GameController.receivePrivateMessage(message);
+                }
+                case "send_public_message" -> {
+                    GameController.receivePublicMessage(message);
                 }
             }
         }

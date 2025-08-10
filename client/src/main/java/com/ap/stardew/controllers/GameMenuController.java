@@ -381,6 +381,13 @@ public class GameMenuController implements Controller {
         return tool.getComponent(Useable.class).use(map.getTileByPosition(position));
     }
 
+    public Result useArtisan(Entity artisan, String itemName) {
+        ArtisanComponent artisanComponent = artisan.getComponent(ArtisanComponent.class);
+        if (artisanComponent.isInProcess())
+            return new Result(false, "another recipe already in process");
+        return artisanComponent.addProcess(itemName, ClientApp.getActiveGame().getCurrentPlayer());
+    }
+
     public Result useArtisan(String artisanName, String itemName) {
         Game game = ClientApp.getActiveGame();
         Player player = game.getCurrentPlayer();
@@ -394,10 +401,7 @@ public class GameMenuController implements Controller {
             Tile tile = game.getActiveMap().getTileByPosition(y + dir[0], x + dir[1]);
             if (tile == null) continue;
             if (tile.getContent() != null && StringUtils.isNamesEqual(tile.getContent().getEntityName(), artisanName)) {
-                ArtisanComponent artisan = tile.getContent().getComponent(ArtisanComponent.class);
-                if (artisan.isInProcess())/* TODO: should fix in phase2 (what if there is two artisan near player)*/
-                    return new Result(false, "another recipe already in process");
-                return artisan.addProcess(itemName);
+                return useArtisan(tile.getContent(), itemName);
             }
         }
         return new Result(false, "There isn't any " + artisanName + " around you!");
@@ -1348,7 +1352,7 @@ public class GameMenuController implements Controller {
         return new Result(true, message);
     }
 
-    public Result giveGift(String playerName, String itemName, int amount) {
+    public Result canGiveGift(String playerName, String itemName, int amount) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player giftedPlayer = game.findPlayer(playerName);
@@ -1361,29 +1365,46 @@ public class GameMenuController implements Controller {
             return new Result(false, "you can't gift yourself!");
         }
 
-        if (!game.checkPlayerDistance(currentPlayer, giftedPlayer)) {
-            return new Result(false, giftedPlayer.getEntityName() + " is out of distance");
-        }
+        //TODO: I commented them just for test
+//        if (!game.checkPlayerDistance(currentPlayer, giftedPlayer)) {
+//            return new Result(false, giftedPlayer.getEntityName() + " is out of distance");
+//        }
 
         if (!App.entityRegistry.doesEntityExist(itemName)) {
             return new Result(false, "Item not found");
         }
 
-        if (game.getFriendshipWith(giftedPlayer).getLevel() == 0) {
-            return new Result(false, "Don't be cousin too soon:)");
-        }
+//        if (game.getFriendshipWith(giftedPlayer).getLevel() == 0) {
+//            return new Result(false, "Don't be cousin too soon:)");
+//        }
 
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
         if (!currentPlayer.getComponent(Inventory.class).doesHaveItem(itemName, amount)) {
             return new Result(false, "You don't have " + amount + " items!");
         }
-        Entity item = inventory.takeFromInventory(itemName, amount);
 
-        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
-        giftedPlayer.receiveGift(gift);
+//        Entity item = inventory.takeFromInventory(itemName, amount);
+//
+//        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
+//        giftedPlayer.receiveGift(gift);
 
 
         return new Result(true, "You gave gift to " + giftedPlayer.getUsername());
+    }
+
+    public Gift giveGift(String playerName, String itemName, int amount) {
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        Player giftedPlayer = game.findPlayer(playerName);
+        Inventory inventory = currentPlayer.getComponent(Inventory.class);
+
+        Entity item = inventory.takeFromInventory(itemName, amount);
+
+        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
+        currentPlayer.addGiftSent(gift);
+        giftedPlayer.receiveGift(gift);
+
+        return gift;
     }
 
     public Result giftList() {
@@ -1391,14 +1412,28 @@ public class GameMenuController implements Controller {
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder message = new StringBuilder("Your gift list:\n");
 
-        for (Gift gift : currentPlayer.getGiftLog()) {
+        for (Gift gift : currentPlayer.getGiftReceived()) {
             message.append(gift.toString());
         }
 
         return new Result(true, message.toString());
     }
 
-    public Result giftRate(int giftNumber, int rating) {
+    public Result giftList(Player player) {
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        StringBuilder message = new StringBuilder("Your gift list:\n");
+
+        for (Gift gift : currentPlayer.getGiftReceived()) {
+            if (gift.getSender().equals(player)) {
+                message.append(gift.toString());
+            }
+        }
+
+        return new Result(true, message.toString());
+    }
+
+    public Result canRateGift(int giftNumber, int rating) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Gift gift = currentPlayer.findGift(giftNumber);
@@ -1415,16 +1450,13 @@ public class GameMenuController implements Controller {
             return new Result(false, "Rating must be between 1 and 5");
         }
 
-        gift.setRating(rating);
+//        gift.setRating(rating);
+//
+//        PlayerFriendship playerFriendship = game.getFriendshipWith(game.getPlayerByUsername(gift.getSender()));
+//        if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
+//        else playerFriendship.addXp((rating - 3) * 30 + 15);
 
-        PlayerFriendship playerFriendship = game.getFriendshipWith(gift.getSender());
-        if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
-        else playerFriendship.addXp((rating - 3) * 30 + 15);
-
-        Entity item = gift.getContent().clone();
-        currentPlayer.getComponent(Inventory.class).addItem(item);
-
-        return new Result(true, "Rated and collected successfully!");
+        return new Result(true, "Rated successfully!");
     }
 
     public Result giftHistory(String username) {
@@ -1443,14 +1475,14 @@ public class GameMenuController implements Controller {
         message.append(giftedPlayer.getUsername()).append(":\n");
 
         ArrayList<Gift> gifts = new ArrayList<>();
-        for (Gift gift : currentPlayer.getGiftLog()) {
-            if (gift.getSender().equals(giftedPlayer)) {
+        for (Gift gift : currentPlayer.getGiftReceived()) {
+            if (gift.getSender().equals(giftedPlayer.getUsername())) {
                 gifts.add(gift);
             }
         }
 
-        for (Gift gift : giftedPlayer.getGiftLog()) {
-            if (gift.getSender().equals(giftedPlayer)) {
+        for (Gift gift : giftedPlayer.getGiftReceived()) {
+            if (gift.getSender().equals(currentPlayer.getUsername())) {
                 gifts.add(gift);
             }
         }
@@ -1462,6 +1494,8 @@ public class GameMenuController implements Controller {
 
         return new Result(true, message.toString());
     }
+
+
 
     public Result hug(String username) {
         Game game = ClientApp.getActiveGame();
@@ -2265,14 +2299,25 @@ public class GameMenuController implements Controller {
         }
 
 
-        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
-        Entity tileEntity = tile.getContent();
 
-        if (tileEntity != null) {
-            if (tileEntity.getEntityName().equals("Fridge")) {
-                screen.showStorage(tileEntity.getComponent(Inventory.class));
-            } else if (tileEntity.getEntityName().equals("shopCounter")) {
-                screen.openShopMenu(tile.getMap().getBuilding().getComponent(Shop.class));
+
+        Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(y / 16f, x / 16f);
+        if(tile != null && tile.getContent() != null) {
+            Entity tileEntity = tile.getContent();
+
+            /* -- Check Artisans -- */
+            if(tileEntity.hasTag(EntityTag.ARTISAN)) {
+                screen.openArtisanMenu(tileEntity);
+                return;
+            }
+            /* -- End of Check Artisans -- */
+
+            if (tileEntity != null) {
+                if (tileEntity.getEntityName().equals("Fridge")) {
+                    screen.showStorage(tileEntity.getComponent(Inventory.class));
+                } else if (tileEntity.getEntityName().equals("shopCounter")) {
+                    screen.openShopMenu(tile.getMap().getBuilding().getComponent(Shop.class));
+                }
             }
         }
     }

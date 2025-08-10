@@ -1,5 +1,6 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.records.GameStartingDetails;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,7 @@ public class Game implements Serializable {
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private ArrayList<PlayerFriendship> playerFriendships = new ArrayList<>();
+    private ArrayList<Message> publicChat = new ArrayList<>();
     private ArrayList<NPC> gameNPCs = new ArrayList<>();
     private boolean mapVisible = true;
     private ArrayList<Quest> quests = new ArrayList<>();
@@ -210,6 +212,22 @@ public class Game implements Serializable {
         return players;
     }
 
+    public ArrayList<Message> getPublicChat() {
+        return publicChat;
+    }
+
+    public void addPublicMessage(Message message) {
+        publicChat.add(message);
+    }
+
+    public ArrayList<PlayerFriendship> getPlayerFriendships() {
+        return playerFriendships;
+    }
+
+    public void setPlayerFriendships(ArrayList<PlayerFriendship> playerFriendships) {
+        this.playerFriendships = playerFriendships;
+    }
+
     public void nextTurn(){
         ArrayList<Player> players = getPlayers();
         int index = players.indexOf(getCurrentPlayer());
@@ -275,7 +293,7 @@ public class Game implements Serializable {
         int distance = (position1.getRow() - position2.getRow()) * (position1.getRow() - position2.getRow())
                 + (position1.getCol() - position2.getCol()) * (position1.getCol() - position2.getCol());
 
-        return distance < 3;
+        return distance < 200;
     }
 
     public void crowAttack() {
@@ -382,7 +400,7 @@ public class Game implements Serializable {
     public ArrayList<PlayerFriendship> getCurrentPlayerFriendships() {
         ArrayList<PlayerFriendship> friendships = new ArrayList<>();
         for (PlayerFriendship playerFriendships : playerFriendships) {
-            if (playerFriendships.getFriends().contains(currentPlayer)) {
+            if (playerFriendships.getFriends().contains(currentPlayer.getUsername())) {
                 friendships.add(playerFriendships);
             }
         }
@@ -393,7 +411,7 @@ public class Game implements Serializable {
     public PlayerFriendship getFriendshipWith(Player friend) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
             if (playerFriendship.getFriends().contains(friend) &&
-            playerFriendship.getFriends().contains(currentPlayer)) {
+            playerFriendship.getFriends().contains(currentPlayer.getUsername())) {
                 return playerFriendship;
             }
         }
@@ -402,12 +420,18 @@ public class Game implements Serializable {
 
     public PlayerFriendship getFriendshipBetween(Player friend1, Player friend2) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
-            if (playerFriendship.getFriends().contains(friend1) &&
-                    playerFriendship.getFriends().contains(friend2)) {
+            if (playerFriendship.getFriends().contains(friend1.getUsername()) &&
+                    playerFriendship.getFriends().contains(friend2.getUsername())) {
                 return playerFriendship;
             }
         }
         return null;
+    }
+
+    public PlayerFriendship getFriendshipBetween(String friend1N, String friend2N) {
+        Player friend1 = findPlayer(friend1N);
+        Player friend2 = findPlayer(friend2N);
+        return getFriendshipBetween(friend1, friend2);
     }
 
     public Quest findQuest(int questId) {

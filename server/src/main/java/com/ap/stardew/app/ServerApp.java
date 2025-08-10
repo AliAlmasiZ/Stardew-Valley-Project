@@ -8,6 +8,7 @@ import com.ap.stardew.controllers.DatabaseManager;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.enums.Gender;
+import com.ap.stardew.utils.NetworkUtils;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -141,7 +142,7 @@ public class ServerApp {
     }
 
     private static void registerClasses() { //to register any classes register it in ConnectionThread registerClasses function
-        ConnectionThread.registerClasses(server.getKryo());
+        NetworkUtils.registerClasses(server.getKryo());
     }
 
     public static void startServer(int tcpPort, int udpPort) throws IOException {

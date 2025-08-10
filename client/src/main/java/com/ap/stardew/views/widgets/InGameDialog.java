@@ -189,6 +189,7 @@ public class InGameDialog extends Table {
         );
     }
 
+    // this is added when hide is override
     public void hide(boolean check) {
         addAction(
             Actions.sequence(

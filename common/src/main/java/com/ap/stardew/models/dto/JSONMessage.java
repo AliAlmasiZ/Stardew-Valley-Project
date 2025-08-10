@@ -53,6 +53,7 @@ public class JSONMessage {
         player_input_command,
         update,
         trade,
+        chat,
     }
 
     @Override
@@ -62,5 +63,9 @@ public class JSONMessage {
 
     public Map<String, Object> getBody() {
         return body;
+    }
+
+    public boolean containsKey(String key) {
+        return body.containsKey(key);
     }
 }

@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -67,6 +68,14 @@ public class RecipeRegistry {
                 return registry.get(s);
         }
         return null;
+    }
+
+    public List<Recipe> getAllRecipes() {
+        return new ArrayList<>(registry.values());
+    }
+
+    public List<Recipe> getRecipesByType(RecipeType type) {
+        return getAllRecipes().stream().filter(p -> p.getType().equals(type)).toList();
     }
 
     public void checkIngredients() {

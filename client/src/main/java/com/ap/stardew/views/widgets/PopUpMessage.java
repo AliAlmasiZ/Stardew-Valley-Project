@@ -11,14 +11,38 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PopUpMessage extends Table {
     private static PopUpMessage activeMessage = null;
+    private static PopUpMessageType popUpMessageType = PopUpMessageType.STANDARD;
+
 
     private Table wrapperTable;
-    public PopUpMessage(){
+
+    public PopUpMessage() {
         setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
     }
 
-    public void show(Stage stage){
-        if(activeMessage != null){
+    public PopUpMessage(PopUpMessageType popUpMessageType) {
+        setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
+        this.popUpMessageType = popUpMessageType;
+    }
+
+    public enum PopUpMessageType {
+        STANDARD(2),
+        TOP_CENTER(5),
+        ;
+
+        private final float duration;
+
+        PopUpMessageType(float duration) {
+            this.duration = duration;
+        }
+
+        public float getDuration() {
+            return duration;
+        }
+    }
+
+    public void show(Stage stage) {
+        if (activeMessage != null) {
             activeMessage.hide();
         }
 
@@ -26,7 +50,14 @@ public class PopUpMessage extends Table {
 
         wrapperTable = new Table();
         wrapperTable.setFillParent(true);
-        wrapperTable.bottom().right().pad(5);
+        switch (popUpMessageType) {
+            case STANDARD -> {
+                wrapperTable.bottom().right().pad(5);
+            }
+            case TOP_CENTER -> {
+                wrapperTable.center().top().pad(8);
+            }
+        }
 
         stage.addActor(wrapperTable);
 
@@ -37,13 +68,13 @@ public class PopUpMessage extends Table {
             Actions.sequence(
                 Actions.moveBy(5 + getWidth() + 20, 0),
                 Actions.moveBy(-5 - getWidth() - 20, 0, 0.5f, Interpolation.swingOut),
-                Actions.delay(2),
+                Actions.delay(popUpMessageType.getDuration()),
                 Actions.run(this::hide)
             )
         );
 
         setTouchable(Touchable.enabled);
-        addListener(new ClickListener(){
+        addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 hide();
@@ -51,11 +82,11 @@ public class PopUpMessage extends Table {
         });
     }
 
-    public void hide(){
+    public void hide() {
         this.addAction(
             Actions.sequence(
                 Actions.alpha(0, 1),
-                Actions.run(()->{
+                Actions.run(() -> {
                     wrapperTable.remove();
                     clearChildren();
                     clearActions();
