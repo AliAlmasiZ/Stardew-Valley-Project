@@ -2,6 +2,7 @@ package com.ap.stardew.app;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.GameMenuController;
+import com.ap.stardew.controllers.GameStaticController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
@@ -378,6 +379,18 @@ public class GameController {
         jsonMessage.put("rating", rating);
 
         ClientApp.sendTCP(jsonMessage);
+    }
+
+    public static void receiveGiftRate(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        int id = jsonMessage.getFromBody("id");
+        int rating = jsonMessage.getFromBody("rating");
+        Game game = ClientApp.getActiveGame();
+        Player giftRater = ClientApp.getActiveGame().getCurrentPlayer();
+
+        GameStaticController.giftRate(id, rating, game, giftRater);
+
+        gameScreen.showTemporaryMessage("Your gift has been rated by \"" + giftRater.getUsername() + "\"" , 5, Color.CYAN);
     }
 
 

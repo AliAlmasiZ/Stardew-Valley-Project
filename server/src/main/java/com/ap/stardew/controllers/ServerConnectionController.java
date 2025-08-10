@@ -93,7 +93,7 @@ public class ServerConnectionController {
                     connectionThread.playerController.giftPlayer(message);
                 }
                 case "rate_gift" -> {
-                    //TODO
+                    connectionThread.playerController.rateGift(message);
                 }
             }
         }

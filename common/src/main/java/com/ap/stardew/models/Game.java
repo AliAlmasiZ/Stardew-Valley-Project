@@ -281,7 +281,7 @@ public class Game implements Serializable {
         int distance = (position1.getRow() - position2.getRow()) * (position1.getRow() - position2.getRow())
                 + (position1.getCol() - position2.getCol()) * (position1.getCol() - position2.getCol());
 
-        return distance < 3;
+        return distance < 200;
     }
 
     public void crowAttack() {

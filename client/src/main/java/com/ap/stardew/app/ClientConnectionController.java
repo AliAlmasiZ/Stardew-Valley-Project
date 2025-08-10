@@ -76,7 +76,9 @@ public class ClientConnectionController {
                 case "gift_player" -> {
                     GameController.receiveGift(message.getFromBody("gift"));
                 }
-                case "rate_player" -> {}
+                case "rate_gift" -> {
+                    GameController.receiveGiftRate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

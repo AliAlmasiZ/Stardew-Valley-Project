@@ -163,4 +163,13 @@ public class PlayerController {
         clientConnectionThread.gameThread.sendTCP(jsonMessage, jsonMessage.getFromBody("receiver"));
     }
 
+    public void rateGift(JSONMessage jsonMessage) {
+        int id = jsonMessage.getFromBody("id");
+        int rating = jsonMessage.getFromBody("rating");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(jsonMessage.getFromBody("sender")).player;
+
+        GameStaticController.giftRate(id, rating, clientConnectionThread.gameThread.getGame(), sender);
+        clientConnectionThread.gameThread.sendTCP(jsonMessage, jsonMessage.getFromBody("receiver"));
+    }
+
 }
