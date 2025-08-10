@@ -6,6 +6,9 @@ import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.app.GameController;
+import com.ap.stardew.controllers.TradeMenuController;
+import com.ap.stardew.models.entities.RenderFunction;
+import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
@@ -60,6 +63,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -71,7 +75,7 @@ public class GameScreen extends AbstractScreen {
 
     private GameMenuController controller;
     private PlayerController playerController;
-    private Player player;
+    public Player player;
     private Sprite currentPlayerSprite;
 
     //Renderers
@@ -344,6 +348,38 @@ public class GameScreen extends AbstractScreen {
             }
         }
         batch.end();
+
+        /* --- Artisan Progress Bar --- */
+        Gdx.gl.glEnable(GL32.GL_BLEND);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (Entity entity : activeMap.getEntitiesWithComponent(ArtisanComponent.class)) {
+            ArtisanComponent artisanComponent = entity.getComponent(ArtisanComponent.class);
+            if (artisanComponent.isInProcess()) {
+                PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
+                float progress = artisanComponent.getProcessProgress();
+
+                RenderFunction renderFunction = entity.getComponent(Renderable.class).getRenderFunction();
+
+
+                float barWidth = 32;
+                float barHeight = 4;
+                float barX = positionComponent.getX() + (renderFunction.getCurrentTexture(entity).getWidth() / 2f) - (barWidth / 2f);
+                float barY = positionComponent.getY() + renderFunction.getCurrentTexture(entity).getHeight() + 2;
+
+                // Draw background of the bar
+                shapeRenderer.setColor(Color.DARK_GRAY);
+                shapeRenderer.rect(barX, barY, barWidth, barHeight);
+
+                // Draw filled portion of the bar
+                shapeRenderer.setColor(Color.LIME);
+                shapeRenderer.rect(barX, barY, barWidth * progress, barHeight);
+            }
+        }
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL32.GL_BLEND);
+        /* --- Artisan Progress Bar --- */
 
         mapRenderManager.renderFrontLayers(renderer, activeMap);
 
@@ -1489,18 +1525,10 @@ public class GameScreen extends AbstractScreen {
 
     /* --- Crafting --- */
     public void openCraftingMenu() {
-        openRecipeMenu(RecipeType.CRAFTING);
-    }
-
-    /* --- Cooking --- */
-    public void openCookingMenu() {
-        openRecipeMenu(RecipeType.COOKING);
-    }
-
-
-    private void openRecipeMenu(RecipeType type) {
         InGameDialog craftingDialog = new InGameDialog(uiStage);
         craftingDialog.pad(10);
+
+
 
         Table mainTable = new Table();
         mainTable.top().left();
@@ -1511,7 +1539,7 @@ public class GameScreen extends AbstractScreen {
         int itemsPerRow = 5;
         int itemsCount = 0;
 
-        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(type);
+        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(RecipeType.CRAFTING);
 
         for (Recipe recipe : recipes) {
             String recipeName = recipe.getName();
@@ -1547,16 +1575,18 @@ public class GameScreen extends AbstractScreen {
             recipeButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (isUnlocked && recipe.canCraft(player.getComponent(Inventory.class))) {
-                        Result result = controller.craftingCraft(recipeName); // TODO: do it on server side
-                        if (!result.isSuccessful()) {
-                            showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
-                        } else {
-                            showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
-                        }
-                    } else {
-                        showTemporaryMessage("You cannot craft this item yet.", ERROR_MESSAGE_DELAY, Color.RED);
-                    }
+                    Result result = controller.craftingCraft(recipeName); // TODO: do it on server side
+                    Image icon;
+                    if(result.isSuccessful())
+                        icon = new Image(GameAssetManager.getInstance().success);
+                    else
+                        icon = new Image(GameAssetManager.getInstance().error);
+
+                    PopUpMessage popUp = new PopUpMessage();
+                    Label label = new Label(result.message(), customSkin);
+                    popUp.add(icon).size(16,16).pad(5);
+                    popUp.add(label).pad(10);
+                    popUp.show(uiStage);
                 }
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -1578,6 +1608,8 @@ public class GameScreen extends AbstractScreen {
 
         ScrollPane recipeScrollPane = new ScrollPane(recipeTable, customSkin);
 
+
+        /* -- Show Player's Inventory -- */
         Table inventoryPanel = new Table();
         inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
         inventoryPanel.add(new InventoryGrid(player.getComponent(Inventory.class), 10)).grow();
@@ -1585,9 +1617,118 @@ public class GameScreen extends AbstractScreen {
         mainTable.add(recipeScrollPane).colspan(2).fillX().height(200).row();
         mainTable.add(inventoryPanel).colspan(2).grow().padTop(10);
 
-        craftingDialog.add(mainTable).grow();
-        craftingDialog.show();
 
+        craftingDialog.add(mainTable);
+        craftingDialog.show();
+    }
+
+    /* --- Cooking --- */
+    public void openCookingMenu() {
+        InGameDialog cookingDialog = new InGameDialog(uiStage);
+        cookingDialog.pad(10);
+
+
+
+
+        Table mainTable = new Table();
+        mainTable.top().left();
+
+        Table recipeTable = new Table();
+        recipeTable.top().pad(5);
+
+        int itemsPerRow = 5;
+        int itemsCount = 0;
+
+
+        java.util.List<Recipe> recipes = App.recipeRegistry.getRecipesByType(RecipeType.COOKING);
+
+        for (Recipe recipe : recipes) {
+            String recipeName = recipe.getName();
+            boolean isUnlocked = player.hasRecipe(recipe);
+
+            Image itemImage = new Image(recipe.getEntityTexture());
+            itemImage.setScaling(Scaling.fit);
+
+            Table recipeButton = new Table();
+            recipeButton.setBackground(customSkin.getDrawable("frameNinePatch2"));
+            recipeButton.add(itemImage).width(32).height(32).pad(5);
+
+            if(!isUnlocked) {
+                recipeButton.setColor(Color.GRAY);
+                itemImage.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+            } else {
+                recipeButton.setColor(Color.WHITE);
+                itemImage.setColor(Color.WHITE);
+            }
+
+            //TODO : Make ToolTip contents graphical
+            ToolTip toolTip = new ToolTip(recipeButton);
+            Label toolTipLabel = new Label(recipeName, customSkin);
+            toolTipLabel.setText(toolTipLabel.getText() + (isUnlocked ? " (Unlocked)" : " (Locked)"));
+            toolTipLabel.setText(toolTipLabel.getText() + "\n" + "Ingredients:\n");
+            toolTipLabel.setAlignment(Align.left);
+
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                toolTipLabel.setText(toolTipLabel.getText() + "- " + ingredient.toString() + "\n");
+            }
+            toolTip.add(toolTipLabel).pad(5).grow();
+
+            recipeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result result = controller.cookingPrepare(recipeName); // TODO: do it on server side
+                    Image icon;
+                    if(result.isSuccessful())
+                        icon = new Image(GameAssetManager.getInstance().success);
+                    else
+                        icon = new Image(GameAssetManager.getInstance().error);
+
+                    PopUpMessage popUp = new PopUpMessage();
+                    Label label = new Label(result.message(), customSkin);
+                    popUp.add(icon).size(16,16).pad(5);
+                    popUp.add(label).pad(10);
+                    popUp.show(uiStage);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    toolTip.show();
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    toolTip.hide();
+                }
+            });
+
+            recipeTable.add(recipeButton).size(60, 60).pad(2);
+            itemsCount++;
+
+            if(itemsCount % itemsPerRow == 0) {
+                recipeTable.row();
+            }
+        }
+
+        ScrollPane recipeScrollPane = new ScrollPane(recipeTable, customSkin);
+
+
+        /* -- Show Player's Inventory -- */
+        Table inventoryPanel = new Table();
+        inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
+        inventoryPanel.add(new InventoryGrid(player.getComponent(Inventory.class), 10)).grow();
+
+        mainTable.add(recipeScrollPane).colspan(2).fillX().height(200).row();
+        mainTable.add(inventoryPanel).colspan(2).grow().padTop(10);
+
+        cookingDialog.add(mainTable).grow();
+        cookingDialog.show();
+    }
+
+
+    /* --- Artisan Menu --- */
+    public void openArtisanMenu(Entity artisanEntity) {
+        ArtisanMenuContent content = new ArtisanMenuContent(this, artisanEntity);
+        InGameDialog artisanDialog = new InGameDialog(uiStage);
+        artisanDialog.add(content).grow();
+        artisanDialog.show();
 
     }
 
@@ -1685,6 +1826,8 @@ public class GameScreen extends AbstractScreen {
         controller.cheatGiveItem("Stone", 40);
         controller.cheatGiveItem("Coal", 8);
         controller.cheatGiveItem("Axe", 1);
+        controller.cheatGiveItem("vegetable", 1);
+        controller.cheatGiveItem("Cherry", 10);
 //        controller.cheatGiveItem("Pickaxe", 1);
 //        controller.cheatGiveItem("Hoe", 1);
 //        controller.cheatGiveItem("Hay", 500);

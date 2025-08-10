@@ -240,7 +240,7 @@ public class MapActor extends Table {
         }
     }
 
-    public void regionClicked(MapRegion mapRegion){
+    public void regionClicked(MapRegion mapRegion) {
 
     }
 

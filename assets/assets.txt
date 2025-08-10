@@ -5191,6 +5191,7 @@ Content/energyBarFill.png
 Content/energyBarFill2NinePatch.9.png
 Content/energyBarFillNinePatch.9.png
 Content/energyBarNinePatch.9.png
+Content/error.png
 Content/exitButton.png
 Content/exitButtonHovered.png
 Content/font/PixelatedEleganceRegular-ovyAA.fnt
@@ -5215,6 +5216,7 @@ Content/frame2.png
 Content/frameBackground.png
 Content/frameNinePatch.9.png
 Content/frameNinePatch2.9.png
+Content/info.png
 Content/inventoryIconRotated.png
 Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
@@ -5261,11 +5263,13 @@ Content/smallPanel.png
 Content/smallPanelNinePatch.9.png
 Content/smallPlus.png
 Content/storageIcon.png
+Content/success.png
 Content/textBox.png
 Content/textboxNinePatch.9.png
 Content/tileSelectBox.png
 Content/tilledSoil.png
 Content/titleLogo.png
+Content/warning.png
 Content/—Pngtree—hand-drawn comic dialog_517429.png
 Moz/MapEditor/Tile sets/biome.json
 Moz/MapEditor/Tile sets/biomes.png
