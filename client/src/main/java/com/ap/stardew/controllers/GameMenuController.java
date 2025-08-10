@@ -1433,7 +1433,7 @@ public class GameMenuController implements Controller {
         return new Result(true, message.toString());
     }
 
-    public Result giftRate(int giftNumber, int rating) {
+    public Result canRateGift(int giftNumber, int rating) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Gift gift = currentPlayer.findGift(giftNumber);
@@ -1450,11 +1450,11 @@ public class GameMenuController implements Controller {
             return new Result(false, "Rating must be between 1 and 5");
         }
 
-        gift.setRating(rating);
-
-        PlayerFriendship playerFriendship = game.getFriendshipWith(game.getPlayerByUsername(gift.getSender()));
-        if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
-        else playerFriendship.addXp((rating - 3) * 30 + 15);
+//        gift.setRating(rating);
+//
+//        PlayerFriendship playerFriendship = game.getFriendshipWith(game.getPlayerByUsername(gift.getSender()));
+//        if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
+//        else playerFriendship.addXp((rating - 3) * 30 + 15);
 
         return new Result(true, "Rated successfully!");
     }
@@ -1482,7 +1482,7 @@ public class GameMenuController implements Controller {
         }
 
         for (Gift gift : giftedPlayer.getGiftReceived()) {
-            if (gift.getSender().equals(giftedPlayer.getUsername())) {
+            if (gift.getSender().equals(currentPlayer.getUsername())) {
                 gifts.add(gift);
             }
         }

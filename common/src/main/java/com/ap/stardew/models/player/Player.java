@@ -169,6 +169,106 @@ public class Player extends Entity implements Serializable {
         return giftReceived;
     }
 
+    public void setTrashcanLevel(int trashcanLevel) {
+        this.trashcanLevel = trashcanLevel;
+    }
+
+    public Map<Player, PlayerFriendship> getPlayerFriendships() {
+        return playerFriendships;
+    }
+
+    public void setGiftSent(ArrayList<Gift> giftSent) {
+        this.giftSent = giftSent;
+    }
+
+    public int getGiftId() {
+        return giftId;
+    }
+
+    public void setGiftId(int giftId) {
+        this.giftId = giftId;
+    }
+
+    public void setUnlockedRecipes(ArrayList<Recipe> unlockedRecipes) {
+        this.unlockedRecipes = unlockedRecipes;
+    }
+
+    public void setTradeOffers(ArrayList<TradeOffer> tradeOffers) {
+        this.tradeOffers = tradeOffers;
+    }
+
+    public ArrayList<TradeHistoryItem> getTrades() {
+        return trades;
+    }
+
+    public void setTrades(ArrayList<TradeHistoryItem> trades) {
+        this.trades = trades;
+    }
+
+    public String getAccountUsername() {
+        return accountUsername;
+    }
+
+    public ArrayList<MapRegion> getOwnedRegions() {
+        return ownedRegions;
+    }
+
+    public Entity getTrashcan() {
+        return trashcan;
+    }
+
+    public void setTrashcan(Entity trashcan) {
+        this.trashcan = trashcan;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public Vector2 getLastDir() {
+        return lastDir;
+    }
+
+    public void setLastDir(Vector2 lastDir) {
+        this.lastDir = lastDir;
+    }
+
+    public ArrayList<Tile> getOwnedTiles() {
+        return ownedTiles;
+    }
+
+    public void setOwnedTiles(ArrayList<Tile> ownedTiles) {
+        this.ownedTiles = ownedTiles;
+    }
+
+    public boolean isHaveNewSuitor() {
+        return haveNewSuitor;
+    }
+
+    public void setHaveNewSuitor(boolean haveNewSuitor) {
+        this.haveNewSuitor = haveNewSuitor;
+    }
+
     public ArrayList<TradeOffer> getTradeOffers() {
         return tradeOffers;
     }

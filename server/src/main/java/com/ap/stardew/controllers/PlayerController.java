@@ -1,6 +1,7 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
@@ -16,6 +17,8 @@ import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
+
+import java.util.HashMap;
 
 public class PlayerController {
     private ClientConnectionThread clientConnectionThread;
@@ -64,10 +67,6 @@ public class PlayerController {
         updateMessage.put("action", action);
         clientConnectionThread.gameThread.sendAllTCP(updateMessage);
     }
-
-
-
-
 
 
     public void update(float delta) {
@@ -160,27 +159,80 @@ public class PlayerController {
     /***************************************** **** **********************************************/
 
     public void giftPlayer(JSONMessage jsonMessage) {
-        Gift gift = jsonMessage.getFromBody("gift");
         Game game = clientConnectionThread.gameThread.getGame();
+        String receiverName = jsonMessage.getFromBody("receiver");
+        String senderName = jsonMessage.getFromBody("sender");
+        String entityName = jsonMessage.getFromBody("entity");
+        int amount = jsonMessage.getFromBody("amount");
 
-        Player sender = game.getPlayerByUsername(gift.getSender());
-        Player receiver = game.getPlayerByUsername(gift.getReceiver());
-        Entity entity = gift.getContent();
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
 
-        sender.getComponent(Inventory.class).takeFromInventory(entity, entity.getComponent(Pickable.class).getStackSize());
-        sender.addGiftSent(gift);
-        receiver.receiveGift(gift);
+        // Do the logic
+        GameController.giveGift(game, receiverName, senderName, entityName, amount);
 
-        clientConnectionThread.gameThread.sendTCP(jsonMessage, jsonMessage.getFromBody("receiver"));
+
+        // Send to client
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_player_gift");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        updateMessage.put("friendships", game.getPlayerFriendships());
+
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("inventory", sender.getComponent(Inventory.class));
+        senderUpdateMessage.put("gift_received", sender.getGiftReceived());
+        senderUpdateMessage.put("gift_sent", sender.getGiftSent());
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        receiverUpdateMessage.put("inventory", receiver.getComponent(Inventory.class));
+        receiverUpdateMessage.put("gift_received", receiver.getGiftReceived());
+        receiverUpdateMessage.put("gift_sent", receiver.getGiftSent());
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendTCP(updateMessage, receiver.getUsername());
+        clientConnectionThread.gameThread.sendTCP(updateMessage, sender.getUsername());
     }
 
     public void rateGift(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
         int id = jsonMessage.getFromBody("id");
         int rating = jsonMessage.getFromBody("rating");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(jsonMessage.getFromBody("sender")).player;
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
 
-        GameStaticController.giftRate(id, rating, clientConnectionThread.gameThread.getGame(), sender);
-        clientConnectionThread.gameThread.sendTCP(jsonMessage, jsonMessage.getFromBody("receiver"));
+        GameController.rateGift(game, senderName, receiverName, id, rating);
+
+        // Send to client
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_rate_gift");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        updateMessage.put("friendships", game.getPlayerFriendships());
+
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("gift_received", sender.getGiftReceived());
+        senderUpdateMessage.put("gift_sent", sender.getGiftSent());
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        receiverUpdateMessage.put("gift_received", receiver.getGiftReceived());
+        receiverUpdateMessage.put("gift_sent", receiver.getGiftSent());
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendTCP(updateMessage, receiver.getUsername());
+        clientConnectionThread.gameThread.sendTCP(updateMessage, sender.getUsername());
     }
 
 }

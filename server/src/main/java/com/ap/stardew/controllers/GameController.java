@@ -53,11 +53,50 @@ public class GameController {
         }
 
         game.initGame(null);
+        initialCheats(game);
+
+
 
         return gameSession;
     }
 
+    private static void initialCheats(Game game) {
+        for (Player player : game.getPlayers()) {
+            GameStaticController.cheatGiveItem(game, player,"Hay", 500);
+            GameStaticController.cheatGiveItem(game, player,"Wood", 50);
+            GameStaticController.cheatGiveItem(game, player,"Stone", 40);
+            GameStaticController.cheatGiveItem(game, player,"Coal", 8);
+            GameStaticController.cheatGiveItem(game, player,"Axe", 1);
+            GameStaticController.cheatGiveItem(game, player,"vegetable", 1);
+            GameStaticController.cheatGiveItem(game, player,"Cherry", 10);
+        }
+    }
 
 
+    public static Gift giveGift(Game game,String receiverName, String senderName, String itemName, int amount) {
+        Player sender = game.findPlayer(senderName);
+        Player giftedPlayer = game.findPlayer(receiverName);
+        Inventory inventory = sender.getComponent(Inventory.class);
+
+        Entity item = inventory.takeFromInventory(itemName, amount);
+
+        Gift gift = new Gift(sender, giftedPlayer, item, game.getDate());
+        sender.addGiftSent(gift);
+        giftedPlayer.receiveGift(gift);
+
+        return gift;
+    }
+
+    public static void rateGift(Game game, String senderName, String receiverName, int id, int rating) {
+        Player sender = game.findPlayer(senderName);
+        Player receiver = game.findPlayer(receiverName);
+        Gift gift = sender.findGift(id);
+
+        gift.setRating(rating);
+
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(sender, receiver);
+        if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
+        else playerFriendship.addXp((rating - 3) * 30 + 15);
+    }
 
 }

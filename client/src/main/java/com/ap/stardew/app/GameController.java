@@ -8,7 +8,6 @@ import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
@@ -20,6 +19,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import com.badlogic.gdx.graphics.Color;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,16 +52,25 @@ public class GameController {
         });
     }
 
-    public static void updatePlayers(JSONMessage message){
-
+    public static void updatePlayers(HashMap<String, JSONMessage> playerUpdateMessages){
+        for (Map.Entry<String, JSONMessage> entry : playerUpdateMessages.entrySet()) {
+            updatePlayer(entry.getKey(), entry.getValue());
+        }
     }
 
     public static void updatePlayer(String username, JSONMessage message){
         Game game = ClientApp.getActiveGame();
         Player player = game.getPlayerByUsername(username);
 
-        if (message.containsKey("giftReceived")) {
-
+        if (message.containsKey("gift_received")) {
+            player.setGiftReceived(message.getFromBody("gift_received"));
+        }
+        if (message.containsKey("gift_sent")) {
+            player.setGiftSent(message.getFromBody("gift_sent"));
+        }
+        if (message.containsKey("inventory")) {
+            player.getComponent(Inventory.class).empty();
+            player.getComponent(Inventory.class).addItems(message.getFromBody("inventory"));
         }
     }
 
@@ -382,23 +392,46 @@ public class GameController {
 
     /*************************************************************************************************/
 
-    public static void giftPlayer(Player player, Gift gift) {
+    /**
+     * SEND
+     * after check that its possible to send a gift it is sent to server to do it
+     * @param player the player to give gift
+     * @param entityName name of the gift
+     * @param amount amount of the gift
+     */
+    public static void giftPlayer(Player player, String entityName, int amount) {
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
         jsonMessage.put("command", "gift_player");
         jsonMessage.put("receiver", player.getUsername());
-        jsonMessage.put("sender", gift.getSender());
-        jsonMessage.put("gift", gift);
+        jsonMessage.put("sender", ClientApp.getActiveGame().getCurrentPlayer().getUsername());
+        jsonMessage.put("entity", entityName);
+        jsonMessage.put("amount", amount);
 
         ClientApp.sendTCP(jsonMessage);
     }
 
-    public static void receiveGift(JSONMessage jsonMessage) {
+    /**
+     * HANDLE
+     * after the server done it, it will send the updates
+     * @param jsonMessage details
+     */
+    public static void receiveGiftUpdate(JSONMessage jsonMessage) {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
-        Gift gift = jsonMessage.getFromBody("gift");
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
 
-        ClientApp.getActiveGame().getCurrentPlayer().receiveGift(gift);
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        game.setPlayerFriendships(jsonMessage.getFromBody("friendships"));
+        updatePlayers(jsonMessage.getFromBody("players_update"));
 
-        gameScreen.showTemporaryMessage(jsonMessage.getFromBody("sender") + " sent you a gift", 5, Color.CYAN);
+
+        if (currentPlayer.getUsername().equals(receiverName)) {
+            gameScreen.showTemporaryMessage(jsonMessage.getFromBody("sender") + " sent you a gift", 5, Color.CYAN);
+        } else if (currentPlayer.getUsername().equals(senderName)) {
+            gameScreen.showTemporaryMessage("You sent gift to \"" + jsonMessage.getFromBody("receiver") + "\"!", 5, Color.CYAN);
+
+        }
     }
 
     public static void rateGift(int id, int rating, Player player) {
@@ -412,16 +445,18 @@ public class GameController {
         ClientApp.sendTCP(jsonMessage);
     }
 
-    public static void receiveGiftRate(JSONMessage jsonMessage) {
+    public static void receiveGiftRateUpdate(JSONMessage jsonMessage) {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
-        int id = jsonMessage.getFromBody("id");
-        int rating = jsonMessage.getFromBody("rating");
         Game game = ClientApp.getActiveGame();
-        Player giftRater = ClientApp.getActiveGame().getPlayerByUsername(jsonMessage.getFromBody("sender"));
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        game.setPlayerFriendships(jsonMessage.getFromBody("friendships"));
+        updatePlayers(jsonMessage.getFromBody("players_update"));
 
-        GameStaticController.giftRate(id, rating, game, giftRater);
 
-        gameScreen.showTemporaryMessage("Your gift has been rated by \"" + giftRater.getUsername() + "\"" , 5, Color.CYAN);
+        if (ClientApp.getActiveGame().getCurrentPlayer().getUsername().equals(receiverName)) {
+            gameScreen.showTemporaryMessage("Your gift has been rated by \"" + senderName + "\"", 5, Color.CYAN);
+        }
     }
 
 

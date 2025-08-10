@@ -15,6 +15,8 @@ public class PlayerFriendship implements Serializable {
     private boolean hadHuggedToday = false;
 
 
+
+
     public boolean isHadContactToday() {
         return hadContactToday;
     }

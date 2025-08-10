@@ -1,7 +1,6 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.building.Door;
-import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.entities.Entity;
@@ -73,11 +72,11 @@ public class ClientConnectionController {
                     }
                     return null;
                 }
-                case "gift_player" -> {
-                    GameController.receiveGift(message);
+                case "update_player_gift" -> {
+                    GameController.receiveGiftUpdate(message);
                 }
-                case "rate_gift" -> {
-                    GameController.receiveGiftRate(message);
+                case "update_rate_gift" -> {
+                    GameController.receiveGiftRateUpdate(message);
                 }
             }
         }

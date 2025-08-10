@@ -6,11 +6,9 @@ import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.app.GameController;
-import com.ap.stardew.controllers.TradeMenuController;
 import com.ap.stardew.models.entities.RenderFunction;
 import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.gameMap.GameMap;
-import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
@@ -64,7 +62,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -1180,8 +1177,7 @@ public class GameScreen extends AbstractScreen {
                         errorLabel.setVisible(true);
                         errorLabel.setColor(Color.GREEN);
                         errorLabel.setText(result.message());
-                        Gift gift1 = controller.giveGift(((Player) giftedOne).getUsername(), gift.getEntityName(), amount);
-                        GameController.giftPlayer((Player) giftedOne, gift1);
+                        GameController.giftPlayer((Player) giftedOne, gift.getEntityName(), amount);
                         return;
                     }
                 }
@@ -1808,7 +1804,7 @@ public class GameScreen extends AbstractScreen {
 
                 int id = Integer.parseInt(giftId.getText());
                 int rating = Integer.parseInt(ratingField.getText());
-                Result result = controller.giftRate(id, rating);
+                Result result = controller.canRateGift(id, rating);
                 if (!result.isSuccessful()) {
                     errorLabel.setVisible(true);
                     errorLabel.setText(result.message());
@@ -1884,18 +1880,18 @@ public class GameScreen extends AbstractScreen {
 
     private void initialCheats() {
 
-
+/// IMPORTANT do it in server
 
 
         player.addRecipe("Preserves Jar");
 //        controller.cheatGiveItem("Training Rod", 1);
-        controller.cheatGiveItem("Hay", 500);
-        controller.cheatGiveItem("Wood", 50);
-        controller.cheatGiveItem("Stone", 40);
-        controller.cheatGiveItem("Coal", 8);
-        controller.cheatGiveItem("Axe", 1);
-        controller.cheatGiveItem("vegetable", 1);
-        controller.cheatGiveItem("Cherry", 10);
+//        controller.cheatGiveItem("Hay", 500);
+//        controller.cheatGiveItem("Wood", 50);
+//        controller.cheatGiveItem("Stone", 40);
+//        controller.cheatGiveItem("Coal", 8);
+//        controller.cheatGiveItem("Axe", 1);
+//        controller.cheatGiveItem("vegetable", 1);
+//        controller.cheatGiveItem("Cherry", 10);
 //        controller.cheatGiveItem("Pickaxe", 1);
 //        controller.cheatGiveItem("Hoe", 1);
 //        controller.cheatGiveItem("Hay", 500);

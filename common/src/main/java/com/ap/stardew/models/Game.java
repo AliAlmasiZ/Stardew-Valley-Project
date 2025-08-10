@@ -216,6 +216,14 @@ public class Game implements Serializable {
         publicChat.add(message);
     }
 
+    public ArrayList<PlayerFriendship> getPlayerFriendships() {
+        return playerFriendships;
+    }
+
+    public void setPlayerFriendships(ArrayList<PlayerFriendship> playerFriendships) {
+        this.playerFriendships = playerFriendships;
+    }
+
     public void nextTurn(){
         ArrayList<Player> players = getPlayers();
         int index = players.indexOf(getCurrentPlayer());
@@ -388,7 +396,7 @@ public class Game implements Serializable {
     public ArrayList<PlayerFriendship> getCurrentPlayerFriendships() {
         ArrayList<PlayerFriendship> friendships = new ArrayList<>();
         for (PlayerFriendship playerFriendships : playerFriendships) {
-            if (playerFriendships.getFriends().contains(currentPlayer)) {
+            if (playerFriendships.getFriends().contains(currentPlayer.getUsername())) {
                 friendships.add(playerFriendships);
             }
         }
@@ -399,7 +407,7 @@ public class Game implements Serializable {
     public PlayerFriendship getFriendshipWith(Player friend) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
             if (playerFriendship.getFriends().contains(friend) &&
-            playerFriendship.getFriends().contains(currentPlayer)) {
+            playerFriendship.getFriends().contains(currentPlayer.getUsername())) {
                 return playerFriendship;
             }
         }
@@ -408,8 +416,8 @@ public class Game implements Serializable {
 
     public PlayerFriendship getFriendshipBetween(Player friend1, Player friend2) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
-            if (playerFriendship.getFriends().contains(friend1) &&
-                    playerFriendship.getFriends().contains(friend2)) {
+            if (playerFriendship.getFriends().contains(friend1.getUsername()) &&
+                    playerFriendship.getFriends().contains(friend2.getUsername())) {
                 return playerFriendship;
             }
         }

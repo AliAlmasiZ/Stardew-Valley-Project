@@ -9,9 +9,7 @@ import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
-import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.EntityList;
-import com.ap.stardew.models.entities.Renderable;
+import com.ap.stardew.models.entities.*;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
@@ -244,6 +242,10 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(BuildingShopProduct.class);
         kryo.register(AnimalShopProduct.class);
         kryo.register(UpgradableShopProduct.class);
+        kryo.register(RenderFunction.class);
+        kryo.register(UseFunction.class);
+        kryo.register(Upgradable.class);
+        kryo.register(Material.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);
