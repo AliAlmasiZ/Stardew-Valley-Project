@@ -99,4 +99,17 @@ public class GameController {
         else playerFriendship.addXp((rating - 3) * 30 + 15);
     }
 
+    public static void hug(Game game, String senderName, String receiverName) {
+        Player currentPlayer = game.getPlayerByUsername(senderName);
+        Player huggedPlayer = game.findPlayer(receiverName);
+
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(currentPlayer, huggedPlayer);
+        currentPlayer.setAction(Player.Action.HUGGING);
+        huggedPlayer.setAction(Player.Action.HUGGING);
+
+        playerFriendship.setHadHuggedToday(true);
+        playerFriendship.addXp(60);
+
+    }
+
 }

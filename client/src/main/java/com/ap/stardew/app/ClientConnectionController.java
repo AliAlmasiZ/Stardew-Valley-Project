@@ -78,6 +78,9 @@ public class ClientConnectionController {
                 case "update_rate_gift" -> {
                     GameController.receiveGiftRateUpdate(message);
                 }
+                case "update_hug" -> {
+                    GameController.hugUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

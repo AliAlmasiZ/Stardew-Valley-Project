@@ -72,6 +72,9 @@ public class GameController {
             player.getComponent(Inventory.class).empty();
             player.getComponent(Inventory.class).addItems(message.getFromBody("inventory"));
         }
+        if (message.containsKey("action")) {
+            player.setAction(message.getFromBody("action"));
+        }
     }
 
     /***************************************** Trade **********************************************/
@@ -459,5 +462,16 @@ public class GameController {
         }
     }
 
+
+    /******************************************* Player Interactions **********************************************/
+
+    public static void hugUpdate(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Game game = ClientApp.getActiveGame();
+        updatePlayers(jsonMessage.getFromBody("players_update"));
+    }
+
+
+    /*************************************************************************************************/
 
 }

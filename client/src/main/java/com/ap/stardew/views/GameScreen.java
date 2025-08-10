@@ -6,6 +6,7 @@ import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.app.GameController;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.RenderFunction;
 import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.models.gameMap.GameMap;
@@ -1474,10 +1475,15 @@ public class GameScreen extends AbstractScreen {
 
         hugButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.hug(friend.getUsername());
+                Result result = controller.canHug(friend.getUsername());
                 if (result.isSuccessful()) {
-                    //TODO: GRAPHIC
-                    showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.update);
+                    message.put("command", "hug");
+                    message.put("sender", game.getCurrentPlayer().getUsername());
+                    message.put("receiver", friend.getUsername());
+
+                    ClientApp.sendTCP(message);
+
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 }
@@ -1502,6 +1508,12 @@ public class GameScreen extends AbstractScreen {
                 //TODO
             }
         });
+
+        actionsTable.add(hugButton).pad(5).growX().row();
+        actionsTable.add(flowerButton).pad(5).growX().row();
+        actionsTable.add(MarryButton).pad(5).growX().row();
+
+        showTable(actionsTable);
 
     }
 

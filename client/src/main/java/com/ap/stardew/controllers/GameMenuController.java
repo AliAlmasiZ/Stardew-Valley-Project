@@ -1365,18 +1365,17 @@ public class GameMenuController implements Controller {
             return new Result(false, "you can't gift yourself!");
         }
 
-        //TODO: I commented them just for test
-//        if (!game.checkPlayerDistance(currentPlayer, giftedPlayer)) {
-//            return new Result(false, giftedPlayer.getEntityName() + " is out of distance");
-//        }
+        if (!game.checkPlayerDistance(currentPlayer, giftedPlayer)) {
+            return new Result(false, giftedPlayer.getEntityName() + " is out of distance");
+        }
 
         if (!App.entityRegistry.doesEntityExist(itemName)) {
             return new Result(false, "Item not found");
         }
 
-//        if (game.getFriendshipWith(giftedPlayer).getLevel() == 0) {
-//            return new Result(false, "Don't be cousin too soon:)");
-//        }
+        if (game.getFriendshipWith(giftedPlayer).getLevel() == 0) {
+            return new Result(false, "Don't be cousin too soon:)");
+        }
 
         Inventory inventory = currentPlayer.getComponent(Inventory.class);
         if (!currentPlayer.getComponent(Inventory.class).doesHaveItem(itemName, amount)) {
@@ -1390,21 +1389,6 @@ public class GameMenuController implements Controller {
 
 
         return new Result(true, "You gave gift to " + giftedPlayer.getUsername());
-    }
-
-    public Gift giveGift(String playerName, String itemName, int amount) {
-        Game game = ClientApp.getActiveGame();
-        Player currentPlayer = game.getCurrentPlayer();
-        Player giftedPlayer = game.findPlayer(playerName);
-        Inventory inventory = currentPlayer.getComponent(Inventory.class);
-
-        Entity item = inventory.takeFromInventory(itemName, amount);
-
-        Gift gift = new Gift(currentPlayer, giftedPlayer, item, game.getDate());
-        currentPlayer.addGiftSent(gift);
-        giftedPlayer.receiveGift(gift);
-
-        return gift;
     }
 
     public Result giftList() {
@@ -1497,7 +1481,7 @@ public class GameMenuController implements Controller {
 
 
 
-    public Result hug(String username) {
+    public Result canHug(String username) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player huggedPlayer = game.findPlayer(username);
@@ -1515,17 +1499,18 @@ public class GameMenuController implements Controller {
 
         PlayerFriendship playerFriendship = game.getFriendshipWith(huggedPlayer);
 
-        if (playerFriendship.getLevel() < 2) {
-            return new Result(false, "too soon for a hug;)");
-        }
+        //TODO: remove comment
+//        if (playerFriendship.getLevel() < 2) {
+//            return new Result(false, "too soon for a hug;)");
+//        }
 
 
         if (playerFriendship.isHadHuggedToday()) {
             return new Result(false, "You have already hugged today!");
         }
 
-        playerFriendship.setHadHuggedToday(true);
-        playerFriendship.addXp(60);
+//        playerFriendship.setHadHuggedToday(true);
+//        playerFriendship.addXp(60);
 
         return new Result(true, "Hugged successfully!");
     }
