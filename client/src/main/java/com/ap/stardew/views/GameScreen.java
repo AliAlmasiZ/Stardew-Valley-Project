@@ -1607,7 +1607,7 @@ public class GameScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Table table = new Table();
                 Label label = new Label(controller.giftHistory(friend.getUsername()).message(), customSkin);
-                table.add(label).pad(3).grow();
+                table.add(label).pad(3);
                 showTable(table);
             }
         });
@@ -1617,7 +1617,7 @@ public class GameScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Table table = new Table();
                 Label label = new Label(controller.giftList().message(), customSkin);
-                table.add(label).pad(3).grow();
+                table.add(label).pad(3);
                 showTable(table);
             }
         });
@@ -1688,7 +1688,7 @@ public class GameScreen extends AbstractScreen {
 
 
         tabWidget.addTab(sendGiftTable, customSkin.getDrawable("skillMenuIcon"));
-        tabWidget.addTab(giftHistory, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giftHistoryTable, customSkin.getDrawable("skillMenuIcon"));
         tabWidget.addTab(rateGift, customSkin.getDrawable("skillMenuIcon"));
 
         dialog.add(tabWidget).fill().grow();

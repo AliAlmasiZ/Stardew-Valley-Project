@@ -1448,7 +1448,7 @@ public class GameMenuController implements Controller {
 
         gift.setRating(rating);
 
-        PlayerFriendship playerFriendship = game.getFriendshipWith(gift.getSender());
+        PlayerFriendship playerFriendship = game.getFriendshipWith(game.getPlayerByUsername(gift.getSender()));
         if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
         else playerFriendship.addXp((rating - 3) * 30 + 15);
 
@@ -1472,13 +1472,13 @@ public class GameMenuController implements Controller {
 
         ArrayList<Gift> gifts = new ArrayList<>();
         for (Gift gift : currentPlayer.getGiftReceived()) {
-            if (gift.getSender().equals(giftedPlayer)) {
+            if (gift.getSender().equals(giftedPlayer.getUsername())) {
                 gifts.add(gift);
             }
         }
 
         for (Gift gift : giftedPlayer.getGiftReceived()) {
-            if (gift.getSender().equals(giftedPlayer)) {
+            if (gift.getSender().equals(giftedPlayer.getUsername())) {
                 gifts.add(gift);
             }
         }

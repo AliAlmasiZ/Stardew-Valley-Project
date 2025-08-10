@@ -51,6 +51,14 @@ public class GameController {
         });
     }
 
+    public static void updatePlayers(JSONMessage message){
+
+    }
+
+    public static void updatePlayer(String username, JSONMessage message){
+
+    }
+
     /***************************************** Trade **********************************************/
 
     /**
@@ -373,6 +381,7 @@ public class GameController {
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
         jsonMessage.put("command", "gift_player");
         jsonMessage.put("receiver", player.getUsername());
+        jsonMessage.put("sender", gift.getSender());
         jsonMessage.put("gift", gift);
 
         ClientApp.sendTCP(jsonMessage);
@@ -384,7 +393,7 @@ public class GameController {
 
         ClientApp.getActiveGame().getCurrentPlayer().receiveGift(gift);
 
-        gameScreen.showTemporaryMessage(jsonMessage.getFromBody("sender"), 5, Color.CYAN);
+        gameScreen.showTemporaryMessage(jsonMessage.getFromBody("sender") + " sent you a gift", 5, Color.CYAN);
     }
 
     public static void rateGift(int id, int rating, Player player) {
@@ -403,7 +412,7 @@ public class GameController {
         int id = jsonMessage.getFromBody("id");
         int rating = jsonMessage.getFromBody("rating");
         Game game = ClientApp.getActiveGame();
-        Player giftRater = ClientApp.getActiveGame().getCurrentPlayer();
+        Player giftRater = ClientApp.getActiveGame().getPlayerByUsername(jsonMessage.getFromBody("sender"));
 
         GameStaticController.giftRate(id, rating, game, giftRater);
 

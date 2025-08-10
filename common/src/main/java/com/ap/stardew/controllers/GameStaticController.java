@@ -12,7 +12,7 @@ public class GameStaticController {
 
         gift.setRating(rating);
 
-        PlayerFriendship playerFriendship = game.getFriendshipWith(gift.getSender());
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(gift.getSender(), gift.getReceiver());
         if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
         else playerFriendship.addXp((rating - 3) * 30 + 15);
     }

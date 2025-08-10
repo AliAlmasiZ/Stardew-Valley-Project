@@ -161,9 +161,10 @@ public class PlayerController {
 
     public void giftPlayer(JSONMessage jsonMessage) {
         Gift gift = jsonMessage.getFromBody("gift");
+        Game game = clientConnectionThread.gameThread.getGame();
 
-        Player sender = gift.getSender();
-        Player receiver = gift.getReceiver();
+        Player sender = game.getPlayerByUsername(gift.getSender());
+        Player receiver = game.getPlayerByUsername(gift.getReceiver());
         Entity entity = gift.getContent();
 
         sender.getComponent(Inventory.class).takeFromInventory(entity, entity.getComponent(Pickable.class).getStackSize());

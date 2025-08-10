@@ -74,7 +74,7 @@ public class ClientConnectionController {
                     return null;
                 }
                 case "gift_player" -> {
-                    GameController.receiveGift(message.getFromBody("gift"));
+                    GameController.receiveGift(message);
                 }
                 case "rate_gift" -> {
                     GameController.receiveGiftRate(message);

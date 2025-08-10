@@ -7,17 +7,20 @@ import com.ap.stardew.models.entities.components.Pickable;
 import java.io.Serializable;
 
 public class Gift implements Serializable {
-    private final Player sender;
-    private final Player receiver;
-    private final Entity content;
-    private final Date date;
+    private String sender;
+    private String receiver;
+    private Entity content;
+    private Date date;
     private int id;
     private boolean seen;
     private int rating;
 
+    public Gift() {
+    }
+
     public Gift(Player sender, Player receiver, Entity content, Date date) {
-        this.sender = sender;
-        this.receiver = receiver;
+        this.sender = sender.getUsername();
+        this.receiver = receiver.getUsername();
         this.content = content.clone();
         this.date = date;
         rating = -1;
@@ -47,11 +50,11 @@ public class Gift implements Serializable {
         this.rating = rating;
     }
 
-    public Player getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public Player getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
@@ -67,14 +70,14 @@ public class Gift implements Serializable {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("ID: ").append(id).append("\n");
-        result.append("Sender: ").append(sender.getUsername()).append("\n");
+        result.append("Sender: ").append(sender).append("\n");
         return getString(result);
     }
 
     public String getGiftDetail() {
         StringBuilder result = new StringBuilder();
-        result.append("Sender: ").append(sender.getUsername()).append("\n");
-        result.append("Receiver: ").append(receiver.getUsername()).append("\n");
+        result.append("Sender: ").append(sender).append("\n");
+        result.append("Receiver: ").append(receiver).append("\n");
         return getString(result);
     }
 
