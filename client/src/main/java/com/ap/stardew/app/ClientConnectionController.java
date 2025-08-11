@@ -124,6 +124,15 @@ public class ClientConnectionController {
                 case "update_flower" -> {
                     GameController.flowerUpdate(message);
                 }
+                case "update_ask_marriage" -> {
+                    GameController.askMarriageUpdate(message);
+                }
+                case "update_accept_marriage" -> {
+                    GameController.acceptMarriageUpdate(message);
+                }
+                case "update_reject_marriage" -> {
+                    GameController.rejectMarriageUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

@@ -52,6 +52,7 @@ public class JSONMessage {
         response,
         player_input_command,
         update,
+        request,
         trade,
         chat,
     }

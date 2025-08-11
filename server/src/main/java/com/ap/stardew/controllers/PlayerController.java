@@ -300,7 +300,111 @@ public class PlayerController {
     }
 
     public void askMarriage(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        String ringName = jsonMessage.getFromBody("ring_name");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
 
+        GameController.askMarriage(game, senderName, receiverName, ringName);
+
+
+
+        // Send to clients
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_ask_marriage");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("inventory", sender.getComponent(Inventory.class));
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        receiverUpdateMessage.put("suitors", receiver.getSuitors());
+        receiverUpdateMessage.put("inventory", receiver.getComponent(Inventory.class));
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendTCP(updateMessage,senderName);
+        clientConnectionThread.gameThread.sendTCP(updateMessage,receiverName);
+    }
+
+    public void acceptMarriage(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+
+        game.marry(sender, receiver);
+        receiver.getComponent(Inventory.class).addItem(receiver.getSuitors().get(sender).clone());
+        sender.setAction(Player.Action.MARRIED);
+        receiver.setAction(Player.Action.MARRIED);
+
+        // Send to clients
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_accept_marriage");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        updateMessage.put("friendships", game.getPlayerFriendships());
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("action", sender.getAction());
+        senderUpdateMessage.put("wallet", sender.getWallet());
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("action", receiver.getAction());
+        receiverUpdateMessage.put("suitors", receiver.getSuitors());
+        receiverUpdateMessage.put("wallet", receiver.getWallet());
+        receiverUpdateMessage.put("inventory", receiver.getComponent(Inventory.class));
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+
+    }
+
+    public void rejectMarriage(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+
+        GameController.rejectMarriage(game, senderName, receiverName);
+
+        // Send to clients
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_reject_marriage");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        updateMessage.put("friendships", game.getPlayerFriendships());
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("action", sender.getAction());
+        senderUpdateMessage.put("inventory", sender.getComponent(Inventory.class));
+        senderUpdateMessage.put("energy", sender.getEnergy());
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        receiverUpdateMessage.put("suitors", receiver.getSuitors());
+        receiverUpdateMessage.put("inventory", receiver.getComponent(Inventory.class));
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
     }
 
 }

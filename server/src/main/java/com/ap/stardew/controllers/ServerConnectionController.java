@@ -111,14 +111,24 @@ public class ServerConnectionController {
                 case "rate_gift" -> {
                     connectionThread.playerController.rateGift(message);
                 }
+            }
+        }
+        if (message.getType() == JSONMessage.Type.request) {
+            switch ((String) message.getFromBody("command")) {
                 case "hug" -> {
                     connectionThread.playerController.hug(message);
                 }
                 case "flower" -> {
                     connectionThread.playerController.flower(message);
                 }
-                case "marry" -> {
+                case "ask_marriage" -> {
                     connectionThread.playerController.askMarriage(message);
+                }
+                case "accept_marriage" -> {
+                    connectionThread.playerController.acceptMarriage(message);
+                }
+                case "reject_marriage" -> {
+                    connectionThread.playerController.rejectMarriage(message);
                 }
             }
         }

@@ -63,8 +63,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 
 import java.util.ArrayList;
 
@@ -1481,7 +1479,7 @@ public class GameScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Result result = controller.canHug(friend.getUsername());
                 if (result.isSuccessful()) {
-                    JSONMessage message = new JSONMessage(JSONMessage.Type.update);
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.request);
                     message.put("command", "hug");
                     message.put("sender", game.getCurrentPlayer().getUsername());
                     message.put("receiver", friend.getUsername());
@@ -1499,7 +1497,7 @@ public class GameScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Result result = controller.canFlower(friend.getUsername());
                 if (result.isSuccessful()) {
-                    JSONMessage message = new JSONMessage(JSONMessage.Type.update);
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.request);
                     message.put("command", "flower");
                     message.put("sender", game.getCurrentPlayer().getUsername());
                     message.put("receiver", friend.getUsername());
@@ -1515,7 +1513,7 @@ public class GameScreen extends AbstractScreen {
 
         MarryButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                //TODO
+                openMarriageDialog(friend);
             }
         });
 
@@ -1525,6 +1523,97 @@ public class GameScreen extends AbstractScreen {
 
         showTable(actionsTable);
 
+    }
+
+    public void openMarriageDialog(Player friend) {
+        Table table = new Table();
+        TextField ringNameField = new TextField("", customSkin);
+        ringNameField.setMessageText("Enter the ring name...");
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setVisible(false);
+        errorLabel.setColor(Color.RED);
+        TextButton marriageButton = new TextButton("Marry \"" + friend.getUsername() + "\"", customSkin);
+
+        marriageButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (ringNameField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Please enter a ring name.");
+                    return;
+                }
+
+                Result result = controller.canAskMarriage(friend.getUsername(), ringNameField.getText());
+                if (!result.isSuccessful()) {
+                    errorLabel.setText(result.message());
+                    errorLabel.setVisible(true);
+
+                } else {
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.request);
+                    message.put("command", "ask_marriage");
+                    message.put("sender", game.getCurrentPlayer().getUsername());
+                    message.put("receiver", friend.getUsername());
+
+                    ClientApp.sendTCP(message);
+                    hideTable(table);
+                }
+            }
+        });
+
+
+        table.add(ringNameField).pad(5).growX().row();
+        table.add(marriageButton).pad(5).growX().row();
+        showTable(table);
+    }
+
+    public void openAskMarriageDialog(Player suitor) {
+        Player currentPlayer = game.getCurrentPlayer();
+        Entity ring = currentPlayer.getSuitors().get(suitor);
+
+        Table table = new Table();
+        Label label = new Label("Do you want to marry \"" + suitor.getUsername() + "\" ?", customSkin);
+        Label ringName = new Label(ring.getEntityName(), customSkin);
+        ringName.setColor(Color.GOLDENROD);
+        Image ringImage = new Image(GameAssetManager.getInstance()
+            .getTexture(ring.getComponent(Pickable.class).getIcon()));
+        TextButton yesButton = new TextButton("Yes", customSkin);
+        TextButton noButton = new TextButton("No", customSkin);
+        yesButton.setColor(Color.GREEN);
+        noButton.setColor(Color.RED);
+
+        yesButton.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                JSONMessage message = new JSONMessage(JSONMessage.Type.request);
+                message.put("command", "accept_marriage");
+                message.put("sender", game.getCurrentPlayer().getUsername());
+                message.put("receiver", suitor.getUsername());
+
+                ClientApp.sendTCP(message);
+                hideTable(table);
+            }
+        });
+        noButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                JSONMessage message = new JSONMessage(JSONMessage.Type.request);
+                message.put("command", "reject_marriage");
+                message.put("sender", game.getCurrentPlayer().getUsername());
+                message.put("receiver", suitor.getUsername());
+
+                ClientApp.sendTCP(message);
+                hideTable(table);
+            }
+        });
+
+        table.add(label).colspan(2).growX().row();
+        table.add(ringName).pad(2).right();
+        table.add(ringImage).pad(2).center();
+        table.add(yesButton).pad(5).center().growX();
+        table.add(noButton).pad(5).center().growX();
+        table.row();
+
+        showTable(table);
     }
 
 

@@ -1551,14 +1551,14 @@ public class GameMenuController implements Controller {
         return new Result(true, "You have flowered " + floweredPlayer.getUsername() + "!");
     }
 
-    public Result askMarriage(String username, String ringName) {
+    public Result canAskMarriage(String username, String ringName) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player marriagePlayer = game.findPlayer(username);
 
 
         if (currentPlayer.getGender().equals(Gender.FEMALE)) {
-            // equal to "sangin bash dokhtar"
+            // equals "sangin bash dokhtar"
             return new Result(false, "Be heavy girl!");
         }
 
@@ -1606,8 +1606,8 @@ public class GameMenuController implements Controller {
         }
 
         // do all the stuff in this function
-        marriagePlayer.addSuitor(currentPlayer, ring);
-        inventory.takeFromInventory(ring, 1);
+//        marriagePlayer.addSuitor(currentPlayer, ring);
+//        inventory.takeFromInventory(ring, 1);
 
         return new Result(true, "your request sent successfully!");
     }

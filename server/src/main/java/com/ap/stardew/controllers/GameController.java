@@ -247,4 +247,31 @@ public class GameController {
         inventory2.addItem(App.entityRegistry.makeEntity("Bouquet"), 1);
     }
 
+    public static void askMarriage(Game game, String senderName, String receiverName, String ringName) {
+        Player sender = game.findPlayer(senderName);
+        Player receiver = game.findPlayer(receiverName);
+        Inventory inventory = sender.getComponent(Inventory.class);
+        Entity ring = App.entityRegistry.makeEntity(ringName);
+
+
+        receiver.addSuitor(sender, ring);
+        inventory.takeFromInventory(ring, 1);
+    }
+
+
+    public static void rejectMarriage(Game game, String senderName, String receiverName) {
+        Player currentPlayer = game.getPlayerByUsername(senderName);
+        Player respondPlayer = game.getPlayerByUsername(receiverName);
+
+        Entity ring = currentPlayer.getSuitors().get(respondPlayer).clone();
+        currentPlayer.getSuitors().remove(respondPlayer);
+        respondPlayer.getComponent(Inventory.class).addItem(ring);
+        //effects on friendship
+        game.getFriendshipWith(respondPlayer).setLevel(0);
+        game.getFriendshipWith(respondPlayer).setXp(0);
+
+        // effects on energy
+        respondPlayer.getEnergy().setModifier(0.5f, 7);
+    }
+
 }

@@ -82,6 +82,21 @@ public class GameController {
         if (message.containsKey("action")) {
             player.setAction(message.getFromBody("action"));
         }
+        if (message.containsKey("suitors")) {
+            player.setSuitors(message.getFromBody("suitors"));
+        }
+        if (message.containsKey("wallet")) {
+            player.setWallet(message.getFromBody("wallet"));
+        }
+        if (message.containsKey("energy")) {
+            player.setEnergy(message.getFromBody("energy"));
+        }
+    }
+
+    private static void updateFriendships(JSONMessage jsonMessage) {
+        Game game = ClientApp.getActiveGame();
+        if (!jsonMessage.containsKey("friendships")) return;
+        game.setPlayerFriendships(jsonMessage.getFromBody("friendships"));
     }
 
     /***************************************** Trade **********************************************/
@@ -580,7 +595,55 @@ public class GameController {
         updatePlayers(jsonMessage.getFromBody("players_update"));
     }
 
+    public static void askMarriageUpdate(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Game game = ClientApp.getActiveGame();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
+
+        String senderName = jsonMessage.getFromBody("sender");
+        Player suitor = game.getPlayerByUsername(senderName);
+
+        updatePlayers(jsonMessage.getFromBody("players_update"));
+
+        if (currentPlayer.getUsername().equals(jsonMessage.getFromBody("receiver"))) {
+            gameScreen.openAskMarriageDialog(suitor);
+        }
+    }
+
+    public static void acceptMarriageUpdate(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
+        String receiverName = jsonMessage.getFromBody("receiver");
+        String senderName = jsonMessage.getFromBody("sender");
+
+        updatePlayers(jsonMessage.getFromBody("players_update"));
+        updateFriendships(jsonMessage);
+
+        if (currentPlayer.getUsername().equals(senderName) || currentPlayer.getUsername().equals(receiverName)) {
+            gameScreen.showTemporaryMessage("Lalala mobarak bada!", 5, Color.CYAN);
+        }
+    }
+
+    public static void rejectMarriageUpdate(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Player currentPlayer = ClientApp.getActiveGame().getCurrentPlayer();
+        String receiverName = jsonMessage.getFromBody("receiver");
+        String senderName = jsonMessage.getFromBody("sender");
+
+        updatePlayers(jsonMessage.getFromBody("players_update"));
+        updateFriendships(jsonMessage);
+
+        if (currentPlayer.getUsername().equals(senderName)) {
+            gameScreen.showTemporaryMessage("hala fekr kardi ki hasti??", 5, Color.CYAN);
+        } else if (currentPlayer.getUsername().equals(receiverName)) {
+            gameScreen.showTemporaryMessage("Ghamet Nabashe Mard...", 5, Color.RED);
+
+        }
+    }
+
 
     /*************************************************************************************************/
+
+
 
 }
