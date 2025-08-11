@@ -25,6 +25,10 @@ allprojects {
       testOutputDir file('build/classes/java/test')
     }
   }
+
+  ext {
+    gdxNativefilechooserVersion = '2.4.0'
+  }
 }
 
 configure(subprojects) {
