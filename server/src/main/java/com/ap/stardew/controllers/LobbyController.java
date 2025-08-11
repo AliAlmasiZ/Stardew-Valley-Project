@@ -167,7 +167,7 @@ public class LobbyController {
         for (AccountInfo account : lobby.getPlayers()) {
             ClientConnection connection = ServerApp.getConnectionByUsername(account.getUsername());
             if(connection != null){
-                connection.sendTCP(command);
+                connection.sendGameTCP(command);
             }
         }
     }
@@ -324,7 +324,7 @@ public class LobbyController {
             gameStartDetails.put("lobby_id", lobby.getLobbyId());
             gameStartDetails.put("gameData", session.getGame());
             gameStartDetails.put("player", session.getUserPlayerMap().get(client.getCurrentAccount().getUsername()));
-            client.sendTCP(gameStartDetails);
+            client.sendGameTCP(gameStartDetails);
         }
 
         ServerApp.addGameThread(gameThread);

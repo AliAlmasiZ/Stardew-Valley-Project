@@ -178,18 +178,27 @@ public class RadioDialog extends InGameDialog {
 
                         // Upload with another thread
                         new Thread(() -> {
-                            RadioController.uploadFile(fileHandle.path(), fileHandle.name(), progress -> {
-                                // progress is between 0 and 1
-                                Gdx.app.postRunnable(() -> {
-                                    progressBar.setValue(progress);
-                                    percentLabel.setText((int)(progress * 100) + "%");
-                                });
-                            });
+                            try {
 
-                            Gdx.app.postRunnable(() -> {
-                                progressDialog.hide();
-                                showPlaylistScreen();
-                            });
+                                RadioController.uploadFile(fileHandle.path(), fileHandle.name(), progress -> {
+                                    // progress is between 0 and 1
+                                    Gdx.app.postRunnable(() -> {
+                                        progressBar.setValue(progress);
+                                        percentLabel.setText((int)(progress * 100) + "%");
+                                    });
+                                });
+                            } catch (Error e) {
+                                var popup = new PopUpMessage(PopUpMessage.PopUpMessageType.ERROR_NOTIFICATION);
+                                e.printStackTrace();
+                                popup.add(new Label(e.getMessage(), gameScreen.customSkin));
+                                popup.show(gameScreen.uiStage);
+                            } finally {
+                                Gdx.app.postRunnable(() -> {
+                                    progressDialog.hide();
+                                    showPlaylistScreen();
+                                });
+                            }
+
                         }).start();
                     }
 

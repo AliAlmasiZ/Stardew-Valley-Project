@@ -74,6 +74,51 @@ public class DatabaseManager {
         }
     }
 
+    public static void saveAudioFile(String username, String fileName, byte[] data) throws IOException {
+        String sql = """
+            INSERT OR REPLACE INTO audio_files (username, file_name, audio_data) VALUES (?, ?, ?)
+            """;
+
+        if(data.length > 10 * 1024 * 1024) {
+            throw new IOException("File too large");
+        }
+        if(!userExists(username)) {
+            throw new IllegalArgumentException("Invalid user");
+        }
+        try (var conn = DriverManager.getConnection(URL)) {
+            conn.setAutoCommit(false);
+
+
+
+            try (var pstmt = conn.prepareStatement(sql)){
+                pstmt.setString(1, username);
+                pstmt.setString(2, fileName);
+                pstmt.setBytes(3, data);
+                pstmt.executeUpdate();
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean userExists(String username) {
+        try (var pstmt = DriverManager.getConnection(URL).prepareStatement(
+            "SELECT 1 FROM users WHERE username = ?"
+        )){
+            pstmt.setString(1, username);
+            var rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static Account loadAccount(String username) {
         var sql = """
         SELECT
@@ -135,6 +180,8 @@ public class DatabaseManager {
     }
 
 
+
+
     private static Account mapRowToUser(ResultSet rs) throws SQLException {
         Account a = new Account();
         a.setUsername(rs.getString("username"));
@@ -146,6 +193,10 @@ public class DatabaseManager {
 
         return a;
     }
+
+
+
+
     public static void createTableIfNotExists() throws IOException {
         var classLoader = DatabaseManager.class.getClassLoader();
 

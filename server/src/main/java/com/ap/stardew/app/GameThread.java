@@ -84,14 +84,14 @@ public class GameThread extends Thread{
 
     public void sendAllTCP(Object object) {
         for (ClientConnection client : clients) {
-            client.sendTCP(object);
+            client.sendGameTCP(object);
         }
     }
 
     public void sendTCP(JSONMessage message, String username) {
         for (ClientConnection client : clients) {
             if (client.player.getUsername().equals(username)) {
-                client.sendTCP(message);
+                client.sendGameTCP(message);
                 return;
             }
         }
@@ -99,7 +99,7 @@ public class GameThread extends Thread{
 
     public void sendAllUDP(Object object) {
         for (ClientConnection client : clients) {
-            client.sendUDP(object);
+            client.sendGameUDP(object);
         }
     }
 

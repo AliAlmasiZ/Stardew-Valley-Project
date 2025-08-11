@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.controllers.AudioServerController;
 import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.controllers.ServerConnectionController;
 import com.ap.stardew.models.Account;
@@ -9,16 +10,16 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Map;
+import java.util.concurrent.*;
 
 public class ClientConnection {
     ExecutorService gameExecutor = Executors.newSingleThreadExecutor();
     ExecutorService audioExecutor = Executors.newSingleThreadExecutor();
     protected final BlockingQueue<Object> receivedObjectsQueue;
+    protected final BlockingQueue<Object> receivedAudioObjectsQueue;
     private Connection gameConnection;
     private Connection audioConnection;
     private Account currentAccount = null;
@@ -26,10 +27,12 @@ public class ClientConnection {
     public PlayerController playerController;
     public Player player;
     public GameThread gameThread;
+    public Map<String, ByteArrayOutputStream> uploadBuffers = new ConcurrentHashMap<>();
 
 
     public ClientConnection(Connection gameConnection) throws IOException {
         this.receivedObjectsQueue = new LinkedBlockingQueue<>();
+        this.receivedAudioObjectsQueue = new LinkedBlockingQueue<>();
         this.gameConnection = gameConnection;
 
 
@@ -48,7 +51,7 @@ public class ClientConnection {
             //for Socket
     //        sendMessage(response);
             if(response != null)
-                sendTCP(response);
+                sendGameTCP(response);
             return true;
         } catch (UnsupportedOperationException notHandled) {
             return false;
@@ -84,10 +87,10 @@ public class ClientConnection {
         return false;
     }
 
-    public synchronized void sendTCP(Object object) {
+    public synchronized void sendGameTCP(Object object) {
         gameConnection.sendTCP(object);
     }
-    public synchronized void sendUDP(Object object) {
+    public synchronized void sendGameUDP(Object object) {
         gameConnection.sendUDP(object);
     }
 
@@ -124,7 +127,21 @@ public class ClientConnection {
             @Override
             public void received(Connection connection, Object object) {
                 audioExecutor.submit(() -> {
-                    // TODO : handle audio commands
+                    if (object instanceof JSONMessage m) {
+                        try {
+                            var res = AudioServerController.handleMessage(m, ClientConnection.this);
+                            if (res != null)
+                                audioConnection.sendTCP(res);
+
+                        } catch (UnsupportedOperationException e) {
+                            try {
+                                receivedAudioObjectsQueue.put(m);
+                            } catch (InterruptedException interruptedException) {
+                                interruptedException.printStackTrace();
+                            }
+                        }
+
+                    }
                 });
             }
         });

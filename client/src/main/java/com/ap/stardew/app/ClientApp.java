@@ -18,6 +18,7 @@ public class ClientApp {
     private static Client gameClient;
     private static Client audioClient;
     private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
+    private static BlockingQueue<JSONMessage> receivedAudioMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
 
     private static Game activeGame;
@@ -143,6 +144,16 @@ public class ClientApp {
         sendTCP(message);
         try {
             return receivedMessageQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            System.err.println("Request Timed out.");
+            return null;
+        }
+    }
+
+    public static JSONMessage sendAndWaitForAudioResponse(JSONMessage message, int timeoutMilli) {
+        audioClient.sendTCP(message);
+        try {
+            return receivedAudioMessageQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             System.err.println("Request Timed out.");
             return null;
