@@ -55,6 +55,7 @@ public class JSONMessage {
         trade,
         chat,
         audio_packet,
+        upload_packet,
         audio_auth
     }
 

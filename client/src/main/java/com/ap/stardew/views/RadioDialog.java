@@ -1,15 +1,24 @@
 package com.ap.stardew.views;
 
+import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.controllers.RadioController;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.views.widgets.InGameDialog;
+import com.ap.stardew.views.widgets.PopUpMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
@@ -24,12 +33,14 @@ public class RadioDialog extends InGameDialog {
     private final Skin skin;
     private Table mainContentTable;
     private NativeFileChooser fileChooser;
+    private GameScreen gameScreen;
 
 
-    public RadioDialog(Stage stage, NativeFileChooser fileChooser) {
-        super(stage);
+    public RadioDialog(GameScreen gameScreen) {
+        super(gameScreen.uiStage);
+        this.gameScreen = gameScreen;
         skin = GameAssetManager.getInstance().getCustomSkin();
-        this.fileChooser = fileChooser;
+        this.fileChooser = ClientGame.getInstance().fileChooser;
         setupUI();
     }
 
@@ -127,6 +138,59 @@ public class RadioDialog extends InGameDialog {
                     @Override
                     public void onFileChosen(FileHandle fileHandle) {
                         System.out.println("Chosen file: " + fileHandle.path());
+                        if(musics.contains(fileHandle.name())) {
+                            PopUpMessage message = new PopUpMessage(PopUpMessage.PopUpMessageType.ERROR_NOTIFICATION);
+                            message.add(new Label("file with this name already exists", gameScreen.customSkin));
+                            message.show(gameScreen.uiStage);
+                            return;
+                        }
+                        // Dialog for show Process
+
+                        // TODO : better progress bar maybe
+                        Pixmap bgPixmap = new Pixmap(100, 15, Pixmap.Format.RGBA8888);
+                        bgPixmap.setColor(Color.BROWN);
+                        bgPixmap.fill();
+                        Texture progressBarBgTex = new Texture(bgPixmap);
+                        bgPixmap.dispose();
+
+                        Pixmap knobPixmap = new Pixmap(1 , 15, Pixmap.Format.RGBA8888);
+                        knobPixmap.setColor(Color.GREEN);
+                        knobPixmap.fill();
+                        Texture progressBarKnobTex = new Texture(knobPixmap);
+                        knobPixmap.dispose();
+
+                        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+                        progressBarStyle.background = new TextureRegionDrawable(new TextureRegion(progressBarBgTex));
+                        progressBarStyle.knobBefore = new TextureRegionDrawable(new TextureRegion(progressBarKnobTex));
+
+                        InGameDialog progressDialog = new InGameDialog(gameScreen.uiStage);
+                        ProgressBar progressBar = new ProgressBar(0f, 1f, 0.01f, false, progressBarStyle);
+                        progressBar.setValue(0f);
+                        progressBar.setAnimateDuration(0.2f);
+
+                        Label percentLabel = new Label("0%", skin);
+                        Table content = new Table();
+                        content.add(progressBar).width(300).pad(10).row();
+                        content.add(percentLabel).pad(5).row();
+
+                        progressDialog.add(content);
+                        progressDialog.show();
+
+                        // Upload with another thread
+                        new Thread(() -> {
+                            RadioController.uploadFile(fileHandle.path(), fileHandle.name(), progress -> {
+                                // progress is between 0 and 1
+                                Gdx.app.postRunnable(() -> {
+                                    progressBar.setValue(progress);
+                                    percentLabel.setText((int)(progress * 100) + "%");
+                                });
+                            });
+
+                            Gdx.app.postRunnable(() -> {
+                                progressDialog.hide();
+                                showPlaylistScreen();
+                            });
+                        }).start();
                     }
 
                     @Override

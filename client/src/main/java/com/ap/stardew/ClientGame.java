@@ -8,10 +8,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class ClientGame extends Game {
     private static ClientGame instance;
+    public NativeFileChooser fileChooser;
     private SpriteBatch batch;
 
     public static ClientGame getInstance() {
@@ -20,6 +22,11 @@ public class ClientGame extends Game {
 
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public ClientGame(NativeFileChooser fileChooser) {
+        super();
+        this.fileChooser = fileChooser;
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.ap.stardew.views.widgets;
 
 import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -28,6 +30,8 @@ public class PopUpMessage extends Table {
     public enum PopUpMessageType {
         STANDARD(2),
         TOP_CENTER(5),
+        ERROR_NOTIFICATION(3),
+        SUCCESS_NOTIFICATION(3),
         ;
 
         private final float duration;
@@ -56,6 +60,14 @@ public class PopUpMessage extends Table {
             }
             case TOP_CENTER -> {
                 wrapperTable.center().top().pad(8);
+            }
+            case ERROR_NOTIFICATION -> {
+                Image icon = new Image(GameAssetManager.getInstance().error);
+                add(icon);
+            }
+            case SUCCESS_NOTIFICATION -> {
+                Image icon = new Image(GameAssetManager.getInstance().success);
+                add(icon);
             }
         }
 
