@@ -18,4 +18,6 @@ dependencies {
 
   api 'org.tiledreader:TiledReader:1.1.0'
 
+  api("io.github.cdimascio:dotenv-java:3.0.0")
+  api("org.json:json:20231013")
 }
