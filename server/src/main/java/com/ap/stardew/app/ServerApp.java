@@ -140,7 +140,7 @@ public class ServerApp {
         if(audioServer != null) audioServer.dispose();
 
         gameServer = new Server(1024 * 1024 * 10, 1024 * 1024 * 10);
-        audioServer = new Server();
+        audioServer = new Server(1024 * 1024 * 10, 1024 * 1024 * 10);
 
         gameServer.start();
         audioServer.start();

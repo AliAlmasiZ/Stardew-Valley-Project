@@ -18,6 +18,12 @@ import static com.ap.stardew.utils.NetworkUtils.BUFFER_SIZE;
 public class RadioController {
 
 
+    public static JSONMessage handleMessage(JSONMessage message) {
+        //TODO
+        throw new UnsupportedOperationException();
+    }
+
+
 
     public static synchronized void uploadFile(String localPath, String fileName, Consumer<Float> onProgress) {
         try (var fis = new FileInputStream(localPath)) {

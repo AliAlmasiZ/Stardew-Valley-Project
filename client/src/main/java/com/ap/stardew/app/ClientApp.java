@@ -1,5 +1,6 @@
 package com.ap.stardew.app;
 
+import com.ap.stardew.controllers.RadioController;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.utils.NetworkUtils;
@@ -42,7 +43,19 @@ public class ClientApp {
 
             @Override
             public void received(Connection connection, Object object) {
-
+                if(object instanceof JSONMessage message) {
+                    try {
+                        var res = RadioController.handleMessage(message);
+                        if(res != null)
+                            audioClient.sendTCP(res);
+                    } catch (UnsupportedOperationException e) {
+                        try {
+                            receivedAudioMessageQueue.put(message);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
             }
         });
     }
@@ -93,7 +106,7 @@ public class ClientApp {
         }
         gameClient = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
         gameClient.start();
-        audioClient = new Client();
+        audioClient = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
         audioClient.start();
 
         registerClasses();
