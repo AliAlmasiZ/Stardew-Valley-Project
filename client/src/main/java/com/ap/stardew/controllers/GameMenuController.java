@@ -10,6 +10,7 @@ import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.crafting.Recipe;
 import com.ap.stardew.models.crafting.RecipeType;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
@@ -1737,6 +1738,11 @@ public class GameMenuController implements Controller {
             npcFriendship.setWasMetToday(true);
             npcFriendship.addXp(20);
         }
+
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
+        jsonMessage.put("command", "meet_npc");
+        jsonMessage.put("npc_name", npc.getName());
+        ClientApp.sendTCP(jsonMessage);
 
         return new Result(true, message);
     }

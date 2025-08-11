@@ -253,7 +253,6 @@ public class GameScreen extends AbstractScreen {
         dialogActors.clear();
 
         for (NPC npc : game.getGameNPCs()) {
-            if (npc.getComponent(PositionComponent.class).getX() < 10) continue;
             DialogActor dialogShow = new DialogActor(npc, this);
             gameStage.addActor(dialogShow);
             dialogActors.add(dialogShow);

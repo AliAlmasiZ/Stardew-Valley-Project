@@ -1,6 +1,7 @@
 package com.ap.stardew.models.Actors;
 
 import com.ap.stardew.app.ClientApp;
+import com.ap.stardew.models.Position;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.NPC.NPC;
@@ -27,8 +28,9 @@ public class DialogActor extends Actor {
 
         setSize(10, 8);
         Sprite sprite = GameAssetManager.getInstance().getNormalSprite(npc);
-        setX(sprite.getX() + sprite.getWidth() - this.getWidth() / 2);
-        setY(sprite.getY() + sprite.getHeight());
+        Position position = npc.getComponent(PositionComponent.class).get();
+        setX(position.x + sprite.getWidth() - this.getWidth() / 2);
+        setY(position.y + sprite.getHeight());
 
         setTouchable(Touchable.enabled);
         addListener(new ClickListener() {

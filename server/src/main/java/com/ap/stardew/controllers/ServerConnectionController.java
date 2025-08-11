@@ -118,6 +118,9 @@ public class ServerConnectionController {
                     connectionThread.playerController.rateGift(message);
                     return null;
                 }
+                case "meet_npc" -> {
+                    GameController.meetNPC(connectionThread.gameThread.getGame(), connectionThread.player, message.getFromBody("npc_name"));
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.request) {

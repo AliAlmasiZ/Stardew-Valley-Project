@@ -4,6 +4,8 @@ import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.*;
+import com.ap.stardew.models.NPC.NPC;
+import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.entities.Entity;
@@ -283,4 +285,14 @@ public class GameController {
         playerFriendship.setXp(xp);
     }
 
+    public static void meetNPC(Game game, Player currentPlayer,String npcName) {
+        NPC npc = game.findNPC(npcName);
+        NpcFriendship npcFriendship = currentPlayer.getNpcFriendships().get(npc);
+
+
+        if (!npcFriendship.wasMetToday()) {
+            npcFriendship.setWasMetToday(true);
+            npcFriendship.addXp(20);
+        }
+    }
 }

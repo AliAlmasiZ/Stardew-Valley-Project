@@ -121,7 +121,7 @@ public class ClientApp {
 
     private static boolean handleMessage(JSONMessage message) {
         try {
-            System.out.println(message);
+//            System.out.println(message);
             JSONMessage response = ClientConnectionController.handleCommand(message);
 
             if(response != null)
