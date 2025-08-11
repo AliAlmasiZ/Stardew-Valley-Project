@@ -106,8 +106,10 @@ public class PlayerController implements InputProcessor {
             screen.openCraftingMenu();
         if (keycode == Input.Keys.C)
             screen.openCookingMenu();
-        if (keycode == Input.Keys.F4)
+        if (keycode == Input.Keys.F1)
             screen.openCheatMenu();
+        if (keycode == Input.Keys.F2)
+            screen.scoreBoardDialog.show();
 
 
         return false;

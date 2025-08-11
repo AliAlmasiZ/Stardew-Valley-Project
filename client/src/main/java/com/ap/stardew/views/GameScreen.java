@@ -97,11 +97,10 @@ public class GameScreen extends AbstractScreen {
     // Clock
     private ClockActor clockActor;
 
-    // Trade
+    // more dialogs
     public TradeDialog tradeDialog;
-
-    // Chat
     public ChatDialog chatDialog;
+    public ScoreBoardDialog scoreBoardDialog;
 
 
     private final Game game;
@@ -201,6 +200,8 @@ public class GameScreen extends AbstractScreen {
         initNPCDialogs();
 
         chatDialog = new ChatDialog(ClientApp.getActiveGame().getPlayers(), uiStage);
+        scoreBoardDialog = new ScoreBoardDialog(uiStage);
+
 
         //TODO: remove this later
         //**************************************
@@ -411,6 +412,8 @@ public class GameScreen extends AbstractScreen {
          */
         // Clock
         clockActor.update(delta);
+
+        scoreBoardDialog.refreshFromGame();
     }
 
 

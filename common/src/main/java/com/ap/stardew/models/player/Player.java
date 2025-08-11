@@ -60,6 +60,7 @@ public class Player extends Entity implements Serializable {
     private Entity greenHouse;
     private Entity trashcan;
     private Buff activeBuff;
+    private int numberOfQuestsDone;
     //for graphic
     private Sprite sprite;
     private float stateTime = 0f;
@@ -175,6 +176,22 @@ public class Player extends Entity implements Serializable {
 
     public Map<Player, PlayerFriendship> getPlayerFriendships() {
         return playerFriendships;
+    }
+
+    public int getNumberOfQuestsDone() {
+        return numberOfQuestsDone;
+    }
+
+    public void setNumberOfQuestsDone(int numberOfQuestsDone) {
+        this.numberOfQuestsDone = numberOfQuestsDone;
+    }
+
+    public void addNumberOfQuestsDone() {
+        this.numberOfQuestsDone++;
+    }
+
+    public void addNumberOfQuestsDone(int amount) {
+        this.numberOfQuestsDone += amount;
     }
 
     public void setGiftSent(ArrayList<Gift> giftSent) {
