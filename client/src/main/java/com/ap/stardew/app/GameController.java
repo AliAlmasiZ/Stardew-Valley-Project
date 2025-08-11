@@ -93,7 +93,7 @@ public class GameController {
         }
     }
 
-    private static void updateFriendships(JSONMessage jsonMessage) {
+    public static void updateFriendships(JSONMessage jsonMessage) {
         Game game = ClientApp.getActiveGame();
         if (!jsonMessage.containsKey("friendships")) return;
         game.setPlayerFriendships(jsonMessage.getFromBody("friendships"));

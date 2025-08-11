@@ -55,6 +55,7 @@ public class JSONMessage {
         request,
         trade,
         chat,
+        cheat,
     }
 
     @Override

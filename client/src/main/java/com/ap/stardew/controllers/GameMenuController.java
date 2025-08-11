@@ -1990,7 +1990,7 @@ public class GameMenuController implements Controller {
         return new Result(true, "your inventory is" + (inventory.getUnlimited() ? "" : " not") + " unlimited now.");
     }
 
-    public Result cheatSetFriendship(int level, int xp, String name) {
+    public Result canCheatSetFriendship(int level, int xp, String name) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Player player = game.findPlayer(name);
@@ -2002,9 +2002,9 @@ public class GameMenuController implements Controller {
             return new Result(false, "dige cheat ham hadi dare:/");
         }
 
-        PlayerFriendship playerFriendship = game.getFriendshipWith(player);
-        playerFriendship.setLevel(level);
-        playerFriendship.setXp(xp);
+//        PlayerFriendship playerFriendship = game.getFriendshipWith(player);
+//        playerFriendship.setLevel(level);
+//        playerFriendship.setXp(xp);
         return new Result(true, "set!");
     }
 

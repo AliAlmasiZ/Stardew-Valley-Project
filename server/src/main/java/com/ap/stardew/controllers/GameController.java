@@ -258,7 +258,6 @@ public class GameController {
         inventory.takeFromInventory(ring, 1);
     }
 
-
     public static void rejectMarriage(Game game, String senderName, String receiverName) {
         Player currentPlayer = game.getPlayerByUsername(senderName);
         Player respondPlayer = game.getPlayerByUsername(receiverName);
@@ -272,6 +271,16 @@ public class GameController {
 
         // effects on energy
         respondPlayer.getEnergy().setModifier(0.5f, 7);
+    }
+
+    public static void cheatFriendship(Game game, String senderName, String receiverName, int level, int xp) {
+        Player currentPlayer = game.getPlayerByUsername(senderName);
+        Player player = game.getPlayerByUsername(receiverName);
+
+
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(currentPlayer ,player);
+        playerFriendship.setLevel(level);
+        playerFriendship.setXp(xp);
     }
 
 }

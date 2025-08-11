@@ -149,11 +149,12 @@ public class GameThread extends Thread{
         }
     }
 
-    public void sendTCP(JSONMessage message, String username) {
+    public void sendTCP(JSONMessage message, String ... username) {
         for (ClientConnectionThread client : clients) {
-            if (client.player.getUsername().equals(username)) {
-                client.sendTCP(message);
-                return;
+            for (String user : username) {
+                if (client.player.getUsername().equals(user)) {
+                    client.sendTCP(message);
+                }
             }
         }
     }

@@ -133,6 +133,12 @@ public class ClientConnectionController {
                 case "update_reject_marriage" -> {
                     GameController.rejectMarriageUpdate(message);
                 }
+                case "update_players_fields" -> {
+                    GameController.updatePlayer(message.getFromBody("username"), message);
+                }
+                case "update_friendships" -> {
+                    GameController.updateFriendships(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

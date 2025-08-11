@@ -3,7 +3,9 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
+import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
+import com.ap.stardew.models.player.Player;
 import io.jsonwebtoken.*;
 
 public class ServerConnectionController {
@@ -129,6 +131,32 @@ public class ServerConnectionController {
                 }
                 case "reject_marriage" -> {
                     connectionThread.playerController.rejectMarriage(message);
+                }
+            }
+        }
+        if (message.getType() == JSONMessage.Type.chat) {
+            switch ((String) message.getFromBody("command")) {
+                case "energy" -> {
+                    Game game = connectionThread.gameThread.getGame();
+                    Player player = game.getPlayerByUsername(message.getFromBody("sender"));
+
+                    player.getEnergy().addEnergy(message.getFromBody("amount"));
+
+                    JSONMessage response = new JSONMessage(JSONMessage.Type.update);
+                    response.put("command", "update_players_fields");
+                    response.put("energy", player.getEnergy());
+                    response.put("username", player.getUsername());
+
+                    connectionThread.gameThread.sendTCP(message, player.getUsername());
+                }
+                case "friendship" -> {
+                    connectionThread.playerController.cheatSetFriendship(message);
+                }
+                case "give_item" -> {
+                    GameStaticController.cheatGiveItem(connectionThread.gameThread.getGame(),
+                        connectionThread.player,
+                        message.getFromBody("name"),
+                        message.getIntFromBody("amount"));
                 }
             }
         }

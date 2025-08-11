@@ -195,8 +195,7 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, receiver.getUsername());
-        clientConnectionThread.gameThread.sendTCP(updateMessage, sender.getUsername());
+        clientConnectionThread.gameThread.sendTCP(updateMessage, receiverName, senderName);
     }
 
     public void rateGift(JSONMessage jsonMessage) {
@@ -231,8 +230,7 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, receiver.getUsername());
-        clientConnectionThread.gameThread.sendTCP(updateMessage, sender.getUsername());
+        clientConnectionThread.gameThread.sendTCP(updateMessage, receiver.getUsername(), sender.getUsername());
     }
 
     public void hug(JSONMessage jsonMessage) {
@@ -330,8 +328,7 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage,senderName);
-        clientConnectionThread.gameThread.sendTCP(updateMessage,receiverName);
+        clientConnectionThread.gameThread.sendTCP(updateMessage,senderName, receiverName);
     }
 
     public void acceptMarriage(JSONMessage jsonMessage) {
@@ -405,6 +402,23 @@ public class PlayerController {
         updateMessage.put("players_update", playerUpdateMessages);
 
         clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+    }
+
+    public void cheatSetFriendship(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        int level = jsonMessage.getIntFromBody("level");
+        int xp = jsonMessage.getIntFromBody("xp");
+
+        GameController.cheatFriendship(game, senderName, receiverName, level, xp);
+
+        // Send to clients
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_friendships");
+        updateMessage.put("friendships", game.getPlayerFriendships());
+
+        clientConnectionThread.gameThread.sendTCP(updateMessage, receiverName, senderName);
     }
 
 }

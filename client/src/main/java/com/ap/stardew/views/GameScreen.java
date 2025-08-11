@@ -1616,6 +1616,161 @@ public class GameScreen extends AbstractScreen {
         showTable(table);
     }
 
+    public void openCheatMenu() {
+        InGameDialog dialog = new InGameDialog(uiStage);
+        dialog.setBackground((Drawable) null);
+        Player currentPlayer = game.getCurrentPlayer();
+
+        TabWidget tabWidget = new TabWidget();
+
+        // Energy Tab
+        Table energyTable = new Table();
+        Label energyLabel = new Label("cheat add energy", customSkin);
+        TextField energyField = new TextField("", customSkin);
+        energyField.setMessageText("Enter the energy...");
+        TextButton energyButton = new TextButton("Confirm", customSkin);
+
+        energyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int amount;
+                try {
+                    amount = Integer.parseInt(energyField.getText());
+                }catch (Exception e) {
+                    return;
+                }
+                JSONMessage message = new JSONMessage(JSONMessage.Type.cheat);
+                message.put("command", "energy");
+                message.put("amount", amount);
+                message.put("sender", currentPlayer.getUsername());
+
+                ClientApp.sendTCP(message);
+                dialog.hide();
+            }
+        });
+
+        energyTable.add(energyLabel).center().pad(5).growX().row();
+        energyTable.add(energyField).pad(5).growX().row();
+        energyTable.add(energyButton).pad(5).growX().row();
+
+
+        // friendship
+        Table friendshipTable = new Table();
+        Label label = new Label("set friendship", customSkin);
+        Label errorLabel = new Label("", customSkin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+        TextField nameField = new TextField("", customSkin);
+        nameField.setMessageText("Enter name...");
+        TextField levelField = new TextField("", customSkin);
+        nameField.setMessageText("Enter level...");
+        TextField xpField = new TextField("", customSkin);
+        levelField.setMessageText("Enter xp...");
+        TextButton nameButton = new TextButton("Confirm", customSkin);
+
+        nameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int level;
+                int xp;
+                String name;
+                try {
+                    level = Integer.parseInt(levelField.getText());
+                    xp = Integer.parseInt(xpField.getText());
+                    name = nameField.getText();
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Are you testing errors in CHEAT?");
+                    errorLabel.setVisible(true);
+                    return;
+                }
+
+                Result result = controller.canCheatSetFriendship(level, xp, name);
+                if (!result.isSuccessful()) {
+                    errorLabel.setText(result.message());
+                    errorLabel.setVisible(true);
+                } else {
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.cheat);
+                    message.put("command", "friendship");
+                    message.put("sender", currentPlayer.getUsername());
+                    message.put("receiver", name);
+                    message.put("level", level);
+                    message.put("xp", xp);
+
+                    ClientApp.sendTCP(message);
+                    dialog.hide();
+                }
+
+
+            }
+        });
+
+        friendshipTable.add(label).growX().pad(3).row();
+        friendshipTable.add(nameField).growX().pad(3).row();
+        friendshipTable.add(levelField).growX().pad(3).row();
+        friendshipTable.add(xpField).growX().pad(3).row();
+        friendshipTable.add(errorLabel).growX().pad(3).row();
+        friendshipTable.add(nameButton).growX().pad(3).row();
+
+        // give item
+        Table giveItemTable = new Table();
+        Label giveItemLabel = new Label("cheat give item", customSkin);
+        Label errorLabelItem = new Label("", customSkin);
+        errorLabelItem.setColor(Color.RED);
+        errorLabelItem.setVisible(false);
+        TextField itemNameField = new TextField("", customSkin);
+        itemNameField.setMessageText("item name...");
+        TextField amountField = new TextField("", customSkin);
+        amountField.setMessageText("Enter amount...");
+        TextButton giveItemButton = new TextButton("Confirm", customSkin);
+
+        giveItemButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String name;
+                int amount;
+                try {
+                    name = itemNameField.getText();
+                    amount = Integer.parseInt(amountField.getText());
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Are you testing errors in CHEAT?");
+                    errorLabel.setVisible(true);
+                    return;
+                }
+
+                Result result = controller.cheatGiveItem(name, amount);
+                if (!result.isSuccessful()) {
+                    errorLabel.setText(result.message());
+                    errorLabel.setVisible(true);
+                } else {
+                    JSONMessage message = new JSONMessage(JSONMessage.Type.cheat);
+                    message.put("command", "give_item");
+                    message.put("name", name);
+                    message.put("amount", amount);
+
+                    ClientApp.sendTCP(message);
+                    dialog.hide();
+                }
+            }
+
+
+        });
+
+
+
+        giveItemTable.add(giveItemLabel).growX().pad(3).row();
+        giveItemTable.add(itemNameField).growX().pad(3).row();
+        giveItemTable.add(amountField).growX().pad(3).row();
+        giveItemTable.add(errorLabelItem).growX().pad(3).row();
+        giveItemTable.add(giveItemButton).growX().pad(3).row();
+
+
+        tabWidget.add(energyTable).pad(5).fill().grow();
+        tabWidget.add(friendshipTable).pad(5).fill().grow();
+        dialog.add(tabWidget).fill().grow();
+
+        dialog.show();
+    }
+
 
     /* --- Crafting --- */
     public void openCraftingMenu() {
