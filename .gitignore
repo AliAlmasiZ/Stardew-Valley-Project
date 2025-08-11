@@ -51,7 +51,7 @@ pnpm-lock.yaml
 __pycache__/
 *.py[cod]
 venv/
-.env
+assets/.env
 
 # Java
 *.jar

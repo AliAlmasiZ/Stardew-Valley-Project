@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 public class LLMRequest {
+    private static final HttpClient client = HttpClient.newHttpClient();
     private final String apiKey;
     private final String model;
     private final String baseUrl;
@@ -33,24 +33,9 @@ public class LLMRequest {
     }
 
     public String talkToLLM(String sysMsg, String userMsg) throws IOException, InterruptedException {
-        JSONObject payload = new JSONObject();
-        payload.put("model", model);
-        payload.put("max_tokens", 100);
-        payload.put("temperature", 0.1);
+        JSONObject payload = getJsonObject(sysMsg, userMsg);
 
-        JSONArray messages = new JSONArray();
-        JSONObject systemMessage = new JSONObject();
-        systemMessage.put("role", "system");
-        systemMessage.put("content", sysMsg);
-        JSONObject userMessage = new JSONObject();
-        userMessage.put("role", "user");
-        userMessage.put("content", userMsg);
-        messages.put(systemMessage);
-        messages.put(userMessage);
 
-        payload.put("messages", messages);
-
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(baseUrl))
             .header("Content-Type", "application/json")
@@ -66,11 +51,40 @@ public class LLMRequest {
             return "I don't know";
         }
 
-        JSONObject result = new JSONObject(response.body());
-        var choices = result.getJSONArray("choices");
-        var first = choices.getJSONObject(0);
-        JSONObject message = first.getJSONObject("message");
-        return message.getString("contetn").trim();
+        String result = new JSONObject(response.body())
+            .getJSONArray("choices")
+            .getJSONObject(0)
+            .getJSONObject("message")
+            .getString("content").trim();
+
+        return result;
+    }
+
+    private JSONObject getJsonObject(String sysMsg, String userMsg) {
+        JSONObject payload = new JSONObject();
+        payload.put("model", model);
+        payload.put("max_tokens", 100);
+        payload.put("temperature", 0.1);
+//        payload.put("stream", true);
+
+        JSONArray messages = new JSONArray();
+        JSONObject systemMessage = new JSONObject();
+        systemMessage.put("role", "system");
+        systemMessage.put("content", sysMsg);
+        JSONObject userMessage = new JSONObject();
+        userMessage.put("role", "user");
+        userMessage.put("content", userMsg);
+
+        if(sysMsg != null && !sysMsg.isEmpty())
+            messages.put(systemMessage);
+        if(userMsg != null && !userMsg.isEmpty())
+            messages.put(userMessage);
+
+        if(messages.isEmpty())
+            throw new IllegalStateException("messages can not be empty");
+
+        payload.put("messages", messages);
+        return payload;
     }
 
 }

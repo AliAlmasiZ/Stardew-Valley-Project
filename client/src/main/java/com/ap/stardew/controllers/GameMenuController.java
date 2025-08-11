@@ -1728,6 +1728,9 @@ public class GameMenuController implements Controller {
             return new Result(false, "You are too far from this NPC");
         }
 
+        //TODO: move this to server side
+
+
         String message = npc.getCorrectDialogue(game.getDate().getSeason(), npcFriendship.getLevel(),
             game.getTodayWeather(), game.getDate().getHour() < 16);
         if (message == null) {
