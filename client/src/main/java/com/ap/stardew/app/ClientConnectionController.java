@@ -112,9 +112,11 @@ public class ClientConnectionController {
                 }
                 case "update_player_gift" -> {
                     GameController.receiveGiftUpdate(message);
+                    return null;
                 }
                 case "update_rate_gift" -> {
                     GameController.receiveGiftRateUpdate(message);
+                    return null;
                 }
             }
         }
@@ -123,24 +125,31 @@ public class ClientConnectionController {
             switch (command) {
                 case "request_start" -> {
                     GameController.startTradeRequest(message);
+                    return null;
                 }
                 case "stop_trade" -> {
                     GameController.stopTrade(message);
+                    return null;
                 }
                 case "accept_trade" -> {
                     GameController.acceptTradeRequest();
+                    return null;
                 }
                 case "update_trade" -> {
                     GameController.updateTradeInventory(message);
+                    return null;
                 }
                 case "confirm" -> {
                     GameController.confirmTrade();
+                    return null;
                 }
                 case "reject_trade_offer" -> {
                     GameController.rejectTradeOffer();
+                    return null;
                 }
                 case "finish_trade" -> {
                     GameController.finishTrade(message);
+                    return null;
                 }
             }
         }
@@ -158,9 +167,11 @@ public class ClientConnectionController {
             switch (command) {
                 case "send_private_message" -> {
                     GameController.receivePrivateMessage(message);
+                    return null;
                 }
                 case "send_public_message" -> {
                     GameController.receivePublicMessage(message);
+                    return null;
                 }
             }
         }

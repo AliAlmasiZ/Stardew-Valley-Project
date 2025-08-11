@@ -359,14 +359,12 @@ public class GameController {
         Gdx.app.postRunnable(()->{
             PopUpMessage popUpMessage = new PopUpMessage();
             popUpMessage.add(new Label("You were disconnected from a session. Do you want to rejoin?",
-                GameAssetManager.getInstance().getCustomSkin()){{setWrap(true);}}).maxWidth(200).row();
-            popUpMessage.fadeOutTime = 20;
-
+                GameAssetManager.getInstance().getCustomSkin()){{setWrap(true);}}).grow().width(200).spaceBottom(2).row();
             Button acceptButton = new Button(GameAssetManager.getInstance().getCustomSkin(), "accept");
             Button rejectButton = new Button(GameAssetManager.getInstance().getCustomSkin(), "reject");
 
-            popUpMessage.add(acceptButton).right();
-            popUpMessage.add(rejectButton).left();
+            popUpMessage.add(acceptButton);
+            popUpMessage.add(rejectButton).expandX().left();
             popUpMessage.add().growX();
 
             popUpMessage.show(AbstractScreen.getFrontStage());

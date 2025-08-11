@@ -446,14 +446,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void showTemporaryMessage(String message, float duration, Color color) {
-        Label label = new Label(message, customSkin);
-
-        label.setColor(color);
-        label.scaleBy(2);
-
-        PopUpMessage popUpMessage = new PopUpMessage(PopUpMessage.PopUpMessageType.TOP_CENTER);
-        popUpMessage.add(label);
-        popUpMessage.show(uiStage);
+        new PopUpMessage(message, PopUpMessage.PopUpMessageType.TOP_CENTER).show(AbstractScreen.getFrontStage());
     }
 
     public void showTemporaryMessage(String message, float duration, Color color, float x, float y, float scale) {

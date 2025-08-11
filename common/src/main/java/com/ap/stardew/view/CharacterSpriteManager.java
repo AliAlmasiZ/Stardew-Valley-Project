@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -196,9 +197,9 @@ public class CharacterSpriteManager {
         loadAnim(Direction.RIGHT, Player.Action.HARVESTING , "58@100, 59@100, 60@100, 61@100");
         loadAnim(Direction.LEFT , Player.Action.HARVESTING , "58@100, 59@100, 60@100, 61@100");
 
-        loadAnim(Direction.DOWN , Player.Action.USING_TOOL , "66@150, 67@40, 68@40, 69@170, 70@75");
+        loadAnim(Direction.DOWN , Player.Action.USING_TOOL , "66@150, 67@40, 68@40, 69@170, 70@75", "(3.00, 20.98, 0.000),(7.60, 15.58, 0.000),(8.10, 11.88, 0.000),(7.90, 9.58, 0.000),(7.80, 8.68, 0.000)");
         loadAnim(Direction.UP   , Player.Action.USING_TOOL , "36@100, 37@40, 38@40, 63@220, 62@75");
-        loadAnim(Direction.RIGHT, Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75");
+        loadAnim(Direction.RIGHT, Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75", "(2.80, 20.68, 1.625), (8.40, 21.38, 1.205), (13.80, 19.98, 0.884), (13.50, 15.98, 0.000), (13.80, 14.28, 0.000)");
         loadAnim(Direction.LEFT , Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75");
 
         loadAnim(Direction.DOWN , Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
@@ -216,8 +217,10 @@ public class CharacterSpriteManager {
         loadAnim(Direction.RIGHT, Player.Action.WATERING , "58@75, 59@100, 45@500");
         loadAnim(Direction.LEFT , Player.Action.WATERING , "58@75, 59@100, 45@500");
     }
-
-    synchronized private void loadAnim(Direction direction, Player.Action action, String data) {
+    synchronized private void loadAnim(Direction direction, Player.Action action, String data){
+        loadAnim(direction, action, data, null);
+    }
+    synchronized private void loadAnim(Direction direction, Player.Action action, String data, String toolAnimData) {
         Array<TextureRegion> frames = new Array<>();
         Array<Float> durations = new Array<>();
 
@@ -279,6 +282,32 @@ public class CharacterSpriteManager {
         VariableDurationAnimation<TextureRegion> animation = new VariableDurationAnimation<>(framesArray, durationsArray);
         animations.putIfAbsent(action, new HashMap<>());
         animations.get(action).put(direction, animation);
+
+        if(toolAnimData != null){
+            ArrayList<ToolFrameInfo> list = new ArrayList<>();
+
+            // Split by "),", then clean each substring
+            String[] parts = toolAnimData.split("\\),");
+
+            for (String part : parts) {
+                // Clean up string to remove parentheses and spaces
+                part = part.replace("(", "").replace(")", "").trim();
+
+                // Split by comma
+                String[] values = part.split(",");
+                if (values.length == 3) {
+                    float x = Float.parseFloat(values[0].trim());
+                    float y = Float.parseFloat(values[1].trim());
+                    float a = Float.parseFloat(values[2].trim());
+
+                    Vector2 origin = new Vector2(x, y);
+                    ToolFrameInfo info = new ToolFrameInfo(origin, a);
+                    list.add(info);
+                }
+            }
+            System.out.println("s");
+        }
+
     }
 
     private TextureRegion loadTexture(Direction direction, Player.Action action, int[] baseBody, int[] baseHand, int[] shirt, int[] pants, int[] hair) {

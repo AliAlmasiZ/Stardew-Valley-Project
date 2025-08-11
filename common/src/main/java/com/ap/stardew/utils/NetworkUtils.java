@@ -10,8 +10,11 @@ import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
+import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.entities.*;
 import com.ap.stardew.models.entities.components.*;
+import com.ap.stardew.models.entities.components.harvestable.Harvestable;
+import com.ap.stardew.models.entities.components.harvestable.HarvestableResource;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.enums.*;
@@ -125,6 +128,10 @@ public class NetworkUtils {
         kryo.register(UseFunction.class);
         kryo.register(Upgradable.class);
         kryo.register(Material.class);
+        kryo.register(Forageable.class);
+        kryo.register(SavedGameDetails.class);
+        kryo.register(Harvestable.class);
+        kryo.register(HarvestableResource.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);

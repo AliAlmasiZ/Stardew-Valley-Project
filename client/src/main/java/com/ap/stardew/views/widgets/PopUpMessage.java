@@ -12,35 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PopUpMessage extends Table {
     private static PopUpMessage activeMessage = null;
-    private static PopUpMessageType popUpMessageType = PopUpMessageType.STANDARD;
-
-
-    private Table wrapperTable;
-
-    public PopUpMessage() {
-        setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
-
-    }
-    public PopUpMessage(String message){
-        this();
-
-        Label label = new Label(message, GameAssetManager.getInstance().getCustomSkin());
-
-        if(label.getPrefWidth() < 200){
-            add(label).grow().width(label.getPrefWidth());
-        }else{
-            add(label).grow().width(200);
-            label.setWrap(true);
-        }
-    }
-
-    public PopUpMessage(PopUpMessageType popUpMessageType) {
-        setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
-        this.popUpMessageType = popUpMessageType;
-    }
 
     public enum PopUpMessageType {
-        STANDARD(2),
+        STANDARD(20),
         TOP_CENTER(5),
         ;
 
@@ -52,6 +26,30 @@ public class PopUpMessage extends Table {
 
         public float getDuration() {
             return duration;
+        }
+    }
+
+    private Table wrapperTable;
+    private PopUpMessageType popUpMessageType = PopUpMessageType.STANDARD;
+
+    public PopUpMessage() {
+        setBackground(GameAssetManager.getInstance().getCustomSkin().getDrawable("smallPanelNinePatch"));
+    }
+    public PopUpMessage(String message){
+        this(message, PopUpMessageType.STANDARD);
+    }
+
+    public PopUpMessage(String message, PopUpMessageType popUpMessageType) {
+        this();
+        this.popUpMessageType = popUpMessageType;
+
+        Label label = new Label(message, GameAssetManager.getInstance().getCustomSkin());
+
+        if(label.getPrefWidth() < 200){
+            add(label).grow().width(label.getPrefWidth());
+        }else{
+            add(label).grow().width(200);
+            label.setWrap(true);
         }
     }
 
