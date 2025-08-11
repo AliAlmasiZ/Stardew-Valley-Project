@@ -3,10 +3,14 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
+import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.player.Player;
 import io.jsonwebtoken.*;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ServerConnectionController {
     public static JSONMessage handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
@@ -59,8 +63,18 @@ public class ServerConnectionController {
             JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
             switch ((String) message.getFromBody("command")) {
+                case "suggest_username" -> {
+                    return suggestUsername(message.getFromBody("username"));
+                }
                 case "login" -> {
                     return login(message, connectionThread);
+                }
+                case "register" -> {
+                    ArrayList<Account> accounts = new ArrayList<>();
+                    accounts.add(message.getFromBody("account"));
+                    ServerApp.saveAccounts(accounts);
+                    connectionThread.setCurrentAccount(accounts.get(0));
+                    return null;
                 }
                 case "getUsername" -> {
                     return getUsernameCommand(message.getFromBody("token"));
@@ -244,6 +258,31 @@ public class ServerConnectionController {
 
         response.put("success", true);
         response.put("username", payload.getSubject());
+
+        return response;
+    }
+
+    /******************************** for signup menu *******************************************/
+    private static JSONMessage suggestUsername(String username) {
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+        if (ServerApp.getAccountByUsername(username) == null) {
+            response.put("success", true);
+            return response;
+        }
+
+        StringBuilder newUsername = new StringBuilder(username);
+        Random rand = new Random();
+        while (ServerApp.getAccountByUsername(newUsername.toString()) != null) {
+            int randomNumber = rand.nextInt() % 11;
+            if (randomNumber == 10) {
+                newUsername.append("-");
+            } else {
+                newUsername.append(randomNumber);
+            }
+        }
+
+        response.put("success", false);
+        response.put("username", newUsername.toString());
 
         return response;
     }

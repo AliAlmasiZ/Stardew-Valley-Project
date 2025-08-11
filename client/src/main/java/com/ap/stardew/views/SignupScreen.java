@@ -1,7 +1,9 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.controllers.LoginMenuController;
+import com.ap.stardew.models.App;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.models.Result;
 import com.badlogic.gdx.Gdx;
@@ -36,18 +38,18 @@ public class SignupScreen extends AbstractMenuScreen {
 
         username = new TextField("", customSkin);
         username.setMessageText("Username");
-        username.setWidth(fieldWidth);
+//        username.setWidth(fieldWidth);
         password = new TextField("", customSkin);
         password.setMessageText("Password");
-        password.setWidth(fieldWidth);
+//        password.setWidth(fieldWidth);
         confirmPassword = new TextField("", customSkin);
         confirmPassword.setMessageText("Confirm Password");
-        confirmPassword.setWidth(fieldWidth);
+//        confirmPassword.setWidth(fieldWidth);
         name = new TextField("", customSkin);
         name.setMessageText("Name");
         email = new TextField("", customSkin);
         email.setMessageText("Email");
-        email.setWidth(fieldWidth);
+//        email.setWidth(fieldWidth);
         gender = new SelectBox<>(customSkin);
         String[] genders = {"male", "female"};
         SignupScreen.this.gender.setItems(genders);
@@ -65,24 +67,24 @@ public class SignupScreen extends AbstractMenuScreen {
         rootTable.row();
         rootTable.add(new Label("Username:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
-        rootTable.add(username).width(fieldWidth);
+        rootTable.add(username)/*.width(fieldWidth)*/;
         rootTable.row();
         rootTable.add(new Label("Password:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
-        rootTable.add(password).width(fieldWidth);
+        rootTable.add(password)/*.width(fieldWidth)*/;
         rootTable.add(randomPasswordButton).pad(15);
         rootTable.row();
         rootTable.add(new Label("Confirm Password:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
-        rootTable.add(confirmPassword).width(fieldWidth);
+        rootTable.add(confirmPassword)/*.width(fieldWidth)*/;
         rootTable.row();
         rootTable.add(new Label("Name", customSkin)).padBottom(padFromLabel);
         rootTable.row();
-        rootTable.add(name).width(fieldWidth);
+        rootTable.add(name)/*.width(fieldWidth)*/;
         rootTable.row();
         rootTable.add(new Label("Email:", customSkin)).padBottom(padFromLabel);
         rootTable.row();
-        rootTable.add(email).width(fieldWidth);
+        rootTable.add(email)/*.width(fieldWidth)*/;
         rootTable.row();
         rootTable.add(new Label("Gender:", customSkin));
         rootTable.row();
@@ -163,8 +165,8 @@ public class SignupScreen extends AbstractMenuScreen {
         dialog.getContentTable().add(questionLabel).padTop(10).padLeft(10).padRight(10).row();
         dialog.getContentTable().add(new Label("which one will you answer?", customSkin)).padTop(10).padLeft(10).padRight(10).row();
         dialog.getContentTable().add(integerSelectBox).padTop(10).padLeft(10).padRight(10).row();
-        dialog.getContentTable().add(answerField).width(300).padBottom(10).row();
-        dialog.getContentTable().add(confirmAnswerField).width(300).padBottom(10).row();
+        dialog.getContentTable().add(answerField).width(200).padBottom(10).row();
+        dialog.getContentTable().add(confirmAnswerField).width(200).padBottom(10).row();
         dialog.getContentTable().add(errorLabel).padBottom(10).row();
 
         TextButton confirmButton = new TextButton("Confirm", customSkin);
@@ -185,7 +187,9 @@ public class SignupScreen extends AbstractMenuScreen {
                     return;
                 }
 
-                ClientGame.getInstance().setScreen(new MainScreen()); //TODO: go to proper screen
+                ClientApp.setUsername(App.getRegisteredAccount().getUsername());
+                ClientGame.getInstance().setScreen(new MainScreen());
+//                ClientGame.getInstance().setScreen(new MainScreen());
             }
 
         });

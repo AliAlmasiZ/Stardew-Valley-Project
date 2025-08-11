@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 public class ScoreBoardDialog {
+    //TODO: make it look better
     private final float FONT_SCALE = 0.3f;
     private final Skin skin = GameAssetManager.getInstance().getCustomSkin();
 

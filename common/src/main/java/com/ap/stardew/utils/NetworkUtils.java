@@ -141,7 +141,9 @@ public class NetworkUtils {
         kryo.register(Material.class);
         kryo.register(Dialogue.class);
         kryo.register(Quest.class);
+        kryo.register(Account.class);
         kryo.register(NPC.class);
+        kryo.register(SecurityQuestions.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);

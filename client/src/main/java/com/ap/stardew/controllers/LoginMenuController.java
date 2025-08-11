@@ -42,8 +42,7 @@ public class LoginMenuController implements Controller{    @Override
 
         Account account = new Account(genderEnum, email,name, password, username);
         App.setRegisteredAccount(account);
-//        App.addAccount(account);
-        //TODO: add account to jason file
+
 
         StringBuilder message = new StringBuilder("Account registered successfully! now you can choose a security question:");
         message.append("\n").append(SecurityQuestions.getQuestionList());
@@ -51,22 +50,15 @@ public class LoginMenuController implements Controller{    @Override
     }
 
     public Result suggestUsername(String username) {
-        if(!App.doesUsernameExist(username)){
-            return new Result(true, "");
-        }
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
+        jsonMessage.put("command", "suggest_username");
+        jsonMessage.put("username", username);
 
-        StringBuilder newUsername = new StringBuilder(username);
-        Random rand = new Random();
-        while (App.doesUsernameExist(newUsername.toString())) {
-            int randomNumber = rand.nextInt() % 11;
-            if (randomNumber == 10) {
-                newUsername.append("-");
-            } else {
-                newUsername.append(randomNumber);
-            }
-        }
+        JSONMessage response = ClientApp.sendAndWaitForResponse(jsonMessage, ClientApp.TIMEOUT_MILLIS);
+        if (response.getFromBody("success") ) return new Result(true, "");
 
-        return new Result(false, newUsername.toString());
+        String newUsername = response.getFromBody("username");
+        return new Result(false, newUsername);
     }
 
     public Result login(String username, String password, boolean stayLogged) {
@@ -105,7 +97,15 @@ public class LoginMenuController implements Controller{    @Override
             return new Result(false, "answers do not match!");
         }
 
-        App.getRegisteredAccount().getSecurityAnswers().put(question, answer);
+        Account account = App.getRegisteredAccount();
+        account.getSecurityAnswers().put(question, answer);
+
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
+        jsonMessage.put("command", "register");
+        jsonMessage.put("account", account);
+
+        ClientApp.sendTCP(jsonMessage);
+
         return new Result(true, "You answered question number " + number + " successfully!");
     }
 

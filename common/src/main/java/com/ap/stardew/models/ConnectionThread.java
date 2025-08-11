@@ -253,6 +253,7 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(Dialogue.class);
         kryo.register(Quest.class);
         kryo.register(NPC.class);
+        kryo.register(Account.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);
