@@ -126,7 +126,6 @@ public class RadioDialog extends InGameDialog {
                 fileChooser.chooseFile(conf, new NativeFileChooserCallback() {
                     @Override
                     public void onFileChosen(FileHandle fileHandle) {
-                        //TODO
                         System.out.println("Chosen file: " + fileHandle.path());
                     }
 

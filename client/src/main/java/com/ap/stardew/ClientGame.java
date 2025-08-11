@@ -3,7 +3,6 @@ package com.ap.stardew;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.view.GameAssetManager;
-import com.ap.stardew.models.App;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,8 +24,8 @@ public class ClientGame extends Game {
 
     @Override
     public void create() {
-        ClientApp.startClient();
-        ClientApp.connectServer();
+        ClientApp.startClients();
+        ClientApp.connectClients();
 
         loadDatas();
         instance = this;

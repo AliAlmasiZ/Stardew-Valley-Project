@@ -12,8 +12,11 @@ import com.ap.stardew.ClientGame;
 import com.ap.stardew.views.LobbyScreen;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientConnectionController {
+    private static ExecutorService thread = Executors.newSingleThreadExecutor();
     public static JSONMessage handleCommand(JSONMessage message) {
         if(message.getType() == JSONMessage.Type.update) {
             String command = message.getFromBody("command");
@@ -117,6 +120,18 @@ public class ClientConnectionController {
                 }
             }
         }
-        throw new UnsupportedOperationException(); // for messages cant handle
+        if (message.getType() == JSONMessage.Type.audio_packet) {
+            thread.submit(() -> handleStreaming(message));
+        }
+
+
+        if(message.getType() == JSONMessage.Type.response) {
+            throw new UnsupportedOperationException();
+        }
+        return null;
+    }
+
+    public static synchronized void handleStreaming(JSONMessage audioPacketMessage) {
+        //TODO
     }
 }

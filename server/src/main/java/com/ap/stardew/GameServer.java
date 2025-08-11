@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import static com.ap.stardew.models.ConnectionThread.TCP_PORT;
-import static com.ap.stardew.models.ConnectionThread.UDP_PORT;
+import static com.ap.stardew.utils.NetworkUtils.TCP_PORT;
+import static com.ap.stardew.utils.NetworkUtils.UDP_PORT;
 
 
 public class GameServer {
@@ -29,8 +29,8 @@ public class GameServer {
 //            ServerApp.setListenerThread(new ListenerThread(PORT));
 //            ServerApp.startListening();
 
-            //for start kryoNet server
-            ServerApp.startServer(TCP_PORT, UDP_PORT);
+            //for startGameConnection kryoNet server
+            ServerApp.startServer();
             ServerApp.initializeServerListener(); // add message handling and client connections listener
 
             System.out.println("Server started successfully on tcp : " + TCP_PORT + " udp : " + UDP_PORT);

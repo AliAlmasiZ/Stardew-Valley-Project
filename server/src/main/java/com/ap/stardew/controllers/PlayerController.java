@@ -1,31 +1,27 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
-import com.ap.stardew.models.App;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
-import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.Client;
 
 import java.util.HashMap;
 
 public class PlayerController {
-    private ClientConnectionThread clientConnectionThread;
+    private ClientConnection clientConnectionThread;
     private Vector2 direction = new Vector2();
     private Player player;
 
-    public PlayerController(ClientConnectionThread clientThread) {
+    public PlayerController(ClientConnection clientThread) {
         this.clientConnectionThread = clientThread;
         player = clientThread.player;
     }

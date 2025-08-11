@@ -54,6 +54,8 @@ public class JSONMessage {
         update,
         trade,
         chat,
+        audio_packet,
+        audio_auth
     }
 
     @Override

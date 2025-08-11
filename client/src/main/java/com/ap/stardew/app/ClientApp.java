@@ -1,58 +1,68 @@
 package com.ap.stardew.app;
 
-import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.JSONMessage;
-import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.utils.NetworkUtils;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-import static com.ap.stardew.models.ConnectionThread.*;
+import static com.ap.stardew.utils.NetworkUtils.*;
 
 public class ClientApp {
-    private static Client client;
+    private static Client gameClient;
+    private static Client audioClient;
     private static BlockingQueue<JSONMessage> receivedMessageQueue = new LinkedBlockingQueue<>();
     public static final int TIMEOUT_MILLIS = 5000;
-
-    private static boolean exitFlag = false;
 
     private static Game activeGame;
     private static String token;
     private static String username;
 
-    public static boolean isEnded() {
-        return exitFlag;
-    }
-
-    public static void endAll() {
-        exitFlag = true;
-//        serverConnectionThread.end();
-    }
-
-    public static void connectServer(String host, int tcpPort, int udpPort) throws IOException {
-        client.connect(TIMEOUT_MILLIS, host, tcpPort, udpPort);
-        client.addListener(new Listener(){
+    public static void connectAudioClient(String host, int tcp, int udp) throws IOException {
+        if(audioClient == null)
+            throw new IllegalStateException("You should start audioClient before connect that");
+        audioClient.connect(TIMEOUT_MILLIS, host, tcp, udp);
+        audioClient.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
-                System.out.println("connected");
+                System.out.println("Audio Connected");
             }
 
             @Override
             public void disconnected(Connection connection) {
-                System.err.println("disconnected");
+                System.out.println("Audio Disconnected");
             }
 
             @Override
             public void received(Connection connection, Object object) {
-//                System.out.println("new message received in class : " + object.getClass());
+
+            }
+        });
+    }
+
+    public static void connectGameClient(String host, int tcpPort, int udpPort) throws IOException {
+        if(gameClient == null)
+            throw new IllegalStateException("You should start gameClient before connect that");
+        gameClient.connect(TIMEOUT_MILLIS, host, tcpPort, udpPort);
+        gameClient.addListener(new Listener(){
+            @Override
+            public void connected(Connection connection) {
+                System.out.println("Game Connected");
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                System.err.println("Game Disconnected");
+            }
+
+            @Override
+            public void received(Connection connection, Object object) {
                 boolean handled = handleReceived(object);
                 if(!handled) try {
                     receivedMessageQueue.put((JSONMessage) object); // other objects must be handled
@@ -64,36 +74,44 @@ public class ClientApp {
         });
     }
 
-    public static void connectServer() {
+    public static void connectClients() {
 
         try {
-            connectServer(HOST, TCP_PORT, UDP_PORT);
+            connectGameClient(HOST, TCP_PORT, UDP_PORT);
+            connectAudioClient(HOST, AUDIO_CHANNEL_TCP, AUDIO_CHANNEL_UDP);
         } catch (IOException e) {
             System.err.println("Error : can not connect to server :");
             System.err.println(e.getMessage());
         }
     }
 
-    public static void startClient() {
-        if(client != null) {
+    public static void startClients() {
+        if(gameClient != null || audioClient != null) {
             System.err.println("client already started");
             return;
         }
-        client = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
-        client.start();
+        gameClient = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
+        gameClient.start();
+        audioClient = new Client();
+        audioClient.start();
+
         registerClasses();
     }
 
+    /**
+     * Register any classes with {@link NetworkUtils#registerClasses(Kryo)}
+     * */
     private static void registerClasses() {
-        NetworkUtils.registerClasses(client.getKryo());
+        NetworkUtils.registerClasses(gameClient.getKryo());
+        NetworkUtils.registerClasses(audioClient.getKryo());
     }
 
     public static void sendTCP(Object o) {
-        client.sendTCP(o);
+        gameClient.sendTCP(o);
     }
 
     public static void sendUDP(Object o) {
-        client.sendUDP(o);
+        gameClient.sendUDP(o);
     }
 
     private static boolean handleMessage(JSONMessage message) {
@@ -120,6 +138,7 @@ public class ClientApp {
         }
         return false;
     }
+
     public static JSONMessage sendAndWaitForResponse(JSONMessage message, int timeoutMilli) {
         sendTCP(message);
         try {
@@ -130,40 +149,17 @@ public class ClientApp {
         }
     }
 
-    public static Client getClient() {
-        return client;
+    public static Client getGameClient() {
+        return gameClient;
     }
 
-    //    public static void connectServer() {
-//        if(serverConnectionThread != null && !serverConnectionThread.isAlive())
-//            serverConnectionThread.start();
-//        else
-//            System.err.println("server connected already");
-//    }
+    public static Client getAudioClient() {
+        return audioClient;
+    }
 
-//    public static void connectServer(String ip, int port) {
-//        try {
-//            setServerConnectionThread(ip, port);
-//            connectServer();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void setServerConnectionThread(String ip, int port) throws IOException {
-//        //for Socket connection
-//        serverConnectionThread = new ServerConnectionThread(new Socket(ip, port));
-//
-//    }
-
-//    public static ServerConnectionThread getServerConnectionThread() {
-//        return serverConnectionThread;
-//    }
 
     public static boolean isConnected(){
-//        return serverConnectionThread != null && serverConnectionThread.isAlive();
-
-        return client.isConnected() ;
+        return gameClient.isConnected();
     }
 
     public static String getToken() {

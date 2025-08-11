@@ -1,21 +1,21 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.dto.JSONMessage;
 import io.jsonwebtoken.*;
 
 public class ServerConnectionController {
-    public static JSONMessage handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
+    public static JSONMessage handleCommand(JSONMessage message, ClientConnection clientConnection) {
         if (message.getType() == JSONMessage.Type.player_input_command) {
             String command = message.getFromBody("command");
             switch (command) {
                 case "player_move" -> {
-                    return connectionThread.playerController.handleWalk(message);
+                    return clientConnection.playerController.handleWalk(message);
                 }
                 case "update_player_action" -> {
-                    connectionThread.playerController.handleChangeAction(message);
+                    clientConnection.playerController.handleChangeAction(message);
                 }
             }
         }
@@ -53,7 +53,7 @@ public class ServerConnectionController {
 
             switch ((String) message.getFromBody("command")) {
                 case "login" -> {
-                    return login(message.getFromBody("username"), message.getFromBody("password"), connectionThread);
+                    return login(message.getFromBody("username"), message.getFromBody("password"), clientConnection);
                 }
                 case "getUsername" -> {
                     return getUsernameCommand(message.getFromBody("token"));
@@ -67,10 +67,10 @@ public class ServerConnectionController {
             String command = message.getFromBody("command");
             switch (command) {
                 case "do_trade" -> {
-                    connectionThread.playerController.doTrade(message);
+                    clientConnection.playerController.doTrade(message);
                 }
                 default -> {
-                    connectionThread.gameThread.sendTCP(message, message.getFromBody("receiver"));
+                    clientConnection.gameThread.sendTCP(message, message.getFromBody("receiver"));
                     return null;
                 }
             }
@@ -79,10 +79,10 @@ public class ServerConnectionController {
             String command = message.getFromBody("command");
             switch (command) {
                 case "send_private_message" -> {
-                    connectionThread.playerController.sendPrivateMessage(message);
+                    clientConnection.playerController.sendPrivateMessage(message);
                 }
                 case "send_public_message" -> {
-                    connectionThread.playerController.sendPublicMessage(message);
+                    clientConnection.playerController.sendPublicMessage(message);
                 }
             }
         }
@@ -90,17 +90,20 @@ public class ServerConnectionController {
             String command = message.getFromBody("command");
             switch (command) {
                 case "gift_player" -> {
-                    connectionThread.playerController.giftPlayer(message);
+                    clientConnection.playerController.giftPlayer(message);
                 }
                 case "rate_gift" -> {
-                    connectionThread.playerController.rateGift(message);
+                    clientConnection.playerController.rateGift(message);
                 }
             }
         }
-            throw new UnsupportedOperationException("didn't handle");
+        if(message.getType() == JSONMessage.Type.response) {
+            throw new UnsupportedOperationException();
+        }
+        return null;
     }
 
-    public static JSONMessage login(String username, String password, ClientConnectionThread connectionThread) {
+    public static JSONMessage login(String username, String password, ClientConnection connectionThread) {
         Account account = ServerApp.getAccountByUsername(username);
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 

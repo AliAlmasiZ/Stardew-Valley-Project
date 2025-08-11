@@ -7,8 +7,6 @@ import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.player.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -17,7 +15,7 @@ public class GameThread extends Thread{
     private float lastUpdateSent = 0;
     private float stateTime = 0;
     private float deltaTime;
-    private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
+    private ArrayList<ClientConnection> clients = new ArrayList<>();
     private AtomicBoolean end = new AtomicBoolean(false);
     private final GameSession gameSession;
 
@@ -32,7 +30,7 @@ public class GameThread extends Thread{
 
     @Override
     public void start() {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             client.gameThread = this;
         }
         super.start();
@@ -55,7 +53,7 @@ public class GameThread extends Thread{
 
 
     private void update(float delta) {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             client.update(delta);
         }
         sendUpdates();
@@ -78,20 +76,20 @@ public class GameThread extends Thread{
 
     private ArrayList<PlayerState> getPlayerStates() {
         ArrayList<PlayerState> states = new ArrayList<>();
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             states.add(client.player.getPlayerState());
         }
         return states;
     }
 
     public void sendAllTCP(Object object) {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             client.sendTCP(object);
         }
     }
 
     public void sendTCP(JSONMessage message, String username) {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             if (client.player.getUsername().equals(username)) {
                 client.sendTCP(message);
                 return;
@@ -100,7 +98,7 @@ public class GameThread extends Thread{
     }
 
     public void sendAllUDP(Object object) {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             client.sendUDP(object);
         }
     }
@@ -109,12 +107,12 @@ public class GameThread extends Thread{
         return deltaTime;
     }
 
-    public ArrayList<ClientConnectionThread> getClients() {
+    public ArrayList<ClientConnection> getClients() {
         return clients;
     }
 
-    public ClientConnectionThread getClientByUsername(String username) {
-        for (ClientConnectionThread client : clients) {
+    public ClientConnection getClientByUsername(String username) {
+        for (ClientConnection client : clients) {
             if (client.player.getUsername().equals(username)) return client;
         }
         return null;

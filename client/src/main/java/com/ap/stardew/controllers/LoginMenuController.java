@@ -86,6 +86,11 @@ public class LoginMenuController implements Controller{    @Override
         ClientApp.setToken(response.getFromBody("token", String.class));
         ClientApp.setUsername(username);
 
+        JSONMessage audioAuthMessage = new JSONMessage(JSONMessage.Type.audio_auth);
+        audioAuthMessage.put("command", "set_audio_connection");
+        audioAuthMessage.put("token", ClientApp.getToken());
+        ClientApp.getAudioClient().sendTCP(audioAuthMessage);
+
         return new Result(response.getFromBody("success"), response.getFromBody("message"));
     }
 

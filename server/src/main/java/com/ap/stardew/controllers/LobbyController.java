@@ -1,6 +1,6 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.GameSession;
@@ -9,13 +9,10 @@ import com.ap.stardew.models.Lobby;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.AccountInfo;
-import com.ap.stardew.models.dto.PlayerState;
-import com.ap.stardew.models.player.Player;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class LobbyController {
@@ -39,9 +36,9 @@ public class LobbyController {
         AccountInfo accountInfo = new AccountInfo(hostUsername);
         Lobby lobby = new Lobby(name, accountInfo, maxPlayers, password, isVisible);
 
-        ClientConnectionThread connection = ServerApp.getConnectionByUsername(hostUsername);
+        ClientConnection connection = ServerApp.getConnectionByUsername(hostUsername);
 
-        connection.getConnection().addListener(new Listener(){
+        connection.getGameConnection().addListener(new Listener(){
             @Override
             public void disconnected(Connection connection) {
                 leaveLobby(lobby, accountInfo);
@@ -87,9 +84,9 @@ public class LobbyController {
         response.put("result", result);
         response.put("lobby_info", lobby.getLobbyInfo());
 
-        ClientConnectionThread connection = ServerApp.getConnectionByUsername(username);
+        ClientConnection connection = ServerApp.getConnectionByUsername(username);
 
-        connection.getConnection().addListener(new Listener(){
+        connection.getGameConnection().addListener(new Listener(){
             @Override
             public void disconnected(Connection connection) {
                 leaveLobby(lobby, accountInfo);
@@ -168,7 +165,7 @@ public class LobbyController {
         command.put("message", message);
 
         for (AccountInfo account : lobby.getPlayers()) {
-            ClientConnectionThread connection = ServerApp.getConnectionByUsername(account.getUsername());
+            ClientConnection connection = ServerApp.getConnectionByUsername(account.getUsername());
             if(connection != null){
                 connection.sendTCP(command);
             }
@@ -294,7 +291,7 @@ public class LobbyController {
         }
 
         if(!lobby.getHostUsername().equals(username)){
-            Result result = new Result(false, "only the host can start the game");
+            Result result = new Result(false, "only the host can startGameConnection the game");
             res.put("result", result);
             return res;
         }
@@ -318,7 +315,7 @@ public class LobbyController {
 
 
 
-        for (ClientConnectionThread client : gameThread.getClients()) {
+        for (ClientConnection client : gameThread.getClients()) {
             client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());
             client.playerController = new PlayerController(client);
 
