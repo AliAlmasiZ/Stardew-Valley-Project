@@ -56,7 +56,8 @@ public class JSONMessage {
         chat,
         audio_packet,
         upload_packet,
-        audio_auth
+        files_list_request,
+        audio_auth,
     }
 
     @Override

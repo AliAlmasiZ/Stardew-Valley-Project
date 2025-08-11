@@ -102,6 +102,8 @@ public class GameScreen extends AbstractScreen {
     // Chat
     public ChatDialog chatDialog;
 
+    public RadioDialog radioDialog;
+
 
     private final Game game;
 
@@ -190,9 +192,20 @@ public class GameScreen extends AbstractScreen {
             }
         });
 
+        Image radioButton = new Image(new Texture("Content/radio.png"));
+        radioButton.setWidth(buttonWidth);
+        radioButton.setHeight(buttonHeight);
+        radioButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                radioDialog.show();
+            }
+        });
+
 
         buttonTable.add(button).width(buttonWidth).height(buttonHeight).pad(5);
         buttonTable.add(chatButton).width(buttonWidth).height(buttonHeight).pad(5);
+        buttonTable.add(radioButton).width(buttonWidth).height(buttonHeight).pad(5);
         buttonTable.top().left().pad(15);
         stack.add(buttonTable);
 
@@ -200,6 +213,7 @@ public class GameScreen extends AbstractScreen {
         initNPCDialogs();
 
         chatDialog = new ChatDialog(ClientApp.getActiveGame().getPlayers(),uiStage);
+        radioDialog = new RadioDialog(this);
 
         //TODO: remove this later
         //**************************************

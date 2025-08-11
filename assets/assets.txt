@@ -5242,6 +5242,7 @@ Content/miniMap/miniMapBackground.9.png
 Content/newGameButton.png
 Content/newGameButtonHovered.png
 Content/pixil-frame-0.png
+Content/radio.png
 Content/redCross.png
 Content/scrollBackground.png
 Content/scrollBackgroundNinePatch.9.png

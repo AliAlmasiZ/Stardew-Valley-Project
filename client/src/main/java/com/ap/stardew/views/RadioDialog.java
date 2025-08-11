@@ -91,7 +91,12 @@ public class RadioDialog extends InGameDialog {
         // Users Musics TODO: get files from server and add to scrollPane
         Table playlistContent = new Table(skin);
         playlistContent.add(new Label("Your songs will appear here.", skin)).center().row();
-        List<String> musics = new ArrayList<>();
+
+        var req = new JSONMessage(JSONMessage.Type.files_list_request);
+        req.put("owner_username", ClientApp.getUsername());
+        var res = ClientApp.sendAndWaitForAudioResponse(req, 500);
+
+        List<String> musics = res.getFromBody("file_names", ArrayList.class);
 
         for (String music : musics) {
             Label musicLabel = new Label(music, skin);

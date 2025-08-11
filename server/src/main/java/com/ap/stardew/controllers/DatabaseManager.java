@@ -179,6 +179,29 @@ public class DatabaseManager {
         }
     }
 
+    public static List<String> allUserAudioFiles(String username) {
+        try (var conn = DriverManager.getConnection(URL)) {
+            try (var pstmt = conn.prepareStatement(
+                "SELECT a.file_name, u.username " +
+                    "FROM audio_files a " +
+                    "JOIN users u ON a.username = u.username " +
+                    "WHERE a.username = ?")) {
+                pstmt.setString(1, username);
+                ResultSet rs = pstmt.executeQuery();
+                List<String> files = new ArrayList<>();
+                while (rs.next()) {
+                    files.add(rs.getString("username") + ": " + rs.getString("file_name"));
+                }
+                return files;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+
+    }
 
 
 

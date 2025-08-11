@@ -8,14 +8,18 @@ import com.badlogic.gdx.utils.Json;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AudioServerController {
 
     public static JSONMessage handleMessage(JSONMessage message, ClientConnection client) {
-        if (message.getType() == JSONMessage.Type.audio_packet) {
+        if (message.getType() == JSONMessage.Type.upload_packet) {
             return handleUpload(message, client);
+        }
+        if (message.getType() == JSONMessage.Type.files_list_request) {
+            return sendFileList(message);
         }
         throw new UnsupportedOperationException();
     }
@@ -35,6 +39,13 @@ public class AudioServerController {
             var result = new Result(false, e.getMessage());
             response.put("result", result);
         }
+        return response;
+    }
+
+    private static JSONMessage sendFileList(JSONMessage request) {
+        List<String> fileNames = DatabaseManager.allUserAudioFiles(request.getFromBody("owner_username"));
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+        response.put("file_names", fileNames);
         return response;
     }
 
