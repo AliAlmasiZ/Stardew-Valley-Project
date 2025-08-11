@@ -3,10 +3,7 @@ package com.ap.stardew.controllers;
 import com.ap.stardew.app.ClientConnectionThread;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
-import com.ap.stardew.models.Game;
-import com.ap.stardew.models.GameSession;
-import com.ap.stardew.models.Position;
-import com.ap.stardew.models.Result;
+import com.ap.stardew.models.*;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.entities.Entity;
@@ -213,6 +210,41 @@ public class GameController {
         PlayerFriendship playerFriendship = game.getFriendshipBetween(sender, receiver);
         if (rating < 3) playerFriendship.reduceXp((3 - rating) * 30 - 15);
         else playerFriendship.addXp((rating - 3) * 30 + 15);
+    }
+
+    public static void hug(Game game, String senderName, String receiverName) {
+        Player currentPlayer = game.getPlayerByUsername(senderName);
+        Player huggedPlayer = game.findPlayer(receiverName);
+
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(currentPlayer, huggedPlayer);
+        currentPlayer.setAction(Player.Action.HUGGING);
+        huggedPlayer.setAction(Player.Action.HUGGING);
+
+        playerFriendship.setHadHuggedToday(true);
+        playerFriendship.addXp(60);
+
+    }
+
+    public static void flower(Game game, String SenderName,String receiverName) {
+        Player sender = game.getPlayerByUsername(SenderName);
+        Player receiver = game.getPlayerByUsername(receiverName);
+        Inventory inventory = sender.getComponent(Inventory.class);
+        Inventory inventory2 = receiver.getComponent(Inventory.class);
+
+        sender.setAction(Player.Action.GIVING_FLOWER);
+        receiver.setAction(Player.Action.RECEIVING_FLOWER);
+
+        PlayerFriendship playerFriendship = game.getFriendshipBetween(sender, receiver);
+
+
+
+        if (playerFriendship.getLevel() == 2) {
+            playerFriendship.setLevel(3);
+            playerFriendship.setXp(0);
+        }
+
+        inventory.takeFromInventory("Bouquet", 1);
+        inventory2.addItem(App.entityRegistry.makeEntity("Bouquet"), 1);
     }
 
 }

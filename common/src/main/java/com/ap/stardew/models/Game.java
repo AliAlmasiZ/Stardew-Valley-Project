@@ -1,5 +1,6 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.records.GameStartingDetails;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -89,7 +90,7 @@ public class Game implements Serializable {
 //        }
 
         //mainMap.initRandomElements();
-//        initNPCs();
+        initNPCs();
         //currentPlayer.getOwnedTiles();
 
 //        currentPlayer.setPosition(new Position(55, 86, currentPlayer.getCurrentMap()));
@@ -106,10 +107,11 @@ public class Game implements Serializable {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             List<NPC> NPCs = objectMapper.readValue(new File("data/NPC/npcNames.json"),
-                    new TypeReference<List<NPC>>() {});
+                new TypeReference<List<NPC>>() {
+                });
 
             for (Entity npc : NPCs) {
-            NPC realNPC = new NPC(npc.getEntityName());
+                NPC realNPC = new NPC(npc.getEntityName());
                 gameNPCs.add(realNPC);
                 for (Player player : players) {
                     player.getNpcFriendships().put(realNPC, new NpcFriendship());
@@ -123,8 +125,9 @@ public class Game implements Serializable {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Quest> quests = mapper.readValue(
-                    new File("data/NPC/quests.json"),
-                    new TypeReference<List<Quest>>() {}
+                new File("data/NPC/quests.json"),
+                new TypeReference<List<Quest>>() {
+                }
             );
 
             for (Quest quest : quests) {
@@ -142,8 +145,8 @@ public class Game implements Serializable {
                 ObjectMapper mapper = new ObjectMapper();
 
                 ArrayList<String> list = mapper.readValue(
-                        new File("data/NPC/Favorites/" + npc.getEntityName() + ".json"),
-                        mapper.getTypeFactory().constructCollectionType(ArrayList.class, String.class)
+                    new File("data/NPC/Favorites/" + npc.getEntityName() + ".json"),
+                    mapper.getTypeFactory().constructCollectionType(ArrayList.class, String.class)
                 );
 
                 npc.setFavorites(list);
@@ -153,13 +156,13 @@ public class Game implements Serializable {
         }
 
 
-
         // Initialize dialogs
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Dialogue> dialogues = mapper.readValue(
-                    new File("data/NPC/dialogues.json"),
-                    new TypeReference<List<Dialogue>>() {}
+                new File("data/NPC/dialogues.json"),
+                new TypeReference<List<Dialogue>>() {
+                }
             );
 
             for (Dialogue dialogue : dialogues) {
@@ -175,7 +178,9 @@ public class Game implements Serializable {
 
         //TODO: Put NPC on the Map
 //        ArrayList<MapData.MapLayerData<String>.ObjectData> npcDatas = WorldMapType.DEFAULT.getData().getNpcs();
-//        for (NPC npc : gameNPCs) {
+        int i = 0;
+        int j = 0;
+        for (NPC npc : gameNPCs) {
 //            MapData.MapLayerData<String>.ObjectData data = null;
 //            for (MapData.MapLayerData<String>.ObjectData d : npcDatas) {
 //                if(d.type.equals(npc.getName())){
@@ -183,7 +188,16 @@ public class Game implements Serializable {
 //                }
 //            }
 //            EntityPlacementSystem.placeOnMap(npc, new Position(data.x, data.y), mainMap);
-//        }
+            npc.getComponent(PositionComponent.class).setPosition(2350 + 100 * i, 2000 - j * 120 );
+            EntityPlacementSystem.placeEntity(npc, npc.getComponent(PositionComponent.class).get(), getMainMap());
+            if (i < 2) {
+                i++;
+            }
+            else {
+                j++;
+                i = 0;
+            }
+        }
 
     }
 
@@ -228,7 +242,7 @@ public class Game implements Serializable {
         this.playerFriendships = playerFriendships;
     }
 
-    public void nextTurn(){
+    public void nextTurn() {
         ArrayList<Player> players = getPlayers();
         int index = players.indexOf(getCurrentPlayer());
 
@@ -291,7 +305,7 @@ public class Game implements Serializable {
         Position position2 = player2.getPosition();
 
         int distance = (position1.getRow() - position2.getRow()) * (position1.getRow() - position2.getRow())
-                + (position1.getCol() - position2.getCol()) * (position1.getCol() - position2.getCol());
+            + (position1.getCol() - position2.getCol()) * (position1.getCol() - position2.getCol());
 
         return distance < 200;
     }
@@ -312,7 +326,7 @@ public class Game implements Serializable {
                     Growable growable = entity.getComponent(Growable.class);
                     if (growable.getDaysPastFromRegrowth() == growable.getRegrowthTime()) {
                         growable.setRegrowthTime(growable.getRegrowthTime() - 1);
-                    }else if (growable.getTotalHarvestTime() == growable.getDaysPastFromPlant()) {
+                    } else if (growable.getTotalHarvestTime() == growable.getDaysPastFromPlant()) {
                         growable.setDaysPastFromPlant(growable.getDaysPastFromPlant() - 1);
                     }
 
@@ -338,10 +352,9 @@ public class Game implements Serializable {
     }
 
 
-
     public void thorTile(Tile tile) {
         if (tile.getContent() != null &&
-                (tile.getContent().hasTag(EntityTag.CROP) || tile.getContent().hasTag(EntityTag.FORAGING_CROP))) {
+            (tile.getContent().hasTag(EntityTag.CROP) || tile.getContent().hasTag(EntityTag.FORAGING_CROP))) {
             EntityPlacementSystem.emptyTile(tile);
             tile.setType(TileType.DIRT);
         }
@@ -379,11 +392,11 @@ public class Game implements Serializable {
         this.currentPlayer.setCurrentMap(map);
     }
 
-    public void toggleMapVisibility(){
+    public void toggleMapVisibility() {
         mapVisible = !mapVisible;
     }
 
-    public boolean isMapVisible(){
+    public boolean isMapVisible() {
         return mapVisible;
     }
 
@@ -411,7 +424,7 @@ public class Game implements Serializable {
     public PlayerFriendship getFriendshipWith(Player friend) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
             if (playerFriendship.getFriends().contains(friend) &&
-            playerFriendship.getFriends().contains(currentPlayer.getUsername())) {
+                playerFriendship.getFriends().contains(currentPlayer.getUsername())) {
                 return playerFriendship;
             }
         }
@@ -421,7 +434,7 @@ public class Game implements Serializable {
     public PlayerFriendship getFriendshipBetween(Player friend1, Player friend2) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
             if (playerFriendship.getFriends().contains(friend1.getUsername()) &&
-                    playerFriendship.getFriends().contains(friend2.getUsername())) {
+                playerFriendship.getFriends().contains(friend2.getUsername())) {
                 return playerFriendship;
             }
         }
@@ -449,9 +462,9 @@ public class Game implements Serializable {
     }
 
     /**
-      this is the ugliest function of the project, it will take the season and fishing skill
-      and return name of available fish for fishing. I have done this to avoid making new classes
-      for fish...
+     * this is the ugliest function of the project, it will take the season and fishing skill
+     * and return name of available fish for fishing. I have done this to avoid making new classes
+     * for fish...
      */
     public ArrayList<String> getAvailableFish(Season season, Skill fishingSkill) {
         ArrayList<String> availableFish = new ArrayList<>();
@@ -545,7 +558,7 @@ public class Game implements Serializable {
 
     public Player getPlayerByUsername(String username) {
         for (Player player : players) {
-            if(player.getUsername().equals(username))
+            if (player.getUsername().equals(username))
                 return player;
         }
         return null;

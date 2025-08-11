@@ -712,7 +712,13 @@ public class Player extends Entity implements Serializable {
         USING_TOOL,
         USING_SCYTHE,
         PASSING_OUT,
-        WATERING
+        WATERING,
+        HUGGING, // TODO: set this animations
+        GIVING_FLOWER,
+        RECEIVING_FLOWER,
+        MARRIED,
+        ASKING_MARRIAGE, // till here
+
     }
 
     public void setAction(Action action) {

@@ -8,13 +8,13 @@ import com.ap.stardew.models.enums.Weather;
 import java.io.Serializable;
 
 public class Dialogue implements Serializable {
-    private final String dialogue;
-    private final String npcName;
+    private String dialogue;
+    private String npcName;
 
-    private final Season season;
-    private final int friendshipLevel;
-    private final Weather weather;
-    private final boolean isDay;
+    private Season season;
+    private int friendshipLevel;
+    private Weather weather;
+    private boolean isDay;
 
     @JsonCreator
     public Dialogue(
@@ -31,6 +31,9 @@ public class Dialogue implements Serializable {
         this.friendshipLevel = friendshipLevel;
         this.weather = weather;
         this.isDay = isDay;
+    }
+
+    public Dialogue() {
     }
 
     // Getters

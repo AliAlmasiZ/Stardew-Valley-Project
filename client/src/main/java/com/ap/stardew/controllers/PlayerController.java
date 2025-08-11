@@ -97,7 +97,7 @@ public class PlayerController implements InputProcessor {
         if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D)
             this.right = false;
         if (keycode == Input.Keys.T)
-            this.advanceTime = true;
+            this.advanceTime = false;
         if (keycode == Input.Keys.TAB)
             screen.openJournal();
         if (keycode == Input.Keys.P) //TODO: TemporarilyBoo

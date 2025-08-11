@@ -111,9 +111,18 @@ public class ServerConnectionController {
                 case "rate_gift" -> {
                     connectionThread.playerController.rateGift(message);
                 }
+                case "hug" -> {
+                    connectionThread.playerController.hug(message);
+                }
+                case "flower" -> {
+                    connectionThread.playerController.flower(message);
+                }
+                case "marry" -> {
+                    connectionThread.playerController.askMarriage(message);
+                }
             }
         }
-            throw new UnsupportedOperationException("didn't handle");
+        throw new UnsupportedOperationException("didn't handle");
     }
 
     public static JSONMessage login(JSONMessage message, ClientConnectionThread connectionThread) {

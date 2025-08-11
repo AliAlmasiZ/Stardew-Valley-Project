@@ -118,6 +118,12 @@ public class ClientConnectionController {
                     GameController.receiveGiftRateUpdate(message);
                     return null;
                 }
+                case "update_hug" -> {
+                    GameController.hugUpdate(message);
+                }
+                case "update_flower" -> {
+                    GameController.flowerUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

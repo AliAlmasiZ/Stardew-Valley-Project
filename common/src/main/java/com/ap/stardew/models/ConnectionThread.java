@@ -1,7 +1,9 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.models.NPC.Dialogue;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;
+import com.ap.stardew.models.NPC.Quest;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
@@ -247,6 +249,13 @@ abstract public class ConnectionThread extends Thread {
         kryo.register(BiomeType.Spawnable.class);
         kryo.register(UseFunction.class);
         kryo.register(Upgradable.class);
+        kryo.register(Material.class);
+        kryo.register(Dialogue.class);
+        kryo.register(Quest.class);
+        kryo.register(NPC.class);
+
+        kryo.register(Tile.class);
+        kryo.register(TiledMap.class);
         kryo.register(Useable.class);
         kryo.register(TradeHistoryItem.class);
         kryo.register(Position.class);

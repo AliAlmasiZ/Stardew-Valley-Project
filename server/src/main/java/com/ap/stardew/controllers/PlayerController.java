@@ -235,4 +235,72 @@ public class PlayerController {
         clientConnectionThread.gameThread.sendTCP(updateMessage, sender.getUsername());
     }
 
+    public void hug(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+
+        GameController.hug(game, senderName, receiverName);
+
+        // Send to clients
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_hug");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        updateMessage.put("friendships", game.getPlayerFriendships());
+
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("action", sender.getAction());
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        receiverUpdateMessage.put("action", receiver.getAction());
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+    }
+
+    public void flower(JSONMessage jsonMessage) {
+        Game game = clientConnectionThread.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String receiverName = jsonMessage.getFromBody("receiver");
+        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
+        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+
+        GameController.flower(game, senderName, receiverName);
+
+        // Send to clients
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_flower");
+        updateMessage.put("sender", senderName);
+        updateMessage.put("receiver", receiverName);
+        updateMessage.put("friendships", game.getPlayerFriendships());
+
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+        // update for sender:
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("action", sender.getAction());
+        senderUpdateMessage.put("inventory", sender.getComponent(Inventory.class));
+        playerUpdateMessages.put(senderName, senderUpdateMessage);
+
+        JSONMessage receiverUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        receiverUpdateMessage.put("action", receiver.getAction());
+        receiverUpdateMessage.put("inventory", receiver.getComponent(Inventory.class));
+        playerUpdateMessages.put(receiverName, receiverUpdateMessage);
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+    }
+
+    public void askMarriage(JSONMessage jsonMessage) {
+
+    }
+
 }
