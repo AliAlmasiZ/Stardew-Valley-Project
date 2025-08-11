@@ -1,11 +1,13 @@
 package com.ap.stardew.views.widgets;
 
 import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.GameScreen;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,6 +18,8 @@ public class PopUpMessage extends Table {
     public enum PopUpMessageType {
         STANDARD(20),
         TOP_CENTER(5),
+        ERROR_NOTIFICATION(3),
+        SUCCESS_NOTIFICATION(3),
         ;
 
         private final float duration;
@@ -39,10 +43,21 @@ public class PopUpMessage extends Table {
         this(message, PopUpMessageType.STANDARD);
     }
 
+
     public PopUpMessage(String message, PopUpMessageType popUpMessageType) {
         this();
         this.popUpMessageType = popUpMessageType;
 
+        switch (popUpMessageType) {
+            case ERROR_NOTIFICATION -> {
+                Image icon = new Image(GameAssetManager.getInstance().error);
+                add(icon).size(16,16).pad(5);
+            }
+            case SUCCESS_NOTIFICATION -> {
+                Image icon = new Image(GameAssetManager.getInstance().success);
+                add(icon).size(16, 16).pad(5);
+            }
+        }
         Label label = new Label(message, GameAssetManager.getInstance().getCustomSkin());
 
         if(label.getPrefWidth() < 200){

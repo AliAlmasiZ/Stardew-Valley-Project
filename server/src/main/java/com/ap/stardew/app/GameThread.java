@@ -23,7 +23,7 @@ public class GameThread extends Thread{
     private float lastUpdateSent = 0;
     private float stateTime = 0;
     private float deltaTime;
-    private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
+    private ArrayList<ClientConnection> clients = new ArrayList<>();
     private final List<String> disconnectedClients = new ArrayList<>();
     private final List<String> playersWithSentReconnectionRequests = new ArrayList<>(); // sorry (*^ω^*)
     private AtomicBoolean end = new AtomicBoolean(false);
@@ -36,8 +36,8 @@ public class GameThread extends Thread{
         this.gameSession = gameSession;
 
         for (Map.Entry<String, Player> entry : gameSession.getUserPlayerMap().entrySet()) {
-            ClientConnectionThread connectionThread = ServerApp.getConnectionByUsername(entry.getKey());
-            clients.add(connectionThread);
+            ClientConnection clientConnection = ServerApp.getConnectionByUsername(entry.getKey());
+            clients.add(clientConnection);
 
             System.out.println("client " + entry.getKey() + " added to game");
         }
@@ -45,7 +45,7 @@ public class GameThread extends Thread{
 
     @Override
     public void start() {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             client.gameThread = this;
         }
         super.start();
@@ -71,21 +71,21 @@ public class GameThread extends Thread{
             }
             lastUpdateSent = stateTime;
             for (int i = clients.size() - 1; i >= 0; i--) {
-                ClientConnectionThread client = clients.get(i);
-                if(!client.getConnection().isConnected()){
+                ClientConnection client = clients.get(i);
+                if(!client.getGameConnection().isConnected()){
                     handleUserDisconnection(client);
                 }
             }
             System.out.println("game is paused");
             synchronized (disconnectedClients) {
                 for (String disconnectedClient : disconnectedClients) {
-                    ClientConnectionThread connection = ServerApp.getConnectionByUsername(disconnectedClient);
-                    if(connection != null && connection.getConnection().isConnected()){
+                    ClientConnection connection = ServerApp.getConnectionByUsername(disconnectedClient);
+                    if(connection != null && connection.getGameConnection().isConnected()){
                         if(playersWithSentReconnectionRequests.contains(disconnectedClient)) continue;
 
                         JSONMessage req = new JSONMessage(JSONMessage.Type.command);
                         req.put("command", "game_reconnect_request");
-                        connection.sendTCP(req);
+                        connection.sendGameTCP(req);
 
                         playersWithSentReconnectionRequests.add(disconnectedClient);
                     }
@@ -94,8 +94,8 @@ public class GameThread extends Thread{
             timeLeftToTermination -= delta;
         }else {
             for (int i = clients.size() - 1; i >= 0; i--) {
-                ClientConnectionThread client = clients.get(i);
-                if(!client.getConnection().isConnected()){
+                ClientConnection client = clients.get(i);
+                if(!client.getGameConnection().isConnected()){
                     handleUserDisconnection(client);
                     gamePaused.set(true);
                     timeLeftToTermination = 120f;
@@ -107,7 +107,7 @@ public class GameThread extends Thread{
         }
     }
 
-    private void handleUserDisconnection(ClientConnectionThread disconnectedClient){
+    private void handleUserDisconnection(ClientConnection disconnectedClient){
         clients.remove(disconnectedClient);
 
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
@@ -137,31 +137,31 @@ public class GameThread extends Thread{
 
     private ArrayList<PlayerState> getPlayerStates() {
         ArrayList<PlayerState> states = new ArrayList<>();
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             states.add(client.player.getPlayerState());
         }
         return states;
     }
 
     public void sendAllTCP(Object object) {
-        for (ClientConnectionThread client : clients) {
-            client.sendTCP(object);
+        for (ClientConnection client : clients) {
+            client.sendGameTCP(object);
         }
     }
 
     public void sendTCP(JSONMessage message, String ... username) {
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             for (String user : username) {
                 if (client.player.getUsername().equals(user)) {
-                    client.sendTCP(message);
+                    client.sendGameTCP(message);
                 }
             }
         }
     }
 
     public void sendAllUDP(Object object) {
-        for (ClientConnectionThread client : clients) {
-            client.sendUDP(object);
+        for (ClientConnection client : clients) {
+            client.sendGameUDP(object);
         }
     }
 
@@ -169,12 +169,12 @@ public class GameThread extends Thread{
         return deltaTime;
     }
 
-    public ArrayList<ClientConnectionThread> getClients() {
+    public ArrayList<ClientConnection> getClients() {
         return clients;
     }
 
-    public ClientConnectionThread getClientByUsername(String username) {
-        for (ClientConnectionThread client : clients) {
+    public ClientConnection getClientByUsername(String username) {
+        for (ClientConnection client : clients) {
             if (client.player.getUsername().equals(username)) return client;
         }
         return null;
@@ -203,7 +203,7 @@ public class GameThread extends Thread{
             return jsonMessage;
         }
 
-        ClientConnectionThread connection = ServerApp.getConnectionByUsername(username);
+        ClientConnection connection = ServerApp.getConnectionByUsername(username);
 
         if(connection == null){
             JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.response);
@@ -265,10 +265,14 @@ public class GameThread extends Thread{
     public void endGame(){
         end.set(true);
 
-        for (ClientConnectionThread client : clients) {
+        for (ClientConnection client : clients) {
             client.gameThread = null;
             client.playerController = null;
             client.player = null;
         }
+    }
+
+    public void end() {
+        end.set(true);
     }
 }

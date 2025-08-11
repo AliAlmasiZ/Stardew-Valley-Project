@@ -36,6 +36,13 @@ import java.util.HashSet;
 
 public class NetworkUtils {
 
+    public static final int TCP_PORT = 54555;
+    public static final int UDP_PORT = 54777;
+    public static final int AUDIO_CHANNEL_TCP = 54556;
+    public static final int AUDIO_CHANNEL_UDP = 54778;
+    public static final String HOST = "127.0.0.1";
+    public static final int BUFFER_SIZE = 8 * 1024;
+
 
     /**
      * Registers classes for kryo Serialization
@@ -51,6 +58,7 @@ public class NetworkUtils {
         kryo.register(ArrayList.class);
         kryo.register(Vector2.class);
         kryo.register(HashSet.class);
+        kryo.register(byte[].class);
 
         /* DTOs */
         kryo.register(JSONMessage.class);

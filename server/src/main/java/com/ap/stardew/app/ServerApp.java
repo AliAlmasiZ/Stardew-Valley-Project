@@ -1,40 +1,30 @@
 package com.ap.stardew.app;
 
-import com.ap.stardew.controllers.GameController;
-import com.ap.stardew.models.*;
-import com.ap.stardew.models.dto.AccountInfo;
-import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.controllers.DatabaseManager;
 import com.ap.stardew.models.Account;
-import com.ap.stardew.models.ConnectionThread;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.utils.NetworkUtils;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.google.gson.stream.JsonWriter;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
+import static com.ap.stardew.utils.NetworkUtils.*;
+
 public class ServerApp {
-    private static Server server;
+    private static Server gameServer;
+    private static Server audioServer;
     public static final int TIMEOUT_MILLIS = 500;
-    private static final ArrayList<ClientConnectionThread> connections = new ArrayList<>();
+    private static final ArrayList<ClientConnection> connections = new ArrayList<>();
     private static final ArrayList<GameThread> games = new ArrayList<>();
     private static boolean exitFlag = false;
 
@@ -54,41 +44,37 @@ public class ServerApp {
 
     }
 
-    public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {
-        for (ClientConnectionThread connection : connections) {
-            if(connection.getOtherSideIP().equals(ip) && connection.getOtherSidePort() == port) {
-                return connection;
-            }
-        }
-        return null;
-    }
 
     public static boolean isEnded() {
         return exitFlag;
     }
 
 
-    public static List<ClientConnectionThread> getConnections() {
+    public static List<ClientConnection> getConnections() {
         return List.copyOf(ServerApp.connections);
     }
 
     public static void endAll() {
         exitFlag = true;
-        for (ClientConnectionThread connection : connections)
+        for (ClientConnection connection : connections)
             connection.end();
+        for (GameThread game : games) {
+            game.end();
+        }
         connections.clear();
+        games.clear();
     }
 
-    public static void removeClientConnection(ClientConnectionThread clientConnectionThread) {
-        if (clientConnectionThread != null) {
-            connections.remove(clientConnectionThread);
-            clientConnectionThread.end();
+    public static void removeClientConnection(ClientConnection ClientConnection) {
+        if (ClientConnection != null) {
+            connections.remove(ClientConnection);
+            ClientConnection.end();
         }
     }
 
-    public static void addClientConnection(ClientConnectionThread clientConnectionThread) {
-        if (clientConnectionThread != null && !connections.contains(clientConnectionThread)) {
-            connections.add(clientConnectionThread);
+    public static void addClientConnection(ClientConnection ClientConnection) {
+        if (ClientConnection != null && !connections.contains(ClientConnection)) {
+            connections.add(ClientConnection);
         }
     }
 
@@ -145,54 +131,43 @@ public class ServerApp {
         return null;
     }
 
-    private static void registerClasses() { //to register any classes register it in ConnectionThread registerClasses function
-        NetworkUtils.registerClasses(server.getKryo());
+    /**
+     * Register any classes with {@link NetworkUtils#registerClasses(Kryo)}
+     * */
+    private static void registerClasses() {
+        NetworkUtils.registerClasses(gameServer.getKryo());
+        NetworkUtils.registerClasses(audioServer.getKryo());
     }
 
-    public static void startServer(int tcpPort, int udpPort) throws IOException {
-        if(server != null) server.dispose();
-        server = new Server(1024 * 1024 * 10, 1024 * 1024 * 10);
-        server.start();
-        server.bind(tcpPort, udpPort);
+    public static void startServer() throws IOException {
+        if(gameServer != null) gameServer.dispose();
+        if(audioServer != null) audioServer.dispose();
+
+        gameServer = new Server(1024 * 1024 * 10, 1024 * 1024 * 10);
+        audioServer = new Server(1024 * 1024 * 10, 1024 * 1024 * 10);
+
+        gameServer.start();
+        audioServer.start();
+
+        gameServer.bind(TCP_PORT, UDP_PORT);
+        audioServer.bind(AUDIO_CHANNEL_TCP, AUDIO_CHANNEL_UDP);
+
+
         registerClasses();
-
-//
-//        AccountInfo test = new AccountInfo("a");
-//        test.setSelectedMapRegion("Suncrest Farm");
-//        ArrayList<AccountInfo> testAccounts = new ArrayList<>();
-//        testAccounts.add(test);
-//
-//        GameSession session = GameController.createGame(testAccounts);
-//
-//        JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);
-//        gameStartDetails.put("command", "startGame");
-//        gameStartDetails.put("gameData", session.getGame());
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        Output output = new Output(baos);
-////        server.getKryo().setRegistrationRequired(false);
-//        server.getKryo().setReferences(true);
-//        server.getKryo().writeObject(output, gameStartDetails);
-//        output.close();
-//        byte[] serialized = baos.toByteArray();
-//
-//        Input input = new Input(new ByteArrayInputStream(serialized));
-//        JSONMessage deserializedMsg = server.getKryo().readObject(input, JSONMessage.class);
-//        input.close();
-
     }
 
     public static void initializeServerListener() {
-        server.addListener(new Listener(){
+        gameServer.addListener(new Listener(){
             @Override
             public void connected(Connection connection) {
                 try { // make a connection thread for handle every player in a different thread
-                    ClientConnectionThread connectionThread = new ClientConnectionThread(connection);
+                    ClientConnection connectionThread = new ClientConnection(connection);
                     if (!connectionThread.initialHandshake()) {
                         System.err.println("Inital HandShake failed with remote device.");
                         connectionThread.end();
                         return;
                     }
-                    connectionThread.start();
+                    connectionThread.startGameConnection();
                     System.out.println("new client connected : " + connection.getID());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -207,35 +182,49 @@ public class ServerApp {
             }
 
         });
+
+        audioServer.addListener(new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof JSONMessage message) {
+                    if(message.getType() == JSONMessage.Type.audio_auth) {
+                        String username = ServerApp.getUsername(message.getFromBody("token"));
+                        var clientConnection = ServerApp.getConnectionByUsername(username);
+                        clientConnection.setAudioConnection(connection);
+                        clientConnection.setAudioConnectionListener();
+                    }
+                }
+            }
+        });
     }
 
-    public static Server getServer() {
-        return server;
+    public static Server getGameServer() {
+        return gameServer;
     }
 
-    private static ClientConnectionThread getConnectionThread(int connectionId) {
-        for (ClientConnectionThread connectionThread : connections) {
-            if (connectionThread.getConnection().getID() == connectionId) {
+    private static ClientConnection getConnectionThread(int connectionId) {
+        for (ClientConnection connectionThread : connections) {
+            if (connectionThread.getGameConnection().getID() == connectionId) {
                 return connectionThread;
             }
         }
         return null;
     }
 
-    private static ClientConnectionThread getConnectionThread(Connection connection) {
+    private static ClientConnection getConnectionThread(Connection connection) {
         return getConnectionThread(connection.getID());
     }
 
     private static void removeClientConnection(Connection connection) {
-        ClientConnectionThread connectionThread = getConnectionThread(connection);
+        ClientConnection connectionThread = getConnectionThread(connection);
         if(connections.contains(connectionThread)) {
             connections.remove(connectionThread);
             connectionThread.end();
         }
     }
 
-    public static ClientConnectionThread getConnectionByUsername(String username){
-        for (ClientConnectionThread connection : connections) {
+    public static ClientConnection getConnectionByUsername(String username){
+        for (ClientConnection connection : connections) {
             if(connection.getCurrentAccount() != null && connection.getCurrentAccount().getUsername().equals(username)){
                 return connection;
             }
@@ -254,5 +243,7 @@ public class ServerApp {
         return payload.getSubject();
     }
 
-
+    public static List<GameThread> getGameThreads() {
+        return new ArrayList<>(games);
+    }
 }

@@ -1,6 +1,7 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.ClientConnection;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.GameSession;
@@ -18,7 +19,6 @@ import com.esotericsoftware.kryonet.Listener;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class LobbyController {
@@ -42,9 +42,9 @@ public class LobbyController {
         AccountInfo accountInfo = new AccountInfo(hostUsername);
         Lobby lobby = new Lobby(name, accountInfo, maxPlayers, password, isVisible);
 
-        ClientConnectionThread connection = ServerApp.getConnectionByUsername(hostUsername);
+        ClientConnection connection = ServerApp.getConnectionByUsername(hostUsername);
 
-        connection.getConnection().addListener(new Listener(){
+        connection.getGameConnection().addListener(new Listener(){
             @Override
             public void disconnected(Connection connection) {
                 leaveLobby(lobby, accountInfo);
@@ -76,7 +76,7 @@ public class LobbyController {
         AccountInfo accountInfo = new AccountInfo(hostUsername);
         Lobby lobby = new Lobby(name, accountInfo, savedGameDetails);
 
-        ClientConnectionThread connection = ServerApp.getConnectionByUsername(hostUsername);
+        ClientConnection connection = ServerApp.getConnectionByUsername(hostUsername);
 
         if(connection == null){
             Result result = new Result(false, "wtf");
@@ -84,7 +84,7 @@ public class LobbyController {
             return response;
         }
 
-        connection.getConnection().addListener(new Listener(){
+        connection.getGameConnection().addListener(new Listener(){
             @Override
             public void disconnected(Connection connection) {
                 leaveLobby(lobby, accountInfo);
@@ -141,9 +141,9 @@ public class LobbyController {
         response.put("result", result);
         response.put("lobby_info", lobby.getLobbyInfo());
 
-        ClientConnectionThread connection = ServerApp.getConnectionByUsername(username);
+        ClientConnection connection = ServerApp.getConnectionByUsername(username);
 
-        connection.getConnection().addListener(new Listener(){
+        connection.getGameConnection().addListener(new Listener(){
             @Override
             public void disconnected(Connection connection) {
                 leaveLobby(lobby, accountInfo);
@@ -222,9 +222,9 @@ public class LobbyController {
         command.put("message", message);
 
         for (AccountInfo account : lobby.getPlayers()) {
-            ClientConnectionThread connection = ServerApp.getConnectionByUsername(account.getUsername());
+            ClientConnection connection = ServerApp.getConnectionByUsername(account.getUsername());
             if(connection != null){
-                connection.sendTCP(command);
+                connection.sendGameTCP(command);
             }
         }
     }
@@ -348,7 +348,7 @@ public class LobbyController {
         }
 
         if(!lobby.getHostUsername().equals(username)){
-            Result result = new Result(false, "only the host can start the game");
+            Result result = new Result(false, "only the host can startGameConnection the game");
             res.put("result", result);
             return res;
         }
@@ -385,7 +385,7 @@ public class LobbyController {
 
         GameThread gameThread = new GameThread(session);
 
-        for (ClientConnectionThread client : gameThread.getClients()) {
+        for (ClientConnection client : gameThread.getClients()) {
             client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());
             client.playerController = new PlayerController(client);
 
@@ -394,7 +394,7 @@ public class LobbyController {
             gameStartDetails.put("lobby_id", lobby.getLobbyId());
             gameStartDetails.put("gameData", session.getGame());
             gameStartDetails.put("player", session.getUserPlayerMap().get(client.getCurrentAccount().getUsername()));
-            client.sendTCP(gameStartDetails);
+            client.sendGameTCP(gameStartDetails);
         }
 
         ServerApp.addGameThread(gameThread);

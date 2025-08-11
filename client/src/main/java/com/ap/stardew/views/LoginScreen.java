@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +34,7 @@ public class LoginScreen extends AbstractMenuScreen{
 
         //Todo this is ashghal
         if(!ClientApp.isConnected()){
-            ClientApp.connectServer();
+            ClientApp.connectClients();
         }
 
         if(!ClientApp.isConnected()) {

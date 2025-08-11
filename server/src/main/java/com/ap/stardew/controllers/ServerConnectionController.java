@@ -1,6 +1,6 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
@@ -13,15 +13,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ServerConnectionController {
-    public static JSONMessage handleCommand(JSONMessage message, ClientConnectionThread connectionThread) {
+    public static JSONMessage handleCommand(JSONMessage message, ClientConnection clientConnection) {
         if (message.getType() == JSONMessage.Type.player_input_command) {
             String command = message.getFromBody("command");
             switch (command) {
                 case "player_move" -> {
-                    return connectionThread.playerController.handleWalk(message);
+                    return clientConnection.playerController.handleWalk(message);
                 }
                 case "update_player_action" -> {
-                    connectionThread.playerController.handleChangeAction(message);
+                    clientConnection.playerController.handleChangeAction(message);
                 }
 
             }
@@ -67,13 +67,13 @@ public class ServerConnectionController {
                     return suggestUsername(message.getFromBody("username"));
                 }
                 case "login" -> {
-                    return login(message, connectionThread);
+                    return login(message, clientConnection);
                 }
                 case "register" -> {
                     ArrayList<Account> accounts = new ArrayList<>();
                     accounts.add(message.getFromBody("account"));
                     ServerApp.saveAccounts(accounts);
-                    connectionThread.setCurrentAccount(accounts.get(0));
+                    clientConnection.setCurrentAccount(accounts.get(0));
                     return null;
                 }
                 case "getUsername" -> {
@@ -99,11 +99,11 @@ public class ServerConnectionController {
             String command = message.getFromBody("command");
             switch (command) {
                 case "do_trade" -> {
-                    connectionThread.playerController.doTrade(message);
+                    clientConnection.playerController.doTrade(message);
                     return null;
                 }
                 default -> {
-                    connectionThread.gameThread.sendTCP(message, message.getFromBody("receiver"));
+                    clientConnection.gameThread.sendTCP(message, message.getFromBody("receiver"));
                     return null;
                 }
             }
@@ -112,11 +112,11 @@ public class ServerConnectionController {
             String command = message.getFromBody("command");
             switch (command) {
                 case "send_private_message" -> {
-                    connectionThread.playerController.sendPrivateMessage(message);
+                    clientConnection.playerController.sendPrivateMessage(message);
                     return null;
                 }
                 case "send_public_message" -> {
-                    connectionThread.playerController.sendPublicMessage(message);
+                    clientConnection.playerController.sendPublicMessage(message);
                     return null;
                 }
             }
@@ -125,38 +125,38 @@ public class ServerConnectionController {
             String command = message.getFromBody("command");
             switch (command) {
                 case "gift_player" -> {
-                    connectionThread.playerController.giftPlayer(message);
+                    clientConnection.playerController.giftPlayer(message);
                     return null;
                 }
                 case "rate_gift" -> {
-                    connectionThread.playerController.rateGift(message);
+                    clientConnection.playerController.rateGift(message);
                     return null;
                 }
                 case "meet_npc" -> {
-                    GameController.meetNPC(connectionThread.gameThread.getGame(), connectionThread.player, message.getFromBody("npc_name"));
+                    GameController.meetNPC(clientConnection.gameThread.getGame(), clientConnection.player, message.getFromBody("npc_name"));
                 }
             }
         }
         if (message.getType() == JSONMessage.Type.request) {
             switch ((String) message.getFromBody("command")) {
                 case "hug" -> {
-                    connectionThread.playerController.hug(message);
+                    clientConnection.playerController.hug(message);
                     return null;
                 }
                 case "flower" -> {
-                    connectionThread.playerController.flower(message);
+                    clientConnection.playerController.flower(message);
                     return null;
                 }
                 case "ask_marriage" -> {
-                    connectionThread.playerController.askMarriage(message);
+                    clientConnection.playerController.askMarriage(message);
                     return null;
                 }
                 case "accept_marriage" -> {
-                    connectionThread.playerController.acceptMarriage(message);
+                    clientConnection.playerController.acceptMarriage(message);
                     return null;
                 }
                 case "reject_marriage" -> {
-                    connectionThread.playerController.rejectMarriage(message);
+                    clientConnection.playerController.rejectMarriage(message);
                     return null;
                 }
             }
@@ -164,7 +164,7 @@ public class ServerConnectionController {
         if (message.getType() == JSONMessage.Type.cheat) {
             switch ((String) message.getFromBody("command")) {
                 case "energy" -> {
-                    Game game = connectionThread.gameThread.getGame();
+                    Game game = clientConnection.gameThread.getGame();
                     Player player = game.getPlayerByUsername(message.getFromBody("sender"));
 
                     player.getEnergy().addEnergy(message.getFromBody("amount"));
@@ -174,26 +174,29 @@ public class ServerConnectionController {
                     response.put("energy", player.getEnergy());
                     response.put("username", player.getUsername());
 
-                    connectionThread.gameThread.sendTCP(message, player.getUsername());
+                    clientConnection.gameThread.sendTCP(message, player.getUsername());
                     return null;
                 }
                 case "friendship" -> {
-                    connectionThread.playerController.cheatSetFriendship(message);
+                    clientConnection.playerController.cheatSetFriendship(message);
                     return null;
                 }
                 case "give_item" -> {
-                    GameStaticController.cheatGiveItem(connectionThread.gameThread.getGame(),
-                        connectionThread.player,
+                    GameStaticController.cheatGiveItem(clientConnection.gameThread.getGame(),
+                        clientConnection.player,
                         message.getFromBody("name"),
                         message.getIntFromBody("amount"));
                     return null;
                 }
             }
         }
-        throw new UnsupportedOperationException("didn't handle");
+        if(message.getType() == JSONMessage.Type.response) {
+            throw new UnsupportedOperationException();
+        }
+        return null;
     }
 
-    public static JSONMessage login(JSONMessage message, ClientConnectionThread connectionThread) {
+    public static JSONMessage login(JSONMessage message, ClientConnection clientConnection) {
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
         if(message.getFromBody("token") != null){
@@ -212,7 +215,7 @@ public class ServerConnectionController {
                 return response;
             }
 
-            connectionThread.setCurrentAccount(account);
+            clientConnection.setCurrentAccount(account);
 
             response.put("success", true);
             response.put("username", username);
@@ -240,7 +243,7 @@ public class ServerConnectionController {
         response.put("success", true);
         response.put("token", token);
 
-        connectionThread.setCurrentAccount(account);
+        clientConnection.setCurrentAccount(account);
 
         return response;
     }

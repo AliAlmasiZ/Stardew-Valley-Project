@@ -3,6 +3,7 @@ package com.ap.stardew.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.ap.stardew.ClientGame;
+import games.spooky.gdx.nativefilechooser.desktop.DesktopFileChooser;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
@@ -12,7 +13,7 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new ClientGame(), getDefaultConfiguration());
+        return new Lwjgl3Application(new ClientGame(new DesktopFileChooser()), getDefaultConfiguration());
     }
 
 
@@ -37,7 +38,6 @@ public class Lwjgl3Launcher {
         config.setBackBufferConfig(8, 8, 8, 8, 16, 8, 4);
 
 
-        //// You can change these files; they are in lwjgl3/src/main/resources/ .
         config.setWindowIcon("stardew256.png", "stardew128.png", "stardew64.png", "stardew48.png", "stardew16.png");
         return config;
     }

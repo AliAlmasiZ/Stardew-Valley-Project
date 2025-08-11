@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE IF NOT EXISTS users (
     username            TEXT NOT NULL PRIMARY KEY,
     nickname            TEXT NOT NULL,
@@ -21,5 +23,13 @@ CREATE TABLE IF NOT EXISTS user_game (
     gold INTEGER NOT NULL,
     PRIMARY KEY (game_id, username),
     FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS audio_files (
+    username        TEXT NOT NULL,
+    file_name       TEXT NOT NULL,
+    audio_data      BLOB,
+    PRIMARY KEY(username, file_name)
     FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );

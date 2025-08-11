@@ -1,32 +1,28 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
-import com.ap.stardew.models.App;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
-import com.ap.stardew.models.entities.components.Pickable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
-import com.ap.stardew.models.player.Gift;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.Client;
 
 import java.util.HashMap;
 
 public class PlayerController {
-    private ClientConnectionThread clientConnectionThread;
+    private ClientConnection ClientConnection;
     private Vector2 direction = new Vector2();
     private Player player;
 
-    public PlayerController(ClientConnectionThread clientThread) {
-        this.clientConnectionThread = clientThread;
+    public PlayerController(ClientConnection clientThread) {
+        this.ClientConnection = clientThread;
         player = clientThread.player;
     }
 
@@ -51,7 +47,7 @@ public class PlayerController {
         updateMessage.put("username", player.getUsername());
         updateMessage.put("delta_time", delta);
         updateMessage.put("direction", direction);
-        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
 
         return null;
     }
@@ -65,7 +61,7 @@ public class PlayerController {
         updateMessage.put("command", "update_player_action");
         updateMessage.put("username", player.getUsername());
         updateMessage.put("action", action);
-        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
     }
 
 
@@ -74,15 +70,15 @@ public class PlayerController {
     }
 
     public void updatePlayer() {
-        this.player = clientConnectionThread.player;
+        this.player = ClientConnection.player;
     }
 
     //Maybe this should be at GameController
     public void doTrade(JSONMessage message) {
-        Player receiver = clientConnectionThread.player;
+        Player receiver = ClientConnection.player;
         String senderName = message.getFromBody("receiver");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Game game = clientConnectionThread.gameThread.getGame();
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Game game = ClientConnection.gameThread.getGame();
 
         Inventory receiverInventory = message.getFromBody("receiverInventory");
         Inventory senderInventory = message.getFromBody("senderInventory");
@@ -116,7 +112,7 @@ public class PlayerController {
         updateMessage.put("username", player.getUsername());
         updateMessage.put("player", player);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, player.getUsername());
+        ClientConnection.gameThread.sendTCP(updateMessage, player.getUsername());
     }
 
     public void updatePlayer(Player player) {
@@ -129,16 +125,16 @@ public class PlayerController {
         updateMessage.put("inventory", player.getComponent(Inventory.class));
         updateMessage.put("trade_history", tradeHistoryItem);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, player.getUsername());
+        ClientConnection.gameThread.sendTCP(updateMessage, player.getUsername());
     }
 
     /***************************************** Chat **********************************************/
     public void sendPrivateMessage(JSONMessage jsonMessage) {
         String receiverName = jsonMessage.getFromBody("receiver");
         Message message = jsonMessage.getFromBody("message");
-        clientConnectionThread.gameThread.getClientByUsername(receiverName).player.addMessage(jsonMessage.getFromBody("message"));
+        ClientConnection.gameThread.getClientByUsername(receiverName).player.addMessage(jsonMessage.getFromBody("message"));
 
-        PlayerFriendship playerFriendship = clientConnectionThread.gameThread.getGame()
+        PlayerFriendship playerFriendship = ClientConnection.gameThread.getGame()
             .getFriendshipBetween(message.getSender(), message.getReceiver());
 
         if (!playerFriendship.isHadMessageToday()) {
@@ -146,27 +142,27 @@ public class PlayerController {
             playerFriendship.addXp(20);
         }
 
-        clientConnectionThread.gameThread.sendTCP(jsonMessage,jsonMessage.getFromBody("receiver"));
+        ClientConnection.gameThread.sendTCP(jsonMessage,jsonMessage.getFromBody("receiver"));
     }
 
     public void sendPublicMessage(JSONMessage jsonMessage) {
         Message message = jsonMessage.getFromBody("message");
-        clientConnectionThread.gameThread.getGame().addPublicMessage(message);
+        ClientConnection.gameThread.getGame().addPublicMessage(message);
 
-        clientConnectionThread.gameThread.sendAllTCP(jsonMessage);
+        ClientConnection.gameThread.sendAllTCP(jsonMessage);
     }
 
     /***************************************** **** **********************************************/
 
     public void giftPlayer(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String receiverName = jsonMessage.getFromBody("receiver");
         String senderName = jsonMessage.getFromBody("sender");
         String entityName = jsonMessage.getFromBody("entity");
         int amount = jsonMessage.getFromBody("amount");
 
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         // Do the logic
         GameController.giveGift(game, receiverName, senderName, entityName, amount);
@@ -195,17 +191,17 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, receiverName, senderName);
+        ClientConnection.gameThread.sendTCP(updateMessage, receiverName, senderName);
     }
 
     public void rateGift(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         int id = jsonMessage.getFromBody("id");
         int rating = jsonMessage.getFromBody("rating");
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         GameController.rateGift(game, senderName, receiverName, id, rating);
 
@@ -230,15 +226,15 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, receiver.getUsername(), sender.getUsername());
+        ClientConnection.gameThread.sendTCP(updateMessage, receiver.getUsername(), sender.getUsername());
     }
 
     public void hug(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         GameController.hug(game, senderName, receiverName);
 
@@ -261,15 +257,15 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
     }
 
     public void flower(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         GameController.flower(game, senderName, receiverName);
 
@@ -294,16 +290,16 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
     }
 
     public void askMarriage(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
         String ringName = jsonMessage.getFromBody("ring_name");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         GameController.askMarriage(game, senderName, receiverName, ringName);
 
@@ -328,15 +324,15 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage,senderName, receiverName);
+        ClientConnection.gameThread.sendTCP(updateMessage,senderName, receiverName);
     }
 
     public void acceptMarriage(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         game.marry(sender, receiver);
         receiver.getComponent(Inventory.class).addItem(receiver.getSuitors().get(sender).clone());
@@ -366,16 +362,16 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
 
     }
 
     public void rejectMarriage(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
-        Player sender = clientConnectionThread.gameThread.getClientByUsername(senderName).player;
-        Player receiver = clientConnectionThread.gameThread.getClientByUsername(receiverName).player;
+        Player sender = ClientConnection.gameThread.getClientByUsername(senderName).player;
+        Player receiver = ClientConnection.gameThread.getClientByUsername(receiverName).player;
 
         GameController.rejectMarriage(game, senderName, receiverName);
 
@@ -401,11 +397,11 @@ public class PlayerController {
 
         updateMessage.put("players_update", playerUpdateMessages);
 
-        clientConnectionThread.gameThread.sendAllTCP(updateMessage);
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
     }
 
     public void cheatSetFriendship(JSONMessage jsonMessage) {
-        Game game = clientConnectionThread.gameThread.getGame();
+        Game game = ClientConnection.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
         int level =  jsonMessage.getFromBody("level");
@@ -418,7 +414,7 @@ public class PlayerController {
         updateMessage.put("command", "update_friendships");
         updateMessage.put("friendships", game.getPlayerFriendships());
 
-        clientConnectionThread.gameThread.sendTCP(updateMessage, receiverName, senderName);
+        ClientConnection.gameThread.sendTCP(updateMessage, receiverName, senderName);
     }
 
 }

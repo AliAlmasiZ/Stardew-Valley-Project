@@ -48,9 +48,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
-    public static final int TCP_PORT = 54555;
-    public static final int UDP_PORT = 54777;
-    public static final String HOST = "127.0.0.1";
     protected final DataInputStream dataInputStream;
     protected final DataOutputStream dataOutputStream;
     //this is for Socket connection
@@ -143,7 +140,7 @@ abstract public class ConnectionThread extends Thread {
     }
 
 
-    public Connection getConnection() {
+    public Connection getGameConnection() {
         return connection;
     }
 

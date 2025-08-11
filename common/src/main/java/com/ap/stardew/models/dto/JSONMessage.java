@@ -12,7 +12,7 @@ public class JSONMessage {
     /*
      * Empty constructor needed for JSON Serialization/Deserialization
      */
-    private JSONMessage() {
+    public JSONMessage() {
 
     }
     public JSONMessage(Map<String, Object> body, Type type) {
@@ -56,6 +56,10 @@ public class JSONMessage {
         trade,
         chat,
         cheat,
+        audio_packet,
+        upload_packet,
+        files_list_request,
+        audio_auth,
     }
 
     @Override

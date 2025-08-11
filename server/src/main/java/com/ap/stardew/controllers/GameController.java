@@ -1,19 +1,21 @@
 package com.ap.stardew.controllers;
 
-import com.ap.stardew.app.ClientConnectionThread;
+import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
 import com.ap.stardew.models.*;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;
+import com.ap.stardew.models.Game;
+import com.ap.stardew.models.GameSession;
+import com.ap.stardew.models.Position;
 import com.ap.stardew.models.dto.AccountInfo;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.InteriorComponent;
-import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
-import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.enums.Weather;
 import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
@@ -120,7 +122,7 @@ public class GameController {
         String savePath = generateSavePath("./games");
 
         try (Output output = new Output(new FileOutputStream(savePath))) {
-            ServerApp.getServer().getKryo().writeObject(output, gameSession.getGame());
+            ServerApp.getGameServer().getKryo().writeObject(output, gameSession.getGame());
         } catch (IOException e) {
             throw new RuntimeException("Failed to save game session file", e);
         }
@@ -167,7 +169,7 @@ public class GameController {
         if(savedGamePath == null) return null;
 
         try (Input input = new Input(new FileInputStream(savedGamePath))) {
-            GameSession gameSession = new GameSession(ServerApp.getServer().getKryo().readObject(input, Game.class));
+            GameSession gameSession = new GameSession(ServerApp.getGameServer().getKryo().readObject(input, Game.class));
 
             DatabaseManager.deleteGame(gameId);
 

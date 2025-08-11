@@ -142,7 +142,7 @@ public class AbstractScreen implements Screen {
                 button.addListener(new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        ClientApp.getClient().close();
+                        ClientApp.getGameClient().close();
                     }
                 });
                 Table networkStatusTable = AbstractScreen.getNetworkStatusTable();

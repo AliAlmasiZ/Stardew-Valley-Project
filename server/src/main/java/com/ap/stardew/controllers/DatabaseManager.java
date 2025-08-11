@@ -4,6 +4,7 @@ import com.ap.stardew.models.Account;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.dto.SavedGameDetails;
 import com.ap.stardew.models.enums.Gender;
+import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.utils.JSONUtils;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.*;
 public class DatabaseManager {
     private static final String URL = "jdbc:sqlite:game.db";
 
-    public static void saveAccount(Account account) {
+    static {
         //TODO put this in a better place
         try {
             createTableIfNotExists();
@@ -22,6 +23,10 @@ public class DatabaseManager {
             System.err.println("Error in reading schema");
             e.printStackTrace();
         }
+    }
+
+    public static void saveAccount(Account account) {
+
 
         String sql = "INSERT INTO users ( " +
             "    username, " +
@@ -64,6 +69,51 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Error in save user " + account.getUsername());
             e.printStackTrace();
+        }
+    }
+
+    public static void saveAudioFile(String username, String fileName, byte[] data) throws IOException {
+        String sql = """
+            INSERT OR REPLACE INTO audio_files (username, file_name, audio_data) VALUES (?, ?, ?)
+            """;
+
+        if(data.length > 10 * 1024 * 1024) {
+            throw new IOException("File too large");
+        }
+        if(!userExists(username)) {
+            throw new IllegalArgumentException("Invalid user");
+        }
+        try (var conn = DriverManager.getConnection(URL)) {
+            conn.setAutoCommit(false);
+
+
+
+            try (var pstmt = conn.prepareStatement(sql)){
+                pstmt.setString(1, username);
+                pstmt.setString(2, fileName);
+                pstmt.setBytes(3, data);
+                pstmt.executeUpdate();
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean userExists(String username) {
+        try (var pstmt = DriverManager.getConnection(URL).prepareStatement(
+            "SELECT 1 FROM users WHERE username = ?"
+        )){
+            pstmt.setString(1, username);
+            var rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -294,6 +344,32 @@ public class DatabaseManager {
         }
     }
 
+    public static List<String> allUserAudioFiles(String username) {
+        try (var conn = DriverManager.getConnection(URL)) {
+            try (var pstmt = conn.prepareStatement(
+                "SELECT a.file_name, u.username " +
+                    "FROM audio_files a " +
+                    "JOIN users u ON a.username = u.username " +
+                    "WHERE a.username = ?")) {
+                pstmt.setString(1, username);
+                ResultSet rs = pstmt.executeQuery();
+                List<String> files = new ArrayList<>();
+                while (rs.next()) {
+                    files.add(rs.getString("username") + ": " + rs.getString("file_name"));
+                }
+                return files;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+
+    }
+
+
+
     private static Account mapRowToUser(ResultSet rs) throws SQLException {
         Account a = new Account();
         a.setUsername(rs.getString("username"));
@@ -305,8 +381,6 @@ public class DatabaseManager {
 
         return a;
     }
-
-
 
     public static void createTableIfNotExists() throws IOException {
         var classLoader = DatabaseManager.class.getClassLoader();
@@ -335,6 +409,4 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-
-
 }

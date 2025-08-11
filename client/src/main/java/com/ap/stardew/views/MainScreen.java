@@ -10,9 +10,7 @@ import com.ap.stardew.app.GameController;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.*;
 import com.ap.stardew.models.LobbyInfo;
-import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
-import com.ap.stardew.models.enums.Weather;
 import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.Player;
@@ -72,6 +70,7 @@ public class MainScreen extends AbstractMenuScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(!ClientApp.isConnected()){
+                    ClientApp.connectClients();
                     new PopUpMessage("You should be connected to the server").show(getFrontStage());
                     return;
                 }
@@ -99,7 +98,7 @@ public class MainScreen extends AbstractMenuScreen {
             public void clicked(InputEvent event, float x, float y) {
 
                 if(!ClientApp.isConnected())
-                    ClientApp.connectServer();
+                    ClientApp.connectClients();
 //                Game game = new Game();
 ////                App.setActiveGame(game);
 //
