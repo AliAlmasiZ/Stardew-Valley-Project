@@ -86,6 +86,7 @@ public class ServerConnectionController {
             switch (command) {
                 case "do_trade" -> {
                     connectionThread.playerController.doTrade(message);
+                    return null;
                 }
                 default -> {
                     connectionThread.gameThread.sendTCP(message, message.getFromBody("receiver"));
@@ -98,9 +99,11 @@ public class ServerConnectionController {
             switch (command) {
                 case "send_private_message" -> {
                     connectionThread.playerController.sendPrivateMessage(message);
+                    return null;
                 }
                 case "send_public_message" -> {
                     connectionThread.playerController.sendPublicMessage(message);
+                    return null;
                 }
             }
         }
@@ -109,9 +112,11 @@ public class ServerConnectionController {
             switch (command) {
                 case "gift_player" -> {
                     connectionThread.playerController.giftPlayer(message);
+                    return null;
                 }
                 case "rate_gift" -> {
                     connectionThread.playerController.rateGift(message);
+                    return null;
                 }
             }
         }
@@ -119,22 +124,27 @@ public class ServerConnectionController {
             switch ((String) message.getFromBody("command")) {
                 case "hug" -> {
                     connectionThread.playerController.hug(message);
+                    return null;
                 }
                 case "flower" -> {
                     connectionThread.playerController.flower(message);
+                    return null;
                 }
                 case "ask_marriage" -> {
                     connectionThread.playerController.askMarriage(message);
+                    return null;
                 }
                 case "accept_marriage" -> {
                     connectionThread.playerController.acceptMarriage(message);
+                    return null;
                 }
                 case "reject_marriage" -> {
                     connectionThread.playerController.rejectMarriage(message);
+                    return null;
                 }
             }
         }
-        if (message.getType() == JSONMessage.Type.chat) {
+        if (message.getType() == JSONMessage.Type.cheat) {
             switch ((String) message.getFromBody("command")) {
                 case "energy" -> {
                     Game game = connectionThread.gameThread.getGame();
@@ -148,15 +158,18 @@ public class ServerConnectionController {
                     response.put("username", player.getUsername());
 
                     connectionThread.gameThread.sendTCP(message, player.getUsername());
+                    return null;
                 }
                 case "friendship" -> {
                     connectionThread.playerController.cheatSetFriendship(message);
+                    return null;
                 }
                 case "give_item" -> {
                     GameStaticController.cheatGiveItem(connectionThread.gameThread.getGame(),
                         connectionThread.player,
                         message.getFromBody("name"),
                         message.getIntFromBody("amount"));
+                    return null;
                 }
             }
         }

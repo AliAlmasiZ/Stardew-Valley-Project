@@ -120,24 +120,31 @@ public class ClientConnectionController {
                 }
                 case "update_hug" -> {
                     GameController.hugUpdate(message);
+                    return null;
                 }
                 case "update_flower" -> {
                     GameController.flowerUpdate(message);
+                    return null;
                 }
                 case "update_ask_marriage" -> {
                     GameController.askMarriageUpdate(message);
+                    return null;
                 }
                 case "update_accept_marriage" -> {
                     GameController.acceptMarriageUpdate(message);
+                    return null;
                 }
                 case "update_reject_marriage" -> {
                     GameController.rejectMarriageUpdate(message);
+                    return null;
                 }
                 case "update_players_fields" -> {
                     GameController.updatePlayer(message.getFromBody("username"), message);
+                    return null;
                 }
                 case "update_friendships" -> {
                     GameController.updateFriendships(message);
+                    return null;
                 }
             }
         }

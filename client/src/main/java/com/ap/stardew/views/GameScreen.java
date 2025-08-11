@@ -200,7 +200,7 @@ public class GameScreen extends AbstractScreen {
         //NPC
         initNPCDialogs();
 
-        chatDialog = new ChatDialog(ClientApp.getActiveGame().getPlayers(),uiStage);
+        chatDialog = new ChatDialog(ClientApp.getActiveGame().getPlayers(), uiStage);
 
         //TODO: remove this later
         //**************************************
@@ -269,7 +269,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        if(!ClientApp.isConnected()){
+        if (!ClientApp.isConnected()) {
             GameController.handleGameDisconnection(this);
             return;
         }
@@ -311,9 +311,9 @@ public class GameScreen extends AbstractScreen {
             if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
             if (entity instanceof Player) ((Player) entity).update(delta);
 
-            if(renderable.getRenderFunction() != null){
+            if (renderable.getRenderFunction() != null) {
                 renderable.getRenderFunction().render(entity, batch);
-            }else{
+            } else {
                 Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, game, delta);
                 if (sprite != null) {
                     sprite.setPosition(entity.getComponent(PositionComponent.class).getX(), entity.getComponent(PositionComponent.class).getY());
@@ -1636,7 +1636,7 @@ public class GameScreen extends AbstractScreen {
                 int amount;
                 try {
                     amount = Integer.parseInt(energyField.getText());
-                }catch (Exception e) {
+                } catch (Exception e) {
                     return;
                 }
                 JSONMessage message = new JSONMessage(JSONMessage.Type.cheat);
@@ -1663,9 +1663,9 @@ public class GameScreen extends AbstractScreen {
         TextField nameField = new TextField("", customSkin);
         nameField.setMessageText("Enter name...");
         TextField levelField = new TextField("", customSkin);
-        nameField.setMessageText("Enter level...");
+        levelField.setMessageText("Enter level...");
         TextField xpField = new TextField("", customSkin);
-        levelField.setMessageText("Enter xp...");
+        xpField.setMessageText("Enter xp...");
         TextButton nameButton = new TextButton("Confirm", customSkin);
 
         nameButton.addListener(new ClickListener() {
@@ -1732,15 +1732,15 @@ public class GameScreen extends AbstractScreen {
                     name = itemNameField.getText();
                     amount = Integer.parseInt(amountField.getText());
                 } catch (NumberFormatException e) {
-                    errorLabel.setText("Are you testing errors in CHEAT?");
-                    errorLabel.setVisible(true);
+                    errorLabelItem.setText("Are you testing errors in CHEAT?");
+                    errorLabelItem.setVisible(true);
                     return;
                 }
 
                 Result result = controller.cheatGiveItem(name, amount);
                 if (!result.isSuccessful()) {
-                    errorLabel.setText(result.message());
-                    errorLabel.setVisible(true);
+                    errorLabelItem.setText(result.message());
+                    errorLabelItem.setVisible(true);
                 } else {
                     JSONMessage message = new JSONMessage(JSONMessage.Type.cheat);
                     message.put("command", "give_item");
@@ -1756,7 +1756,6 @@ public class GameScreen extends AbstractScreen {
         });
 
 
-
         giveItemTable.add(giveItemLabel).growX().pad(3).row();
         giveItemTable.add(itemNameField).growX().pad(3).row();
         giveItemTable.add(amountField).growX().pad(3).row();
@@ -1764,8 +1763,9 @@ public class GameScreen extends AbstractScreen {
         giveItemTable.add(giveItemButton).growX().pad(3).row();
 
 
-        tabWidget.add(energyTable).pad(5).fill().grow();
-        tabWidget.add(friendshipTable).pad(5).fill().grow();
+        tabWidget.addTab(energyTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(giveItemTable, customSkin.getDrawable("skillMenuIcon"));
+        tabWidget.addTab(friendshipTable, customSkin.getDrawable("skillMenuIcon"));
         dialog.add(tabWidget).fill().grow();
 
         dialog.show();
@@ -1776,7 +1776,6 @@ public class GameScreen extends AbstractScreen {
     public void openCraftingMenu() {
         InGameDialog craftingDialog = new InGameDialog(uiStage);
         craftingDialog.pad(10);
-
 
 
         Table mainTable = new Table();
@@ -1801,7 +1800,7 @@ public class GameScreen extends AbstractScreen {
             recipeButton.setBackground(customSkin.getDrawable("frameNinePatch2"));
             recipeButton.add(itemImage).width(32).height(32).pad(5);
 
-            if(!isUnlocked) {
+            if (!isUnlocked) {
                 recipeButton.setColor(Color.GRAY);
                 itemImage.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             } else {
@@ -1826,21 +1825,23 @@ public class GameScreen extends AbstractScreen {
                 public void clicked(InputEvent event, float x, float y) {
                     Result result = controller.craftingCraft(recipeName); // TODO: do it on server side
                     Image icon;
-                    if(result.isSuccessful())
+                    if (result.isSuccessful())
                         icon = new Image(GameAssetManager.getInstance().success);
                     else
                         icon = new Image(GameAssetManager.getInstance().error);
 
                     PopUpMessage popUp = new PopUpMessage();
                     Label label = new Label(result.message(), customSkin);
-                    popUp.add(icon).size(16,16).pad(5);
+                    popUp.add(icon).size(16, 16).pad(5);
                     popUp.add(label).pad(10);
                     popUp.show(uiStage);
                 }
+
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTip.show();
                 }
+
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     toolTip.hide();
@@ -1850,7 +1851,7 @@ public class GameScreen extends AbstractScreen {
             recipeTable.add(recipeButton).size(60, 60).pad(2);
             itemsCount++;
 
-            if(itemsCount % itemsPerRow == 0) {
+            if (itemsCount % itemsPerRow == 0) {
                 recipeTable.row();
             }
         }
@@ -1877,8 +1878,6 @@ public class GameScreen extends AbstractScreen {
         cookingDialog.pad(10);
 
 
-
-
         Table mainTable = new Table();
         mainTable.top().left();
 
@@ -1902,7 +1901,7 @@ public class GameScreen extends AbstractScreen {
             recipeButton.setBackground(customSkin.getDrawable("frameNinePatch2"));
             recipeButton.add(itemImage).width(32).height(32).pad(5);
 
-            if(!isUnlocked) {
+            if (!isUnlocked) {
                 recipeButton.setColor(Color.GRAY);
                 itemImage.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             } else {
@@ -1927,21 +1926,23 @@ public class GameScreen extends AbstractScreen {
                 public void clicked(InputEvent event, float x, float y) {
                     Result result = controller.cookingPrepare(recipeName); // TODO: do it on server side
                     Image icon;
-                    if(result.isSuccessful())
+                    if (result.isSuccessful())
                         icon = new Image(GameAssetManager.getInstance().success);
                     else
                         icon = new Image(GameAssetManager.getInstance().error);
 
                     PopUpMessage popUp = new PopUpMessage();
                     Label label = new Label(result.message(), customSkin);
-                    popUp.add(icon).size(16,16).pad(5);
+                    popUp.add(icon).size(16, 16).pad(5);
                     popUp.add(label).pad(10);
                     popUp.show(uiStage);
                 }
+
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTip.show();
                 }
+
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     toolTip.hide();
@@ -1951,7 +1952,7 @@ public class GameScreen extends AbstractScreen {
             recipeTable.add(recipeButton).size(60, 60).pad(2);
             itemsCount++;
 
-            if(itemsCount % itemsPerRow == 0) {
+            if (itemsCount % itemsPerRow == 0) {
                 recipeTable.row();
             }
         }
@@ -2075,7 +2076,7 @@ public class GameScreen extends AbstractScreen {
                     errorLabel.setVisible(true);
                     errorLabel.setText(result.message());
                     return;
-                }else {
+                } else {
                     GameController.rateGift(id, rating, friend);
                     dialog.hide();
                     showTemporaryMessage(result.message(), 5, Color.CYAN);

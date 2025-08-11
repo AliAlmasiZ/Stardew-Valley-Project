@@ -207,6 +207,26 @@ public class CharacterSpriteManager {
         loadAnim(Direction.RIGHT, Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
         loadAnim(Direction.LEFT , Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
 
+        loadAnim(Direction.DOWN , Player.Action.HUGGING , "16@1000, 0@500, 16@1000, 4@200, 5@6000"); //TODO
+        loadAnim(Direction.UP   , Player.Action.HUGGING , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.RIGHT, Player.Action.HUGGING , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.LEFT , Player.Action.HUGGING , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+
+        loadAnim(Direction.DOWN , Player.Action.MARRIED , "16@1000, 0@500, 16@1000, 4@200, 5@6000"); //TODO
+        loadAnim(Direction.UP   , Player.Action.MARRIED , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.RIGHT, Player.Action.MARRIED , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.LEFT , Player.Action.MARRIED , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+
+        loadAnim(Direction.DOWN , Player.Action.GIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.UP   , Player.Action.GIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.RIGHT, Player.Action.GIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.LEFT , Player.Action.GIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+
+        loadAnim(Direction.DOWN , Player.Action.RECEIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.UP   , Player.Action.RECEIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.RIGHT, Player.Action.RECEIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+        loadAnim(Direction.LEFT , Player.Action.RECEIVING_FLOWER , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
+
         loadAnim(Direction.DOWN , Player.Action.USING_SCYTHE , "24@55, 25@45, 26@25, 27@25, 28@25, 29@25");
         loadAnim(Direction.UP   , Player.Action.USING_SCYTHE , "36@55, 37@45, 38@25, 39@25, 40@25, 41@25");
         loadAnim(Direction.RIGHT, Player.Action.USING_SCYTHE , "30@55, 31@45, 32@25, 33@25, 34@25, 35@25");

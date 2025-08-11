@@ -408,8 +408,8 @@ public class PlayerController {
         Game game = clientConnectionThread.gameThread.getGame();
         String senderName = jsonMessage.getFromBody("sender");
         String receiverName = jsonMessage.getFromBody("receiver");
-        int level = jsonMessage.getIntFromBody("level");
-        int xp = jsonMessage.getIntFromBody("xp");
+        int level =  jsonMessage.getFromBody("level");
+        int xp = jsonMessage.getFromBody("xp");
 
         GameController.cheatFriendship(game, senderName, receiverName, level, xp);
 
