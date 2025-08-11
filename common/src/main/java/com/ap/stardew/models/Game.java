@@ -423,7 +423,7 @@ public class Game implements Serializable {
 
     public PlayerFriendship getFriendshipWith(Player friend) {
         for (PlayerFriendship playerFriendship : playerFriendships) {
-            if (playerFriendship.getFriends().contains(friend) &&
+            if (playerFriendship.getFriends().contains(friend.getUsername()) &&
                 playerFriendship.getFriends().contains(currentPlayer.getUsername())) {
                 return playerFriendship;
             }
