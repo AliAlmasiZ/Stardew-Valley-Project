@@ -55,6 +55,9 @@ public class ClientConnection {
             return true;
         } catch (UnsupportedOperationException notHandled) {
             return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -66,6 +69,7 @@ public class ClientConnection {
                 gameExecutor.submit(() -> {
                     boolean handled = handleReceived(object);
                     if(!handled) try {
+                        System.out.println("not handled, added to queue");
                         receivedObjectsQueue.put(object);
                     } catch (InterruptedException e) {
                         System.err.println("Error occurred in add object message to queue :");

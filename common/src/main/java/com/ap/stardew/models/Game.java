@@ -1,5 +1,7 @@
 package com.ap.stardew.models;
 
+import com.ap.stardew.models.animal.Animal;
+import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.records.GameStartingDetails;
@@ -100,6 +102,7 @@ public class Game implements Serializable {
             ForageSpawnSystem.updatePerDay(this);
             GrowthSystem.updatePerDay(this, mainMap);
         }
+
     }
 
     public void initNPCs() {

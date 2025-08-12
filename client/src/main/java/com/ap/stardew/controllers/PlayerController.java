@@ -110,6 +110,12 @@ public class PlayerController implements InputProcessor {
             screen.openCheatMenu();
         if (keycode == Input.Keys.F2)
             screen.scoreBoardDialog.show();
+        if (keycode == Input.Keys.F3) {
+            JSONMessage message = new JSONMessage(JSONMessage.Type.request);
+            message.put("command", "initial_add_animal");
+            System.out.println("sent from client initial_add_animal"); //TODO
+            ClientApp.sendTCP(message);
+        }
 
 
         return false;

@@ -2,9 +2,11 @@ package com.ap.stardew.models.animal;
 
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
+import com.ap.stardew.models.enums.EntityTag;
 import com.ap.stardew.models.enums.ProductQuality;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Animal extends Entity implements Serializable {
     private AnimalType animalType;
@@ -34,6 +37,7 @@ public class Animal extends Entity implements Serializable {
         Renderable renderable = this.getComponent(Renderable.class);
         /*TODO: Check this later*/
         this.addComponent(new Placeable(true));
+        this.addComponent(new PositionComponent());
         renderable.setSpritePath("Content/Animal/" + animalType.name().toLowerCase() + "/normal.png");
         this.name = name;
         this.animalType = animalType;
@@ -41,6 +45,9 @@ public class Animal extends Entity implements Serializable {
 
     public Animal(AnimalType animalType) {
         this(animalType, null);
+    }
+
+    public Animal() {
     }
 
     public AnimalType getAnimalType() {
@@ -106,6 +113,14 @@ public class Animal extends Entity implements Serializable {
 
     public void setDestination(Vector2 destination) {
         this.destination = destination;
+    }
+
+    public void setDestinationX(float x) {
+        this.destination.x = x;
+    }
+
+    public void setDestinationY(float y) {
+        this.destination.y = y;
     }
 
     public boolean isFedToday() {
@@ -222,41 +237,52 @@ public class Animal extends Entity implements Serializable {
         return null;
     }
 
-    public void renderUpdate(float delta, boolean isOwner) {
+    public JSONMessage renderUpdate(float delta, boolean isOwner) {
         //movement Update TODO: check that it doesnt go to baghalies
         PositionComponent positionComponent = getComponent(PositionComponent.class);
-        if (isOwner) {
-            if (timeLeftToMove > 0 && getComponent(Renderable.class).getCurrentStatue() == Renderable.Statue.NORMAL) {
-                timeLeftToMove -= delta;
-                if (timeLeftToMove <= 0) {
-                    Vector2 movementVector = new Vector2();
-                    movementVector.x = (MathUtils.random() - 0.5f) * 80;
-                    movementVector.y = (MathUtils.random() - 0.5f) * 80;
-                    destination.x = (float) (positionComponent.getX() + movementVector.x);
-                    destination.y = (float) (positionComponent.getY() + movementVector.y);
-                    if (movementVector.x > 0) {
-                        getComponent(Renderable.class).setStatue(Renderable.Statue.RIGHT_WALKING, 10000);
-                    } else {
-                        getComponent(Renderable.class).setStatue(Renderable.Statue.LEFT_WALKING, 10000);
-                    }
 
-                }
+        if (timeLeftToMove > 0 && getComponent(Renderable.class).getCurrentStatue() == Renderable.Statue.NORMAL && isOwner) {
+            timeLeftToMove -= delta;
+//            if (timeLeftToMove <= 0) {
+//                Vector2 movementVector = new Vector2();
+//                movementVector.x = (MathUtils.random() - 0.5f) * 80;
+//                movementVector.y = (MathUtils.random() - 0.5f) * 80;
+//                destination.x = (float) (positionComponent.getX() + movementVector.x);
+//                destination.y = (float) (positionComponent.getY() + movementVector.y);
+//                if (movementVector.x > 0) {
+//                    getComponent(Renderable.class).setStatue(Renderable.Statue.RIGHT_WALKING, 10000);
+//                } else {
+//                    getComponent(Renderable.class).setStatue(Renderable.Statue.LEFT_WALKING, 10000);
+//                }
+//
+//            }
 
-            } else if (timeLeftToMove <= 0) {
-                Position position = positionComponent.get();
-                int moveFactor = 10;
-                Vector2 movementVector = new Vector2();
-                movementVector.x = destination.x - (float) positionComponent.getX();
-                movementVector.y = destination.y - (float) positionComponent.getY();
-                if (movementVector.len() < 0.05f) {
-                    timeLeftToMove = 30;
-                    getComponent(Renderable.class).setStatue(Renderable.Statue.NORMAL, 0);
-                    getComponent(PositionComponent.class).setPosition(destination.x, destination.y);
-                }
-                movementVector.nor();
-                position.add(movementVector.x * delta * moveFactor, movementVector.y * delta * moveFactor);
+            if (timeLeftToMove <= 0) {
+                JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                jsonMessage.put("command", "move_animal");
+                jsonMessage.put("animal_name", getName());
+
+                return jsonMessage;
             }
+
+
+        } else if (timeLeftToMove <= 0 && getComponent(Renderable.class).getCurrentStatue() != Renderable.Statue.NORMAL) {
+            Position position = positionComponent.get();
+            int moveFactor = 10;
+            Vector2 movementVector = new Vector2();
+            movementVector.x = destination.x - (float) positionComponent.getX();
+            movementVector.y = destination.y - (float) positionComponent.getY();
+            if (movementVector.len() < 0.1f) {
+                timeLeftToMove = 30;
+                getComponent(Renderable.class).setStatue(Renderable.Statue.NORMAL, 0);
+                getComponent(PositionComponent.class).setPosition(destination.x, destination.y);
+                return null;
+            }
+            movementVector.nor();
+            position.add(movementVector.x * delta * moveFactor, movementVector.y * delta * moveFactor);
         }
+
+        return null;
     }
 
     public void move(float x, float y) {

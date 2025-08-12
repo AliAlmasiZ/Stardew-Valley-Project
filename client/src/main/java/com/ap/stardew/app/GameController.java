@@ -3,14 +3,15 @@ package com.ap.stardew.app;
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.GameStaticController;
-import com.ap.stardew.models.App;
-import com.ap.stardew.models.Game;
-import com.ap.stardew.models.Result;
+import com.ap.stardew.models.*;
 import com.ap.stardew.models.animal.Animal;
+import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Renderable;
+import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
@@ -106,13 +107,36 @@ public class GameController {
         Animal animal = player.findAnimal(animalName);
 
         if (message.containsKey("statue")) {
-            animal.getComponent(Renderable.class).setStatue(message.getFromBody("statue"), message.getFromBody("statue_time"));
+            Renderable.Statue statue = message.getFromBody("statue");
+            float statueTime = 0;
+            switch (statue) {
+                case RIGHT_WALKING, LEFT_WALKING -> {
+                    statueTime = 1000;
+                }
+                case EATING -> {
+                    statueTime = 5;
+                }
+                case PET -> {
+                    statueTime = 3;
+                }
+
+            }
+            animal.getComponent(Renderable.class).setStatue(statue, statueTime);
         }
         if (message.containsKey("fed_today")) {
             animal.setFedToday(message.getFromBody("fed_today"));
         }
         if (message.containsKey("pet_today")) {
             animal.setPetToday(message.getFromBody("pet_today"));
+        }
+        if (message.containsKey("destination_x")) {
+            animal.setDestinationX(message.getFromBody("destination_x"));
+        }
+        if (message.containsKey("destination_y")) {
+            animal.setDestinationY(message.getFromBody("destination_y"));
+        }
+        if (message.containsKey("time_left_to_move")) {
+            animal.setTimeLeftToMove(message.getFromBody("time_left_to_move"));
         }
 
 
@@ -688,6 +712,16 @@ public class GameController {
 
 
     /*************************************************************************************************/
+
+    public static void initialAddAnimal(JSONMessage jsonMessage) {
+        Game game = ClientApp.getActiveGame();
+        Player owner = game.getPlayerByUsername(jsonMessage.getFromBody("owner"));
+        Animal animal = jsonMessage.getFromBody("animal");
+
+        owner.getAnimals().add(animal);
+        EntityPlacementSystem.placeEntity(animal, animal.getComponent(PositionComponent.class).get(), game.getMainMap());
+        System.out.println("animal added");
+    }
 
 
 }

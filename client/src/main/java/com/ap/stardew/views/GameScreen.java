@@ -321,7 +321,12 @@ public class GameScreen extends AbstractScreen {
 
             Renderable renderable = entity.getComponent(Renderable.class);
             //update animals:
-            if (entity instanceof Animal animal) animal.renderUpdate(delta, player.getAnimals().contains(animal));
+            if (entity instanceof Animal){
+                JSONMessage animalMessage = ((Animal) entity).renderUpdate(delta, player.getAnimals().contains(((Animal) entity)));
+                if (animalMessage != null) {
+                    ClientApp.sendTCP(animalMessage);
+                }
+            }
             if (entity instanceof Player) ((Player) entity).update(delta);
 
             if (renderable.getRenderFunction() != null) {

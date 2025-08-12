@@ -9,6 +9,8 @@ import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.GameSession;
 import com.ap.stardew.models.Position;
+import com.ap.stardew.models.animal.Animal;
+import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.SavedGameDetails;
@@ -187,6 +189,23 @@ public class GameController {
             GameStaticController.cheatGiveItem(game, player,"vegetable", 1);
             GameStaticController.cheatGiveItem(game, player,"Cherry", 10);
         }
+
+//        Player player = game.getPlayers().get(0);
+//        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
+//        Vec2 pos1 = new Vec2(1000,2800);
+//        System.out.println(EntityPlacementSystem.placeEntity(animal1, pos1, game.getMainMap()).message());
+//        player.getAnimals().add(animal1);
+
+//        Animal animal2 = new Animal(AnimalType.Pig, "Gabriel");
+//        Vec2 pos2 = new Vec2(1000,2700);
+//        System.out.println(EntityPlacementSystem.placeEntity(animal2, pos2, game.getMainMap()).message());
+//        player.getAnimals().add(animal2);
+//
+//
+//        Animal animal3 = new Animal(AnimalType.Dinosaur, "richi");
+//        Vec2 pos3 = new Vec2(1100,2700);
+//        System.out.println(EntityPlacementSystem.placeEntity(animal3, pos3, game.getMainMap()).message());
+//        player.getAnimals().add(animal3);
     }
 
 
