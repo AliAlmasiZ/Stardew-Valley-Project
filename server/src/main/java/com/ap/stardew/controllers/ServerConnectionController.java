@@ -138,6 +138,7 @@ public class ServerConnectionController {
             }
         }
         if (message.getType() == JSONMessage.Type.request) {
+            System.out.println("received request from client");//TODO: delete this
             switch ((String) message.getFromBody("command")) {
                 case "hug" -> {
                     clientConnection.playerController.hug(message);
@@ -159,6 +160,46 @@ public class ServerConnectionController {
                     clientConnection.playerController.rejectMarriage(message);
                     return null;
                 }
+                case "initial_add_animal" -> {
+                    clientConnection.playerController.initialAddAnimal();
+                    return null;
+                }
+                case "feed_animal" -> {
+                    try {
+                        clientConnection.playerController.feedAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    return null;
+                }
+                case "move_animal" -> {
+                    try {
+                        clientConnection.playerController.moveAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw e;
+                    }
+                    return null;
+                }
+                case "pet_animal" -> {
+                    try {
+                        clientConnection.playerController.petAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    return null;
+                }
+                case "sell_animal" -> {
+                    try {
+                        clientConnection.playerController.sellAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw e;
+                    }
+                    return null;
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.cheat) {
@@ -170,7 +211,7 @@ public class ServerConnectionController {
                     player.getEnergy().addEnergy(message.getFromBody("amount"));
 
                     JSONMessage response = new JSONMessage(JSONMessage.Type.update);
-                    response.put("command", "update_players_fields");
+                    response.put("command", "update_player_fields");
                     response.put("energy", player.getEnergy());
                     response.put("username", player.getUsername());
 

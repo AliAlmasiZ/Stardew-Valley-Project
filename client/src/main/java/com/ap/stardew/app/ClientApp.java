@@ -98,6 +98,7 @@ public class ClientApp {
             public void received(Connection connection, Object object) {
                 boolean handled = handleReceived(object);
                 if(!handled) try {
+                    System.out.println("not handled, added to queue");
                     receivedMessageQueue.put((JSONMessage) object); // other objects must be handled
                 } catch (InterruptedException e) {
                     System.err.println("Error occurred in add object message to queue :");

@@ -5,6 +5,8 @@ import com.ap.stardew.models.NPC.Dialogue;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.NPC.Quest;
+import com.ap.stardew.models.animal.Animal;
+import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.crafting.Ingredient;
 import com.ap.stardew.models.crafting.Recipe;
@@ -100,7 +102,9 @@ public class NetworkUtils {
         kryo.register(Energy.class);
         kryo.register(Wallet.class);
         kryo.register(SkillType.class);
+        kryo.register(Animal.class);
         kryo.register(AnimalHouse.class);
+        kryo.register(AnimalType.class);
         kryo.register(Edible.class);
         kryo.register(Useable.class);
         kryo.register(Sellable.class);
@@ -152,6 +156,7 @@ public class NetworkUtils {
         kryo.register(Account.class);
         kryo.register(NPC.class);
         kryo.register(SecurityQuestions.class);
+        kryo.register(Renderable.Statue.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);

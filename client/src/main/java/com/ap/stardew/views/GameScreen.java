@@ -321,7 +321,12 @@ public class GameScreen extends AbstractScreen {
 
             Renderable renderable = entity.getComponent(Renderable.class);
             //update animals:
-            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
+            if (entity instanceof Animal){
+                JSONMessage animalMessage = ((Animal) entity).renderUpdate(delta, player.getAnimals().contains(((Animal) entity)));
+                if (animalMessage != null) {
+                    ClientApp.sendTCP(animalMessage);
+                }
+            }
             if (entity instanceof Player) ((Player) entity).update(delta);
 
             if (renderable.getRenderFunction() != null) {
@@ -821,12 +826,17 @@ public class GameScreen extends AbstractScreen {
 
         feedButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.feedHay(animal.getName());
+                Result result = controller.canFeedHay(animal.getName());
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
-                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
+                    JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                    jsonMessage.put("command", "feed_animal");
+                    jsonMessage.put("animal", animal.getName());
+                    jsonMessage.put("sender", game.getCurrentPlayer().getUsername());
 
+                    ClientApp.sendTCP(jsonMessage);
+//                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
                 }
                 dialog.hide();
             }
@@ -834,11 +844,16 @@ public class GameScreen extends AbstractScreen {
 
         petButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.pet(animal.getName());
+                Result result = controller.canPet(animal.getName());
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
-                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.PET, 2);
+                    JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                    jsonMessage.put("command", "pet_animal");
+                    jsonMessage.put("animal", animal.getName());
+                    jsonMessage.put("sender", game.getCurrentPlayer().getUsername());
+
+                    ClientApp.sendTCP(jsonMessage);
                 }
                 dialog.hide();
             }
@@ -854,11 +869,17 @@ public class GameScreen extends AbstractScreen {
         sellAnimalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.sellAnimal(animal.getName());
+                Result result = controller.canSellAnimal(animal.getName());
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                    JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                    jsonMessage.put("command", "sell_animal");
+                    jsonMessage.put("animal", animal.getName());
+                    jsonMessage.put("sender", game.getCurrentPlayer().getUsername());
+
+                    ClientApp.sendTCP(jsonMessage);
                 }
                 dialog.hide();
             }

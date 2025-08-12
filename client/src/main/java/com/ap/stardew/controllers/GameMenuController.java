@@ -953,7 +953,7 @@ public class GameMenuController implements Controller {
         return new Result(true, " bought and added to your farm successfully");
     }
 
-    public Result pet(String animalName) {
+    public Result canPet(String animalName) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
@@ -965,10 +965,10 @@ public class GameMenuController implements Controller {
             return new Result(false, "You are too far from this animal!\n" + currentPlayer.getPosition().dst(animal.getComponent(PositionComponent.class).get()));
         }
 
-        if (!animal.isPetToday()) {
-            animal.setPetToday(true);
-            animal.addFriendshipLevel(15);
-        }
+//        if (!animal.isPetToday()) {
+//            animal.setPetToday(true);
+//            animal.addFriendshipLevel(15);
+//        }
 
         return new Result(true, animal.getName() + " has pet successfully!");
     }
@@ -1039,7 +1039,7 @@ public class GameMenuController implements Controller {
         return new Result(true, "animal was moved");
     }
 
-    public Result feedHay(String animalName) {
+    public Result canFeedHay(String animalName) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
@@ -1052,9 +1052,9 @@ public class GameMenuController implements Controller {
             return new Result(false, "You don't have enough hay!");
         }
 
-        inventory.takeFromInventory("Hay", 1);
-
-        animal.setFedToday(true);
+//        inventory.takeFromInventory("Hay", 1);
+//
+//        animal.setFedToday(true);
 
         return new Result(true, "animal fed successfully");
     }
@@ -1206,7 +1206,7 @@ public class GameMenuController implements Controller {
     }
 
     /* -------------------------------------------------- -------------------------------------------------- */
-    public Result sellAnimal(String animalName) {
+    public Result canSellAnimal(String animalName) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
@@ -1215,10 +1215,10 @@ public class GameMenuController implements Controller {
         }
 
 
-        int price = animal.calculatePrice();
-        currentPlayer.getWallet().changeBalance(price);
-        currentPlayer.getAnimals().remove(animal);
-        EntityPlacementSystem.removeFromMap(animal);
+//        int price = animal.calculatePrice();
+//        currentPlayer.getWallet().changeBalance(price);
+//        currentPlayer.getAnimals().remove(animal);
+//        EntityPlacementSystem.removeFromMap(animal);
         //TODO: remove form his house if needed
 
         return new Result(true, animal.getName() + " sold successfully!");

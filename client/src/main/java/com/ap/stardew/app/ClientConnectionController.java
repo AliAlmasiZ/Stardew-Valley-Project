@@ -141,12 +141,25 @@ public class ClientConnectionController {
                     GameController.rejectMarriageUpdate(message);
                     return null;
                 }
-                case "update_players_fields" -> {
-                    GameController.updatePlayer(message.getFromBody("username"), message);
+                case "update_player_fields" -> {
+                    try {
+                        GameController.updatePlayer(message.getFromBody("username"), message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
                     return null;
                 }
                 case "update_friendships" -> {
                     GameController.updateFriendships(message);
+                    return null;
+                }
+                case "initial_add_animal" -> {
+                    GameController.initialAddAnimal(message);
+                    return null;
+                }
+                case "sell_animal" -> {
+                    GameController.sellAnimalUpdate(message);
                     return null;
                 }
             }

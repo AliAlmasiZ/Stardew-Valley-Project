@@ -2,9 +2,14 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.Vec2;
+import com.ap.stardew.models.animal.Animal;
+import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.Renderable;
+import com.ap.stardew.models.entities.components.PositionComponent;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
@@ -12,6 +17,7 @@ import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashMap;
@@ -153,6 +159,9 @@ public class PlayerController {
     }
 
     /***************************************** **** **********************************************/
+
+
+    /********************************** players interactions **********************************************/
 
     public void giftPlayer(JSONMessage jsonMessage) {
         Game game = ClientConnection.gameThread.getGame();
@@ -416,5 +425,157 @@ public class PlayerController {
 
         ClientConnection.gameThread.sendTCP(updateMessage, receiverName, senderName);
     }
+
+    /*******************************************************************************************/
+
+    /***************************************** animal **********************************************/
+    public void feedAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal");
+
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+
+        Inventory inventory = sender.getComponent(Inventory.class);
+
+        inventory.takeFromInventory("Hay", 1);
+        animal.setFedToday(true);
+        animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
+
+        // Sending to clients
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "update_player_fields");
+        senderUpdateMessage.put("username", senderName);
+        senderUpdateMessage.put("inventory", inventory);
+        JSONMessage animalUpdate = new JSONMessage(JSONMessage.Type.update);
+            animalUpdate.put("name", animalName);
+            animalUpdate.put("fed_today", true);
+            animalUpdate.put("statue", Renderable.Statue.EATING);
+        senderUpdateMessage.put("animal", animalUpdate);
+
+
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+    }
+
+    public void moveAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        Player currentPlayer = ClientConnection.player;
+        String animalName = jsonMessage.getFromBody("animal_name");
+        Animal animal = currentPlayer.findAnimal(animalName);
+        PositionComponent positionComponent = animal.getComponent(PositionComponent.class);
+
+        Vector2 movementVector = new Vector2();
+        movementVector.x = (MathUtils.random() - 0.5f) * 80;
+        movementVector.y = (MathUtils.random() - 0.5f) * 80;
+        float x = (float) (positionComponent.getX() + movementVector.x);
+        float y = (float) (positionComponent.getY() + movementVector.y);
+        positionComponent.setPosition(x, y);
+
+        // Sending to clients
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "update_player_fields");
+        senderUpdateMessage.put("username", player.getUsername());
+        JSONMessage animalUpdate = new JSONMessage(JSONMessage.Type.update);
+        animalUpdate.put("name", animalName);
+        if (movementVector.x > 0) {
+            animalUpdate.put("statue", Renderable.Statue.RIGHT_WALKING);
+        } else {
+            animalUpdate.put("statue", Renderable.Statue.LEFT_WALKING);
+        }
+        animalUpdate.put("destination_x", x);
+        animalUpdate.put("destination_y", y);
+        animalUpdate.put("time_left_to_move", 0.0f);
+
+        senderUpdateMessage.put("animal", animalUpdate);
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+
+    }
+
+    public void initialAddAnimal() {
+        Player currentPlayer = ClientConnection.playerController.player;
+        Game game = ClientConnection.gameThread.getGame();
+
+
+        Animal animal1 = new Animal(AnimalType.getRandomAnimalType(currentPlayer.getAnimals().size()), "Arteta" + currentPlayer.getAnimals().size());
+        float x = MathUtils.random() * 50;
+        float y = MathUtils.random() * 50;
+        Vec2 pos1 = new Vec2(1000 + x,2800 + y);
+
+
+
+        animal1.getComponent(PositionComponent.class).setPosition(pos1);
+//        EntityPlacementSystem.placeEntity(animal1, pos1, game.getMainMap());
+        currentPlayer.getAnimals().add(animal1);
+
+
+        JSONMessage animalMessage = new JSONMessage(JSONMessage.Type.update);
+        animalMessage.put("command", "initial_add_animal");
+        animalMessage.put("owner", currentPlayer.getUsername());
+        animalMessage.put("animal", animal1);
+
+        ClientConnection.gameThread.sendAllTCP(animalMessage);
+    }
+
+    public void petAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal");
+
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+
+        if (!animal.isPetToday()) {
+            animal.setPetToday(true);
+            animal.addFriendshipLevel(15);
+        }
+
+        // Sending to clients
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "update_player_fields");
+        senderUpdateMessage.put("username", senderName);
+        JSONMessage animalUpdate = new JSONMessage(JSONMessage.Type.update);
+        animalUpdate.put("name", animalName);
+        animalUpdate.put("pet_today", true);
+        animalUpdate.put("statue", Renderable.Statue.PET);
+        animalUpdate.put("friendship", animal.getFriendshipLevel());
+        senderUpdateMessage.put("animal", animalUpdate);
+
+
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+    }
+
+    public void sellAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal");
+
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+
+                int price = animal.calculatePrice();
+        sender.getWallet().changeBalance(price);
+        sender.getAnimals().remove(animal);
+
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "sell_animal");
+        senderUpdateMessage.put("sender", senderName);
+        senderUpdateMessage.put("animal_name", animalName);
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+
+        // update for sender:
+        JSONMessage senderUpdateMessage1 = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage1.put("wallet", sender.getWallet());
+        playerUpdateMessages.put(senderName, senderUpdateMessage1);
+
+
+        senderUpdateMessage.put("players_update", playerUpdateMessages);
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+    }
+
 
 }
