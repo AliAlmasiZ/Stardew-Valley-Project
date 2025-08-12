@@ -844,11 +844,16 @@ public class GameScreen extends AbstractScreen {
 
         petButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.pet(animal.getName());
+                Result result = controller.canPet(animal.getName());
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
-                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.PET, 2);
+                    JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                    jsonMessage.put("command", "pet_animal");
+                    jsonMessage.put("animal", animal.getName());
+                    jsonMessage.put("sender", game.getCurrentPlayer().getUsername());
+
+                    ClientApp.sendTCP(jsonMessage);
                 }
                 dialog.hide();
             }

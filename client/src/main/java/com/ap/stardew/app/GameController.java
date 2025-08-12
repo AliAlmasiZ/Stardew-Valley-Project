@@ -138,6 +138,9 @@ public class GameController {
         if (message.containsKey("time_left_to_move")) {
             animal.setTimeLeftToMove(message.getFromBody("time_left_to_move"));
         }
+        if (message.containsKey("friendship")) {
+            animal.setFriendshipLevel(message.getIntFromBody("friendship"));
+        }
 
 
     }

@@ -190,6 +190,11 @@ public class GameController {
             GameStaticController.cheatGiveItem(game, player,"Cherry", 10);
         }
 
+        for (Player player : game.getPlayers()) {
+            player.setPosition(1000, 2700);
+            player.setCurrentMap(game.getMainMap());
+        }
+
 //        Player player = game.getPlayers().get(0);
 //        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
 //        Vec2 pos1 = new Vec2(1000,2800);

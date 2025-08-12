@@ -467,8 +467,8 @@ public class PlayerController {
         PositionComponent positionComponent = animal.getComponent(PositionComponent.class);
 
         Vector2 movementVector = new Vector2();
-        movementVector.x = 110/*(MathUtils.random() - 0.5f) * 80*/;
-        movementVector.y = 101/*(MathUtils.random() - 0.5f) * 80*/;
+        movementVector.x = (MathUtils.random() - 0.5f) * 80;
+        movementVector.y = (MathUtils.random() - 0.5f) * 80;
         float x = (float) (positionComponent.getX() + movementVector.x);
         float y = (float) (positionComponent.getY() + movementVector.y);
         positionComponent.setPosition(x, y);
@@ -499,8 +499,10 @@ public class PlayerController {
         Game game = ClientConnection.gameThread.getGame();
 
 
-        Animal animal1 = new Animal(AnimalType.Cow, "Arteta");
-        Vec2 pos1 = new Vec2(1000,2800);
+        Animal animal1 = new Animal(AnimalType.getRandomAnimalType(currentPlayer.getAnimals().size()), "Arteta" + currentPlayer.getAnimals().size());
+        float x = MathUtils.random() * 50;
+        float y = MathUtils.random() * 50;
+        Vec2 pos1 = new Vec2(1000 + x,2800 + y);
 
 
 
@@ -515,6 +517,35 @@ public class PlayerController {
         animalMessage.put("animal", animal1);
 
         ClientConnection.gameThread.sendAllTCP(animalMessage);
+    }
+
+    public void petAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal");
+
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+
+        if (!animal.isPetToday()) {
+            animal.setPetToday(true);
+            animal.addFriendshipLevel(15);
+        }
+
+        // Sending to clients
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "update_player_fields");
+        senderUpdateMessage.put("username", senderName);
+        JSONMessage animalUpdate = new JSONMessage(JSONMessage.Type.update);
+        animalUpdate.put("name", animalName);
+        animalUpdate.put("pet_today", true);
+        animalUpdate.put("statue", Renderable.Statue.PET);
+        animalUpdate.put("friendship", animal.getFriendshipLevel());
+        senderUpdateMessage.put("animal", animalUpdate);
+
+
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
     }
 
 

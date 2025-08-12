@@ -160,6 +160,10 @@ public class ServerConnectionController {
                     clientConnection.playerController.rejectMarriage(message);
                     return null;
                 }
+                case "initial_add_animal" -> {
+                    clientConnection.playerController.initialAddAnimal();
+                    return null;
+                }
                 case "feed_animal" -> {
                     try {
                         clientConnection.playerController.feedAnimal(message);
@@ -177,9 +181,13 @@ public class ServerConnectionController {
                     }
                     return null;
                 }
-                case "initial_add_animal" -> {
-                    clientConnection.playerController.initialAddAnimal();
-                    return null;
+                case "pet_animal" -> {
+                    try {
+                        clientConnection.playerController.petAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

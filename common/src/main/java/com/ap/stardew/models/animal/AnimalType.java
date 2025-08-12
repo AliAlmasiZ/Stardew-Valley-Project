@@ -104,4 +104,13 @@ public enum AnimalType {
         }
         return null;
     }
+
+    public static AnimalType getRandomAnimalType() {
+        int randomIndex = (int) (Math.random() * AnimalType.values().length);
+        return AnimalType.values()[randomIndex];
+    }
+
+    public static AnimalType getRandomAnimalType(int rand) {
+        return AnimalType.values()[rand];
+    }
 }
