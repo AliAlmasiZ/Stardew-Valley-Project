@@ -26,6 +26,7 @@ import com.ap.stardew.models.gameMap.*;
 import com.ap.stardew.models.player.*;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.models.shop.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -103,6 +104,7 @@ public class NetworkUtils {
         kryo.register(Wallet.class);
         kryo.register(SkillType.class);
         kryo.register(Animal.class);
+        kryo.register(Color.class);
         kryo.register(AnimalHouse.class);
         kryo.register(AnimalType.class);
         kryo.register(Edible.class);

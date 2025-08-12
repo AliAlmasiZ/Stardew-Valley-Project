@@ -200,6 +200,13 @@ public class ServerConnectionController {
                     }
                     return null;
                 }
+                case "shepherd_animal" -> {
+                    try {
+                    clientConnection.playerController.shepherdAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 case "advance_one_hour" -> {
                     clientConnection.playerController.advanceOneHour();
                 }
