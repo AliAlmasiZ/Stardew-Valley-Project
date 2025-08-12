@@ -56,6 +56,7 @@ public class JSONMessage {
         trade,
         chat,
         cheat,
+        audio_command, //TODO make all this
         audio_packet,
         upload_packet,
         files_list_request,

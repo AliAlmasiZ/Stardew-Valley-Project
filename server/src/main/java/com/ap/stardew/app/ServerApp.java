@@ -59,7 +59,7 @@ public class ServerApp {
         for (ClientConnection connection : connections)
             connection.end();
         for (GameThread game : games) {
-            game.end();
+            game.endGame();
         }
         connections.clear();
         games.clear();

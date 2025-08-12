@@ -4,11 +4,9 @@ import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.app.GameThread;
 import com.ap.stardew.app.ServerApp;
-import com.ap.stardew.models.GameSession;
-import com.ap.stardew.models.dto.JSONMessage;
-import com.ap.stardew.models.Lobby;
+import com.ap.stardew.models.*;
 import com.ap.stardew.models.LobbyInfo;
-import com.ap.stardew.models.Result;
+import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.AccountInfo;
 import com.ap.stardew.models.dto.PlayerState;
 import com.ap.stardew.models.dto.SavedGameDetails;
@@ -387,6 +385,7 @@ public class LobbyController {
 
         for (ClientConnection client : gameThread.getClients()) {
             client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());
+            client.radio = new Radio(client.player.getUsername());
             client.playerController = new PlayerController(client);
 
             JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);
