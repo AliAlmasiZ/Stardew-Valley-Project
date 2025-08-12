@@ -826,7 +826,7 @@ public class GameScreen extends AbstractScreen {
 
         feedButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.feedHay(animal.getName());
+                Result result = controller.canFeedHay(animal.getName());
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
@@ -869,11 +869,17 @@ public class GameScreen extends AbstractScreen {
         sellAnimalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Result result = controller.sellAnimal(animal.getName());
+                Result result = controller.canSellAnimal(animal.getName());
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.GREEN);
+                    JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                    jsonMessage.put("command", "sell_animal");
+                    jsonMessage.put("animal", animal.getName());
+                    jsonMessage.put("sender", game.getCurrentPlayer().getUsername());
+
+                    ClientApp.sendTCP(jsonMessage);
                 }
                 dialog.hide();
             }

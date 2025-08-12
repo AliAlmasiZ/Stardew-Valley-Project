@@ -111,6 +111,7 @@ public enum AnimalType {
     }
 
     public static AnimalType getRandomAnimalType(int rand) {
+        if (rand >= AnimalType.values().length) return AnimalType.Cow;
         return AnimalType.values()[rand];
     }
 }

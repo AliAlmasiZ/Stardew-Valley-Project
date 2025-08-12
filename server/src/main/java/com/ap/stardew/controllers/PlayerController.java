@@ -548,5 +548,34 @@ public class PlayerController {
         ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
     }
 
+    public void sellAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal");
+
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+
+                int price = animal.calculatePrice();
+        sender.getWallet().changeBalance(price);
+        sender.getAnimals().remove(animal);
+
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "sell_animal");
+        senderUpdateMessage.put("sender", senderName);
+        senderUpdateMessage.put("animal_name", animalName);
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+
+        // update for sender:
+        JSONMessage senderUpdateMessage1 = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage1.put("wallet", sender.getWallet());
+        playerUpdateMessages.put(senderName, senderUpdateMessage1);
+
+
+        senderUpdateMessage.put("players_update", playerUpdateMessages);
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+    }
+
 
 }

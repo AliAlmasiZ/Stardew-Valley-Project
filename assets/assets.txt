@@ -3606,7 +3606,7 @@ Content/Animal/cow/pet.png
 Content/Animal/cow/walking.png
 Content/Animal/dinosaur/eating.png
 Content/Animal/dinosaur/idle.png
-Content/Animal/dinosaur/noraml.png
+Content/Animal/dinosaur/normal.png
 Content/Animal/dinosaur/pet.png
 Content/Animal/dinosaur/walking.png
 Content/Animal/duck/Duck.png

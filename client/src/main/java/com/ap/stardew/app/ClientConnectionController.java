@@ -158,6 +158,10 @@ public class ClientConnectionController {
                     GameController.initialAddAnimal(message);
                     return null;
                 }
+                case "sell_animal" -> {
+                    GameController.sellAnimalUpdate(message);
+                    return null;
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

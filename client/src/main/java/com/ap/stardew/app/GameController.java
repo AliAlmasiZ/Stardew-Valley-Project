@@ -98,6 +98,9 @@ public class GameController {
         if (message.containsKey("animal")) {
             updateAnimal(username, message.getFromBody("animal"));
         }
+        if (message.containsKey("remove_animal")) {
+            player.getAnimals().remove(message.getFromBody("animal"));
+        }
     }
 
     public static void updateAnimal( String playerName, JSONMessage message) {
@@ -139,7 +142,7 @@ public class GameController {
             animal.setTimeLeftToMove(message.getFromBody("time_left_to_move"));
         }
         if (message.containsKey("friendship")) {
-            animal.setFriendshipLevel(message.getIntFromBody("friendship"));
+            animal.setFriendshipLevel(message.getFromBody("friendship"));
         }
 
 
@@ -724,6 +727,19 @@ public class GameController {
         owner.getAnimals().add(animal);
         EntityPlacementSystem.placeEntity(animal, animal.getComponent(PositionComponent.class).get(), game.getMainMap());
         System.out.println("animal added");
+    }
+
+    public static void sellAnimalUpdate(JSONMessage jsonMessage) {
+        Game game = ClientApp.getActiveGame();
+        String animalName = jsonMessage.getFromBody("animal_name");
+        String sender = jsonMessage.getFromBody("sender");
+        Player player = game.getPlayerByUsername(sender);
+
+        Animal animal = player.findAnimal(animalName);
+        player.getAnimals().remove(animal);
+        EntityPlacementSystem.removeFromMap(animal);
+
+        updatePlayers(jsonMessage.getFromBody("players_update"));
     }
 
 

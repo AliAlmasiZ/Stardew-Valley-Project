@@ -1206,7 +1206,7 @@ public class GameMenuController implements Controller {
     }
 
     /* -------------------------------------------------- -------------------------------------------------- */
-    public Result sellAnimal(String animalName) {
+    public Result canSellAnimal(String animalName) {
         Game game = ClientApp.getActiveGame();
         Player currentPlayer = game.getCurrentPlayer();
         Animal animal = currentPlayer.findAnimal(animalName);
@@ -1215,10 +1215,10 @@ public class GameMenuController implements Controller {
         }
 
 
-        int price = animal.calculatePrice();
-        currentPlayer.getWallet().changeBalance(price);
-        currentPlayer.getAnimals().remove(animal);
-        EntityPlacementSystem.removeFromMap(animal);
+//        int price = animal.calculatePrice();
+//        currentPlayer.getWallet().changeBalance(price);
+//        currentPlayer.getAnimals().remove(animal);
+//        EntityPlacementSystem.removeFromMap(animal);
         //TODO: remove form his house if needed
 
         return new Result(true, animal.getName() + " sold successfully!");

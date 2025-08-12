@@ -168,6 +168,7 @@ public class ServerConnectionController {
                     try {
                         clientConnection.playerController.feedAnimal(message);
                     } catch (Exception e) {
+                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
                     return null;
@@ -188,6 +189,16 @@ public class ServerConnectionController {
                         e.printStackTrace();
                         throw new RuntimeException(e);
                     }
+                    return null;
+                }
+                case "sell_animal" -> {
+                    try {
+                        clientConnection.playerController.sellAnimal(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw e;
+                    }
+                    return null;
                 }
             }
         }
