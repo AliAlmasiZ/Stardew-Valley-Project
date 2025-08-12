@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS games (
     game_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    save_path TEXT NOT NULL,
+    save_data BLOB NOT NULL,
     game_date TEXT NOT NULL
 );
 

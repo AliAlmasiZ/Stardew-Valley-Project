@@ -117,8 +117,8 @@ public class DatabaseManager {
         }
     }
 
-    public static void saveGame(String savePath, Game game, List<String> usernames) throws SQLException {
-        String insertGameSQL = "INSERT INTO games (save_path, game_date) VALUES (?, ?)";
+    public static void saveGame(byte[] data, Game game, List<String> usernames) throws SQLException {
+        String insertGameSQL = "INSERT INTO games (save_data, game_date) VALUES (?, ?)";
         String insertRelationSQL = "INSERT INTO user_game (game_id, username, farm, gold) VALUES (?, ?, ?, ?)";
 
         try (var conn = DriverManager.getConnection(URL)) {
@@ -127,7 +127,7 @@ public class DatabaseManager {
 
             // 1. Insert into games table
             try (var stmt = conn.prepareStatement(insertGameSQL, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, savePath);
+                stmt.setBytes(1, data);
                 stmt.setString(2, game.getDate().toString());
                 stmt.executeUpdate();
 
@@ -268,6 +268,25 @@ public class DatabaseManager {
                     return null; // or throw exception if game not found
                 }
             }
+        }
+    }
+
+    public static byte[] getSavedGameData(int gameId) {
+        String sql = "SELECT save_data FROM games WHERE game_id = ?";
+
+        try (var conn = DriverManager.getConnection(URL)){
+            var pstmt = conn.prepareStatement(sql);
+
+            pstmt.setInt(1, gameId);
+
+            var rs = pstmt.executeQuery();
+            if(rs.next()) {
+                return rs.getBytes("save_data");
+            }
+            return null;
+        } catch (SQLException e) {
+            System.err.println("Error in load game data:" + e.getMessage());
+            return null;
         }
     }
 

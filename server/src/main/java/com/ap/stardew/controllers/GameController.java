@@ -28,10 +28,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Client;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
@@ -119,15 +116,18 @@ public class GameController {
     }
 
     public static void saveGame(GameSession gameSession) throws IOException, SQLException{
-        String savePath = generateSavePath("./games");
+//        String savePath = generateSavePath("./games");
 
-        try (Output output = new Output(new FileOutputStream(savePath))) {
+
+        try (Output output = new Output(4096, -1)) {
             ServerApp.getGameServer().getKryo().writeObject(output, gameSession.getGame());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save game session file", e);
+            output.flush();
+
+            DatabaseManager.saveGame(output.toBytes(),
+                gameSession.getGame(), new ArrayList<>(gameSession.getUserPlayerMap().keySet()));
         }
 
-        DatabaseManager.saveGame(savePath, gameSession.getGame(), new ArrayList<>(gameSession.getUserPlayerMap().keySet()));
+//        DatabaseManager.saveGame(savePath, gameSession.getGame(), new ArrayList<>(gameSession.getUserPlayerMap().keySet()));
     }
 
     public static JSONMessage getSavedGames(JSONMessage req){
@@ -164,11 +164,12 @@ public class GameController {
     }
 
     public static GameSession loadGame(int gameId) throws SQLException, FileNotFoundException {
-        String savedGamePath = DatabaseManager.getSavedGamePath(gameId);
+//        String savedGamePath = DatabaseManager.getSavedGamePath(gameId);
+        byte[] data = DatabaseManager.getSavedGameData(gameId);
 
-        if(savedGamePath == null) return null;
+        if(data == null) return null;
 
-        try (Input input = new Input(new FileInputStream(savedGamePath))) {
+        try (Input input = new Input(data)) {
             GameSession gameSession = new GameSession(ServerApp.getGameServer().getKryo().readObject(input, Game.class));
 
             DatabaseManager.deleteGame(gameId);
