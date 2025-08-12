@@ -5039,6 +5039,7 @@ data/recipes/artisanRecipes.json
 data/recipes/cooking.json
 data/recipes/crafting.json
 data/shops/ShopDatas.json
+env
 game.db
 games/2025-08-10/game_2025-08-10_18-39-15_e42c3b71.sav
 games/2025-08-10/game_2025-08-10_19-06-38_efc36114.sav
@@ -5056,6 +5057,7 @@ games/2025-08-11/game_2025-08-11_03-15-32_402d1375.sav
 games/2025-08-11/game_2025-08-11_03-16-31_10f8b06a.sav
 games/2025-08-12/game_2025-08-12_01-27-39_374189fd.sav
 games/2025-08-12/game_2025-08-12_02-51-47_4a005655.sav
+games/2025-08-12/game_2025-08-12_15-34-54_bd55035c.sav
 shaders/outline.frag
 shaders/outline.vert
 skin/Stardew Valley Skin/Brawl.fnt
