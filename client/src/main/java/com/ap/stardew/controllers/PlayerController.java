@@ -160,7 +160,7 @@ public class PlayerController implements InputProcessor {
             Tile tile = ClientApp.getActiveGame().getActiveMap().getTileByPosition(cursorPos);
 
             Useable useable = entity.getComponent(Useable.class);
-            if(useable != null && (player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 1.6f)){
+            if(useable != null && (player.getPosition().cpy().convertToInt().sub(cursorPos.cpy().convertToInt()).len() < 5f)){
 
                 for (UseFunction function : useable.getFunctions()) {
                     function.use(player, entity, ClientApp.getActiveGame(), tile, null);
