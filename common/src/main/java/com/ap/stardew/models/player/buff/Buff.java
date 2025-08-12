@@ -1,5 +1,7 @@
 package com.ap.stardew.models.player.buff;
 
+import com.ap.stardew.models.Game;
+import com.ap.stardew.models.player.Player;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -40,10 +42,9 @@ abstract public class Buff implements Serializable {
         return buffTime - pastTime;
     }
 
-    public void setBuff() {
+    public void setBuff(Player player, Game game) {
         this.startDate = App.getActiveGame().getDate().clone();
         App.getActiveGame().getCurrentPlayer().setActiveBuff(this);
         App.getActiveGame().getCurrentPlayer().getEnergy().buff(this.effectOnMaxEnergy(), this.remainingTime());
     }
-
 }

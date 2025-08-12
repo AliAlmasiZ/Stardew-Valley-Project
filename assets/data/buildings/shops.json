@@ -47,11 +47,11 @@
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "marniesRanchInterior"
+          "interiorName": "AnimalShop"
         },
         {
           "type": "Placeable",
-          "exteriorName": "marniesRanchExterior"
+          "exteriorName": "SaloonExterior"
         },
         {
           "type" : "Shop",
@@ -100,11 +100,11 @@
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "blackSmithInterior"
+          "interiorName": "Blacksmith"
         },
         {
           "type": "Placeable",
-          "exteriorName": "blackSmithExterior"
+          "exteriorName": "SaloonExterior"
         },
         {
           "type" : "Shop",
@@ -118,11 +118,11 @@
       "components": [
         {
           "type": "InteriorComponent",
-          "interiorName": "fishShopInterior"
+          "interiorName": "FishShop"
         },
         {
           "type": "Placeable",
-          "exteriorName": "fishShopExterior"
+          "exteriorName": "SaloonExterior"
         },
         {
           "type" : "Shop",

@@ -1,6 +1,8 @@
 package com.ap.stardew.models.dto;
 
+import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.player.Player;
+import com.ap.stardew.models.player.reaction.Reaction;
 import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serial;
@@ -14,7 +16,7 @@ public class PlayerState implements Serializable {
     public Vector2 position;
     public double energy;
     public Player.Action action;
-
+    public Reaction reaction;
 //    public Map<Integer, Integer> inventory; //TODO
 
 }

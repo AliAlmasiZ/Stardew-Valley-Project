@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -657,6 +658,21 @@ public class GameController {
         }
     }
 
+    public static void sendReactionUpdate(Player player){
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
+        jsonMessage.put("command", "update_player_reaction");
+        jsonMessage.put("reaction", player.getCurrentReaction());
+
+        ClientApp.sendTCP(jsonMessage);
+    }
+
+    public static void sendActionUpdate(Player player){
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
+        jsonMessage.put("command", "update_player_action");
+        jsonMessage.put("action", player.getAction());
+
+        ClientApp.sendTCP(jsonMessage);
+    }
 
     /******************************************* Player Interactions **********************************************/
 
@@ -743,4 +759,11 @@ public class GameController {
     }
 
 
+    public static void sendSelectedEmojiUpdate(Player player){
+        JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
+        jsonMessage.put("command", "update_player_emojis");
+        jsonMessage.put("emojis", player.getEmojis());
+
+        ClientApp.sendTCP(jsonMessage);
+    }
 }

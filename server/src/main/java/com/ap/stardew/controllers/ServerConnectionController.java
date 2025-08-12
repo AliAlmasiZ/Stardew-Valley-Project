@@ -61,7 +61,6 @@ public class ServerConnectionController {
         }
         if (message.getType() == JSONMessage.Type.command) {
             JSONMessage response = new JSONMessage(JSONMessage.Type.response);
-
             switch ((String) message.getFromBody("command")) {
                 case "suggest_username" -> {
                     return suggestUsername(message.getFromBody("username"));
@@ -90,6 +89,18 @@ public class ServerConnectionController {
                 }
                 case "inGameVote" -> {
                     return GameController.handleInGameVote(message);
+                }
+                case "update_player_action" -> {
+                    clientConnection.playerController.handleChangeAction(message);
+                    return null;
+                }
+                case "update_player_reaction" -> {
+                    clientConnection.playerController.handleReactionChange(message);
+                    return null;
+                }
+                case "update_player_emojis" -> {
+                    clientConnection.playerController.handleEmojisChanged(message);
+                    return null;
                 }
             }
 

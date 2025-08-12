@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
+    "activeFile": "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -57,21 +57,23 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/AnimalShop.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 365.25,
-                "y": 176.25
+                "x": 287.33333333333337,
+                "y": 157.66666666666669
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/AnimalShop.tmx#1": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/AnimalShop.tmx#Paths": {
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/AnimalShop.tmx#townInterior_2": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Backwoods.tmx": {
             "scale": 0.75,
@@ -205,6 +207,25 @@
             "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 8
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx": {
+            "scale": 2,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 102.5,
+                "y": 176.75
+            }
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx#1": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx#v15_townInterior_2": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/BugLand.tmx": {
             "scale": 0.99453125,
@@ -641,11 +662,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Farm_Ranching.tmx": {
-            "scale": 0.75,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 798.6666666666666,
-                "y": 599.3333333333333
+                "x": 754,
+                "y": 583
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Farm_Ranching.tmx#Paths": {
@@ -667,11 +688,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FishShop.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 5.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 74.75,
-                "y": 63.25
+                "x": 88.72727272727273,
+                "y": 128.27272727272728
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FishShop.tmx#paths": {
@@ -910,11 +931,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/JojaMart.tmx": {
-            "scale": 1,
+            "scale": 4,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 216,
-                "y": 472.5
+                "x": 189.25,
+                "y": 416.625
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/JojaMart.tmx#Paths": {
@@ -985,11 +1006,11 @@
             "scaleInDock": 1
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/MarnieBarn.tmx": {
-            "scale": 3.127083333333333,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 144.2238507661559,
-                "y": 120.07994670219851
+                "x": 157.5,
+                "y": 129.25
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/MarnieBarn.tmx#barn": {
@@ -1107,11 +1128,11 @@
             "scaleInEditor": 8
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Saloon.tmx": {
-            "scale": 1.5,
+            "scale": 3,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 367.66666666666663,
-                "y": 200.33333333333337
+                "x": 236.66666666666669,
+                "y": 315.5
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Saloon.tmx#1": {
@@ -1160,12 +1181,40 @@
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SamHouse.tmx#p": {
             "scaleInDock": 1
         },
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SeedShop.tmx": {
-            "scale": 4,
-            "selectedLayer": 14,
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRide.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 383.75,
-                "y": 255.875
+                "x": 234.66666666666663,
+                "y": 127.66666666666669
+            }
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRide.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRoom.tmx": {
+            "scale": 3.891346153846153,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 104.07709414381026,
+                "y": 104.20558438349397
+            }
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRoom.tmx#1": {
+            "scaleInDock": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRoom.tmx#p": {
+            "scaleInDock": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRoom.tmx#v15_townInterior_2": {
+            "scaleInDock": 1
+        },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SeedShop.tmx": {
+            "scale": 3,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 175.99999999999997,
+                "y": 354.5
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SeedShop.tmx#1": {
@@ -1531,16 +1580,24 @@
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Woods.tmx#v16_Outdoors2": {
             "scaleInDock": 1
         },
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/marniesRanchExterior.tmx": {
+            "scale": 8,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 32.5,
+                "y": 1.3125
+            }
+        },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled tile sheet.tsx": {
             "scaleInDock": 1.5,
             "scaleInEditor": 8
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx": {
-            "scale": 8,
+            "scale": 4,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1421.75,
-                "y": 1123.9375
+                "x": 2880,
+                "y": 2511.375
             }
         },
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx#Landscape": {
@@ -1617,29 +1674,36 @@
     },
     "last.externalTilesetPath": "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps",
     "last.imagePath": "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps",
-    "map.height": 1000,
+    "map.height": 1,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 1000,
+    "map.width": 1,
     "openFiles": [
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx"
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/JojaMart.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Saloon.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/AnimalShop.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SeedShop.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/marniesRanchExterior.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FishShop.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx"
     ],
     "project": "",
     "property.type": "int",
     "recentFiles": [
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Hospital.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/PierresExterior.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FarmHouseExterior.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/TestMap.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled tile sheet.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/bigMap.tmx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Biomes.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Regions.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/Tile sets/region.json",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/JojaMart.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Saloon.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/AnimalShop.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SeedShop.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/marniesRanchExterior.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/FishShop.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Blacksmith.tmx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/1.tsx",
         "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/Landscape2.tsx",
-        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Moz/MapEditor/Tile sets/biome.json"
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/untitled tile sheet.tsx",
+        "/home/parsa/Projects/University/AP/Stardew Valley/assets/Content(unpacked)/Maps/SebastianRoom.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

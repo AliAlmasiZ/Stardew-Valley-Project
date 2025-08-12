@@ -187,6 +187,10 @@ public class GameController {
             GameStaticController.cheatGiveItem(game, player,"Stone", 40);
             GameStaticController.cheatGiveItem(game, player,"Coal", 8);
             GameStaticController.cheatGiveItem(game, player,"Axe", 1);
+            GameStaticController.cheatGiveItem(game, player,"Hoe", 1);
+            GameStaticController.cheatGiveItem(game, player,"Watering Can", 1);
+            GameStaticController.cheatGiveItem(game, player,"Scythe", 1);
+            GameStaticController.cheatGiveItem(game, player,"Pickaxe", 1);
             GameStaticController.cheatGiveItem(game, player,"vegetable", 1);
             GameStaticController.cheatGiveItem(game, player,"Cherry", 10);
         }

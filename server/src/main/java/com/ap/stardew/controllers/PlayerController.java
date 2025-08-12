@@ -18,9 +18,13 @@ import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.TradeHistoryItem;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.badlogic.gdx.math.MathUtils;
+import com.ap.stardew.models.player.reaction.Emoji;
+import com.ap.stardew.models.player.reaction.Reaction;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class PlayerController {
     private ClientConnection ClientConnection;
@@ -69,10 +73,24 @@ public class PlayerController {
         updateMessage.put("action", action);
         ClientConnection.gameThread.sendAllTCP(updateMessage);
     }
+    public void handleReactionChange(JSONMessage message){
+        Reaction reaction = message.getFromBody("reaction");
 
+        player.setCurrentReaction(reaction);
+
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "update_player");
+        updateMessage.put("state", player.getPlayerState());
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
+    }
+    public void handleEmojisChanged(JSONMessage message){
+        ArrayList<Emoji> emojis = message.getFromBody("emojis");
+
+        player.setEmojis(emojis);
+    }
 
     public void update(float delta) {
-
+        player.update(delta);
     }
 
     public void updatePlayer() {

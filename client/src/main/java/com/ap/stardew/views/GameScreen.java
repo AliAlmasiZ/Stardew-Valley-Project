@@ -9,8 +9,10 @@ import com.ap.stardew.app.GameController;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.RenderFunction;
 import com.ap.stardew.models.entities.workstations.ArtisanComponent;
+import com.ap.stardew.models.enums.*;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.ap.stardew.models.player.TradeHistoryItem;
+import com.ap.stardew.models.player.reaction.Reaction;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.controllers.PlayerController;
@@ -25,10 +27,6 @@ import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
-import com.ap.stardew.models.enums.FishMovement;
-import com.ap.stardew.models.enums.ProductQuality;
-import com.ap.stardew.models.enums.SkillType;
-import com.ap.stardew.models.enums.TileType;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.Skill;
@@ -36,6 +34,11 @@ import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.models.shop.Shop;
 import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.models.records.EntityResult;
+import com.ap.stardew.view.ToolFrameInfo;
+import com.ap.stardew.view.VariableDurationAnimation;
+import com.ap.stardew.views.dialogs.ReactionDialog;
+import com.ap.stardew.views.dialogs.ReactionEditDialog;
+import com.ap.stardew.views.spriteManagers.EmojiSpriteManager;
 import com.ap.stardew.views.widgets.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -47,10 +50,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -327,9 +328,12 @@ public class GameScreen extends AbstractScreen {
                     ClientApp.sendTCP(animalMessage);
                 }
             }
-            if (entity instanceof Player) ((Player) entity).update(delta);
 
-            if (renderable.getRenderFunction() != null) {
+
+            if (entity instanceof Player player){ //sorry
+                player.update(delta);
+                renderPlayer(player, batch);
+            } else if(renderable.getRenderFunction() != null){
                 renderable.getRenderFunction().render(entity, batch);
             } else {
                 Sprite sprite = GameAssetManager.getInstance().getEntitySpriteToRender(entity, game, delta);
@@ -463,6 +467,133 @@ public class GameScreen extends AbstractScreen {
         gameStage.dispose();
     }
 
+    private void renderPlayer(Player player, Batch batch){
+        TextureRegion frame = GameAssetManager.getInstance().characterSpriteManager.getFrame(player.getStateTime(), player.getLastDir(), player.getAction());
+        if(player.getCurrentReaction() != null){
+            Reaction currentReaction = player.getCurrentReaction();
+            if(currentReaction.emoji != null){
+                batch.draw(EmojiSpriteManager.getInstance().getFrame(currentReaction.emoji, currentReaction.timeLeft), player.getPosition().x,
+                    player.getPosition().y + frame.getRegionHeight() - 2+ (float)Math.sin(currentReaction.timeLeft * 2));
+            }else{
+                GameAssetManager.getInstance().getFont().draw(batch, currentReaction.text,
+                    player.getPosition().x, player.getPosition().y + frame.getRegionHeight() + 6 + (float)Math.sin(currentReaction.timeLeft * 2));
+            }
+        }
+
+        player.getSprite().setRegion(frame);
+        player.getSprite().setBounds(player.getPosition().x, player.getPosition().y, frame.getRegionWidth(), frame.getRegionHeight());
+
+        Sprite entitySprite;
+        player.getSprite().draw(batch);
+
+        Player.Action action = player.getAction();
+        if (action == Player.Action.USING_TOOL || (action == Player.Action.WATERING) || (action == Player.Action.USING_SCYTHE)
+            || (action == Player.Action.HARVESTING)) {
+            Entity tool = player.getActionItem();
+            Direction direction = Direction.getDirection(player.getLastDir());
+
+            ToolFrameInfo keyFrame;
+            int animIndex;
+            Texture texture;
+
+            VariableDurationAnimation<ToolFrameInfo> toolFrames = GameAssetManager.getInstance().characterSpriteManager.toolFrames.get(action).get(direction);
+            keyFrame = toolFrames.getKeyFrame(player.getStateTime(), false);
+            animIndex = toolFrames.getKeyFrameIndex(player.getStateTime(), false);
+
+            Vector2 offset = new Vector2();
+            Vector2 origin = new Vector2();
+            float alpha = 1;
+
+            switch (action) {
+                case WATERING -> {
+                    switch (direction) {
+                        case DOWN -> {
+                            if (animIndex <= 1) {
+                                texture = GameAssetManager.getInstance().get("Content/Tools/WateringCan/0.png");
+                            } else {
+                                texture = GameAssetManager.getInstance().get("Content/Tools/WateringCan/1.png");
+                            }
+                            offset.x = texture.getWidth() / 2f;
+                            offset.y = texture.getHeight();
+                        }
+                        case UP -> {
+                            texture = GameAssetManager.getInstance().get("Content/Tools/WateringCan/2.png");
+                            offset.x = texture.getWidth() / 2f;
+                            offset.y = 3;
+                        }
+                        default -> {
+                            texture = GameAssetManager.getInstance().get("Content/Tools/WateringCan/3.png");
+                            offset.x = 2;
+                            offset.y = texture.getHeight() - 0f;
+                            origin.x = 2;
+                            origin.y = texture.getHeight();
+                        }
+                    }
+                }
+                case USING_TOOL -> {
+                    switch (direction) {
+                        case DOWN -> {
+                            if (animIndex == 0) {
+                                texture = GameAssetManager.getInstance().get("Content/Tools/" + tool.getEntityName() + "/0.png");
+                            } else {
+                                texture = GameAssetManager.getInstance().get("Content/Tools/" + tool.getEntityName() + "/1.png");
+                            }
+
+                        }
+                        case UP -> {
+                            if (animIndex == 0) {
+                                texture = GameAssetManager.getInstance().get("Content/Tools/" + tool.getEntityName() + "/3.png");
+                            } else {
+                                texture = GameAssetManager.getInstance().get("Content/Tools/" + tool.getEntityName() + "/4.png");
+                            }
+                        }
+                        default -> {
+                            texture = GameAssetManager.getInstance().get("Content/Tools/" + tool.getEntityName() + "/2.png");
+                        }
+                    }
+                    offset.x = texture.getWidth() / 2f;
+                    offset.y = (animIndex != 0 && direction == Direction.DOWN) ? texture.getHeight() : 0;
+                    origin.x = texture.getWidth() / 2f;
+                    origin.y = 0;
+                }
+                case HARVESTING -> {
+                    if(tool.getComponent(Pickable.class).getIcon() != null){
+                        texture = GameAssetManager.getInstance().get(tool.getComponent(Pickable.class).getIcon());
+                    }else {
+                        texture = GameAssetManager.getInstance().redCross;
+                    }
+                    offset.x = texture.getWidth()/2f;
+                    if(animIndex == 2){
+                        alpha = 0.5f;
+                    }else if(animIndex == 3){
+                        alpha = 0.2f;
+                    }
+                }
+                default -> texture = GameAssetManager.getInstance().get("Content/Tools/Scythe/0.png");
+            }
+            entitySprite = new Sprite(texture);
+
+            entitySprite.setColor(1, 1, 1, alpha);
+            entitySprite.setOrigin(origin.x, origin.y);
+            if (direction == Direction.LEFT) {
+                entitySprite.flip(true, false);
+                offset.x = texture.getWidth() - offset.x;
+                entitySprite.setOrigin(texture.getWidth() - origin.x, origin.y);
+            }
+            entitySprite.setPosition(player.getPosition().x + keyFrame.origin().x - offset.x,
+                player.getPosition().y + keyFrame.origin().y - offset.y);
+            entitySprite.rotate(keyFrame.rotation() / (float) Math.PI * 180);
+
+            if (direction == Direction.UP) {
+                entitySprite.draw(batch);
+                player.getSprite().draw(batch);
+            } else {
+                player.getSprite().draw(batch);
+                entitySprite.draw(batch);
+            }
+        }
+    }
+
     public void showTemporaryMessage(String message, float duration, Color color) {
         new PopUpMessage(message, PopUpMessage.PopUpMessageType.TOP_CENTER).show(AbstractScreen.getFrontStage());
     }
@@ -498,6 +629,16 @@ public class GameScreen extends AbstractScreen {
         title.setColor(Color.BLACK);
 
         table.add(title);
+    }
+
+    public void openReactionMenu(Player player){
+        ReactionDialog reactionDialog = new ReactionDialog(player, this);
+        reactionDialog.show();
+    }
+
+    public void openReactionEditMenu(Player player){
+        ReactionEditDialog reactionEditDialog = new ReactionEditDialog(player, this);
+        reactionEditDialog.show();
     }
 
     public void openJournal() {
@@ -643,9 +784,7 @@ public class GameScreen extends AbstractScreen {
 
             ScrollPane scrollPane = new ScrollPane(map);
 
-            background.add(scrollPane).size(100, map.getHeight() / map.getWidth() * 100f);
-
-            background.pack();
+            background.add(scrollPane);
 
             mapTable.add(background);
         }
@@ -661,7 +800,8 @@ public class GameScreen extends AbstractScreen {
         tabWidget.addTab(table3, customSkin.getDrawable("shit"));
 
 //        dialog.getContentTable().add(tabWidget).fill().size(200, 130);
-        dialog.add(tabWidget).size(230, 130).fill();
+        dialog.add(tabWidget).fill();
+        tabWidget.getContentTable().setSize(230, 130);
 
         dialog.show();
     }

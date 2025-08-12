@@ -91,7 +91,18 @@ public class GameThread extends Thread{
                     }
                 }
             }
-            timeLeftToTermination -= delta;
+            timeLeftToTermination -= 0.2f;
+            if(timeLeftToTermination <= 0){
+                saveGame();
+                endGame();
+
+                JSONMessage gameSavedMessage = new JSONMessage(JSONMessage.Type.update);
+                gameSavedMessage.put("command", "gameSaved");
+                gameSavedMessage.put("message", "the game was saved");
+                sendAllTCP(gameSavedMessage);
+
+                return;
+            }
         }else {
             for (int i = clients.size() - 1; i >= 0; i--) {
                 ClientConnection client = clients.get(i);

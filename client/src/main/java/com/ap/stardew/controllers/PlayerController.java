@@ -2,19 +2,18 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientApp;
 
+import com.ap.stardew.app.GameController;
 import com.ap.stardew.models.Position;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.UseFunction;
-import com.ap.stardew.models.entities.components.Pickable;
-import com.ap.stardew.models.entities.components.Placeable;
-import com.ap.stardew.models.entities.components.PositionComponent;
-import com.ap.stardew.models.entities.components.Useable;
+import com.ap.stardew.models.entities.components.*;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.components.inventory.InventorySlot;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
+import com.ap.stardew.models.enums.Direction;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.views.GameScreen;
@@ -116,6 +115,8 @@ public class PlayerController implements InputProcessor {
             System.out.println("sent from client initial_add_animal"); //TODO
             ClientApp.sendTCP(message);
         }
+        if (keycode == Input.Keys.Q)
+            screen.openReactionMenu(player);
 
 
         return false;
@@ -145,6 +146,10 @@ public class PlayerController implements InputProcessor {
             if(hoveredEntity1 != null){
                 if(hoveredEntity1.getComponent(Pickable.class) != null){
                     gameMenuController.pickupItem(hoveredEntity1);
+                    player.setAction(Player.Action.HARVESTING);
+                    player.setActionItem(hoveredEntity1);
+                    player.setLastDir(cursorPos.cpy().sub(player.getPosition().cpy()));
+                    return true;
                 }
             }
 
@@ -161,7 +166,15 @@ public class PlayerController implements InputProcessor {
                     function.use(player, entity, ClientApp.getActiveGame(), tile, null);
                 }
 
-                player.setAction(Player.Action.PASSING_OUT);
+                if(entity.getEntityName().equals("Watering can")){
+                    player.setAction(Player.Action.WATERING);
+                }else if(entity.getEntityName().equals("Scythe")){
+                    player.setAction(Player.Action.USING_SCYTHE);
+                }else {
+                    player.setAction(Player.Action.USING_TOOL);
+                }
+                player.setActionItem(entity);
+                player.setLastDir(cursorPos.cpy().sub(player.getPosition().cpy()));
             }
 
             Placeable placeable = entity.getComponent(Placeable.class);
@@ -169,6 +182,15 @@ public class PlayerController implements InputProcessor {
                 activeSlot.setEntity(null);
                 EntityPlacementSystem.placeOnTile(entity, tile);
                 equippedItemState = EquippedItemState.NONE;
+            }
+
+            Edible edible = entity.getComponent(Edible.class);
+            if(edible != null){
+                edible.setBuff(player, ClientApp.getActiveGame());
+                player.reduceEnergy(-edible.getEnergy());
+                entity.getComponent(Pickable.class).changeStackSize(-1);
+                player.setAction(Player.Action.HARVESTING);
+                player.setActionItem(entity);
             }
         }
 
@@ -231,6 +253,7 @@ public class PlayerController implements InputProcessor {
 
     public void update(float delta) {
         processInput(delta);
+
 //        player.update(delta);
 
         equippedItemState = EquippedItemState.NONE;
@@ -287,11 +310,8 @@ public class PlayerController implements InputProcessor {
 
         if((!up && !down && !right && !left)) {
             if(player.getAction() == Player.Action.WALKING){
-                JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
-                message.put("command", "update_player_action");
-                message.put("action", Player.Action.IDLE);
-                ClientApp.sendTCP(message);
                 player.setAction(Player.Action.IDLE);
+                GameController.sendActionUpdate(player);
             }
         }else {
             MovementHandler.MoveResult moveResult = MovementHandler.tryMove(player, direction);
@@ -303,6 +323,7 @@ public class PlayerController implements InputProcessor {
                 message.put("direction", direction);
                 message.put("delta", delta);
                 ClientApp.sendTCP(message);
+
                 player.move(direction, delta);
                 player.setAction(Player.Action.WALKING);
             }else{

@@ -102,6 +102,7 @@ public class GameAssetManager extends AssetManager {
 
         this.font = new BitmapFont(Gdx.files.internal("Content/font/khodayaBaseDige.fnt"));
         this.font.getData().setScale(Gdx.graphics.getDensity() * 0.3f);
+        this.font.setUseIntegerPositions(false);
 
         // Clock Images
         clock = new TextureRegion(new Texture(Gdx.files.internal("Content/ClockImages/Clock.png")));
@@ -115,7 +116,7 @@ public class GameAssetManager extends AssetManager {
             }
         }
 
-        testSlot = new Texture("Content/Tools/Pickaxe/copper/20.png");
+        testSlot = new Texture("Content/Tools/Pickaxe/icon.png");
         inventorySlotFrame = new Texture("Content/InventorySlotFrame.png");
         inventorySlotFrameSelected = new Texture("Content/inventorySlotFrameSelected.png");
 

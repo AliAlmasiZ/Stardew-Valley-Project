@@ -111,7 +111,7 @@ public class EntityPlacementSystem {
             );
 
         interiorComponent.setInteriorMap(gameMap);
-
+        System.out.println(building.getComponent(InteriorComponent.class).getInteriorName() );
         List<TiledObject> interiorObjects = ((TiledObjectLayer) TiledMapUtils.getLayer(interiorData, "Objects")).getObjects();
         List<TiledObject> exteriorObjects = ((TiledObjectLayer) TiledMapUtils.getLayer(exteriorData, "Objects")).getObjects();
 

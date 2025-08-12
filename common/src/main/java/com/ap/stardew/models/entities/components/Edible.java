@@ -1,5 +1,7 @@
 package com.ap.stardew.models.entities.components;
 
+import com.ap.stardew.models.Game;
+import com.ap.stardew.models.player.Player;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ap.stardew.models.player.buff.Buff;
@@ -55,9 +57,9 @@ public class Edible extends EntityComponent implements Serializable {
         return this.energy == otherEdible.energy;
     }
 
-    public void setBuff() {
+    public void setBuff(Player player, Game game) {
         if(buff == null)
             return;
-        buff.setBuff();
+        buff.setBuff(player, game);
     }
 }

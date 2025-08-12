@@ -1,5 +1,7 @@
 package com.ap.stardew.models.enums;
 
+import com.badlogic.gdx.math.Vector2;
+
 public enum Direction {
     LEFT(4, -1, 0),
     RIGHT(6, 1, 0),
@@ -27,5 +29,19 @@ public enum Direction {
             }
         }
         return null;
+    }
+
+    public static Direction getDirection(Vector2 dir){
+        if (dir.isZero()) {
+            return Direction.RIGHT; // default
+        }
+
+        if (Math.abs(dir.x) > Math.abs(dir.y)) {
+            // More horizontal than vertical
+            return dir.x > 0 ? Direction.RIGHT : Direction.LEFT;
+        } else {
+            // More vertical than horizontal
+            return dir.y > 0 ? Direction.UP : Direction.DOWN;
+        }
     }
 }
