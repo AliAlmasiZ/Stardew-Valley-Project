@@ -29,10 +29,8 @@ public class CharacterSpriteManager {
     private final Texture shirtsTexture;
     private final Texture pantsTexture;
 
-    private Direction lastDir = Direction.DOWN;
-
     public final Map<Player.Action, Map<Direction, VariableDurationAnimation<TextureRegion>>> animations = new HashMap<>();
-    private final Map<Player.Action, Map<Direction, VariableDurationAnimation<ToolFrameInfo>>> toolFrames = new HashMap<>();
+    public final Map<Player.Action, Map<Direction, VariableDurationAnimation<ToolFrameInfo>>> toolFrames = new HashMap<>();
 
     private final TextureRegion[][] baseFrames;
     private final TextureRegion[][] hairFrames;
@@ -192,30 +190,30 @@ public class CharacterSpriteManager {
         loadAnim(Direction.RIGHT, Player.Action.WALKING , "6@90, 21@140, 17@100, 6@90, 20@140, 11@100");
         loadAnim(Direction.LEFT , Player.Action.WALKING , "6@90, 21@140, 17@100, 6@90, 20@140, 11@100");
 
-        loadAnim(Direction.DOWN , Player.Action.HARVESTING , "54@100, 55@100, 56@100, 57@100");
-        loadAnim(Direction.UP   , Player.Action.HARVESTING , "62@100, 63@100, 64@100, 65@100");
-        loadAnim(Direction.RIGHT, Player.Action.HARVESTING , "58@100, 59@100, 60@100, 61@100");
-        loadAnim(Direction.LEFT , Player.Action.HARVESTING , "58@100, 59@100, 60@100, 61@100");
+        loadAnim(Direction.DOWN , Player.Action.HARVESTING , "54@100, 55@100, 56@100, 57@100", "(8.00, 6.38, 0.000), (7.80, 11.18, 0.000), (8.00, 24.68, 0.000), (7.70, 30.68, 0.000)");
+        loadAnim(Direction.UP   , Player.Action.HARVESTING , "62@100, 63@100, 64@100, 65@100", "(8.00, 9.68, 0.000), (7.60, 11.88, 0.000), (8.10, 22.38, 0.000), (7.70, 31.18, 0.000)");
+        loadAnim(Direction.RIGHT, Player.Action.HARVESTING , "58@100, 59@100, 60@100, 61@100", "(12.50, 8.08, 0.000), (11.60, 12.68, 0.000), (10.00, 25.58, 0.000), (8.90, 31.48, 0.000)");
+        loadAnim(Direction.LEFT , Player.Action.HARVESTING , "58@100, 59@100, 60@100, 61@100", "(12.50, 8.08, 0.000), (11.60, 12.68, 0.000), (10.00, 25.58, 0.000), (8.90, 31.48, 0.000)");
 
         loadAnim(Direction.DOWN , Player.Action.USING_TOOL , "66@150, 67@40, 68@40, 69@170, 70@75", "(3.00, 20.98, 0.000),(7.60, 15.58, 0.000),(8.10, 11.88, 0.000),(7.90, 9.58, 0.000),(7.80, 8.68, 0.000)");
-        loadAnim(Direction.UP   , Player.Action.USING_TOOL , "36@100, 37@40, 38@40, 63@220, 62@75");
-        loadAnim(Direction.RIGHT, Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75", "(2.80, 20.68, 1.625), (8.40, 21.38, 1.205), (13.80, 19.98, 0.884), (13.50, 15.98, 0.000), (13.80, 14.28, 0.000)");
-        loadAnim(Direction.LEFT , Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75");
+        loadAnim(Direction.UP   , Player.Action.USING_TOOL , "36@100, 37@40, 38@40, 63@220, 62@75", "(8.00, 20.58, 0.000), (8.30, 20.08, 0.000), (8.10, 19.68, 0.000), (8.20, 11.08, 0.000), (8.10, 8.28, 0.000)");
+        loadAnim(Direction.RIGHT, Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75", "(2.80, 20.68, 0.054),(8.40, 21.38, -0.366),(13.80, 19.98, -0.687),(13.50, 15.98, -1.7),(13.80, 14.28, -1.7)");
+        loadAnim(Direction.LEFT , Player.Action.USING_TOOL , "48@100, 49@40, 50@40, 51@220, 52@75", "(2.80, 20.68, 0.054),(8.40, 21.38, -0.366),(13.80, 19.98, -0.687),(13.50, 15.98, -1.7),(13.80, 14.28, -1.7)");
 
         loadAnim(Direction.DOWN , Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
         loadAnim(Direction.UP   , Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
         loadAnim(Direction.RIGHT, Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
         loadAnim(Direction.LEFT , Player.Action.PASSING_OUT , "16@1000, 0@500, 16@1000, 4@200, 5@6000");
 
-        loadAnim(Direction.DOWN , Player.Action.USING_SCYTHE , "24@55, 25@45, 26@25, 27@25, 28@25, 29@25");
-        loadAnim(Direction.UP   , Player.Action.USING_SCYTHE , "36@55, 37@45, 38@25, 39@25, 40@25, 41@25");
-        loadAnim(Direction.RIGHT, Player.Action.USING_SCYTHE , "30@55, 31@45, 32@25, 33@25, 34@25, 35@25");
-        loadAnim(Direction.LEFT , Player.Action.USING_SCYTHE , "30@55, 31@45, 32@25, 33@25, 34@25, 35@25");
+        loadAnim(Direction.DOWN , Player.Action.USING_SCYTHE , "24@55, 25@45, 26@25, 27@25, 28@25, 29@45", "(12.70, 13.08, 5.952), (9.40, 10.88, 5.328), (7.00, 7.38, 4.997), (3.70, 6.78, 4.697), (1.90, 6.98, 3.900), (1.70, 7.78, 4.021)");
+        loadAnim(Direction.UP   , Player.Action.USING_SCYTHE , "36@55, 37@45, 38@25, 39@25, 40@25, 41@45", "(8.80, 18.28, 2.132), (11.30, 17.38, 1.775), (11.80, 19.98, 1.586), (12.10, 19.48, 1.399), (13.70, 17.88, 1.028), (15.80, 17.28, 0.745)");
+        loadAnim(Direction.RIGHT, Player.Action.USING_SCYTHE , "30@55, 31@45, 32@25, 33@25, 34@25, 35@45", "(10.90, 17.48, 0.604), (13.20, 17.28, 0.569), (12.60, 13.18, 0.000), (13.80, 9.38, 5.633), (8.30, 8.48, 4.983), (3.50, 8.28, 4.182)");
+        loadAnim(Direction.LEFT , Player.Action.USING_SCYTHE , "30@55, 31@45, 32@25, 33@25, 34@25, 35@45", "(10.90, 17.48, 0.604), (13.20, 17.28, 0.569), (12.60, 13.18, 0.000), (13.80, 9.38, 5.633), (8.30, 8.48, 4.983), (3.50, 8.28, 4.182)");
 
-        loadAnim(Direction.DOWN , Player.Action.WATERING , "54@75, 55@100, 25@500");
-        loadAnim(Direction.UP   , Player.Action.WATERING , "62@75, 63@100, 46@500");
-        loadAnim(Direction.RIGHT, Player.Action.WATERING , "58@75, 59@100, 45@500");
-        loadAnim(Direction.LEFT , Player.Action.WATERING , "58@75, 59@100, 45@500");
+        loadAnim(Direction.DOWN , Player.Action.WATERING , "54@75, 55@100, 25@500", "(7.80, 6.58, 0.000), (7.90, 11.48, 0.000), (8.10, 18.68, 0.000)");
+        loadAnim(Direction.UP   , Player.Action.WATERING , "62@75, 63@100, 46@500", "(7.90, 9.08, 0.000), (8.40, 11.28, 0.000), (8.10, 24.68, 0.000)");
+        loadAnim(Direction.RIGHT, Player.Action.WATERING , "58@75, 59@100, 45@500", "(12.80, 7.38, 0.000), (12.70, 11.98, 0.000), (11.70, 16.48, 0.2)");
+        loadAnim(Direction.LEFT , Player.Action.WATERING , "58@75, 59@100, 45@500", "(12.80, 7.38, 0.000), (12.70, 11.98, 0.000), (11.70, 16.48, 0.2)");
     }
     synchronized private void loadAnim(Direction direction, Player.Action action, String data){
         loadAnim(direction, action, data, null);
@@ -256,11 +254,12 @@ public class CharacterSpriteManager {
 
             int index = Integer.parseInt(parts[0]);
             float duration = Integer.parseInt(parts[1]) / 1000f;
+            if(action == Player.Action.USING_SCYTHE) duration *= 1.5f;
 
             int row = index / 6;
             int column = index % 6;
 
-            TextureRegion frame = loadTexture(direction, action, new int[]{row, column}, new int[]{row, column + 6},
+            TextureRegion frame = loadTexture(direction, action, new int[]{row, column}, new int[]{row, column + ((action == Player.Action.USING_SCYTHE) ? 12 : 6)},
                 new int[]{shirt, 0}, new int[]{row, column}, new int[]{hair, 0});
             frame.flip(flip[0], flip[1]);
 
@@ -286,11 +285,9 @@ public class CharacterSpriteManager {
         if(toolAnimData != null){
             ArrayList<ToolFrameInfo> list = new ArrayList<>();
 
-            // Split by "),", then clean each substring
             String[] parts = toolAnimData.split("\\),");
 
             for (String part : parts) {
-                // Clean up string to remove parentheses and spaces
                 part = part.replace("(", "").replace(")", "").trim();
 
                 // Split by comma
@@ -298,16 +295,27 @@ public class CharacterSpriteManager {
                 if (values.length == 3) {
                     float x = Float.parseFloat(values[0].trim());
                     float y = Float.parseFloat(values[1].trim());
-                    float a = Float.parseFloat(values[2].trim());
+                    float a = Float.parseFloat(values[2].trim()) + ((action == Player.Action.USING_SCYTHE) ? -45f / 180f * (float) Math.PI : 0);
 
                     Vector2 origin = new Vector2(x, y);
+                    if(direction == Direction.LEFT){
+                        origin.x = 16 - origin.x;
+                        a = -a;
+                    }
                     ToolFrameInfo info = new ToolFrameInfo(origin, a);
                     list.add(info);
+
                 }
             }
-            System.out.println("s");
-        }
 
+            ToolFrameInfo[] toolsArray = new ToolFrameInfo[list.size()];
+            for (int i = 0; i < durationsArray.length; i++) {
+                toolsArray[i] = list.get(i);
+            }
+            VariableDurationAnimation<ToolFrameInfo> toolDetails = new VariableDurationAnimation<>(toolsArray, durationsArray);
+            toolFrames.putIfAbsent(action, new HashMap<>());
+            toolFrames.get(action).put(direction, toolDetails);
+        }
     }
 
     private TextureRegion loadTexture(Direction direction, Player.Action action, int[] baseBody, int[] baseHand, int[] shirt, int[] pants, int[] hair) {
@@ -360,23 +368,13 @@ public class CharacterSpriteManager {
     }
 
     public TextureRegion getFrame(float stateTime, Vector2 dir, Player.Action action) {
-        if (dir.x > 0) {
-            lastDir = Direction.RIGHT;
-        } else if (dir.x < 0) {
-            lastDir = Direction.LEFT;
-        } else if (dir.y > 0) {
-            lastDir = Direction.UP;
-        } else if (dir.y < 0) {
-            lastDir = Direction.DOWN;
-        }
-
         if(action.equals(Player.Action.IDLE))
-            return animations.get(Player.Action.WALKING).get(lastDir).getKeyFrame(0, true);
+            return animations.get(Player.Action.WALKING).get(Direction.getDirection(dir)).getKeyFrame(0, true);
 
-        return animations.get(action).get(lastDir).getKeyFrame(stateTime, true);
+        return animations.get(action).get(Direction.getDirection(dir)).getKeyFrame(stateTime, true);
     }
 
     public float getAnimationDuration(Vector2 dir, Player.Action action){
-        return animations.get(action).get(lastDir).getDuration();
+        return animations.get(action).get(Direction.getDirection(dir)).getDuration();
     }
 }

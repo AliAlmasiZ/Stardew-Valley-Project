@@ -22,6 +22,8 @@ import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.models.player.buff.Buff;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.ap.stardew.models.player.reaction.Emoji;
+import com.ap.stardew.models.player.reaction.Reaction;
 import com.ap.stardew.view.GameAssetManager;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -30,6 +32,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Player extends Entity implements Serializable {
@@ -67,6 +70,9 @@ public class Player extends Entity implements Serializable {
     private float speed = 200f;
     private Action action = Action.IDLE;
     private Vector2 lastDir = new Vector2(0, -1);
+    private ArrayList<Emoji> emojis = new ArrayList<>();
+    private Reaction currentReaction = null;
+    private Entity actionItem = null;
 
     private transient ArrayList<Tile> ownedTiles = null;
 
@@ -95,6 +101,8 @@ public class Player extends Entity implements Serializable {
         setActiveSlot(getComponent(Inventory.class).getSlots().get(0));
         Renderable renderable = new Renderable();
         addComponent(renderable);
+
+        emojis.addAll(List.of(Emoji.SAD, Emoji.HEART, Emoji.YES, Emoji.NO, Emoji.ANGRY, Emoji.LAUGH));
     }
 
     public GameMap getCurrentMap() {
@@ -250,6 +258,7 @@ public class Player extends Entity implements Serializable {
     }
 
     public void setLastDir(Vector2 lastDir) {
+        if (lastDir.isZero()) return;
         this.lastDir = lastDir;
     }
 
@@ -693,7 +702,7 @@ public class Player extends Entity implements Serializable {
 
     public void move(Vector2 direction, float delta) {
         if (direction.isZero()) return;
-        lastDir = direction;
+        lastDir = direction.cpy();
         getComponent(PositionComponent.class).move(direction, delta * speed);
     }
 
@@ -732,13 +741,18 @@ public class Player extends Entity implements Serializable {
                 stateTime += delta;
                 if(stateTime > GameAssetManager.getInstance().characterSpriteManager.getAnimationDuration(lastDir, action)){
                     setAction(Action.IDLE);
-
+                    actionItem = null;
                     actionChanged = true;
                 }
             }
         }
-        sprite.setRegion(GameAssetManager.getInstance().characterSpriteManager.getFrame(stateTime, lastDir, action));
-        sprite.setBounds(getPosition().x, getPosition().y, sprite.getRegionWidth(), sprite.getRegionHeight());
+
+        if(currentReaction != null){
+            currentReaction.timeLeft -= delta;
+            if(currentReaction.timeLeft <= 0){
+                currentReaction = null;
+            }
+        }
 
         return actionChanged;
     }
@@ -749,6 +763,7 @@ public class Player extends Entity implements Serializable {
         state.position = getPosition();
         state.action = this.action; //WTF this piece of shit -> fixed :3
         state.username = this.getUsername();
+        state.reaction = this.currentReaction;
         //TODO
 
         return state;
@@ -758,7 +773,7 @@ public class Player extends Entity implements Serializable {
         this.getEnergy().setAmount(state.energy);
         this.setPosition(state.position.x, state.position.y);
         this.action = state.action;
-
+        this.currentReaction = state.reaction;
     }
 
     public Gender getGender() {
@@ -771,5 +786,29 @@ public class Player extends Entity implements Serializable {
 
     public Action getAction() {
         return action;
+    }
+
+    public ArrayList<Emoji> getEmojis() {
+        return emojis;
+    }
+
+    public Reaction getCurrentReaction() {
+        return currentReaction;
+    }
+
+    public void setCurrentReaction(Reaction currentReaction) {
+        this.currentReaction = currentReaction;
+    }
+
+    public void setEmojis(ArrayList<Emoji> emojis) {
+        this.emojis = emojis;
+    }
+
+    public Entity getActionItem() {
+        return actionItem;
+    }
+
+    public void setActionItem(Entity actionItem) {
+        this.actionItem = actionItem;
     }
 }

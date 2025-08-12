@@ -14,10 +14,6 @@ public class ServerConnectionController {
                 case "player_move" -> {
                     return connectionThread.playerController.handleWalk(message);
                 }
-                case "update_player_action" -> {
-                    connectionThread.playerController.handleChangeAction(message);
-                }
-
             }
         }
         if (message.getType() == JSONMessage.Type.lobby_command) {
@@ -55,7 +51,6 @@ public class ServerConnectionController {
         }
         if (message.getType() == JSONMessage.Type.command) {
             JSONMessage response = new JSONMessage(JSONMessage.Type.response);
-
             switch ((String) message.getFromBody("command")) {
                 case "login" -> {
                     return login(message, connectionThread);
@@ -74,6 +69,18 @@ public class ServerConnectionController {
                 }
                 case "inGameVote" -> {
                     return GameController.handleInGameVote(message);
+                }
+                case "update_player_action" -> {
+                    connectionThread.playerController.handleChangeAction(message);
+                    return null;
+                }
+                case "update_player_reaction" -> {
+                    connectionThread.playerController.handleReactionChange(message);
+                    return null;
+                }
+                case "update_player_emojis" -> {
+                    connectionThread.playerController.handleEmojisChanged(message);
+                    return null;
                 }
             }
 

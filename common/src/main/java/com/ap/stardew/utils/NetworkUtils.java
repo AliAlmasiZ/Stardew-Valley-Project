@@ -21,6 +21,8 @@ import com.ap.stardew.models.enums.*;
 import com.ap.stardew.models.gameMap.*;
 import com.ap.stardew.models.player.*;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
+import com.ap.stardew.models.player.reaction.Emoji;
+import com.ap.stardew.models.player.reaction.Reaction;
 import com.ap.stardew.models.shop.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -132,6 +134,10 @@ public class NetworkUtils {
         kryo.register(SavedGameDetails.class);
         kryo.register(Harvestable.class);
         kryo.register(HarvestableResource.class);
+        kryo.register(Emoji.class);
+        kryo.register(Reaction.class);
+        kryo.register(Direction.class);
+        kryo.register(Container.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);

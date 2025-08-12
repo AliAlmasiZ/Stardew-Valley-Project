@@ -21,6 +21,7 @@ public class TabWidget extends Table {
 
     private final Table tabHeaderTable;
     private final Stack contentStack;
+    private Table contentTable;
     private final ArrayList<TabDetails> tabs = new ArrayList<>();
     private final Skin skin;
     private TabDetails currentTab = null;
@@ -32,15 +33,15 @@ public class TabWidget extends Table {
         tabHeaderTable.pad(0);
         contentStack = new Stack();
 
-        Table wrapperTable = new Table(skin);
-        wrapperTable.setBackground("frameNinePatch2");
-        wrapperTable.add(contentStack).grow();
+        contentTable = new Table(skin);
+        contentTable.setBackground("frameNinePatch2");
+        contentTable.add(contentStack).grow();
 
         tabHeaderTable.left();
 
         this.top();
-        this.add(tabHeaderTable).growX().padLeft(5).row();
-        this.add(wrapperTable).grow().row();
+        this.add(tabHeaderTable).growX().growY().padLeft(5).row();
+        this.add(contentTable).size(231, 130).row();
     }
 
     public void addTab(final Table content, Drawable tabIcon) {
@@ -71,5 +72,9 @@ public class TabWidget extends Table {
         currentTab = tabDetails;
         tabDetails.tab.setVisible(true);
         currentTab.button.moveBy(0, -1);
+    }
+
+    public Table getContentTable() {
+        return contentTable;
     }
 }

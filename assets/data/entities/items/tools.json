@@ -23,7 +23,7 @@
           ]
         },{
           "type": "Pickable",
-          "icon" : "Content/Tools/Axe/stone/icon.png",
+          "icon" : "Content/Tools/Axe/icon.png",
           "maxStack": 1
         }
       ]
@@ -38,7 +38,7 @@
           ]
         },{
           "type": "Pickable",
-          "icon" : "Content/Tools/Hoe/stone/icon.png",
+          "icon" : "Content/Tools/Hoe/icon.png",
           "maxStack": 1
         }
       ]
@@ -53,7 +53,7 @@
           ]
         },{
           "type": "Pickable",
-          "icon" : "Content/Tools/Hoe/stone/icon.png",
+          "icon" : "Content/Tools/Scythe/0.png",
           "maxStack": 1
         }
       ]
@@ -70,7 +70,7 @@
           ]
         },{
           "type": "Pickable",
-          "icon" : "Content/Tools/Pickaxe/stone/icon.png",
+          "icon" : "Content/Tools/Pickaxe/icon.png",
           "maxStack": 1
         }
       ]
@@ -90,7 +90,7 @@
           "maxCharge": 40
         },{
           "type": "Pickable",
-          "icon" : "Content/Tools/WateringCan/stone/icon.png",
+          "icon" : "Content/Tools/WateringCan/icon.png",
           "maxStack": 1
         }
       ]

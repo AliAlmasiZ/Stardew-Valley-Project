@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="2">
+ <objectgroup id="2" name="Objects">
+  <object id="1" name="Door" x="0" y="0" width="16" height="16">
+   <properties>
+    <property name="destId" type="int" value="1"/>
+    <property name="id" type="int" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -20,6 +20,8 @@ public class Container extends EntityComponent implements Serializable {
     Container(Container other) {
         this.maxCharge = other.maxCharge;
         this.charge = this.maxCharge;
+    }
+    private Container(){
 
     }
 
