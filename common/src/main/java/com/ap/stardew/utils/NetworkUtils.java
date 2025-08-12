@@ -41,7 +41,7 @@ public class NetworkUtils {
     public static final int AUDIO_CHANNEL_TCP = 54556;
     public static final int AUDIO_CHANNEL_UDP = 54778;
     public static final String HOST = "127.0.0.1";
-    public static final int BUFFER_SIZE = 8 * 1024;
+    public static final int BUFFER_SIZE = 4 * 1024;
 
 
     /**

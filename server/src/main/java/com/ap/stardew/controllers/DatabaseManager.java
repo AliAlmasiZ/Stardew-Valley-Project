@@ -104,6 +104,31 @@ public class DatabaseManager {
         }
     }
 
+    public static byte[] loadAudioFile(String username, String fileName) {
+        String sql = """
+            SELECT audio_data FROM audio_files WHERE username = ? AND file_name = ?
+            """;
+
+        try (var conn = DriverManager.getConnection(URL);
+            var pstmt = conn.prepareStatement(sql)
+        ){
+            pstmt.setString(1, username);
+            pstmt.setString(2, fileName);
+            var rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                return rs.getBytes("audio_data");
+            }
+            return null;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
     public static boolean userExists(String username) {
         try (var pstmt = DriverManager.getConnection(URL).prepareStatement(
             "SELECT 1 FROM users WHERE username = ?"

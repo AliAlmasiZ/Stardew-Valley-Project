@@ -4,6 +4,7 @@ import com.ap.stardew.controllers.AudioServerController;
 import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.controllers.ServerConnectionController;
 import com.ap.stardew.models.Account;
+import com.ap.stardew.models.Radio;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.player.Player;
 import com.esotericsoftware.kryonet.Connection;
@@ -22,6 +23,7 @@ public class ClientConnection {
     protected final BlockingQueue<Object> receivedAudioObjectsQueue;
     private Connection gameConnection;
     private Connection audioConnection;
+    public Radio radio;
     private Account currentAccount = null;
 
     public PlayerController playerController;
@@ -63,7 +65,7 @@ public class ClientConnection {
         gameConnection.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
-                gameExecutor.submit(() -> {
+                gameExecutor.execute(() -> {
                     boolean handled = handleReceived(object);
                     if(!handled) try {
                         receivedObjectsQueue.put(object);
@@ -131,7 +133,7 @@ public class ClientConnection {
         audioConnection.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                audioExecutor.submit(() -> {
+                audioExecutor.execute(() -> {
                     if (object instanceof JSONMessage m) {
                         try {
                             var res = AudioServerController.handleMessage(m, ClientConnection.this);
@@ -145,7 +147,6 @@ public class ClientConnection {
                                 interruptedException.printStackTrace();
                             }
                         }
-
                     }
                 });
             }

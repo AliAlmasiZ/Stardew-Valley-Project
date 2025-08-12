@@ -1,16 +1,21 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnection;
+import com.ap.stardew.models.Radio;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.badlogic.gdx.utils.Json;
+import javazoom.jl.decoder.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.ap.stardew.utils.NetworkUtils.BUFFER_SIZE;
 
 public class AudioServerController {
 
@@ -47,6 +52,68 @@ public class AudioServerController {
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
         response.put("file_names", fileNames);
         return response;
+    }
+
+
+    private static void streamMusic (Radio radio) {
+        byte[] musicBytes = DatabaseManager.loadAudioFile(radio.ownerUsername, radio.currentFile);
+
+        try (var bis = new ByteArrayInputStream(musicBytes)) {
+            Bitstream bitstream = new Bitstream(bis);
+            Decoder decoder = new Decoder();
+            int sequence = 0;
+            byte[] pcmBuffer = new byte[BUFFER_SIZE];
+            int bufferPos = 0;
+            JSONMessage audioPacket = new JSONMessage(JSONMessage.Type.audio_packet);
+
+            while (true) {
+                Header frameHeader = bitstream.readFrame();
+                if(frameHeader == null || !radio.isPlaying.get()) break;
+
+                if(sequence == 0) {
+                    audioPacket.put("bit_depth", 16);
+                    audioPacket.put("sample_rate", frameHeader.frequency());
+                    audioPacket.put("channels", frameHeader.mode() == Header.SINGLE_CHANNEL ? 1 : 2);
+                }
+
+                // Decode to PCM
+                SampleBuffer output = (SampleBuffer) decoder.decodeFrame(frameHeader, bitstream);
+                short[] pcmSamples = output.getBuffer();
+                int sampleCount = output.getBufferLength();
+
+                for (int i = 0; i < sampleCount; i++) {
+                    if (bufferPos >= pcmBuffer.length) {
+                        //Buffer full
+                        audioPacket.put("sequence", sequence++);
+                        byte[] data = new byte[bufferPos];
+                        System.arraycopy(pcmBuffer, 0, data, 0, bufferPos);
+                        audioPacket.put("data", data);
+                        for (ClientConnection client : radio.listeners) {
+                            client.getAudioConnection().sendTCP(audioPacket);
+                        }
+                        bufferPos = 0;
+                        Thread.sleep(10);
+                    }
+                    // Write PCM sample (little-endian)
+                    pcmBuffer[bufferPos++] = (byte) (pcmSamples[i] & 0xff);
+                    pcmBuffer[bufferPos++] = (byte) (pcmSamples[i] >> 8);
+                }
+                bitstream.closeFrame();
+            }
+
+            // Send remaining data in buffer
+            if (bufferPos > 0) {
+                audioPacket.put("sequence", sequence++);
+                byte[] data = new byte[bufferPos];
+                System.arraycopy(pcmBuffer, 0, data, 0, bufferPos);
+                audioPacket.put("data", data);
+                for (ClientConnection client : radio.listeners) {
+                    client.getAudioConnection().sendTCP(audioPacket);
+                }
+            }
+        } catch (IOException | BitstreamException | DecoderException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
