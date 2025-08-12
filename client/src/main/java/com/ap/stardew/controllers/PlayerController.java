@@ -96,8 +96,12 @@ public class PlayerController implements InputProcessor {
             this.down = false;
         if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D)
             this.right = false;
-        if (keycode == Input.Keys.T)
-            this.advanceTime = false;
+        if (keycode == Input.Keys.T) {
+            JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+            jsonMessage.put("command", "advance_one_hour");
+
+            ClientApp.sendTCP(jsonMessage);
+        }
         if (keycode == Input.Keys.TAB)
             screen.openJournal();
         if (keycode == Input.Keys.P) //TODO: TemporarilyBoo

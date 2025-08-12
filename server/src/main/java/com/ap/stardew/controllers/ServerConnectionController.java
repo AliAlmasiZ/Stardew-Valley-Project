@@ -200,6 +200,9 @@ public class ServerConnectionController {
                     }
                     return null;
                 }
+                case "advance_one_hour" -> {
+                    clientConnection.playerController.advanceOneHour();
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.cheat) {

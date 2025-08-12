@@ -522,7 +522,6 @@ public class Game implements Serializable {
             player.updatePerHour();
         }
 
-//Todo        ((GameScreen) ClientGame.getInstance().getScreen()).initNPCDialogs();
     }
 
     public void updateGamePerDay() {

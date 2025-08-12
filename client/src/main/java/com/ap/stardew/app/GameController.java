@@ -742,5 +742,18 @@ public class GameController {
         updatePlayers(jsonMessage.getFromBody("players_update"));
     }
 
+    public static void advanceOneHourUpdate(JSONMessage jsonMessage) {
+        GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
+        Game game = ClientApp.getActiveGame();
+
+        game.setDate(jsonMessage.getFromBody("date"));
+
+        gameScreen.initNPCDialogs();
+
+        updatePlayers(jsonMessage.getFromBody("players_update"));
+
+
+    }
+
 
 }

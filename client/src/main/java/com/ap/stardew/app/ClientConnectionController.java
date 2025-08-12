@@ -162,6 +162,9 @@ public class ClientConnectionController {
                     GameController.sellAnimalUpdate(message);
                     return null;
                 }
+                case "advance_one_hour" -> {
+                    GameController.advanceOneHourUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {

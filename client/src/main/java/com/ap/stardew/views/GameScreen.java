@@ -952,6 +952,10 @@ public class GameScreen extends AbstractScreen {
                 }
 
                 animal.move(x, y);
+                JSONMessage message = new JSONMessage(JSONMessage.Type.request);
+                message.put("sender", game.getCurrentPlayer().getUsername());
+                message.put("animal", animal.getName());
+
                 dialog.hide();
             }
         });
