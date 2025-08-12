@@ -1,7 +1,9 @@
 package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnection;
+import com.ap.stardew.models.Date;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.Position;
 import com.ap.stardew.models.Vec2;
 import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.animal.AnimalType;
@@ -593,6 +595,45 @@ public class PlayerController {
         senderUpdateMessage.put("players_update", playerUpdateMessages);
 
         ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+    }
+
+    public void advanceOneHour() {
+        Game game = ClientConnection.gameThread.getGame();
+        Date date = game.getDate();
+
+        date.addHour(1, game);
+
+        JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
+        updateMessage.put("command", "advance_one_hour");
+        updateMessage.put("date", date);
+
+        HashMap<String, JSONMessage> playerUpdateMessages = new HashMap<>();
+        for (Player player : game.getPlayers()) {
+            JSONMessage playerUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+            //TODO
+            playerUpdateMessages.put(player.getUsername(), playerUpdateMessage);
+        }
+
+        updateMessage.put("players_update", playerUpdateMessages);
+
+
+        ClientConnection.gameThread.sendAllTCP(updateMessage);
+    }
+
+    public void shepherdAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal_name");
+        float x = jsonMessage.getFromBody("x");
+        float y = jsonMessage.getFromBody("y");
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+        Position position = animal.getComponent(PositionComponent.class).get();
+
+        animal.getComponent(PositionComponent.class).setPosition(position.x + x, position.y + y);
+
+        // Sending to clients
+        ClientConnection.gameThread.sendAllTCP(jsonMessage);
     }
 
 

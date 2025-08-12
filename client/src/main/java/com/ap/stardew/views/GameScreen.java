@@ -1091,7 +1091,15 @@ public class GameScreen extends AbstractScreen {
                     return;
                 }
 
-                animal.move(x, y);
+                JSONMessage message = new JSONMessage(JSONMessage.Type.request);
+                message.put("command", "shepherd_animal");
+                message.put("sender", game.getCurrentPlayer().getUsername());
+                message.put("animal_name", animal.getName());
+                message.put("x", x);
+                message.put("y", y);
+
+                ClientApp.sendTCP(message);
+
                 dialog.hide();
             }
         });

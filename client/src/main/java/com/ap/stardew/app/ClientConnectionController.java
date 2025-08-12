@@ -1,6 +1,7 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.models.Result;
+import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
@@ -157,6 +158,9 @@ public class ClientConnectionController {
                     GameController.sellAnimalUpdate(message);
                     return null;
                 }
+                case "advance_one_hour" -> {
+                    GameController.advanceOneHourUpdate(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.trade) {
@@ -216,6 +220,26 @@ public class ClientConnectionController {
         }
         if (message.getType() == JSONMessage.Type.audio_packet) {
             thread.submit(() -> handleStreaming(message));
+        }
+        if (message.getType() == JSONMessage.Type.request) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "shepherd_animal" -> {
+
+                    try {
+                        String playerName = message.getFromBody("sender");
+                        String animalName = message.getFromBody("animal_name");
+
+                        Player player = ClientApp.getActiveGame().getPlayerByUsername(playerName);
+                        Animal animal = player.findAnimal(animalName);
+                        animal.move(message.getFromBody("x"), message.getFromBody("y"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    return null;
+                }
+            }
         }
 
 

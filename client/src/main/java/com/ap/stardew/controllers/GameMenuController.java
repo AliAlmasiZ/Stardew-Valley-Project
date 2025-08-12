@@ -1731,7 +1731,7 @@ public class GameMenuController implements Controller {
         //TODO: move this to server side
 
 
-        String message = npc.getCorrectDialogue(game.getDate().getSeason(), npcFriendship.getLevel(),
+        String message = npc.getCorrectDialogue(currentPlayer.getUsername(),game.getDate().getSeason(), npcFriendship.getXp(),
             game.getTodayWeather(), game.getDate().getHour() < 16);
         if (message == null) {
             message = "not set yet!";
