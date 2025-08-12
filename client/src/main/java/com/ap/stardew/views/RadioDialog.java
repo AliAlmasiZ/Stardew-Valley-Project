@@ -3,6 +3,7 @@ package com.ap.stardew.views;
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.controllers.RadioController;
+import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.view.GameAssetManager;
@@ -101,7 +102,30 @@ public class RadioDialog extends InGameDialog {
         for (String music : musics) {
             Label musicLabel = new Label(music, skin);
             TextButton textButton = new TextButton("Play", skin);
-            // TODO: add listener
+
+            textButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println("clicked");
+                    if(textButton.getText().equals("Play") || true) {
+                        System.out.println("playing");
+                        JSONMessage request = new JSONMessage(JSONMessage.Type.audio_command);
+                        request.put("command", "play_music");
+                        request.put("music_name", music);
+
+                        var response = ClientApp.sendAndWaitForAudioResponse(request, 500);
+                        Result result = response.getFromBody("result");
+                        if(result.isSuccessful()) {
+                            textButton.setText("Pause");
+                            new PopUpMessage(result.message(), PopUpMessage.PopUpMessageType.SUCCESS_NOTIFICATION).show(gameScreen.uiStage);
+                        } else {
+                            new PopUpMessage(result.message(), PopUpMessage.PopUpMessageType.ERROR_NOTIFICATION).show(gameScreen.uiStage);
+                        }
+                    }
+                }
+            });
+
+
 
             playlistContent.add(musicLabel).left().pad(5);
             playlistContent.add(textButton).right().pad(5).row();

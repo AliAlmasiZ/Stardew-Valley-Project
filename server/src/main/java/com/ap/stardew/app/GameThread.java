@@ -5,6 +5,7 @@ import com.ap.stardew.controllers.GameController;
 import com.ap.stardew.controllers.PlayerController;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.GameSession;
+import com.ap.stardew.models.Radio;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.dto.PlayerState;
@@ -16,10 +17,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameThread extends Thread{
     static public final int UPDATE_FREQUENCY = 30;
+    public ExecutorService radioStreamer = Executors.newCachedThreadPool();
     private float lastUpdateSent = 0;
     private float stateTime = 0;
     private float deltaTime;
@@ -47,6 +51,7 @@ public class GameThread extends Thread{
     public void start() {
         for (ClientConnection client : clients) {
             client.gameThread = this;
+
         }
         super.start();
     }
@@ -159,12 +164,6 @@ public class GameThread extends Thread{
         }
     }
 
-    public void sendAllUDP(Object object) {
-        for (ClientConnection client : clients) {
-            client.sendGameUDP(object);
-        }
-    }
-
     public float getDeltaTime() {
         return deltaTime;
     }
@@ -272,7 +271,5 @@ public class GameThread extends Thread{
         }
     }
 
-    public void end() {
-        end.set(true);
-    }
+
 }

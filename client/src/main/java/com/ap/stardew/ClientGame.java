@@ -9,20 +9,30 @@ import com.ap.stardew.views.DisconnectionScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class ClientGame extends Game {
     private static ClientGame instance;
     public NativeFileChooser fileChooser;
     private SpriteBatch batch;
+    //music player
+    public AudioDevice audioDevice;
+    public LinkedBlockingQueue<byte[]> audioQueue;
+    private volatile boolean isRunning = true;
+
+
+
 
     public static ClientGame getInstance() {
         return instance;
@@ -39,6 +49,7 @@ public class ClientGame extends Game {
 
     @Override
     public void create() {
+        audioQueue = new LinkedBlockingQueue<>();
         ClientApp.startClients();
 
         loadDatas();
@@ -48,6 +59,7 @@ public class ClientGame extends Game {
 
         setScreen(new MainScreen());
         ClientApp.connectClients();
+        new Thread(this::playAudio).start();
     }
 
     @Override
@@ -68,6 +80,42 @@ public class ClientGame extends Game {
         GameAssetManager.getInstance().loadTexturesRecursively(Gdx.files.internal("Content/Workstations"));
         GameAssetManager.getInstance().finishLoading();
         GameAssetManager.getInstance().characterSpriteManager = new CharacterSpriteManager();
+    }
+
+    private void playAudio() {
+        int bufferSize = 4096 * 4; // ~100ms buffer for 44100 Hz, stereo, 16-bit
+        byte[] byteBuffer = new byte[bufferSize];
+        int bytePos = 0;
+
+        while (isRunning) {
+            try {
+                byte[] chunk = audioQueue.take(); // Blocking until data arrives
+                // Append chunk to buffer
+                if (bytePos + chunk.length <= byteBuffer.length) {
+                    System.arraycopy(chunk, 0, byteBuffer, bytePos, chunk.length);
+                    bytePos += chunk.length;
+                }
+
+                // Convert to short[] when buffer is full or enough samples are ready
+                if (bytePos >= 4096) { // At least ~23ms of audio
+                    int numSamples = bytePos / 2; // 2 bytes per sample
+                    short[] samples = new short[numSamples];
+                    for (int i = 0; i < numSamples; i++) {
+                        // Convert little-endian bytes to short
+                        samples[i] = (short) ((byteBuffer[i * 2] & 0xff) | (byteBuffer[i * 2 + 1] << 8));
+                    }
+                    audioDevice.writeSamples(samples, 0, numSamples);
+                    // Shift remaining bytes (if any)
+                    int remaining = bytePos - (numSamples * 2);
+                    if (remaining > 0) {
+                        System.arraycopy(byteBuffer, numSamples * 2, byteBuffer, 0, remaining);
+                    }
+                    bytePos = remaining;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

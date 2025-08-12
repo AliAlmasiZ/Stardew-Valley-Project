@@ -385,7 +385,7 @@ public class LobbyController {
 
         for (ClientConnection client : gameThread.getClients()) {
             client.player = session.getUserPlayerMap().get(client.getCurrentAccount().getUsername());
-            client.radio = new Radio();
+            client.radio = new Radio(client.player.getUsername());
             client.playerController = new PlayerController(client);
 
             JSONMessage gameStartDetails = new JSONMessage(JSONMessage.Type.update);

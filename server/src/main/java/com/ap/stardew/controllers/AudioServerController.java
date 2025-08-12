@@ -26,6 +26,16 @@ public class AudioServerController {
         if (message.getType() == JSONMessage.Type.files_list_request) {
             return sendFileList(message);
         }
+        if (message.getType() == JSONMessage.Type.audio_command) {
+            String command = message.getFromBody("command");
+            switch (command) {
+                case "play_music" -> {
+                    return playMusic(message, client);
+                }
+            }
+
+            return null;
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -55,8 +65,32 @@ public class AudioServerController {
     }
 
 
+    private static JSONMessage playMusic(JSONMessage message, ClientConnection client) {
+        // TODO : move this better place
+        client.radio.listeners.add(client);
+
+        String musicName = message.getFromBody("music_name");
+        client.radio.currentFile = musicName;
+        JSONMessage res = new JSONMessage(JSONMessage.Type.response);
+        try {
+            streamMusic(client.radio);
+            res.put("result", new Result(true, musicName + "played"));
+
+        } catch (IllegalStateException e) {
+            res.put("result", new Result(false, e.getMessage()));
+        }
+        return res;
+    }
+
+
     private static void streamMusic (Radio radio) {
+        if(radio.isPlaying.get()) {
+            throw new IllegalStateException("you should stop previous playing music");
+        }
+        radio.isPlaying.set(true);
         byte[] musicBytes = DatabaseManager.loadAudioFile(radio.ownerUsername, radio.currentFile);
+        if (musicBytes == null)
+            return;
 
         try (var bis = new ByteArrayInputStream(musicBytes)) {
             Bitstream bitstream = new Bitstream(bis);

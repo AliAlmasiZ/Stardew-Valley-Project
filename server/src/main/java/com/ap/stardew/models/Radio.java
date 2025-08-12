@@ -8,6 +8,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Radio {
+
+    public Radio(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
+    }
+
     public String ownerUsername;
     public String currentFile;
     public AtomicBoolean isPlaying = new AtomicBoolean(false);
