@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class ScoreBoardDialog {
     //TODO: make it look better
-    private final float FONT_SCALE = 0.3f;
+    private final float FONT_SCALE = 0.2f;
     private final Skin skin = GameAssetManager.getInstance().getCustomSkin();
 
     private InGameDialog dialog;
@@ -84,12 +84,12 @@ public class ScoreBoardDialog {
         // Layout widths
         headerTable.add(indexH).width(10).align(Align.left);
         headerTable.add(nameH).expandX();
-        headerTable.add(moneyH).width(25);
-        headerTable.add(farmingH).width(25);
-        headerTable.add(foragingH).width(25);
-        headerTable.add(miningH).width(25);
-        headerTable.add(fishingH).width(25);
-        headerTable.add(questsH).width(25);
+        headerTable.add(moneyH).width(30).align(Align.center);
+        headerTable.add(farmingH).width(30).align(Align.center);
+        headerTable.add(foragingH).width(30).align(Align.center);
+        headerTable.add(miningH).width(30).align(Align.center);
+        headerTable.add(fishingH).width(30).align(Align.center);
+        headerTable.add(questsH).width(30).align(Align.center);
 
         // scroll pane for rows
         scrollPane = new ScrollPane(rowsTable, skin);
@@ -107,7 +107,6 @@ public class ScoreBoardDialog {
 
     private Label makeHeader(final String text, final SortType type) {
         final Label header = new Label(text + getSortIndicator(type), skin);
-        header.setAlignment(Align.right);
         header.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -119,7 +118,7 @@ public class ScoreBoardDialog {
 
     private String getSortIndicator(SortType type) {
         if (type != currentSort) return "";
-        return ascending ? " ▲" : " ▼";
+        return ascending ? " A" : " D";
     }
 
     private void onHeaderClicked(SortType type) {
@@ -128,10 +127,10 @@ public class ScoreBoardDialog {
             ascending = !ascending;
         } else {
             currentSort = type;
-            ascending = false; // default to descending (best first)
+            ascending = false;
         }
         // rebuild headers (to update indicator) and rows
-        buildUI();               // rebuild header labels (could be optimized)
+        buildUI();
         refreshFromGame();
     }
 
@@ -242,12 +241,12 @@ public class ScoreBoardDialog {
 
             rowsTable.add(index).width(10);
             rowsTable.add(name).expandX();
-            rowsTable.add(money).width(25);
-            rowsTable.add(farming).width(25);
-            rowsTable.add(foraging).width(25);
-            rowsTable.add(mining).width(25);
-            rowsTable.add(fishing).width(25);
-            rowsTable.add(quests).width(25);
+            rowsTable.add(money).width(30);
+            rowsTable.add(farming).width(30);
+            rowsTable.add(foraging).width(30);
+            rowsTable.add(mining).width(30);
+            rowsTable.add(fishing).width(30);
+            rowsTable.add(quests).width(30);
             rowsTable.row();
 
             i++;
