@@ -2,9 +2,11 @@ package com.ap.stardew.controllers;
 
 import com.ap.stardew.app.ClientConnection;
 import com.ap.stardew.models.Game;
+import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.building.Door;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Entity;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.systems.EntityPlacementSystem;
 import com.ap.stardew.models.gameMap.Tile;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
@@ -153,6 +155,9 @@ public class PlayerController {
     }
 
     /***************************************** **** **********************************************/
+
+
+    /********************************** players interactions **********************************************/
 
     public void giftPlayer(JSONMessage jsonMessage) {
         Game game = ClientConnection.gameThread.getGame();
@@ -416,5 +421,40 @@ public class PlayerController {
 
         ClientConnection.gameThread.sendTCP(updateMessage, receiverName, senderName);
     }
+
+    /*******************************************************************************************/
+
+    /***************************************** animal **********************************************/
+    public void feedAnimal(JSONMessage jsonMessage) {
+        Game game = ClientConnection.gameThread.getGame();
+        String senderName = jsonMessage.getFromBody("sender");
+        String animalName = jsonMessage.getFromBody("animal");
+
+        Player sender = game.getPlayerByUsername(senderName);
+        Animal animal = sender.findAnimal(animalName);
+
+        Inventory inventory = sender.getComponent(Inventory.class);
+
+        inventory.takeFromInventory("Hay", 1);
+        animal.setFedToday(true);
+        animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
+
+        // Sending to clients
+        JSONMessage senderUpdateMessage = new JSONMessage(JSONMessage.Type.update);
+        senderUpdateMessage.put("command", "update_player_fields");
+        senderUpdateMessage.put("username", senderName);
+        senderUpdateMessage.put("inventory", inventory);
+        JSONMessage animalUpdate = new JSONMessage(JSONMessage.Type.update);
+            animalUpdate.put("name", animalName);
+            animalUpdate.put("fed_today", true);
+            animalUpdate.put("statue", Renderable.Statue.EATING);
+            animalUpdate.put("statue_time", 5);
+        senderUpdateMessage.put("animal", animalUpdate);
+
+
+
+        ClientConnection.gameThread.sendAllTCP(senderUpdateMessage);
+    }
+
 
 }

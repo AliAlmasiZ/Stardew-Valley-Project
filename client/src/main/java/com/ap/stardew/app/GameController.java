@@ -6,7 +6,9 @@ import com.ap.stardew.controllers.GameStaticController;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Game;
 import com.ap.stardew.models.Result;
+import com.ap.stardew.models.animal.Animal;
 import com.ap.stardew.models.dto.JSONMessage;
+import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.player.Message;
@@ -36,7 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GameController {
-    public static Game makeGame(JSONMessage details){
+    public static Game makeGame(JSONMessage details) {
         Game game = details.getFromBody("gameData");
 
         game.setCurrentPlayer(details.getFromBody("player"));
@@ -49,7 +51,8 @@ public class GameController {
 
         return game;
     }
-    public static void startGame(JSONMessage details){
+
+    public static void startGame(JSONMessage details) {
         Game game = makeGame(details);
 
         ClientApp.setActiveGame(game);
@@ -59,13 +62,13 @@ public class GameController {
         });
     }
 
-    public static void updatePlayers(HashMap<String, JSONMessage> playerUpdateMessages){
+    public static void updatePlayers(HashMap<String, JSONMessage> playerUpdateMessages) {
         for (Map.Entry<String, JSONMessage> entry : playerUpdateMessages.entrySet()) {
             updatePlayer(entry.getKey(), entry.getValue());
         }
     }
 
-    public static void updatePlayer(String username, JSONMessage message){
+    public static void updatePlayer(String username, JSONMessage message) {
         Game game = ClientApp.getActiveGame();
         Player player = game.getPlayerByUsername(username);
 
@@ -91,6 +94,28 @@ public class GameController {
         if (message.containsKey("energy")) {
             player.setEnergy(message.getFromBody("energy"));
         }
+        if (message.containsKey("animal")) {
+            updateAnimal(username, message.getFromBody("animal"));
+        }
+    }
+
+    public static void updateAnimal( String playerName, JSONMessage message) {
+        Game game = ClientApp.getActiveGame();
+        Player player = game.getPlayerByUsername(playerName);
+        String animalName = message.getFromBody("name");
+        Animal animal = player.findAnimal(animalName);
+
+        if (message.containsKey("statue")) {
+            animal.getComponent(Renderable.class).setStatue(message.getFromBody("statue"), message.getFromBody("statue_time"));
+        }
+        if (message.containsKey("fed_today")) {
+            animal.setFedToday(message.getFromBody("fed_today"));
+        }
+        if (message.containsKey("pet_today")) {
+            animal.setPetToday(message.getFromBody("pet_today"));
+        }
+
+
     }
 
     public static void updateFriendships(JSONMessage jsonMessage) {
@@ -104,6 +129,7 @@ public class GameController {
     /**
      * SEND
      * show the waiting dialog, send the message
+     *
      * @param player the player that the trade begin with
      */
     public static void startTradeWithPlayer(Player player) {
@@ -123,6 +149,7 @@ public class GameController {
     /**
      * HANDLE
      * when a startTradeWithPlayer message receives it will handle here
+     *
      * @param message the coming message from server
      */
     public static void startTradeRequest(JSONMessage message) {
@@ -149,6 +176,7 @@ public class GameController {
     /**
      * SEND
      * after closing the menu
+     *
      * @param player player to trade
      */
     public static void stopTradeWithPlayer(Player player, String message) {
@@ -168,6 +196,7 @@ public class GameController {
 
     /**
      * HANDLE
+     *
      * @param message received from server
      */
     public static void stopTrade(JSONMessage message) {
@@ -183,6 +212,7 @@ public class GameController {
     /**
      * SEND
      * after clicking yes
+     *
      * @param player player to send
      */
     public static void acceptTradeStart(Player player) {
@@ -207,8 +237,9 @@ public class GameController {
     /**
      * SEND
      * update the inventory
-     * @param player player to send
-     * @param item item that is given
+     *
+     * @param player   player to send
+     * @param item     item that is given
      * @param isSender if it is added to sender inventory or not
      */
     public static void updateTradeInventory(Player player, Entity item, boolean isSender) {
@@ -223,6 +254,7 @@ public class GameController {
 
     /**
      * HANDLE
+     *
      * @param message update info
      */
     public static void updateTradeInventory(JSONMessage message) {
@@ -233,6 +265,7 @@ public class GameController {
     /**
      * SEND
      * finish putting items and wait for response
+     *
      * @param player to send
      */
     public static void confirmTrade(Player player) {
@@ -256,6 +289,7 @@ public class GameController {
     /**
      * SEND
      * jic jic jic
+     *
      * @param player have trade with
      */
     public static void doTrade(Player player) {
@@ -285,6 +319,7 @@ public class GameController {
 
     /**
      * SEND
+     *
      * @param player to send
      */
     public static void rejectTradeOffer(Player player) {
@@ -313,7 +348,7 @@ public class GameController {
         gameScreen.tradeDialog.getSenderInventory().empty();
     }
 
-    public static Result sendReconnectRequestResponse(boolean accept){
+    public static Result sendReconnectRequestResponse(boolean accept) {
         JSONMessage req = new JSONMessage(JSONMessage.Type.command);
         req.put("command", "game_reconnect_request");
         req.put("token", ClientApp.getToken());
@@ -321,19 +356,19 @@ public class GameController {
 
         JSONMessage response = ClientApp.sendAndWaitForResponse(req, 3000);
 
-        if(response == null) return new Result(false, "failed to reconnect");
+        if (response == null) return new Result(false, "failed to reconnect");
 
         Result result = response.getFromBody("result", Result.class);
-        if(result == null) return new Result(false, result.message());
-        if(!result.isSuccessful()) return new Result(false, result.message());
+        if (result == null) return new Result(false, result.message());
+        if (!result.isSuccessful()) return new Result(false, result.message());
 
 
         final Game game = makeGame(response);
-        Gdx.app.postRunnable(()->{
+        Gdx.app.postRunnable(() -> {
             ClientApp.setActiveGame(game);
             GameScreen gameScreen = new GameScreen(game);
             ClientGame.getInstance().setScreen(gameScreen);
-            if(response.getFromBody("gamePaused")){
+            if (response.getFromBody("gamePaused")) {
                 handleGamePauseForDisconnection(response);
             }
         });
@@ -341,7 +376,7 @@ public class GameController {
         return new Result(true, "reconnected");
     }
 
-    public static void handleGameDisconnection(GameScreen gameScreen){
+    public static void handleGameDisconnection(GameScreen gameScreen) {
         gameScreen.camera = null;
         gameScreen.tradeDialog = null;
         gameScreen.dispose();
@@ -350,34 +385,36 @@ public class GameController {
         ClientGame.getInstance().setScreen(new DisconnectionScreen(null, List.of(ClientApp.getUsername()), 120f));
     }
 
-    public static void handleGamePauseForDisconnection(JSONMessage message){
+    public static void handleGamePauseForDisconnection(JSONMessage message) {
         final ArrayList<String> usernames = message.getFromBody("usernames");
 
-        if(ClientGame.getInstance().getScreen() instanceof GameScreen gameScreen){
+        if (ClientGame.getInstance().getScreen() instanceof GameScreen gameScreen) {
             Game activeGame = ClientApp.getActiveGame();
             for (String username : usernames) {
-                if(activeGame.getPlayerByUsername(username) == null) return;
+                if (activeGame.getPlayerByUsername(username) == null) return;
             }
-            Gdx.app.postRunnable(()->{
+            Gdx.app.postRunnable(() -> {
                 DisconnectionScreen disconnectionScreen = new DisconnectionScreen(gameScreen, usernames, message.getFromBody("timeLeft"));
                 ClientGame.getInstance().setScreen(disconnectionScreen);
             });
-        }else if(ClientGame.getInstance().getScreen() instanceof DisconnectionScreen disconnectionScreen){
-            Gdx.app.postRunnable(()->{
+        } else if (ClientGame.getInstance().getScreen() instanceof DisconnectionScreen disconnectionScreen) {
+            Gdx.app.postRunnable(() -> {
                 disconnectionScreen.updateDisconnectedPlayers(usernames);
             });
         }
     }
 
-    public static void endGame(){
+    public static void endGame() {
         ClientApp.setActiveGame(null);
     }
 
-    public static void handleGameReconnectionRequest(JSONMessage message){
-        Gdx.app.postRunnable(()->{
+    public static void handleGameReconnectionRequest(JSONMessage message) {
+        Gdx.app.postRunnable(() -> {
             PopUpMessage popUpMessage = new PopUpMessage();
             popUpMessage.add(new Label("You were disconnected from a session. Do you want to rejoin?",
-                GameAssetManager.getInstance().getCustomSkin()){{setWrap(true);}}).grow().width(200).spaceBottom(2).row();
+                GameAssetManager.getInstance().getCustomSkin()) {{
+                setWrap(true);
+            }}).grow().width(200).spaceBottom(2).row();
             Button acceptButton = new Button(GameAssetManager.getInstance().getCustomSkin(), "accept");
             Button rejectButton = new Button(GameAssetManager.getInstance().getCustomSkin(), "reject");
 
@@ -387,7 +424,7 @@ public class GameController {
 
             popUpMessage.show(AbstractScreen.getFrontStage());
 
-            acceptButton.addListener(new ClickListener(){
+            acceptButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Result result = GameController.sendReconnectRequestResponse(true);
@@ -398,7 +435,7 @@ public class GameController {
                 }
             });
 
-            rejectButton.addListener(new ClickListener(){
+            rejectButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Result result = GameController.sendReconnectRequestResponse(false);
@@ -417,8 +454,9 @@ public class GameController {
 
     /**
      * SEND
+     *
      * @param username to send
-     * @param text message text
+     * @param text     message text
      */
     public static void sendPrivateMessage(String username, String text) {
         GameScreen gameScreen = (GameScreen) ClientGame.getInstance().getScreen();
@@ -444,6 +482,7 @@ public class GameController {
 
     /**
      * HANDLE
+     *
      * @param jsonMessage to handle
      */
     public static void receivePrivateMessage(JSONMessage jsonMessage) {
@@ -460,13 +499,15 @@ public class GameController {
             playerFriendship.addXp(20);
         }
 
-        if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))  gameScreen.showTemporaryMessage(
-            "\"" + message.getSender() + "\" sent you a message!" ,
-            5, Color.GREEN);
+        if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))
+            gameScreen.showTemporaryMessage(
+                "\"" + message.getSender() + "\" sent you a message!",
+                5, Color.GREEN);
     }
 
     /**
      * SEND
+     *
      * @param text message text
      */
     public static void sendPublicMessage(String text) {
@@ -484,6 +525,7 @@ public class GameController {
     /**
      * HANDLE
      * the logic after receiving
+     *
      * @param jsonMessage message
      */
     public static void receivePublicMessage(JSONMessage jsonMessage) {
@@ -495,9 +537,10 @@ public class GameController {
 
         gameScreen.chatDialog.updateMessage(null, message);
 
-        if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))  gameScreen.showTemporaryMessage(
-            "\"" + message.getSender() + "\" tagged you in public chat" ,
-            5, Color.GREEN);
+        if (isTagged(message.getMessage()) && !(gameScreen.chatDialog.isOpen && gameScreen.chatDialog.isPublic()))
+            gameScreen.showTemporaryMessage(
+                "\"" + message.getSender() + "\" tagged you in public chat",
+                5, Color.GREEN);
     }
 
     private static boolean isTagged(String text) {
@@ -518,9 +561,10 @@ public class GameController {
     /**
      * SEND
      * after check that its possible to send a gift it is sent to server to do it
-     * @param player the player to give gift
+     *
+     * @param player     the player to give gift
      * @param entityName name of the gift
-     * @param amount amount of the gift
+     * @param amount     amount of the gift
      */
     public static void giftPlayer(Player player, String entityName, int amount) {
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.update);
@@ -536,6 +580,7 @@ public class GameController {
     /**
      * HANDLE
      * after the server done it, it will send the updates
+     *
      * @param jsonMessage details
      */
     public static void receiveGiftUpdate(JSONMessage jsonMessage) {
@@ -643,7 +688,6 @@ public class GameController {
 
 
     /*************************************************************************************************/
-
 
 
 }

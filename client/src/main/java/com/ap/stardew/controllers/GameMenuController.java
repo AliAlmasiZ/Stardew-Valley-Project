@@ -1052,9 +1052,9 @@ public class GameMenuController implements Controller {
             return new Result(false, "You don't have enough hay!");
         }
 
-        inventory.takeFromInventory("Hay", 1);
-
-        animal.setFedToday(true);
+//        inventory.takeFromInventory("Hay", 1);
+//
+//        animal.setFedToday(true);
 
         return new Result(true, "animal fed successfully");
     }

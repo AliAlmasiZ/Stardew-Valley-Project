@@ -321,7 +321,7 @@ public class GameScreen extends AbstractScreen {
 
             Renderable renderable = entity.getComponent(Renderable.class);
             //update animals:
-            if (entity instanceof Animal) ((Animal) entity).renderUpdate(delta);
+            if (entity instanceof Animal animal) animal.renderUpdate(delta, player.getAnimals().contains(animal));
             if (entity instanceof Player) ((Player) entity).update(delta);
 
             if (renderable.getRenderFunction() != null) {
@@ -825,8 +825,13 @@ public class GameScreen extends AbstractScreen {
                 if (!result.isSuccessful()) {
                     showTemporaryMessage(result.message(), ERROR_MESSAGE_DELAY, Color.RED);
                 } else {
-                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
+                    JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.request);
+                    jsonMessage.put("command", "feed_animal");
+                    jsonMessage.put("animal", animal.getName());
+                    jsonMessage.put("sender", game.getCurrentPlayer().getUsername());
 
+                    ClientApp.sendTCP(jsonMessage);
+//                    animal.getComponent(Renderable.class).setStatue(Renderable.Statue.EATING, 5);
                 }
                 dialog.hide();
             }

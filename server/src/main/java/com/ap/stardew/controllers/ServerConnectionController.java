@@ -159,6 +159,9 @@ public class ServerConnectionController {
                     clientConnection.playerController.rejectMarriage(message);
                     return null;
                 }
+                case "feed_animal" -> {
+                    clientConnection.playerController.feedAnimal(message);
+                }
             }
         }
         if (message.getType() == JSONMessage.Type.cheat) {

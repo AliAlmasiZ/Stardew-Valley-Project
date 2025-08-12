@@ -92,6 +92,22 @@ public class Animal extends Entity implements Serializable {
         isPetToday = petToday;
     }
 
+    public float getTimeLeftToMove() {
+        return timeLeftToMove;
+    }
+
+    public void setTimeLeftToMove(float timeLeftToMove) {
+        this.timeLeftToMove = timeLeftToMove;
+    }
+
+    public Vector2 getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Vector2 destination) {
+        this.destination = destination;
+    }
+
     public boolean isFedToday() {
         return isFedToday;
     }
@@ -206,37 +222,40 @@ public class Animal extends Entity implements Serializable {
         return null;
     }
 
-    public void renderUpdate(float delta) {
+    public void renderUpdate(float delta, boolean isOwner) {
         //movement Update TODO: check that it doesnt go to baghalies
         PositionComponent positionComponent = getComponent(PositionComponent.class);
-        if (timeLeftToMove > 0 && getComponent(Renderable.class).getCurrentStatue() == Renderable.Statue.NORMAL) {
-            timeLeftToMove -= delta;
-            if (timeLeftToMove <= 0) {
-                Vector2 movementVector = new Vector2();
-                movementVector.x = (MathUtils.random() - 0.5f) * 80;
-                movementVector.y = (MathUtils.random() - 0.5f) * 80;
-                destination.x = (float) (positionComponent.getX() + movementVector.x);
-                destination.y = (float) (positionComponent.getY() + movementVector.y);
-                if (movementVector.x > 0) {
-                    getComponent(Renderable.class).setStatue(Renderable.Statue.RIGHT_WALKING, 10000);
-                } else {
-                    getComponent(Renderable.class).setStatue(Renderable.Statue.LEFT_WALKING, 10000);
+        if (isOwner) {
+            if (timeLeftToMove > 0 && getComponent(Renderable.class).getCurrentStatue() == Renderable.Statue.NORMAL) {
+                timeLeftToMove -= delta;
+                if (timeLeftToMove <= 0) {
+                    Vector2 movementVector = new Vector2();
+                    movementVector.x = (MathUtils.random() - 0.5f) * 80;
+                    movementVector.y = (MathUtils.random() - 0.5f) * 80;
+                    destination.x = (float) (positionComponent.getX() + movementVector.x);
+                    destination.y = (float) (positionComponent.getY() + movementVector.y);
+                    if (movementVector.x > 0) {
+                        getComponent(Renderable.class).setStatue(Renderable.Statue.RIGHT_WALKING, 10000);
+                    } else {
+                        getComponent(Renderable.class).setStatue(Renderable.Statue.LEFT_WALKING, 10000);
+                    }
+
                 }
 
+            } else if (timeLeftToMove <= 0) {
+                Position position = positionComponent.get();
+                int moveFactor = 10;
+                Vector2 movementVector = new Vector2();
+                movementVector.x = destination.x - (float) positionComponent.getX();
+                movementVector.y = destination.y - (float) positionComponent.getY();
+                if (movementVector.len() < 0.05f) {
+                    timeLeftToMove = 30;
+                    getComponent(Renderable.class).setStatue(Renderable.Statue.NORMAL, 0);
+                    getComponent(PositionComponent.class).setPosition(destination.x, destination.y);
+                }
+                movementVector.nor();
+                position.add(movementVector.x * delta * moveFactor, movementVector.y * delta * moveFactor);
             }
-
-        } else if (timeLeftToMove <= 0) {
-            Position position = positionComponent.get();
-            int moveFactor = 10;
-            Vector2 movementVector = new Vector2();
-            movementVector.x = destination.x - (float) positionComponent.getX();
-            movementVector.y = destination.y - (float) positionComponent.getY();
-            if (movementVector.len() < 0.1f) {
-                timeLeftToMove = 30;
-                getComponent(Renderable.class).setStatue(Renderable.Statue.NORMAL, 0);
-            }
-            movementVector.nor();
-            position.add(movementVector.x * delta * moveFactor, movementVector.y * delta * moveFactor);
         }
     }
 

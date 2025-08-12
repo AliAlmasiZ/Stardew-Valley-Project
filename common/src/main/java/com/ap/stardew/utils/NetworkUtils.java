@@ -152,6 +152,7 @@ public class NetworkUtils {
         kryo.register(Account.class);
         kryo.register(NPC.class);
         kryo.register(SecurityQuestions.class);
+        kryo.register(Renderable.Statue.class);
 
         kryo.register(Tile.class);
         kryo.register(TiledMap.class);
