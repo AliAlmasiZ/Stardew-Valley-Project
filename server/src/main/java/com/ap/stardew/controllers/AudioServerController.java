@@ -28,14 +28,7 @@ public class AudioServerController {
             return sendFileList(message);
         }
         if (message.getType() == JSONMessage.Type.audio_command) {
-            String command = message.getFromBody("command");
-            switch (command) {
-                case "play_music" -> {
-                    return playMusic(message, client);
-                }
-            }
-
-            return null;
+            return handleAudioCommand(message, client);
         }
         throw new UnsupportedOperationException();
     }
@@ -65,6 +58,44 @@ public class AudioServerController {
         return response;
     }
 
+
+    public static JSONMessage handleAudioCommand(JSONMessage message, ClientConnection client) {
+        String command = message.getFromBody("command");
+        switch (command) {
+            case "play_music" -> {
+                return playMusic(message, client);
+            }
+            case "pause_music" -> {
+                return pauseMusic(client);
+            }
+            case "tune_in" -> {
+                return tuneIn(message.getFromBody("username"), client);
+            }
+            case "tune_out" -> {
+                return tuneOut(client);
+            }
+        }
+
+        return null;
+    }
+
+
+    private static JSONMessage pauseMusic(ClientConnection client) {
+        JSONMessage response = new JSONMessage(JSONMessage.Type.response);
+        if(client.radio.isPlaying.get()) {
+            response.put("result", new Result(true, "music stopped"));
+            client.radio.isPlaying.set(false);
+            JSONMessage stop = new JSONMessage(JSONMessage.Type.audio_command);
+            stop.put("command", "stop_playing");
+            for (ClientConnection listener : client.radio.listeners) {
+                listener.getAudioConnection().sendTCP(stop);
+            }
+        } else {
+            response.put("result", new Result(false, "there is no playing music right now!"));
+        }
+
+        return response;
+    }
 
     private static JSONMessage playMusic(JSONMessage message, ClientConnection client) {
         // TODO : move this better place
@@ -132,8 +163,15 @@ public class AudioServerController {
                         for (ClientConnection client : radio.listeners) {
                             client.getAudioConnection().sendTCP(audioPacket);
                         }
+                        // After sending a full PCM buffer
+                        int numSamplesInBuffer = bufferPos / 2; // 2 bytes per sample (16-bit)
+                        double durationSec = (double) numSamplesInBuffer / frameHeader.frequency();
+                        long sleepMillis = (long) (durationSec * 1000);
+
+                        // sleep for the approximate chunk duration
+                        Thread.sleep(Math.max(10, sleepMillis - 26));
+                        System.out.println(sleepMillis);
                         bufferPos = 0;
-                        Thread.sleep(10);
                     }
                     // Write PCM sample (little-endian)
                     pcmBuffer[bufferPos++] = (byte) (pcmSamples[i] & 0xff);
@@ -155,6 +193,36 @@ public class AudioServerController {
         } catch (IOException | BitstreamException | DecoderException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static JSONMessage tuneIn(String owner, ClientConnection clientConnection) {
+        JSONMessage res = new JSONMessage(JSONMessage.Type.response);
+        for (ClientConnection client : clientConnection.gameThread.getClients()) {
+            if(client.radio.listeners.contains(clientConnection)) {
+                res.put("result", new Result(false, "you should tune out from another radio first!"));
+                return res;
+            }
+        }
+
+        ClientConnection ownerClient = clientConnection.gameThread.getClientByUsername(owner);
+        ownerClient.radio.listeners.add(clientConnection);
+        res.put("result", new Result(true, "Tuned In Successfully"));
+        return res;
+    }
+
+    private static JSONMessage tuneOut(ClientConnection client) {
+        JSONMessage res = new JSONMessage(JSONMessage.Type.response);
+        for (ClientConnection clientConnection : client.gameThread.getClients()) {
+            if(clientConnection.radio.listeners.contains(client)) {
+                clientConnection.radio.listeners.remove(client);
+            }
+        }
+
+        JSONMessage stop = new JSONMessage(JSONMessage.Type.audio_command);
+        stop.put("command", "stop_playing");
+        client.getAudioConnection().sendTCP(stop);
+        res.put("result", new Result(true, "Tuned Out Successfully"));
+        return res;
     }
 
 }

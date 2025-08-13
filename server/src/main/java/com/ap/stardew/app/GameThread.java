@@ -81,7 +81,6 @@ public class GameThread extends Thread{
                     handleUserDisconnection(client);
                 }
             }
-            System.out.println("game is paused");
             synchronized (disconnectedClients) {
                 for (String disconnectedClient : disconnectedClients) {
                     ClientConnection connection = ServerApp.getConnectionByUsername(disconnectedClient);

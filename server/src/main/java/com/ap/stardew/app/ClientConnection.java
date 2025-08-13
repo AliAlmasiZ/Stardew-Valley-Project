@@ -114,6 +114,7 @@ public class ClientConnection {
     }
 
     public void setCurrentAccount(Account currentAccount) {
+        radio = new Radio(currentAccount.getUsername());
         this.currentAccount = currentAccount;
     }
 

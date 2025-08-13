@@ -3,9 +3,6 @@ package com.ap.stardew;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.view.GameAssetManager;
-import com.ap.stardew.models.App;
-import com.ap.stardew.views.AbstractScreen;
-import com.ap.stardew.views.DisconnectionScreen;
 import com.ap.stardew.views.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -13,12 +10,7 @@ import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -29,6 +21,7 @@ public class ClientGame extends Game {
     //music player
     public AudioDevice audioDevice;
     public LinkedBlockingQueue<byte[]> audioQueue;
+    public Thread musicThread;
     private volatile boolean isRunning = true;
 
 
@@ -59,7 +52,8 @@ public class ClientGame extends Game {
 
         setScreen(new MainScreen());
         ClientApp.connectClients();
-        new Thread(this::playAudio).start();
+        musicThread = new Thread(this::playAudio);
+        musicThread.start();
     }
 
     @Override
@@ -82,7 +76,7 @@ public class ClientGame extends Game {
         GameAssetManager.getInstance().characterSpriteManager = new CharacterSpriteManager();
     }
 
-    private void playAudio() {
+    public void playAudio() {
         int bufferSize = 4096 * 4; // ~100ms buffer for 44100 Hz, stereo, 16-bit
         byte[] byteBuffer = new byte[bufferSize];
         int bytePos = 0;
@@ -104,6 +98,10 @@ public class ClientGame extends Game {
                         // Convert little-endian bytes to short
                         samples[i] = (short) ((byteBuffer[i * 2] & 0xff) | (byteBuffer[i * 2 + 1] << 8));
                     }
+                    if(audioDevice == null) {
+                        System.err.println("Error: audio device is null");
+                        continue;
+                    }
                     audioDevice.writeSamples(samples, 0, numSamples);
                     // Shift remaining bytes (if any)
                     int remaining = bytePos - (numSamples * 2);
@@ -121,5 +119,7 @@ public class ClientGame extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+        if(audioDevice != null)
+            audioDevice.dispose();
     }
 }

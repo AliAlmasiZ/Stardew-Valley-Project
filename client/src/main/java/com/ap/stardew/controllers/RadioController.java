@@ -4,17 +4,13 @@ import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.JSONMessage;
-import com.ap.stardew.views.widgets.PopUpMessage;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.AudioDevice;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 import static com.ap.stardew.utils.NetworkUtils.BUFFER_SIZE;
@@ -26,7 +22,24 @@ public class RadioController {
             playAudio(message);
             return null;
         }
+        if(message.getType() == JSONMessage.Type.audio_command) {
+            return handleAudioCommand(message);
+        }
         throw new UnsupportedOperationException();
+    }
+
+    private static JSONMessage handleAudioCommand(JSONMessage message) {
+        String command = message.getFromBody("command");
+        switch (command) {
+            case "stop_playing" -> {
+                ClientGame.getInstance().audioQueue.clear();
+                return null;
+            }
+        }
+
+
+        return null;
+
     }
 
 
