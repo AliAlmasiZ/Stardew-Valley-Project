@@ -98,8 +98,8 @@ public class AudioServerController {
     }
 
     private static JSONMessage playMusic(JSONMessage message, ClientConnection client) {
-        // TODO : move this better place
-        client.radio.listeners.add(client);
+        tuneOut(client);
+        tuneIn(client.player.getUsername(), client);
 
         String musicName = message.getFromBody("music_name");
         client.radio.currentFile = musicName;
