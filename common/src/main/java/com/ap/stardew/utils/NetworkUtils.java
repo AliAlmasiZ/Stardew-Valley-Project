@@ -33,6 +33,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.tiledreader.TiledMap;
 
 import java.util.ArrayList;
@@ -45,9 +46,13 @@ public class NetworkUtils {
     public static final int UDP_PORT = 54777;
     public static final int AUDIO_CHANNEL_TCP = 54556;
     public static final int AUDIO_CHANNEL_UDP = 54778;
-    public static final String HOST = "localhost";
+    public static final String HOST;
     public static final int BUFFER_SIZE = 4 * 1024;
 
+    static {
+        Dotenv dotenv = Dotenv.load();
+        HOST = dotenv.get("HOST", "localhost");
+    }
 
     /**
      * Registers classes for kryo Serialization

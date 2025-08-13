@@ -20,7 +20,6 @@ public class LLMRequest {
         Dotenv dotenv = Dotenv.load();
         apiKey = dotenv.get("METIS_API_KEY");
 
-        System.out.println("API Key : " + apiKey);
 
         model = "gpt-4.1-mini";
         baseUrl = "https://api.metisai.ir/openai/v1/chat/completions";
