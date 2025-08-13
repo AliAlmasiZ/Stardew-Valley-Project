@@ -670,6 +670,9 @@ public class GameController {
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
         jsonMessage.put("command", "update_player_action");
         jsonMessage.put("action", player.getAction());
+        jsonMessage.put("actionItem", player.getActionItem());
+        jsonMessage.put("stateTime", player.getStateTime());
+        jsonMessage.put("lastDir", player.getLastDir());
 
         ClientApp.sendTCP(jsonMessage);
     }

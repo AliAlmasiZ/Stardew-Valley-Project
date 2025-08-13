@@ -1,6 +1,7 @@
 package com.ap.stardew.models.player;
 
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.ConnectionThread;
 import com.ap.stardew.models.NPC.NPC;
 import com.ap.stardew.models.NPC.NpcFriendship;
 import com.ap.stardew.models.Position;
@@ -787,6 +788,9 @@ public class Player extends Entity implements Serializable {
         state.action = this.action; //WTF this piece of shit -> fixed :3
         state.username = this.getUsername();
         state.reaction = this.currentReaction;
+        state.actionItem = this.actionItem;
+        state.stateTime = this.stateTime;
+        state.lastDir = this.lastDir;
         //TODO
 
         return state;
@@ -797,6 +801,9 @@ public class Player extends Entity implements Serializable {
         this.setPosition(state.position.x, state.position.y);
         this.action = state.action;
         this.currentReaction = state.reaction;
+        this.actionItem = state.actionItem;
+        this.stateTime = state.stateTime;
+        this.lastDir = state.lastDir;
     }
 
     public Gender getGender() {
