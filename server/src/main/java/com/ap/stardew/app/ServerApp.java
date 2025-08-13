@@ -39,6 +39,7 @@ public class ServerApp {
         accounts.add(new Account(Gender.MALE, "asd", "a", "a", "s"));
         accounts.add(new Account(Gender.MALE, "asd2", "a", "a", "d"));
         accounts.add(new Account(Gender.MALE, "asd3", "a", "a", "f"));
+        accounts.add(new Account(Gender.MALE, "asd4", "Parsa", "a", "Parsa"));
 
         saveAccounts(accounts);
 

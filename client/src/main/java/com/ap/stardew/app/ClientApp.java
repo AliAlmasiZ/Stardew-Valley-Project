@@ -83,14 +83,14 @@ public class ClientApp {
             @Override
             public void connected(Connection connection) {
                 Gdx.app.postRunnable(()->{
-                    updateNetworkStatus("Game Connected");
+                    updateNetworkStatus("connected");
                 });
             }
 
             @Override
             public void disconnected(Connection connection) {
                 Gdx.app.postRunnable(()->{
-                    updateNetworkStatus("Game Disconnected");
+                    updateNetworkStatus("disconnected");
                 });
             }
 
