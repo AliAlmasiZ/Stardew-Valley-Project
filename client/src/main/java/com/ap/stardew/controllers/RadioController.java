@@ -35,7 +35,7 @@ public class RadioController {
         if(app.audioDevice == null) {
             app.audioDevice = Gdx.audio.newAudioDevice(
                 packet.getFromBody("sample_rate"),
-                packet.getFromBody("cannels", int.class) == 1
+                packet.getFromBody("channels", int.class) == 1
             );
         }
         app.audioQueue.offer(packet.getFromBody("data"));

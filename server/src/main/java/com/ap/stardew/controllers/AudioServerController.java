@@ -9,6 +9,7 @@ import javazoom.jl.decoder.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -72,21 +73,27 @@ public class AudioServerController {
         String musicName = message.getFromBody("music_name");
         client.radio.currentFile = musicName;
         JSONMessage res = new JSONMessage(JSONMessage.Type.response);
+
         try {
-            streamMusic(client.radio);
+            if(!DatabaseManager.audioFileExists(client.radio.ownerUsername, client.radio.currentFile))
+                throw new FileNotFoundException("file doesn't exists");
+            if(client.radio.isPlaying.get()) {
+                throw new IllegalStateException("you should stop previous playing music");
+            }
+            client.gameThread.radioStreamer.execute(() -> streamMusic(client.radio));
             res.put("result", new Result(true, musicName + "played"));
 
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | FileNotFoundException e) {
             res.put("result", new Result(false, e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return res;
     }
 
 
     private static void streamMusic (Radio radio) {
-        if(radio.isPlaying.get()) {
-            throw new IllegalStateException("you should stop previous playing music");
-        }
+
         radio.isPlaying.set(true);
         byte[] musicBytes = DatabaseManager.loadAudioFile(radio.ownerUsername, radio.currentFile);
         if (musicBytes == null)

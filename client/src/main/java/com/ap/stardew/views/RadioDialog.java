@@ -107,13 +107,16 @@ public class RadioDialog extends InGameDialog {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     System.out.println("clicked");
-                    if(textButton.getText().equals("Play") || true) {
-                        System.out.println("playing");
+                    if(textButton.getText().toString().equals("Play")) {
                         JSONMessage request = new JSONMessage(JSONMessage.Type.audio_command);
                         request.put("command", "play_music");
                         request.put("music_name", music);
 
-                        var response = ClientApp.sendAndWaitForAudioResponse(request, 500);
+                        var response = ClientApp.sendAndWaitForAudioResponse(request, 1000);
+                        if(response == null) {
+                            new PopUpMessage("Request Timed out.", PopUpMessage.PopUpMessageType.ERROR_NOTIFICATION).show(gameScreen.uiStage);
+                            return;
+                        }
                         Result result = response.getFromBody("result");
                         if(result.isSuccessful()) {
                             textButton.setText("Pause");
