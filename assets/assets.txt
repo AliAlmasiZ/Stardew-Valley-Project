@@ -4754,6 +4754,11 @@ Content/checkBoxChecked.png
 Content/checkBoxCheckedOver.png
 Content/checkBoxOver.png
 Content/closeButton.png
+Content/connection/.base.png-autosave.kra
+Content/connection/base.png
+Content/connection/pixil-frame-0(1).png
+Content/connection/pixil-frame-0(2).png
+Content/connection/pixil-frame-0(3).png
 Content/coopButton.png
 Content/coopButtonHovered.png
 Content/daybg.png
@@ -4860,7 +4865,6 @@ Content/smallRejectButton.png
 Content/smallTip.png
 Content/storageIcon.png
 Content/success.png
-Content/test.png
 Content/textBox.9.png
 Content/textBox.png
 Content/textboxNinePatch.9.png

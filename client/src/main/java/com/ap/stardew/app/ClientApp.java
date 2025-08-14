@@ -130,9 +130,9 @@ public class ClientApp {
             System.err.println("client already started");
             return;
         }
-        gameClient = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
+        gameClient = new Client(SERVER_BUFFER_SIZE, SERVER_BUFFER_SIZE);
         gameClient.start();
-        audioClient = new Client(1024 * 1024 * 10, 1024 * 1024 * 10);
+        audioClient = new Client(SERVER_BUFFER_SIZE, SERVER_BUFFER_SIZE);
         audioClient.start();
 
         registerClasses();

@@ -48,6 +48,8 @@ public class NetworkUtils {
     public static final int AUDIO_CHANNEL_UDP = 54778;
     public static final String HOST;
     public static final int BUFFER_SIZE = 4 * 1024;
+    public static final int SERVER_BUFFER_SIZE = 20 * 1024 * 1024;
+
 
     static {
         Dotenv dotenv = Dotenv.load();
