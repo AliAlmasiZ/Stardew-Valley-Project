@@ -1,6 +1,7 @@
 package com.ap.stardew.view;
 
 import com.ap.stardew.models.enums.Direction;
+import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.player.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -24,22 +25,22 @@ public class CharacterSpriteManager {
     public static final int FRAME_HEIGHT = 32;
     private static final float FRAME_DURATION = 0.2f;
 
-    private final Texture baseTexture;
+    private final Map<Gender, Texture> baseTexture = new HashMap<>();
     private final Texture hairTexture;
     private final Texture shirtsTexture;
     private final Texture pantsTexture;
 
-    public final Map<Player.Action, Map<Direction, VariableDurationAnimation<TextureRegion>>> animations = new HashMap<>();
+    public final Map<Gender,Map<Player.Action, Map<Direction, VariableDurationAnimation<TextureRegion>>>> animations = new HashMap<>();
+
     public final Map<Player.Action, Map<Direction, VariableDurationAnimation<ToolFrameInfo>>> toolFrames = new HashMap<>();
 
-    private final TextureRegion[][] baseFrames;
+    private final Map<Gender, TextureRegion[][]> baseFrames = new HashMap<>();
     private final TextureRegion[][] hairFrames;
     private final TextureRegion[][] pantFrames;
     private final TextureRegion[][] shirtFrames;
 
     private final Map<Direction, Integer> baseHeight = Map.of(Direction.DOWN, 27, Direction.RIGHT, 28, Direction.UP, 27, Direction.LEFT, 28);
     private final Map<Texture, Pixmap> texturePixmapMap = new HashMap<>();
-
 
     public void exportAnimations(Map<Player.Action, Map<Direction, VariableDurationAnimation<TextureRegion>>> animations) {
         for (Player.Action action : animations.keySet()) {
@@ -101,17 +102,21 @@ public class CharacterSpriteManager {
     public CharacterSpriteManager() {
         GameAssetManager assets = GameAssetManager.getInstance();
 
-        baseTexture = assets.get("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class);
+        baseTexture.put(Gender.MALE, assets.get("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class));
+        baseTexture.put(Gender.FEMALE, assets.get("Content(unpacked)/Characters/Farmer/farmer_base.png", Texture.class));
+
         hairTexture = assets.get("Content(unpacked)/Characters/Farmer/hairstyles.png", Texture.class);
         pantsTexture = assets.get("Content(unpacked)/Characters/Farmer/pants.png", Texture.class);
         shirtsTexture = assets.get("Content(unpacked)/Characters/Farmer/shirts.png", Texture.class);
 
-        baseTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        baseTexture.get(Gender.MALE).setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        baseTexture.get(Gender.FEMALE).setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         hairTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         pantsTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         shirtsTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        baseFrames = TextureRegion.split(baseTexture, FRAME_WIDTH, FRAME_HEIGHT);
+        baseFrames.put(Gender.MALE, TextureRegion.split(baseTexture.get(Gender.MALE), FRAME_WIDTH, FRAME_HEIGHT));
+        baseFrames.put(Gender.FEMALE, TextureRegion.split(baseTexture.get(Gender.FEMALE), FRAME_WIDTH, FRAME_HEIGHT));
         hairFrames = TextureRegion.split(hairTexture, FRAME_WIDTH, FRAME_HEIGHT);
         pantFrames = TextureRegion.split(pantsTexture, FRAME_WIDTH, FRAME_HEIGHT);
         shirtFrames = TextureRegion.split(shirtsTexture, 8, 8);
@@ -244,68 +249,73 @@ public class CharacterSpriteManager {
         loadAnim(direction, action, data, null);
     }
     synchronized private void loadAnim(Direction direction, Player.Action action, String data, String toolAnimData) {
-        Array<TextureRegion> frames = new Array<>();
         Array<Float> durations = new Array<>();
+        float[] durationsArray = new float[3];
+        for (Gender gender : Gender.values()) {
+            durations.clear();
+            durationsArray = null;
 
-        int hair = 0, shirt = 0;
-        boolean[] flip = new boolean[2];
+            Array<TextureRegion> frames = new Array<>();
 
-        switch (direction){
-            case DOWN -> {
-                hair = 0;
-                shirt = 0;
-                flip = new boolean[]{false, true};
+            int hair = 0, shirt = 0;
+            boolean[] flip = new boolean[2];
+
+            switch (direction){
+                case DOWN -> {
+                    flip = new boolean[]{false, true};
+                }
+                case UP -> {
+                    hair = 2;
+                    shirt = 3;
+                    flip = new boolean[]{false, true};
+                }
+                case RIGHT ->{
+                    hair = 1;
+                    shirt = 1;
+                    flip = new boolean[]{false, true};
+                }
+                case LEFT ->{
+                    hair = 1;
+                    shirt = 1;
+                    flip = new boolean[]{true, true};
+                }
             }
-            case UP -> {
-                hair = 2;
-                shirt = 3;
-                flip = new boolean[]{false, true};
+
+            for (String entry : data.split(",")) {
+                entry = entry.trim();
+                String[] parts = entry.split("@");
+
+                int index = Integer.parseInt(parts[0]);
+                float duration = Integer.parseInt(parts[1]) / 1000f;
+                if(action == Player.Action.USING_SCYTHE) duration *= 1.5f;
+
+                int row = index / 6;
+                int column = index % 6;
+
+                TextureRegion frame = loadTexture(gender, direction, action, new int[]{row, column}, new int[]{row, column + ((action == Player.Action.USING_SCYTHE) ? 12 : 6)},
+                    new int[]{shirt, 0}, new int[]{row, column + ((gender == Gender.FEMALE) ? 24 : 0)}, new int[]{hair + ((gender == Gender.FEMALE) ? 9 : 0), 0});
+                frame.flip(flip[0], flip[1]);
+
+                frames.add(frame);
+                durations.add(duration);
             }
-            case RIGHT ->{
-                hair = 1;
-                shirt = 1;
-                flip = new boolean[]{false, true};
+
+
+            durationsArray = new float[durations.size];
+            TextureRegion[] framesArray = new TextureRegion[frames.size];
+
+            for (int i = 0; i < durationsArray.length; i++) {
+                durationsArray[i] = durations.get(i);
             }
-            case LEFT ->{
-                hair = 1;
-                shirt = 1;
-                flip = new boolean[]{true, true};
+            for (int i = 0; i < framesArray.length; i++) {
+                framesArray[i] = frames.get(i);
             }
+
+            VariableDurationAnimation<TextureRegion> animation = new VariableDurationAnimation<>(framesArray, durationsArray);
+            animations.putIfAbsent(gender, new HashMap<>());
+            animations.get(gender).putIfAbsent(action, new HashMap<>());
+            animations.get(gender).get(action).put(direction, animation);
         }
-
-        for (String entry : data.split(",")) {
-            entry = entry.trim();
-            String[] parts = entry.split("@");
-
-            int index = Integer.parseInt(parts[0]);
-            float duration = Integer.parseInt(parts[1]) / 1000f;
-            if(action == Player.Action.USING_SCYTHE) duration *= 1.5f;
-
-            int row = index / 6;
-            int column = index % 6;
-
-            TextureRegion frame = loadTexture(direction, action, new int[]{row, column}, new int[]{row, column + ((action == Player.Action.USING_SCYTHE) ? 12 : 6)},
-                new int[]{shirt, 0}, new int[]{row, column}, new int[]{hair, 0});
-            frame.flip(flip[0], flip[1]);
-
-            frames.add(frame);
-            durations.add(duration);
-        }
-
-
-        float[] durationsArray = new float[durations.size];
-        TextureRegion[] framesArray = new TextureRegion[frames.size];
-
-        for (int i = 0; i < durationsArray.length; i++) {
-            durationsArray[i] = durations.get(i);
-        }
-        for (int i = 0; i < framesArray.length; i++) {
-            framesArray[i] = frames.get(i);
-        }
-
-        VariableDurationAnimation<TextureRegion> animation = new VariableDurationAnimation<>(framesArray, durationsArray);
-        animations.putIfAbsent(action, new HashMap<>());
-        animations.get(action).put(direction, animation);
 
         if(toolAnimData != null){
             ArrayList<ToolFrameInfo> list = new ArrayList<>();
@@ -343,7 +353,7 @@ public class CharacterSpriteManager {
         }
     }
 
-    private TextureRegion loadTexture(Direction direction, Player.Action action, int[] baseBody, int[] baseHand, int[] shirt, int[] pants, int[] hair) {
+    private TextureRegion loadTexture(Gender gender, Direction direction, Player.Action action, int[] baseBody, int[] baseHand, int[] shirt, int[] pants, int[] hair) {
         SpriteBatch fbBatch = new SpriteBatch();
         FrameBuffer fbo = new FrameBuffer(Pixmap.Format.RGBA8888, 16, 32, false);
         fbo.getColorBufferTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -354,10 +364,10 @@ public class CharacterSpriteManager {
 
         fbo.begin();
 
-        int hairY = pixelsFromBottomToTopOpaque(baseFrames[baseBody[0]][baseBody[1]]) - baseHeight.get(direction);
+        int hairY = pixelsFromBottomToTopOpaque(baseFrames.get(gender)[baseBody[0]][baseBody[1]]) - baseHeight.get(direction);
         int hairX = 0;
         if((direction == Direction.RIGHT || direction == Direction.LEFT)){
-            hairX = getHeadPsition(baseFrames[baseBody[0]][baseBody[1]]) - 3;
+            hairX = getHeadPsition(baseFrames.get(gender)[baseBody[0]][baseBody[1]]) - 3;
         }
 
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -365,16 +375,16 @@ public class CharacterSpriteManager {
 
         fbBatch.begin();
 
-        fbBatch.draw(baseFrames[baseBody[0]][baseBody[1]], 0, 0);//body
+        fbBatch.draw(baseFrames.get(gender)[baseBody[0]][baseBody[1]], 0, 0);//body
         fbBatch.setColor(Color.BLUE);
         fbBatch.draw(pantFrames[pants[0]][pants[1]], 0, 0);
         fbBatch.setColor(Color.WHITE);
         fbBatch.draw(shirtFrames[shirt[0]][shirt[1]], 4, hairY + 10);
         fbBatch.setColor(Color.BROWN);
-        fbBatch.draw(hairFrames[hair[0]][hair[1]], hairX,hairY - 1);
+        fbBatch.draw(hairFrames[hair[0]][hair[1]], hairX,hairY - 1  +( (gender == Gender.FEMALE) ? 2 : 0));
         fbBatch.setColor(Color.WHITE);
 
-        fbBatch.draw(baseFrames[baseHand[0]][baseHand[1]], 0, 0); //hand
+        fbBatch.draw(baseFrames.get(gender)[baseHand[0]][baseHand[1]], 0, 0); //hand
         fbBatch.setColor(Color.WHITE);
 
         fbBatch.end();
@@ -392,14 +402,14 @@ public class CharacterSpriteManager {
         return new TextureRegion(texture);
     }
 
-    public TextureRegion getFrame(float stateTime, Vector2 dir, Player.Action action) {
+    public TextureRegion getFrame(float stateTime, Vector2 dir, Player.Action action, Gender gender) {
         if(action.equals(Player.Action.IDLE))
-            return animations.get(Player.Action.WALKING).get(Direction.getDirection(dir)).getKeyFrame(0, true);
+            return animations.get(gender).get(Player.Action.WALKING).get(Direction.getDirection(dir)).getKeyFrame(0, true);
 
-        return animations.get(action).get(Direction.getDirection(dir)).getKeyFrame(stateTime, true);
+        return animations.get(gender).get(action).get(Direction.getDirection(dir)).getKeyFrame(stateTime, true);
     }
 
     public float getAnimationDuration(Vector2 dir, Player.Action action){
-        return animations.get(action).get(Direction.getDirection(dir)).getDuration();
+        return animations.get(Gender.MALE).get(action).get(Direction.getDirection(dir)).getDuration();
     }
 }

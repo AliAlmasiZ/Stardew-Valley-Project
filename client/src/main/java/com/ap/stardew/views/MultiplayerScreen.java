@@ -6,8 +6,12 @@ import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.dto.SavedGameDetails;
+import com.ap.stardew.views.managers.ActorAnimManager;
+import com.ap.stardew.views.managers.TransitionManager;
 import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.PopUpMessage;
+import com.ap.stardew.views.widgets.TransformWidgetWrapper;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -16,12 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
+import javax.swing.plaf.ToolBarUI;
 import java.util.ArrayList;
 
 public class MultiplayerScreen extends AbstractMenuScreen {
-    private List<String> lobbyList; //LibGdx list
+    private Table lobbyList;
     private ScrollPane scrollPane;
-    private Button hostNewGameBtn, hostSavedGame, joinBtn, joinByIdBtn,  refreshBtn, backBtn;
 
     private ArrayList<LobbyInfo> availableLobbies = new ArrayList<>();
 
@@ -29,73 +33,66 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         super();
         setupUI();
 
-        fetchLobbies();
+//        fetchLobbies();
     }
 
     public void setupUI() {
-        rootTable.add(new Label("Available Lobbies", customSkin)).padBottom(20).colspan(4).row();
-
-        lobbyList = new List<>(customSkin);
-        scrollPane = new ScrollPane(lobbyList, customSkin);
+        Table mainTable = new Table();
+        Table lobbiesTable = new Table();
+        lobbyList = new Table();
+        scrollPane = new ScrollPane(lobbyList);
         scrollPane.setFadeScrollBars(false);
 
-        hostNewGameBtn = new TextButton("Host New Game", customSkin);
-        joinBtn = new TextButton("Join Game", customSkin);
-        joinByIdBtn = new TextButton("Join by ID", customSkin);
-        refreshBtn = new TextButton("Refresh", customSkin);
-        backBtn = new Button(customSkin, "back");
-        hostSavedGame = new TextButton("Host Saved Game", customSkin);
+        TextButton joinByIdBtn  = new TextButton("Join", customSkin);
+        TextButton refreshBtn   = new TextButton("Refresh", customSkin);
+        TransformWidgetWrapper<Button> backBtn          = new TransformWidgetWrapper<>(new Button(customSkin, "backDown"));
 
-        rootTable.add(scrollPane).colspan(6).grow().pad(10).row();
-        rootTable.add(hostNewGameBtn).pad(10);
-        rootTable.add(hostSavedGame).pad(10);
-        rootTable.add(joinBtn).pad(10);
-        rootTable.add(joinByIdBtn).pad(10);
-        rootTable.add(refreshBtn).pad(10);
-        rootTable.add(backBtn).pad(10);
+        TextField lobbyIdField = new TextField("", customSkin);
+        TextField lobbyPasswordField = new TextField("", customSkin);
+        lobbyIdField.setMessageText("Lobby id");
+        lobbyPasswordField.setMessageText("Lobby password");
+        lobbyPasswordField.setPasswordCharacter('*');
+        lobbyPasswordField.setPasswordMode(true);
 
-        /* --- Listeners --- */
-        hostNewGameBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                showHostNewGameDialog();
-            }
-        });
-        hostSavedGame.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                showHostSavedGameDialog();
-            }
-        });
-        joinBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                int selectedIndex = lobbyList.getSelectedIndex();
-                if(selectedIndex != -1) {
-                    LobbyInfo selectedLobby = availableLobbies.get(selectedIndex);
-                    if(selectedLobby.isPrivate()) {
-                        showJoinPrivateLobbyDialog(selectedLobby);
-                        return;
-                    }
+        Table leftTable = new Table();
+        Table rightTable = new Table();
 
-                    JSONMessage response = joinLobby(selectedLobby.getLobbyId(), null);
-                    System.out.println("dhdhd" + response.getBody());
-                    Result result = response.getFromBody("result");
-                    if(result.isSuccessful()) {
-                        ClientGame.getInstance().setScreen(new LobbyScreen(response.getFromBody("lobby_info"), false));
-                        dispose();
-                    }
-                    else {
-                        //TODO : show error
-                    }
+        leftTable.setBackground(customSkin.getDrawable("1221"));
+        rightTable.setBackground(customSkin.getDrawable("0110"));
 
-                }
-            }
-        });
+        mainTable.defaults().spaceBottom(5);
+        mainTable.add(lobbiesTable).row();
+        lobbiesTable.add(leftTable).growY();
+        lobbiesTable.add(rightTable).growY();
+
+        leftTable.add(refreshBtn).expandX().left().spaceBottom(2 ).row();
+        leftTable.add(scrollPane).grow().size(200, 150);
+
+        rightTable.defaults().pad(2);
+        rightTable.top();
+        rightTable.add(lobbyIdField).width(60).row();
+        rightTable.add(lobbyPasswordField).width(60).row();
+        rightTable.add(joinByIdBtn).growX().row();
+        mainTable.add(backBtn);
+
+        rootTable.add(mainTable);
+
+        ActorAnimManager.addVerticalElastic(backBtn, true);
+
         joinByIdBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                showJoinByIdDialog();
+                String lobbyId = lobbyIdField.getText();
+                if (!lobbyId.trim().isEmpty()) {
+                    JSONMessage response = joinLobby(lobbyId, lobbyPasswordField.getText());
+                    Result result = response.getFromBody("result");
+                    if(result.isSuccessful()) {
+                        ClientGame.getInstance().setScreen(new LobbyScreen(response.getFromBody("lobby_info"), false, MultiplayerScreen.class));
+                        dispose();
+                    } else {
+                        //TODO : show Error ressult.message
+                    }
+                }
             }
         });
         refreshBtn.addListener(new ClickListener() {
@@ -107,220 +104,18 @@ public class MultiplayerScreen extends AbstractMenuScreen {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                parallaxBackground.move(300, 4, Interpolation.smoother);
-                rootTable.addAction(Actions.sequence(
-                    Actions.moveBy(0, -300, 4, Interpolation.smoother),
-                    Actions.run(()->{
-                        MainMenuScreen mainMenuScreen = new MainMenuScreen();
-                        mainMenuScreen.enterAnim();
-                        ClientGame.getInstance().setScreen(mainMenuScreen);
-                    })
-                ));
-                dispose();
+                MainMenuScreen mainMenuScreen = new MainMenuScreen();
+                mainMenuScreen.getUiStage().addAction(
+                    Actions.sequence(
+                        Actions.run(() -> mainMenuScreen.prepareForAnim(false)),
+                        Actions.delay(4),
+                        Actions.run(() -> mainMenuScreen.enterAnim(false, false))
+                    )
+                );
+                TransitionManager.verticalTransition(mainMenuScreen, MultiplayerScreen.this, -500, 4, Interpolation.smoother);
+                return;
             }
         });
-    }
-
-    private void showHostSavedGameDialog(){
-        JSONMessage request = new JSONMessage(JSONMessage.Type.command);
-        request.put("command", "getSavedGames");
-        request.put("token", ClientApp.getToken());
-
-        JSONMessage jsonMessage = ClientApp.sendAndWaitForResponse(request, 2000);
-
-        if(jsonMessage == null || jsonMessage.getFromBody("result") == null || jsonMessage.getFromBody("games") == null){
-            new PopUpMessage("failed to retrieve saved games").show(AbstractMenuScreen.getFrontStage());
-            return;
-        }
-        if(!jsonMessage.getFromBody("result", Result.class).isSuccessful()){
-            new PopUpMessage(jsonMessage.getFromBody("result", Result.class).message()).show(AbstractMenuScreen.getFrontStage());
-            return;
-        }
-        if(jsonMessage.getFromBody("games", ArrayList.class).isEmpty()){
-            new PopUpMessage("you have no saved games").show(AbstractMenuScreen.getFrontStage());
-            return;
-        }
-
-        InGameDialog dialog = new InGameDialog(uiStage);
-        Table gamesTable = new Table();
-        gamesTable.top();
-        ScrollPane scrollPane1 = new ScrollPane(gamesTable);
-        scrollPane1.setFadeScrollBars(false);
-        scrollPane1.setFlickScroll(false);
-        scrollPane1.setOverscroll(false, false);
-        scrollPane1.setForceScroll(false, true);
-
-        ArrayList<SavedGameDetails> games = jsonMessage.getFromBody("games");
-        for (int i = 0; i < games.size(); i++) {
-            SavedGameDetails game = games.get(i);
-            Label dateLabel = new Label(game.inGameDate, customSkin);
-            Label playersLabel = new Label("", customSkin);
-            Label goldLabel = new Label(Integer.toString(game.gold.get(ClientApp.getUsername())), customSkin, "inventoryQuantity");
-            Label farmLabel = new Label(game.farms.get(ClientApp.getUsername()), customSkin, "black");
-
-            Button button = new Button(customSkin, "play");
-            button.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    JSONMessage request = new JSONMessage(JSONMessage.Type.lobby_command);
-                    request.put("command", "hostSavedGame");
-                    request.put("host_username", ClientApp.getUsername());
-                    request.put("saved_game_id", game.gameId);
-
-                    JSONMessage response = ClientApp.sendAndWaitForResponse(request, 1000);
-
-                    if(response == null || response.getFromBody("result") == null){
-                        new PopUpMessage("failed to create lobby").show(AbstractScreen.getFrontStage());
-                        return;
-                    }
-
-                    if(response.getFromBody("lobby_info") == null || !response.getFromBody("result",Result.class).isSuccessful()){
-                        new PopUpMessage(response.getFromBody("result",Result.class).message()).show(AbstractScreen.getFrontStage());
-                        return;
-                    }
-
-                    LobbyScreen lobbyScreen = new LobbyScreen(response.getFromBody("lobby_info"), true);
-                    dispose();
-                    ClientGame.getInstance().setScreen(lobbyScreen);
-                }
-            });
-
-            StringBuilder playersString = new StringBuilder();
-            for (int j = 0; j < game.players.size(); j++) {
-                playersString.append(game.players.get(j));
-                if(j != game.players.size() - 1){
-                    playersString.append(", ");
-                }
-            }
-            playersLabel.setText(playersString.toString());
-            playersLabel.setColor(ColorPalette.green);
-            farmLabel.setFontScale(0.2f);
-            dateLabel.setFontScale(0.24f);
-            playersLabel.setFontScale(0.2f);
-            dateLabel.setFontScale(0.2f);
-            goldLabel.setColor(ColorPalette.yellow);
-            dateLabel.setColor(ColorPalette.orange);
-
-            goldLabel.setFontScale(1);
-
-            Table gameTable = new Table();
-            Table leftTable = new Table();
-            Table middleTable = new Table();
-            Table rightTable = new Table();
-
-            rightTable.bottom();
-            leftTable.top();
-
-
-            gameTable.defaults().spaceRight(2);
-            middleTable.defaults().spaceBottom(4).spaceRight(2);
-            leftTable.add(new Label((i+1) + ".", customSkin, "big"){{setColor(ColorPalette.red); setAlignment(Align.top);}
-            }).top();
-            middleTable.add(new Label("Game with: ", customSkin, "black"){{setFontScale(0.24f);}}).left();
-            middleTable.add(playersLabel);
-            middleTable.add(farmLabel).expandX().right();
-            middleTable.row();
-            middleTable.add(dateLabel).expandX().left().colspan(2);
-            middleTable.add(new Table(){
-                {
-                    add(new Image(customSkin.getDrawable("goldCoin"))).size(8, 8).spaceRight(1);
-                    add(goldLabel).center();
-                }
-            });
-            rightTable.add(button).bottom();
-
-            gameTable.add(leftTable);
-            gameTable.add(middleTable).growX();
-            gameTable.add(rightTable);
-
-            gameTable.setBackground(customSkin.getDrawable("savedGameBox"));
-            gamesTable.add(gameTable).spaceBottom(1).growX().row();
-        }
-
-//        dialog.showCloseButton(false);
-        dialog.add(scrollPane1).grow().maxSize(300, 100).top();
-        dialog.setBackground(customSkin.getDrawable("frameNinePatch2"));
-        dialog.show(0, 100);
-    }
-
-    private void showHostNewGameDialog() {
-        InGameDialog dialog = new InGameDialog(uiStage);
-        dialog.showCloseButton(false);
-        Table contentTable = new Table();
-        Table buttonTable = new Table();
-
-        TextField nameField = new TextField("", customSkin);
-        nameField.setMessageText("Lobby Name");
-        TextField passwordField = new TextField("", customSkin);
-        passwordField.setMessageText("Password (optional)");
-        passwordField.setPasswordMode(true);
-        passwordField.setPasswordCharacter('*');
-        CheckBox visibleCheckbox = new CheckBox(" Visible to others", customSkin); // add to custom skin
-        visibleCheckbox.setChecked(true);
-
-        Label maxPlayersLabel = new Label("Max Players", customSkin);
-        SelectBox<Integer> maxPlayersSelectBox = new SelectBox<>(customSkin);
-        maxPlayersSelectBox.setItems(2,3,4);
-        maxPlayersSelectBox.setSelected(2);
-
-
-        TextButton confirmButton = new TextButton("Create", customSkin);
-        TextButton cancelButton = new TextButton("Cancel", customSkin);
-
-        contentTable.pad(20);
-        contentTable.add(nameField).colspan(3).growX().padBottom(10).row();
-        contentTable.add(passwordField).colspan(3).growX().padBottom(10).row();
-        contentTable.add(maxPlayersLabel).pad(10);
-        contentTable.add(maxPlayersSelectBox).pad(10);
-        contentTable.add(visibleCheckbox).right().padBottom(20).row();
-
-        buttonTable.add(confirmButton).pad(10);
-        buttonTable.add(cancelButton).pad(10);
-
-        confirmButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                String name = nameField.getText();
-                String password = passwordField.getText();
-                boolean isVisible = visibleCheckbox.isChecked();
-
-                if (!name.isEmpty()) {
-                    JSONMessage message = new JSONMessage(JSONMessage.Type.lobby_command);
-                    message.put("command", "host");
-                    message.put("lobby_name", name);
-                    message.put("host_username", ClientApp.getUsername());
-                    message.put("max_players", maxPlayersSelectBox.getSelected().intValue());
-                    message.put("password", password);
-                    message.put("is_visible", isVisible);
-
-                    JSONMessage response = ClientApp.sendAndWaitForResponse(message, 5000);
-                    LobbyInfo lobbyInfo = response.getFromBody("lobby_info");
-                    if(lobbyInfo == null)
-                        return;
-
-                    ClientGame.getInstance().setScreen(new LobbyScreen(lobbyInfo, true));
-
-                    dialog.hide();
-                    dispose();
-                }
-            }
-        });
-
-        cancelButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dialog.hide();
-            }
-        });
-
-
-        dialog.add(contentTable).row();
-        dialog.add(buttonTable);
-        contentTable.pack();
-        buttonTable.pack();
-
-        dialog.setBackground(customSkin.getDrawable("bigButtonNinePatch"));
-        dialog.show();
     }
 
     private void showJoinPrivateLobbyDialog(LobbyInfo lobby) {
@@ -351,8 +146,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
 
                 Result result = response.getFromBody("result");
                 if(result.isSuccessful()) {
-                    ClientGame.getInstance().setScreen(new LobbyScreen(lobby, false));
-                    dispose();
+                    ClientGame.getInstance().setScreen(new LobbyScreen(lobby, false, MultiplayerScreen.class));
                 } else {
                     //TODO : show error
                 }
@@ -398,7 +192,7 @@ public class MultiplayerScreen extends AbstractMenuScreen {
                     JSONMessage response = joinLobby(lobbyId, passField.getText());
                     Result result = response.getFromBody("result");
                     if(result.isSuccessful()) {
-                        ClientGame.getInstance().setScreen(new LobbyScreen(response.getFromBody("lobby_info"), false));
+                        ClientGame.getInstance().setScreen(new LobbyScreen(response.getFromBody("lobby_info"), false, MultiplayerScreen.class));
                         dispose();
                     } else {
                         //TODO : show Error ressult.message
@@ -447,15 +241,50 @@ public class MultiplayerScreen extends AbstractMenuScreen {
     }
 
     private void updateLobbyList() {
-        Array<String> lobbyNames = new Array<>();
+        lobbyList.clearChildren();
+        lobbyList.top();
         for (LobbyInfo lobby : availableLobbies) {
-            lobbyNames.add(String.format("%s (%d/%d) - Host: %s",
-                lobby.getLobbyName(),
-                lobby.getCurrentPlayers(),
-                lobby.getMaxPlayers(),
-                lobby.getHostUsername()
-            ));
+            Table lobbyTable = new Table();
+            lobbyTable.setBackground(customSkin.getDrawable("savedGameBox"));
+
+            Label hostName = new Label(lobby.getHostUsername(), customSkin);
+            Label lobbyName = new Label(lobby.getLobbyName(), customSkin, "big");
+            Label players = new Label(lobby.getCurrentPlayers() + "/" + lobby.getMaxPlayers(), customSkin);
+            TransformWidgetWrapper<Button> playButton = new TransformWidgetWrapper<>(new Button(customSkin, "play"));
+
+            hostName.setColor(ColorPalette.green);
+            lobbyName.setColor(ColorPalette.red);
+            players.setColor(Color.BLACK);
+
+            lobbyTable.add(lobbyName).expandX().left();
+            lobbyTable.add(hostName).expandX();
+            lobbyTable.add(players).expandX();
+            lobbyTable.add(playButton).expandX().right();
+
+            playButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(lobby.isPrivate()) {
+                        showJoinPrivateLobbyDialog(lobby);
+                        return;
+                    }
+
+                    JSONMessage response = joinLobby(lobby.getLobbyId(), null);
+                    Result result = response.getFromBody("result");
+                    if(result.isSuccessful()) {
+                        LobbyScreen lobbyScreen = new LobbyScreen(response.getFromBody("lobby_info"), false, MultiplayerScreen.class);
+                        boolean toRight = false;
+                        if(lobby.getSavedGameDetails() != null) toRight = true;
+                        TransitionManager.horizontalTransition(lobbyScreen, MultiplayerScreen.this, toRight, 1.5f, Interpolation.smoother);
+                    }
+                    else {
+                        //TODO : show error
+                    }
+
+                }
+            });
+
+            lobbyList.add(lobbyTable).growX().spaceBottom(2).row();
         }
-        lobbyList.setItems(lobbyNames);
     }
 }

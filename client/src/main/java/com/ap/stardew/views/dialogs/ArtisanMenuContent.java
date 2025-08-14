@@ -1,14 +1,13 @@
-package com.ap.stardew.views;
+package com.ap.stardew.views.dialogs;
 
-import com.ap.stardew.app.GameController;
 import com.ap.stardew.controllers.GameMenuController;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.crafting.Recipe;
-import com.ap.stardew.models.crafting.RecipeType;
 import com.ap.stardew.models.entities.Entity;
 import com.ap.stardew.models.entities.components.inventory.Inventory;
 import com.ap.stardew.models.entities.workstations.ArtisanComponent;
 import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.InventoryGrid;
 import com.ap.stardew.views.widgets.PopUpMessage;
@@ -29,30 +28,32 @@ public class ArtisanMenuContent extends Table {
     private final GameMenuController controller;
     private final Label remainingTimeLabel;
     private final TextButton getProductBtn;
+    private final Skin customSkin;
 
     public ArtisanMenuContent(GameScreen gameScreen, Entity artisanEntity) {
         this.gameScreen = gameScreen;
         this.artisanEntity = artisanEntity;
         this.artisanComponent = artisanEntity.getComponent(ArtisanComponent.class);
         this.controller = new GameMenuController();
+        customSkin = GameAssetManager.getInstance().getCustomSkin();
 
         top().left().pad(5);
         defaults().pad(2).align(Align.left);
 
-        Label titleLabel = new Label("Artisan: " + artisanEntity.getEntityName(), gameScreen.customSkin);
+        Label titleLabel = new Label("Artisan: " + artisanEntity.getEntityName(), customSkin);
         titleLabel.setColor(Color.WHITE);
         add(titleLabel).growX().row();
 
         if(artisanComponent.isInProcess()) {
-            Label processLabel = new Label("Current Process:", gameScreen.customSkin);
+            Label processLabel = new Label("Current Process:", customSkin);
             processLabel.setColor(Color.YELLOW);
             add(processLabel).growX().row();
 
-            this.remainingTimeLabel = new Label("", gameScreen.customSkin);
+            this.remainingTimeLabel = new Label("", customSkin);
             this.remainingTimeLabel.setColor(Color.ORANGE);
             add(this.remainingTimeLabel).growX().row();
 
-            this.getProductBtn = new TextButton("Get Product", gameScreen.customSkin);
+            this.getProductBtn = new TextButton("Get Product", customSkin);
             this.getProductBtn.setDisabled(!this.artisanComponent.isProcessFinished());
             add(this.getProductBtn).growX().padTop(10).row();
 
@@ -72,7 +73,7 @@ public class ArtisanMenuContent extends Table {
             this.remainingTimeLabel = null;
             this.getProductBtn = null;
 
-            Label title = new Label(artisanEntity.getEntityName() + "Recipes", gameScreen.customSkin);
+            Label title = new Label(artisanEntity.getEntityName() + "Recipes", customSkin);
             title.setColor(Color.CYAN);
             add(title).growX().row();
 
@@ -88,7 +89,7 @@ public class ArtisanMenuContent extends Table {
                 image.setScaling(Scaling.fit);
 
                 Table recipeBtn = new Table();
-                recipeBtn.setBackground(gameScreen.customSkin.getDrawable("frameNinePatch2"));
+                recipeBtn.setBackground(customSkin.getDrawable("frameNinePatch2"));
                 recipeBtn.add(image).width(32).height(32).pad(5);
 
                 recipeTable.add(recipeBtn).size(60, 60).pad(2);
@@ -97,7 +98,7 @@ public class ArtisanMenuContent extends Table {
                 ToolTip toolTip = new ToolTip(recipeBtn);
                 String labelText = recipe.getName() + "\n" + recipe.getDay() + "days, " + recipe.getHour() + "hours";
                 labelText += "\n" + recipe.toString();
-                Label toolTipLabel = new Label(labelText, gameScreen.customSkin);
+                Label toolTipLabel = new Label(labelText, customSkin);
                 toolTip.add(toolTipLabel);
 
 
@@ -112,10 +113,10 @@ public class ArtisanMenuContent extends Table {
                             icon = new Image(GameAssetManager.getInstance().error);
 
                         PopUpMessage popUp = new PopUpMessage();
-                        Label label = new Label(result.message(), gameScreen.customSkin);
+                        Label label = new Label(result.message(), customSkin);
                         popUp.add(icon).size(16,16).pad(5);
                         popUp.add(label).pad(10);
-                        popUp.show(gameScreen.uiStage);
+                        popUp.show(gameScreen.getUiStage());
                     }
 
                     @Override
@@ -135,10 +136,10 @@ public class ArtisanMenuContent extends Table {
                 }
             }
 
-            ScrollPane scrollPane = new ScrollPane(recipeTable, gameScreen.customSkin);
+            ScrollPane scrollPane = new ScrollPane(recipeTable, customSkin);
 
             Table inventoryPanel = new Table();
-            inventoryPanel.setBackground(gameScreen.customSkin.getDrawable("frameNinePatch2"));
+            inventoryPanel.setBackground(customSkin.getDrawable("frameNinePatch2"));
             inventoryPanel.add(new InventoryGrid(gameScreen.player.getComponent(Inventory.class), 10)).grow();
             add(scrollPane).colspan(2).fillX().height(200).row();
             add(inventoryPanel).colspan(2).grow().padTop(10);

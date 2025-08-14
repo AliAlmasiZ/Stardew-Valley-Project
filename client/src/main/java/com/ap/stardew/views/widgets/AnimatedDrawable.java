@@ -2,6 +2,7 @@ package com.ap.stardew.views.widgets;
 
 import com.ap.stardew.view.VariableDurationAnimation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 

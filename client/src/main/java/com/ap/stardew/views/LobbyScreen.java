@@ -10,17 +10,21 @@ import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
 import com.ap.stardew.utils.TiledMapUtils;
 import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.managers.TransitionManager;
 import com.ap.stardew.views.widgets.MapActor;
 import com.ap.stardew.views.widgets.PopUpMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+
+import java.util.ArrayList;
 
 
 public class LobbyScreen extends AbstractMenuScreen{
@@ -35,10 +39,13 @@ public class LobbyScreen extends AbstractMenuScreen{
     private TextButton startGameBtn, readyBtn, leaveBtn;
     private MapActor mapActor;
 
-    public LobbyScreen(LobbyInfo lobby, boolean isHost) {
+    private final Class<? extends AbstractMenuScreen> prevScreen;
+
+    public LobbyScreen(LobbyInfo lobby, boolean isHost, Class<? extends AbstractMenuScreen> prevScreen) {
         super();
         this.currentLobby = lobby;
         this.isHost = isHost;
+        this.prevScreen = prevScreen;
 
         setupUI();
         updatePlayerList();
@@ -196,8 +203,32 @@ public class LobbyScreen extends AbstractMenuScreen{
                 req.put("token", ClientApp.getToken());
 
                 System.out.println(ClientApp.sendAndWaitForResponse(req, 500));
-                ClientGame.getInstance().setScreen(new MultiplayerScreen());
-                dispose();
+
+                if(prevScreen == MultiplayerScreen.class){
+                    TransitionManager.horizontalTransition(new MultiplayerScreen(), LobbyScreen.this, true, 1.5f, Interpolation.smoother);
+                }else if(prevScreen == NewGameScreen.class){
+                    TransitionManager.verticalTransition(new NewGameScreen(), LobbyScreen.this, -500, 4f, Interpolation.smoother);
+                }else if(prevScreen == LoadGameScreen.class){
+                    JSONMessage request = new JSONMessage(JSONMessage.Type.command);
+                    request.put("command", "getSavedGames");
+                    request.put("token", ClientApp.getToken());
+
+                    JSONMessage respond = ClientApp.sendAndWaitForResponse(request, 2000);
+
+                    if(respond == null || respond.getFromBody("result") == null || respond.getFromBody("games") == null){
+                        new PopUpMessage("failed to retrieve saved games").show(AbstractMenuScreen.getFrontStage());
+                        TransitionManager.verticalTransition(new MainMenuScreen(), LobbyScreen.this, -500, 4f, Interpolation.smoother);
+                    }
+                    if(!respond.getFromBody("result", Result.class).isSuccessful()){
+                        new PopUpMessage(respond.getFromBody("result", Result.class).message()).show(AbstractMenuScreen.getFrontStage());
+                        TransitionManager.verticalTransition(new MainMenuScreen(), LobbyScreen.this, -500, 4f, Interpolation.smoother);
+                    }
+                    if(respond.getFromBody("games", ArrayList.class).isEmpty()){
+                        new PopUpMessage("you have no saved games").show(AbstractMenuScreen.getFrontStage());
+                        TransitionManager.verticalTransition(new MainMenuScreen(), LobbyScreen.this, -500, 4f, Interpolation.smoother);
+                    }
+                    TransitionManager.verticalTransition(new LoadGameScreen(respond.getFromBody("games")), LobbyScreen.this, -500, 4f, Interpolation.smoother);
+                }
             }
         });
     }

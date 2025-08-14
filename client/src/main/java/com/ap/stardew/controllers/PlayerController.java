@@ -149,6 +149,7 @@ public class PlayerController implements InputProcessor {
                     player.setAction(Player.Action.HARVESTING);
                     player.setActionItem(hoveredEntity1);
                     player.setLastDir(cursorPos.cpy().sub(player.getPosition().cpy()));
+                    GameController.sendActionUpdate(player);
                     return true;
                 }
             }
@@ -175,6 +176,8 @@ public class PlayerController implements InputProcessor {
                 }
                 player.setActionItem(entity);
                 player.setLastDir(cursorPos.cpy().sub(player.getPosition().cpy()));
+                GameController.sendActionUpdate(player);
+
             }
 
             Placeable placeable = entity.getComponent(Placeable.class);
@@ -191,6 +194,7 @@ public class PlayerController implements InputProcessor {
                 entity.getComponent(Pickable.class).changeStackSize(-1);
                 player.setAction(Player.Action.HARVESTING);
                 player.setActionItem(entity);
+                GameController.sendActionUpdate(player);
             }
         }
 
@@ -328,11 +332,8 @@ public class PlayerController implements InputProcessor {
                 player.setAction(Player.Action.WALKING);
             }else{
                 if(player.getAction() == Player.Action.WALKING){
-                    JSONMessage message = new JSONMessage(JSONMessage.Type.player_input_command);
-                    message.put("command", "update_player_action");
-                    message.put("action", Player.Action.IDLE);
-                    ClientApp.sendTCP(message);
                     player.setAction(Player.Action.IDLE);
+                    GameController.sendActionUpdate(player);
                 }
             }
         }

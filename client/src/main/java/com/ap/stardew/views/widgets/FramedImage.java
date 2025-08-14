@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import org.w3c.dom.Text;
 
@@ -19,13 +20,13 @@ public class FramedImage extends Table {
     protected Stack stack;
     protected Table frameTable;
 
-    public FramedImage(TextureRegion frameTexture, TextureRegion imageTexture, float padPercent) {
-        frame = new Image(frameTexture);
+    public FramedImage(Drawable frameDrawable, Drawable imageDrawable){
+        frame = new Image(frameDrawable);
 
-        if(imageTexture == null){
+        if(imageDrawable == null){
             image = new Image((TextureRegion) null);
         }else {
-            image = new Image(imageTexture);
+            image = new Image(imageDrawable);
         }
         stack = new Stack();
         Table imageTable = new Table();
@@ -42,6 +43,9 @@ public class FramedImage extends Table {
         imageTable.add(image).center().pad(0, 1, 1, 0);
 
         add(stack).grow();
+    }
+    public FramedImage(TextureRegion frameTexture, TextureRegion imageTexture, float padPercent) {
+        this(new TextureRegionDrawable(frameTexture), (imageTexture != null) ?  new TextureRegionDrawable(imageTexture) : null);
     }
     public FramedImage(Texture frameTexture, Texture imageTexture, float padPercent){
         this(new TextureRegion(frameTexture), new TextureRegion(imageTexture), padPercent);

@@ -80,6 +80,7 @@ public class GameAssetManager extends AssetManager {
     private HashMap<String, Sprite> normalSprite = new HashMap<>();
 
     public final ShaderProgram outlineShader;
+    public final ShaderProgram gradientShader;
 
     public final float ppiX, ppiY;
 
@@ -90,6 +91,10 @@ public class GameAssetManager extends AssetManager {
         outlineShader = new ShaderProgram(
             Gdx.files.internal("shaders/outline.vert"),
             Gdx.files.internal("shaders/outline.frag")
+        );
+        gradientShader = new ShaderProgram(
+            Gdx.files.internal("shaders/gradient.vert"),
+            Gdx.files.internal("shaders/gradient.frag")
         );
 
         for (Texture texture : customSkin.getAtlas().getTextures()) {
@@ -444,5 +449,13 @@ public class GameAssetManager extends AssetManager {
             sprites[i] = new Sprite(tiles[0][i]);
         }
         return sprites;
+    }
+
+    public HashMap<String, Animation<Sprite>> getWalkingAnimation() {
+        return walkingAnimation;
+    }
+
+    public HashMap<String, Animation<Sprite>> getPetAnimation() {
+        return petAnimation;
     }
 }

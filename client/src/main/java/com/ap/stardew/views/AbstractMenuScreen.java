@@ -1,6 +1,7 @@
 package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
+import com.ap.stardew.views.widgets.paralaxBackground.ParallaxBackground;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -56,5 +57,9 @@ public class AbstractMenuScreen extends AbstractScreen {
     @Override
     public void dispose() {
         uiStage.dispose();
+    }
+
+    public static ParallaxBackground getParallaxBackground() {
+        return parallaxBackground;
     }
 }
