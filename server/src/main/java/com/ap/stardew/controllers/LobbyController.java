@@ -58,7 +58,6 @@ public class LobbyController {
     static public JSONMessage createSavedGameLobby(JSONMessage request) {
         JSONMessage response = new JSONMessage(JSONMessage.Type.response);
 
-        String name = request.getFromBody("lobby_name");
         String hostUsername = request.getFromBody("host_username");
         int gameId = request.getFromBody("saved_game_id");
 
@@ -72,7 +71,7 @@ public class LobbyController {
         }
 
         AccountInfo accountInfo = new AccountInfo(hostUsername);
-        Lobby lobby = new Lobby(name, accountInfo, savedGameDetails);
+        Lobby lobby = new Lobby(hostUsername + "'s saved game", accountInfo, savedGameDetails);
 
         ClientConnection connection = ServerApp.getConnectionByUsername(hostUsername);
 

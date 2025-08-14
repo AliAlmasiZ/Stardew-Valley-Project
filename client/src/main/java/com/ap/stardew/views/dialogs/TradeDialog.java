@@ -1,4 +1,4 @@
-package com.ap.stardew.views;
+package com.ap.stardew.views.dialogs;
 
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.app.GameController;

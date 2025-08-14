@@ -1,7 +1,7 @@
 package com.ap.stardew.views.widgets;
 
 import com.ap.stardew.models.player.reaction.Emoji;
-import com.ap.stardew.views.spriteManagers.EmojiSpriteManager;
+import com.ap.stardew.views.managers.EmojiSpriteManager;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class EmojiImage extends Image {

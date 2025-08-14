@@ -1,11 +1,8 @@
 package com.ap.stardew.app;
 
 import com.ap.stardew.ClientGame;
-import com.ap.stardew.controllers.GameMenuController;
-import com.ap.stardew.controllers.GameStaticController;
 import com.ap.stardew.models.*;
 import com.ap.stardew.models.animal.Animal;
-import com.ap.stardew.models.animal.AnimalType;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.entities.Renderable;
 import com.ap.stardew.models.entities.components.PositionComponent;
@@ -16,8 +13,7 @@ import com.ap.stardew.models.player.Message;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.friendship.PlayerFriendship;
 import com.ap.stardew.views.GameScreen;
-import com.ap.stardew.views.LobbyScreen;
-import com.ap.stardew.views.TradeDialog;
+import com.ap.stardew.views.dialogs.TradeDialog;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.views.*;
 import com.ap.stardew.views.widgets.PopUpMessage;
@@ -32,7 +28,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Json;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -670,6 +665,14 @@ public class GameController {
         JSONMessage jsonMessage = new JSONMessage(JSONMessage.Type.command);
         jsonMessage.put("command", "update_player_action");
         jsonMessage.put("action", player.getAction());
+
+        if(player.getActionItem() != null){
+            Entity newItem = player.getActionItem().clone();
+            newItem.removeComponent(PositionComponent.class);
+            jsonMessage.put("actionItem", newItem);
+        }
+        jsonMessage.put("stateTime", player.getStateTime());
+        jsonMessage.put("lastDir", player.getLastDir());
 
         ClientApp.sendTCP(jsonMessage);
     }

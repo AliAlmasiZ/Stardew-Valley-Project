@@ -9,10 +9,15 @@ import com.ap.stardew.models.Account;
 import com.ap.stardew.models.App;
 import com.ap.stardew.models.Result;
 import com.ap.stardew.models.enums.SecurityQuestions;
+import com.ap.stardew.views.managers.ActorAnimManager;
+import com.ap.stardew.views.managers.TransitionManager;
 import com.ap.stardew.views.widgets.InGameDialog;
 import com.ap.stardew.views.widgets.PopUpMessage;
+import com.ap.stardew.views.widgets.TransformWidgetWrapper;
 import com.ap.stardew.views.widgets.ValidatedTextField;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -20,30 +25,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginScreen extends AbstractMenuScreen{
-    private ValidatedTextField usernameTextfield;
-    private ValidatedTextField passwordTextfield;
-    private TextButton submitButton;
-    private TextButton forgotPassworBtn;
-    private TextButton backBtn;
-    private Table mainBox;
-
     LoginMenuController controller = new LoginMenuController();
 
     public LoginScreen(){
         super();
-
-        //Todo this is ashghal
-        if(!ClientApp.isConnected()){
-            ClientApp.connectClients();
-        }
-
-        if(!ClientApp.isConnected()) {
-            ClientGame.getInstance().setScreen(new MainScreen());
-            dispose();
-            return;
-        }
-
-        mainBox = new Table();
+        Table mainBox = new Table();
         mainBox.center();
         mainBox.pack();
         mainBox.setSize(400, 200);
@@ -51,59 +37,63 @@ public class LoginScreen extends AbstractMenuScreen{
         Table textFieldBox = new Table();
         textFieldBox.setBackground(customSkin.getDrawable("frameNinePatch2"));
 
-        usernameTextfield = new ValidatedTextField(customSkin, new NonEmptyValidator());
-        passwordTextfield = new ValidatedTextField(customSkin, new NonEmptyValidator());
+        ValidatedTextField usernameTextField = new ValidatedTextField(customSkin, new NonEmptyValidator());
+        ValidatedTextField passwordTextField = new ValidatedTextField(customSkin, new NonEmptyValidator());
 
-        submitButton = new TextButton("login", customSkin, "big");
-        forgotPassworBtn = new TextButton("forgot password", customSkin);
-        backBtn = new TextButton("back", customSkin, "big");
+        TransformWidgetWrapper<TextButton> submitButtonWrapper = new TransformWidgetWrapper<>(new TextButton("login", customSkin, "big"));
+        TransformWidgetWrapper<Button> backButtonWrapper       = new TransformWidgetWrapper<>(new Button(customSkin, "backLeft"));
 
-        backBtn.getLabel().setFontScale(0.35f);
+        TextButton forgotPasswordBtn = new TextButton("forgot password", customSkin);
 
-        mainBox.add(backBtn).left().spaceBottom(5).row();
-        textFieldBox.add(usernameTextfield).fillX().spaceBottom(5).row();
-        textFieldBox.add(passwordTextfield).fillX().spaceBottom(5).row();
-        textFieldBox.add(forgotPassworBtn).center().row();
+        mainBox.add(backButtonWrapper).left().spaceBottom(5).row();
+        textFieldBox.add(usernameTextField).fillX().spaceBottom(5).row();
+        textFieldBox.add(passwordTextField).fillX().spaceBottom(5).row();
+        textFieldBox.add(forgotPasswordBtn).center().row();
         mainBox.add(textFieldBox).spaceBottom(5).row();
-        mainBox.add(submitButton).center().growX().pad(0, 3, 0, 3).row();
+        mainBox.add(submitButtonWrapper).growX().pad(0, 3, 0, 3).row();
 
         rootTable.add(mainBox);
 
-        backBtn.addListener(new ClickListener(){
+        ActorAnimManager.addHorizontalElastic(backButtonWrapper, false);
+        ActorAnimManager.addRotateAction(submitButtonWrapper, 1);
+
+        backButtonWrapper.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ClientGame.getInstance().setScreen(new MainScreen());
+                TransitionManager.horizontalTransition(new MainScreen(), LoginScreen.this, false, 1, Interpolation.smoother);
             }
         });
-        submitButton.addListener(new ClickListener(){
+        submitButtonWrapper.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(!usernameTextfield.validateText() || !passwordTextfield.validateText()){
-                    usernameTextfield.ping();
-                    passwordTextfield.ping();
+                if(!usernameTextField.validateText() || !passwordTextField.validateText()){
+                    usernameTextField.ping();
+                    passwordTextField.ping();
                     return;
                 }
-                Result result = controller.login(usernameTextfield.getText(), passwordTextfield.getText(), true);
+                Result result = controller.login(usernameTextField.getText(), passwordTextField.getText(), true);
                 if(result.isSuccessful()){
-                    //TEMP:
-                    ClientGame.getInstance().setScreen(new MultiplayerScreen());
-
-//                    MainMenuScreen mainMenuScreen = new MainMenuScreen();
-//                    mainMenuScreen.enterAnim();
-//                    ClientGame.getInstance().setScreen(mainMenuScreen);
-
+                    MainMenuScreen mainMenuScreen = new MainMenuScreen();
+                    mainMenuScreen.getUiStage().addAction(
+                        Actions.sequence(
+                            Actions.run(() -> mainMenuScreen.prepareForAnim(true)),
+                            Actions.delay(4),
+                            Actions.run(() -> mainMenuScreen.enterAnim(true, true))
+                        )
+                    );
+                    TransitionManager.verticalTransition(mainMenuScreen, LoginScreen.this, 300, 4, Interpolation.smoother);
                     return;
                 }
                 if(result.message().equals("username doesn't exist")){
-                    usernameTextfield.setMessage("Username doesnt exist");
+                    usernameTextField.setMessage("Username doesnt exist");
                 }else if(result.message().equals("incorrect password")){
-                    passwordTextfield.setMessage("incorrect password");
+                    passwordTextField.setMessage("incorrect password");
                 }else{
                     new PopUpMessage("failed to login").show(AbstractScreen.getFrontStage());
                 }
             }
         });
-        forgotPassworBtn.addListener(new ClickListener(){
+        forgotPasswordBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 showForgotPasswordDialogPhase1();

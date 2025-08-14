@@ -45,31 +45,34 @@ public class ClientConnectionController {
                     return null;
                 }
                 case "players_update" -> { //players movement update
-//                    String username = message.getFromBody("username");
-//                    float delta = message.getFromBody("delta_time");
-//                    Vector2 direction = message.getFromBody("direction");
-//
-//                    if(ClientApp.getUsername().equals(username)) {
-//                        return null;
-//                    }
-//                    Player player = ClientApp.getActiveGame().getPlayerByUsername(username);
-//                    Tile destTile = player.getCurrentMap().
-//                        getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
-//                    Entity entity;
-//                    if ((entity = destTile.getContent()) != null) {
-//                        if(entity instanceof Door door){
-//                            EntityPlacementSystem.placeOnMap(player, door.getDestination(), door.getDestination().getMap());
-//                        }
-//                    }
-//
-//                    player.move(direction, delta);
-//                    player.setAction(Player.Action.WALKING);
-//
+                    Gdx.app.postRunnable(()->{
+                        String username = message.getFromBody("username");
+                        float delta = message.getFromBody("delta_time");
+                        Vector2 direction = message.getFromBody("direction");
+
+                        if(ClientApp.getUsername().equals(username)) {
+                            return;
+                        }
+                        Player player = ClientApp.getActiveGame().getPlayerByUsername(username);
+                        Tile destTile = player.getCurrentMap().
+                            getTileByPosition(player.getPosition().cpy().add(direction.x, direction.y));
+                        Entity entity;
+                        if ((entity = destTile.getContent()) != null) {
+                            if(entity instanceof Door door){
+                                EntityPlacementSystem.placeOnMap(player, door.getDestination(), door.getDestination().getMap());
+                            }
+                        }
+
+                        player.move(direction, delta);
+                        player.setAction(Player.Action.WALKING);
+                    });
+
                     return null;
                 }
                 case "update_player" -> {
                     PlayerState state = message.getFromBody("state");
                     if(state == null) return null;
+                    if(state.username.equals(ClientApp.getUsername())) return null;
                     Player player = ClientApp.getActiveGame().getPlayerByUsername(state.username);
                     player.loadFromState(state);
                     return null;

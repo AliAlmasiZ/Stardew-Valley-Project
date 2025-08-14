@@ -18,6 +18,12 @@
 		"markupEnabled": false,
 		"flip": false
 	},
+	"khodayaBaseDige2": {
+		"file": "khodayaBaseDige.fnt",
+		"scaledSize": 5,
+		"markupEnabled": false,
+		"flip": false
+	},
 	"svbold2": {
 		"file": "svbold(2).fnt",
 		"scaledSize": 13,
@@ -37,6 +43,12 @@
 		"g": 0.5647059,
 		"b": 0.5647059,
 		"a": 1
+	},
+	"RGBA_206_82_82_138": {
+		"r": 0.80784315,
+		"g": 0.32156864,
+		"b": 0.32156864,
+		"a": 0.5449438
 	},
 	"RGBA_206_82_82_255": {
 		"r": 0.80784315,
@@ -58,15 +70,6 @@
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable": {
-	"textboxNinePatch": {
-		"patch": "textboxNinePatch",
-		"minWidth": 48,
-		"minHeight": 15,
-		"leftWidth": 5,
-		"rightWidth": 3,
-		"topHeight": 3,
-		"bottomHeight": 3
-	},
 	"bigButtonHovered2": {
 		"patch": "bigButtonHovered2",
 		"minWidth": 50,
@@ -109,6 +112,14 @@
 		"minHeight": 1
 	}
 },
+"com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable": {
+	"mountains1Tiled": {
+		"region": "mountains1",
+		"color": "RGBA_255_255_255_255",
+		"minWidth": 639,
+		"minHeight": 148
+	}
+},
 "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
 	"default": {
 		"up": "buttonUp",
@@ -144,6 +155,37 @@
 		"up": "playButton",
 		"down": "playButton",
 		"over": "playButtonOver"
+	},
+	"coop": {
+		"up": "coopButton",
+		"over": "coopButtonHovered"
+	},
+	"random": {
+		"up": "randomIcon"
+	},
+	"backLeft": {
+		"up": "backButtonLeft",
+		"over": "backButtonLeftHovered"
+	},
+	"smallPlus": {
+		"up": "smallPlusButton",
+		"over": "smallPlusOver"
+	},
+	"smallMinus": {
+		"up": "smallMinus",
+		"over": "smallMinusOver"
+	},
+	"backDown": {
+		"up": "backButtonDown",
+		"over": "backButtonDownHovered"
+	},
+	"logoutDown": {
+		"up": "logoutDown",
+		"over": "logoutDownHovered"
+	},
+	"info": {
+		"up": "infoButton",
+		"over": "infoButtonOver"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
@@ -180,6 +222,11 @@
 	"black": {
 		"parent": "default",
 		"fontColor": "RGBA_0_0_0_255"
+	},
+	"borderLessTextField": {
+		"font": "khodayaBaseDige",
+		"fontColor": "RGBA_247_221_76_255",
+		"background": "borderLessTextField"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
@@ -242,10 +289,12 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
 	"default": {
-		"font": "khodayaBaseDige",
+		"font": "khodayaBaseDige2",
 		"fontColor": "RGBA_255_255_255_255",
-		"background": "textboxNinePatch",
-		"cursor": "curser"
+		"background": "textBox",
+		"cursor": "curser",
+		"selection": "sliderFill",
+		"messageFontColor": "RGBA_206_82_82_138"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {

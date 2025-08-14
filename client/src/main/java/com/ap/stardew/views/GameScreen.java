@@ -36,9 +36,9 @@ import com.ap.stardew.models.shop.ShopProduct;
 import com.ap.stardew.models.records.EntityResult;
 import com.ap.stardew.view.ToolFrameInfo;
 import com.ap.stardew.view.VariableDurationAnimation;
-import com.ap.stardew.views.dialogs.ReactionDialog;
-import com.ap.stardew.views.dialogs.ReactionEditDialog;
-import com.ap.stardew.views.spriteManagers.EmojiSpriteManager;
+import com.ap.stardew.views.dialogs.*;
+import com.ap.stardew.views.managers.EmojiSpriteManager;
+import com.ap.stardew.views.managers.MapRenderManager;
 import com.ap.stardew.views.widgets.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -468,7 +468,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void renderPlayer(Player player, Batch batch){
-        TextureRegion frame = GameAssetManager.getInstance().characterSpriteManager.getFrame(player.getStateTime(), player.getLastDir(), player.getAction());
+        TextureRegion frame = GameAssetManager.getInstance().characterSpriteManager.getFrame(player.getStateTime(), player.getLastDir(), player.getAction(), Gender.FEMALE);
         if(player.getCurrentReaction() != null){
             Reaction currentReaction = player.getCurrentReaction();
             if(currentReaction.emoji != null){

@@ -65,14 +65,14 @@ public class PlayerController {
     }
 
     public void handleChangeAction(JSONMessage message){
-        Player.Action action = message.getFromBody("action");
-
-        player.setAction(action);
+        player.setAction(message.getFromBody("action"));
+        player.setActionItem(message.getFromBody("actionItem"));
+        player.setStateTime(message.getFromBody("stateTime"));
+        player.setLastDir(message.getFromBody("lastDir"));
 
         JSONMessage updateMessage = new JSONMessage(JSONMessage.Type.update);
-        updateMessage.put("command", "update_player_action");
-        updateMessage.put("username", player.getUsername());
-        updateMessage.put("action", action);
+        updateMessage.put("command", "update_player");
+        updateMessage.put("state", player.getPlayerState());
         ClientConnection.gameThread.sendAllTCP(updateMessage);
     }
     public void handleReactionChange(JSONMessage message){

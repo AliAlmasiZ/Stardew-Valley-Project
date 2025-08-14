@@ -1,4 +1,4 @@
-package com.ap.stardew.views.spriteManagers;
+package com.ap.stardew.views.managers;
 
 import com.ap.stardew.models.player.reaction.Emoji;
 import com.ap.stardew.view.VariableDurationAnimation;

@@ -4,15 +4,24 @@ import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.App;
+import com.ap.stardew.models.enums.Gender;
 import com.ap.stardew.models.enums.SecurityQuestions;
 import com.ap.stardew.models.Result;
-import com.badlogic.gdx.Gdx;
+import com.ap.stardew.models.player.Player;
+import com.ap.stardew.view.GameAssetManager;
+import com.ap.stardew.views.managers.ActorAnimManager;
+import com.ap.stardew.views.managers.TransitionManager;
+import com.ap.stardew.views.widgets.LabelMessage;
+import com.ap.stardew.views.widgets.TransformWidgetWrapper;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 public class SignupScreen extends AbstractMenuScreen {
@@ -22,131 +31,170 @@ public class SignupScreen extends AbstractMenuScreen {
     private TextField confirmPassword;
     private TextField name;
     private TextField email;
-    SelectBox<String> gender;
+    private Image portrait;
 
-
-    private TextButton randomPasswordButton;
-    private TextButton registerButton;
-    private TextButton backButton;
-    private Label message;
-
+    String selectedCity = "male"; // :)
 
     public SignupScreen() {
         super();
         controller = new LoginMenuController();
-        float fieldWidth = Gdx.graphics.getWidth() * 0.2f;
 
-        username = new TextField("", customSkin);
-        username.setMessageText("Username");
-//        username.setWidth(fieldWidth);
-        password = new TextField("", customSkin);
-        password.setMessageText("Password");
-//        password.setWidth(fieldWidth);
+        Table mainBox      = new Table();
+        Table textFieldBox = new Table();
+        textFieldBox.setBackground(customSkin.getDrawable("frameNinePatch2"));
+
         confirmPassword = new TextField("", customSkin);
+        username        = new TextField("", customSkin);
+        password        = new TextField("", customSkin);
+        name            = new TextField("", customSkin);
+        email           = new TextField("", customSkin);
+
+        username.setMessageText("Username");
+        password.setMessageText("Password");
         confirmPassword.setMessageText("Confirm Password");
-//        confirmPassword.setWidth(fieldWidth);
-        name = new TextField("", customSkin);
         name.setMessageText("Name");
-        email = new TextField("", customSkin);
         email.setMessageText("Email");
-//        email.setWidth(fieldWidth);
-        gender = new SelectBox<>(customSkin);
-        String[] genders = {"male", "female"};
-        SignupScreen.this.gender.setItems(genders);
 
-        randomPasswordButton = new TextButton("Random Password", customSkin);
-        registerButton = new TextButton("Register", customSkin);
-        backButton = new TextButton("Back", customSkin);
+        portrait = new Image(GameAssetManager.getInstance().characterSpriteManager.getFrame(0, new Vector2(0, -1), Player.Action.IDLE, Gender.FEMALE));
 
-        message = new Label("", customSkin);
-        message.setVisible(false);
+        TransformWidgetWrapper<Image> randomPasswordTable        = new TransformWidgetWrapper<>(new Image(customSkin.getDrawable("randomIcon")));
+        TransformWidgetWrapper<Button> backButtonWrapper         = new TransformWidgetWrapper<>(new Button(customSkin, "back"));
+        TransformWidgetWrapper<TextButton> registerButtonWrapper = new TransformWidgetWrapper<>(new TextButton("Register", customSkin, "big"));
+        TransformWidgetWrapper<Image> femaleWrapper              = new TransformWidgetWrapper<>(new Image(customSkin.getDrawable("maleIcon")));
+        TransformWidgetWrapper<Image> maleWrapper                = new TransformWidgetWrapper<>(new Image(customSkin.getDrawable("femaleIcon")));
 
-        float padFromLabel = 0.1f;
+        mainBox.defaults().spaceBottom(5);
 
-        rootTable.add(message).pad(30);
-        rootTable.row();
-        rootTable.add(new Label("Username:", customSkin)).padBottom(padFromLabel);
-        rootTable.row();
-        rootTable.add(username)/*.width(fieldWidth)*/;
-        rootTable.row();
-        rootTable.add(new Label("Password:", customSkin)).padBottom(padFromLabel);
-        rootTable.row();
-        rootTable.add(password)/*.width(fieldWidth)*/;
-        rootTable.add(randomPasswordButton).pad(15);
-        rootTable.row();
-        rootTable.add(new Label("Confirm Password:", customSkin)).padBottom(padFromLabel);
-        rootTable.row();
-        rootTable.add(confirmPassword)/*.width(fieldWidth)*/;
-        rootTable.row();
-        rootTable.add(new Label("Name", customSkin)).padBottom(padFromLabel);
-        rootTable.row();
-        rootTable.add(name)/*.width(fieldWidth)*/;
-        rootTable.row();
-        rootTable.add(new Label("Email:", customSkin)).padBottom(padFromLabel);
-        rootTable.row();
-        rootTable.add(email)/*.width(fieldWidth)*/;
-        rootTable.row();
-        rootTable.add(new Label("Gender:", customSkin));
-        rootTable.row();
-        rootTable.add(gender);
-        rootTable.row();
-        rootTable.add(registerButton).pad(20);
-        rootTable.row();
-        rootTable.add(backButton).pad(20);
+        Table leftTable   = new Table();
+        Table rightTable  = new Table();
+        Table bottomTable = new Table();
+        leftTable.defaults().spaceBottom(2);
 
+        mainBox.add(backButtonWrapper).right().row();
+        mainBox.add(textFieldBox).row();
+        textFieldBox.add(leftTable).spaceRight(3);
+        textFieldBox.add(rightTable).grow().row();
+        leftTable.defaults().growX();
+        leftTable.add(username).row();
+        leftTable.add(name).row();
+        leftTable.add(email).row();
+        leftTable.add(bottomTable).row();
+        bottomTable.add(password).spaceRight(2);
+        bottomTable.add(randomPasswordTable);
+        leftTable.add(confirmPassword).row();
+        rightTable.add(new Table(){{setBackground(customSkin.getDrawable("daybg"));add(portrait);}}).expand().top().colspan(2).expand().row();
+        rightTable.add(femaleWrapper);
+        rightTable.add(maleWrapper);
+        mainBox.add(registerButtonWrapper).growX().pad(0, 3, 0, 3).row();
+        rootTable.add(mainBox);
 
-
-        // Add change listener
-        SignupScreen.this.gender.addListener(new ChangeListener() {
+        femaleWrapper.addListener(new ClickListener(){
             @Override
-            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                String selectedCity = SignupScreen.this.gender.getSelected();
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if(pointer != -1) return;
+                femaleWrapper.getActor().addAction(
+                    Actions.sequence(
+                        Actions.moveBy(2, 2, 0.3f, Interpolation.exp5Out)
+                    )
+                );
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if(pointer != -1) return;
+                femaleWrapper.getActor().addAction(
+                    Actions.sequence(
+                        Actions.moveBy(-2, -2, 0.2f, Interpolation.swingOut)
+                    )
+                );
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                femaleWrapper.getActor().addAction(
+                    Actions.sequence(
+                        Actions.scaleTo(1.1f, 1.1f, 0.2f, Interpolation.swingOut),
+                        Actions.scaleTo(1, 1, 0.2f, Interpolation.swingOut)
+                    )
+                );
+
+                selectedCity = "female";
+                portrait.setDrawable(new TextureRegionDrawable(GameAssetManager.getInstance().characterSpriteManager.getFrame(0, new Vector2(0, -1), Player.Action.IDLE, Gender.FEMALE)));
+            }
+        });
+        maleWrapper.addListener(new ClickListener(){
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if(pointer != -1) return;
+                maleWrapper.getActor().addAction(
+                    Actions.sequence(
+                        Actions.moveBy(0, 2, 0.3f, Interpolation.exp5Out)
+                    )
+                );
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if(pointer != -1) return;
+                maleWrapper.getActor().addAction(
+                    Actions.sequence(
+                        Actions.moveBy(0, -2, 0.2f, Interpolation.swingOut)
+                    )
+                );
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                maleWrapper.getActor().addAction(
+                    Actions.sequence(
+                        Actions.scaleTo(1.1f, 1.1f, 0.2f, Interpolation.swingOut),
+                        Actions.scaleTo(1, 1, 0.2f, Interpolation.swingOut)
+                    )
+                );
+
+                selectedCity = "male";
+                portrait.setDrawable(new TextureRegionDrawable(GameAssetManager.getInstance().characterSpriteManager.getFrame(0, new Vector2(0, -1), Player.Action.IDLE, Gender.MALE)));
             }
         });
 
-        registerButton.addListener(new ClickListener() {
+        ActorAnimManager.addRotateAction(registerButtonWrapper, 1);
+        registerButtonWrapper.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Result isNewUsername = controller.suggestUsername(username.getText());
                 if (!isNewUsername.isSuccessful()) {
+                    new LabelMessage(username, "You should choose a new username! We filled new one for you!", customSkin){{setColor(ColorPalette.red);}}.show();
                     username.setText(isNewUsername.message());
-                    message.setColor(Color.RED);
-                    message.setVisible(true);
-                    message.setText("You should choose a new username! We filled new one for you!");
                     return;
                 }
 
                 Result result = controller.register(username.getText(), password.getText(), confirmPassword.getText(),
-                        name.getText(), email.getText(), gender.getSelected());
+                        name.getText(), email.getText(), selectedCity);
 
                 if (!result.isSuccessful()) {
-                    message.setColor(Color.RED);
-                    message.setVisible(true);
-                    message.setText(result.message());
+                    new LabelMessage(registerButtonWrapper.getActor(), result.message(), customSkin){{setColor(ColorPalette.red);}}.show();
                     return;
                 }
 
-                message.setVisible(false);
                 showSecurityQuestionDialog();
             }
         });
 
-        randomPasswordButton.addListener(new ClickListener() {
+        ActorAnimManager.addWiggle(randomPasswordTable);
+        randomPasswordTable.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 password.setText(LoginMenuController.generatePassword());
             }
         });
 
-        backButton.addListener(new ClickListener() {
+        ActorAnimManager.addHorizontalElastic(backButtonWrapper, true);
+        backButtonWrapper.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ClientGame.getInstance().setScreen(new MainScreen());
+                TransitionManager.horizontalTransition(new MainScreen(), SignupScreen.this, true, 1, Interpolation.smoother);
             }
         });
-
-
-
     }
 
     public void showSecurityQuestionDialog() {

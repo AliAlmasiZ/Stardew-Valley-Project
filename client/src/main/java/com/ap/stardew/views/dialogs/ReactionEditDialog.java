@@ -4,7 +4,7 @@ import com.ap.stardew.app.GameController;
 import com.ap.stardew.models.player.Player;
 import com.ap.stardew.models.player.reaction.Emoji;
 import com.ap.stardew.view.GameAssetManager;
-import com.ap.stardew.views.spriteManagers.EmojiSpriteManager;
+import com.ap.stardew.views.managers.EmojiSpriteManager;
 import com.ap.stardew.views.GameScreen;
 import com.ap.stardew.views.widgets.AnimatedDrawable;
 import com.ap.stardew.views.widgets.EmojiImage;

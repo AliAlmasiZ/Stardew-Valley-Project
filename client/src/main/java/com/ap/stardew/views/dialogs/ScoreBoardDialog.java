@@ -1,4 +1,4 @@
-package com.ap.stardew.views;
+package com.ap.stardew.views.dialogs;
 
 import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.models.enums.SkillType;
@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.Collections;

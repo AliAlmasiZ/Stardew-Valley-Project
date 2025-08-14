@@ -1,6 +1,5 @@
-package com.ap.stardew.views;
+package com.ap.stardew.views.managers;
 
-import com.ap.stardew.models.App;
 import com.ap.stardew.models.gameMap.GameMap;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;

@@ -1,5 +1,6 @@
 package com.ap.stardew.view;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Arrays;
@@ -17,6 +18,17 @@ public class VariableDurationAnimation<T> {
         this.frameDurations = frameDurations;
 
         for (float d : frameDurations) totalDuration += d;
+    }
+    public VariableDurationAnimation(Animation<T> animation) {
+        this.keyFrames = animation.getKeyFrames();
+        this.frameDurations = new float[animation.getKeyFrames().length];
+
+
+        for (int i = 0; i < frameDurations.length; i++) {
+            frameDurations[i] = animation.getFrameDuration();
+        }
+
+        totalDuration = animation.getAnimationDuration();
     }
 
     public T getKeyFrame(float stateTime, boolean looping) {

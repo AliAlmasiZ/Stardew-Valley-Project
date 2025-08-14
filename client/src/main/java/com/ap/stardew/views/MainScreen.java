@@ -2,22 +2,15 @@ package com.ap.stardew.views;
 
 import com.ap.stardew.ClientGame;
 import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.models.Account;
-import com.ap.stardew.models.App;
-import com.ap.stardew.models.Game;
-import com.ap.stardew.app.ClientApp;
-import com.ap.stardew.app.GameController;
 import com.ap.stardew.controllers.LoginMenuController;
 import com.ap.stardew.models.*;
 import com.ap.stardew.models.LobbyInfo;
 import com.ap.stardew.models.dto.JSONMessage;
 import com.ap.stardew.models.gameMap.MapRegion;
 import com.ap.stardew.models.gameMap.WorldMap;
-import com.ap.stardew.models.player.Player;
-import com.ap.stardew.models.records.GameStartingDetails;
+import com.ap.stardew.views.managers.TransitionManager;
 import com.ap.stardew.views.widgets.PopUpMessage;
 import com.ap.stardew.utils.TiledMapUtils;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -61,8 +54,7 @@ public class MainScreen extends AbstractMenuScreen {
         registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ClientGame.getInstance().setScreen(new SignupScreen());
-                dispose();
+                TransitionManager.horizontalTransition(new SignupScreen(), MainScreen.this, false, 1, Interpolation.smoother);
             }
         });
 
@@ -74,7 +66,8 @@ public class MainScreen extends AbstractMenuScreen {
                     new PopUpMessage("You should be connected to the server").show(getFrontStage());
                     return;
                 }
-                ClientGame.getInstance().setScreen(new LoginScreen());
+
+                TransitionManager.horizontalTransition(new LoginScreen(), MainScreen.this, true, 1, Interpolation.smoother);
             }
         });
 
@@ -86,7 +79,7 @@ public class MainScreen extends AbstractMenuScreen {
                     Actions.moveBy(0, -300, 4, Interpolation.smoother),
                     Actions.run(()->{
                         MainMenuScreen mainMenuScreen = new MainMenuScreen();
-                        mainMenuScreen.enterAnim();
+                        mainMenuScreen.enterAnim(true, true);
                         ClientGame.getInstance().setScreen(mainMenuScreen);
                     })
                 ));
@@ -130,7 +123,7 @@ public class MainScreen extends AbstractMenuScreen {
                 if(lobbyInfo == null)
                     return;
 
-                ClientGame.getInstance().setScreen(new LobbyScreen(lobbyInfo, true));
+                ClientGame.getInstance().setScreen(new LobbyScreen(lobbyInfo, true, MultiplayerScreen.class));
 
                 WorldMap worldMap = TiledMapUtils.getRegionData("./Content(unpacked)/Maps/untitled.tmx");
                 MapRegion region = null;

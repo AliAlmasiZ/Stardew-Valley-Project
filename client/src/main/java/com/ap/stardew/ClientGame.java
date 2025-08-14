@@ -4,6 +4,8 @@ import com.ap.stardew.app.ClientApp;
 import com.ap.stardew.view.CharacterSpriteManager;
 import com.ap.stardew.view.GameAssetManager;
 import com.ap.stardew.views.MainScreen;
+import com.ap.stardew.models.App;
+import com.ap.stardew.views.*;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
@@ -48,7 +50,6 @@ public class ClientGame extends Game {
         loadDatas();
         instance = this;
         batch = new SpriteBatch();
-
 
         setScreen(new MainScreen());
         ClientApp.connectClients();

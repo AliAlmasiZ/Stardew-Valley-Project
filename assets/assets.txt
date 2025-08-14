@@ -3595,6 +3595,7 @@ Content(unpacked)/TileSheets/weapons.png
 Content(unpacked)/TileSheets/wizard_furniture.png
 Content(unpacked)/TileSheets/wizard_furnitureFront.png
 Content(unpacked)/VolcanoLayouts/Layouts.png
+Content/.backButtonHovered.png-autosave.kra
 Content/Animal/chicken/Brown Chicken.png
 Content/Animal/chicken/eating.png
 Content/Animal/chicken/idle.png
@@ -3659,6 +3660,7 @@ Content/BorderedTable/0220.png
 Content/BorderedTable/1111.png
 Content/BorderedTable/1122.9.png
 Content/BorderedTable/1122.png
+Content/BorderedTable/1221.9.png
 Content/BorderedTable/1221.png
 Content/BorderedTable/1222.9.png
 Content/BorderedTable/1222.png
@@ -4730,13 +4732,19 @@ Content/Workstations/OilMaker.png
 Content/Workstations/PC _ Computer - Stardew Valley - Tilesets - Craftables.png
 Content/Workstations/PreservesJar.png
 Content/backButton.png
+Content/backButtonDown.png
+Content/backButtonDownHovered.png
 Content/backButtonHovered.png
+Content/backButtonLeft.png
+Content/backButtonLeftHovered.png
 Content/bigButton.png
 Content/bigButton2.9.png
 Content/bigButtonHovered.png
 Content/bigButtonHovered2.9.png
 Content/bigButtonHoveredNinePatch.9.png
 Content/bigButtonNinePatch.9.png
+Content/borderLessTextField.9.png
+Content/borderLessTextField.png
 Content/button1.png
 Content/button2.png
 Content/buttonDown.9.png
@@ -4746,6 +4754,8 @@ Content/checkBoxChecked.png
 Content/checkBoxCheckedOver.png
 Content/checkBoxOver.png
 Content/closeButton.png
+Content/coopButton.png
+Content/coopButtonHovered.png
 Content/daybg.png
 Content/energyBar.png
 Content/energyBarFill.png
@@ -4755,6 +4765,7 @@ Content/energyBarNinePatch.9.png
 Content/error.png
 Content/exitButton.png
 Content/exitButtonHovered.png
+Content/femaleIcon.png
 Content/font/PixelatedEleganceRegular-ovyAA.fnt
 Content/font/PixelatedEleganceRegular-ovyAA.png
 Content/font/PixelatedEleganceRegular-ovyAA.ttf
@@ -4779,6 +4790,8 @@ Content/frameNinePatch.9.png
 Content/frameNinePatch2.9.png
 Content/goldCoin.png
 Content/info.png
+Content/infoButton.png
+Content/infoButtonOver.png
 Content/inventoryIconRotated.png
 Content/inventoryQuantityNumbers export.fnt
 Content/inventoryQuantityNumbers export.png
@@ -4788,14 +4801,20 @@ Content/loadGameButton.png
 Content/loadGameButtonHovered.png
 Content/logoutButton.png
 Content/logoutButtonHovered.png
+Content/logoutDown.png
+Content/logoutDownHovered.png
+Content/maleIcon.png
 Content/menuBackground/Clouds.png
 Content/menuBackground/backgroundBushesLeft.png
 Content/menuBackground/backgroundBushesRight.png
+Content/menuBackground/bird1.png
 Content/menuBackground/cloud1.png
 Content/menuBackground/cloud2.png
 Content/menuBackground/cloud3.png
+Content/menuBackground/cloudsBig.png
 Content/menuBackground/mountains1.png
 Content/menuBackground/mountains2.png
+Content/menuBackground/stars.png
 Content/menuButton.png
 Content/miniMap/background.png
 Content/miniMap/backgroundNinePatch.9.png
@@ -4807,6 +4826,7 @@ Content/pixil-frame-0.png
 Content/playButton.png
 Content/playButtonOver.png
 Content/radio.png
+Content/randomIcon.png
 Content/redCross.png
 Content/savedGameBox.9.png
 Content/savedGameBox.png
@@ -4829,13 +4849,19 @@ Content/sliderButtonUp.png
 Content/sliderNinePatch.9.png
 Content/sliderNinePatch2.9.png
 Content/smallAcceptButton.png
+Content/smallMinus.png
+Content/smallMinusOver.png
 Content/smallPanel.png
 Content/smallPanelNinePatch.9.png
 Content/smallPlus.png
+Content/smallPlusButton.png
+Content/smallPlusOver.png
 Content/smallRejectButton.png
 Content/smallTip.png
 Content/storageIcon.png
 Content/success.png
+Content/test.png
+Content/textBox.9.png
 Content/textBox.png
 Content/textboxNinePatch.9.png
 Content/tileSelectBox.png
@@ -4980,11 +5006,14 @@ games/2025-08-12/game_2025-08-12_02-51-47_4a005655.sav
 games/2025-08-12/game_2025-08-12_12-51-06_0cd90443.sav
 games/2025-08-12/game_2025-08-12_16-58-04_98cebfcc.sav
 games/2025-08-12/game_2025-08-12_18-46-17_f5622db1.sav
+shaders/gradient.frag
+shaders/gradient.vert
 shaders/outline.frag
 shaders/outline.vert
 skin/Stardew Valley Skin/Brawl.fnt
 skin/Stardew Valley Skin/Brawl.png
 skin/Stardew Valley Skin/inventoryQuantityNumbers export.fnt
+skin/Stardew Valley Skin/khodayaBaseDige (Copy).fnt
 skin/Stardew Valley Skin/khodayaBaseDige.fnt
 skin/Stardew Valley Skin/skin.atlas
 skin/Stardew Valley Skin/skin.json
